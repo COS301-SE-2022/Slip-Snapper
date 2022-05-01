@@ -1,0 +1,28 @@
+{
+  "root": "apps/slip-snapper-e2e",
+  "sourceRoot": "apps/slip-snapper-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/slip-snapper-e2e/cypress.json",
+        "devServerTarget": "slip-snapper:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "slip-snapper:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/slip-snapper-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["slip-snapper"]
+}

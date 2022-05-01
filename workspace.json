@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "slip-snapper": "apps/slip-snapper",
+    "slip-snapper-e2e": "apps/slip-snapper-e2e"
+  }
+}
