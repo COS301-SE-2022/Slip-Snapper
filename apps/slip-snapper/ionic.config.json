@@ -1,0 +1,7 @@
+{
+  "name": "slip-snapper",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
