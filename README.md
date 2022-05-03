@@ -27,9 +27,13 @@
 
 <!-- Monitoring badges 
 ============================ -->
-<img alt="Commit Activity" src="https://img.shields.io/github/commit-activity/w/COS301-SE-2022/Slip-Snapper?color=green&style=flat-square">
+<a href = "https://github.com/COS301-SE-2022/Slip-Snapper/commits">
+  <img alt="Commit Activity" src="https://img.shields.io/github/commit-activity/w/COS301-SE-2022/Slip-Snapper?color=green&style=flat-square">
+</a>
 
-<img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/COS301-SE-2022/Slip-Snapper?color=pink&style=flat-square">
+<a href = "https://github.com/COS301-SE-2022/Slip-Snapper/commits">
+  <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/COS301-SE-2022/Slip-Snapper?color=pink&style=flat-square">
+</a>
 
 <a href= "https://github.com/COS301-SE-2022/Slip-Snapper/pulls">
   <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/COS301-SE-2022/Slip-Snapper?style=flat-square">
@@ -59,13 +63,17 @@
 <a href="https://linkedin.com/in/gabriel-grobler-865601238/" target="blank">
 <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
-> < Insert Description here >
+> “The computer was born to solve problems that did not exist before.” - Bill Gates
+
+> I am currently a student at the University of Pretoria studying to get a BSc Computer Science. Problem solving is a passion of mine and by coding I naturally get to practice this skill of mine. I enjoy exploring the fields of Digital Forensics and Artificial Intelligence and these two fields are the reason I chose to study Computer Science. When I feel as though I cannot do something I spend the time necessary to add it to my skill set.
 
 
 ## [Christian Devraj](https://github.com/KenanDevraj) _(-Role-)_
 
 <a href="https://linkedin.com/in/christian-devraj-240599229/" target="blank">
 <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
+
+> "A bug is never just a mistake. It represents something bigger. An error of thinking that makes you who you are." - Mr Robot
 
 > < Insert Description here >
 
