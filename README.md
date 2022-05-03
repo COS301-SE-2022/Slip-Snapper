@@ -18,8 +18,8 @@
 
 <!-- Issues -->
 <a href = "https://github.com/COS301-SE-2022/Slip-Snapper/issues">
-  <img alt="GitHub Issues" src="https://img.shields.io/github/issues/COS301-SE-2022/Tutor-ME?style=flat-square">
-</a><br>
+  <img alt="GitHub Issues" src="https://img.shields.io/github/issues/COS301-SE-2022/Slip-Snapper?style=flat-square">
+</a>
 <!-- Project Board -->
 <a href = "https://github.com/COS301-SE-2022/Slip-Snapper/projects/1">
   <img alt="Project Board" src="https://img.shields.io/badge/Project%20Board-1-red">
@@ -32,7 +32,7 @@
 <img alt="GitHub Last Commit" src="https://img.shields.io/github/last-commit/COS301-SE-2022/Slip-Snapper?color=pink&style=flat-square">
 
 <a href= "https://github.com/COS301-SE-2022/Slip-Snapper/pulls">
-  <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/COS301-SE-2022/Tutor-ME?style=flat-square">
+  <img alt="GitHub Pull Requests" src="https://img.shields.io/github/issues-pr/COS301-SE-2022/Slip-Snapper?style=flat-square">
 </a>
 
 
@@ -44,14 +44,12 @@
 > The Slip Snapper is a cross-platform application that assists in managing an individuals’ expenses.
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and create comprehensive expense reports.
 
-## Recorded Demo
-< Insert link to demo recording here >
+<!-- Update when there are more demos, create links for each demo -->
+# [Recorded Demo]()
 
-## Functional Requirements
-< Insert link to SRS here >
+# [Functional Requirements]()
 
-## GitHub Project Board
-< Insert link to PB here >
+# [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
 # Contributors
 
@@ -85,7 +83,9 @@
 <a href="https://linkedin.com/in/andrey-omeltchenko-65401b228/" target="blank">
 <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
-> < Insert Description here >
+> “We who cut mere stones must always be envisioning cathedrals.” - Medieval worker’s creed.
+
+> I am a final year BSc Computer Science student at the University of Pretoria with a passion for application development and specifically the frontend domain. On my journey to becoming a professional software engineer, continuous improvement and growth along with gathering of knowledge are vitally important aspects to me. My current skills include intermediate experience with programming languages such as Java, Python and C++, as well as web development languages including HTML, CSS and JavaScript.
 
 
 ## [Regan Zhao](https://github.com/JurassicRegz) _(Backend Engineer / DevOps)_
@@ -93,6 +93,7 @@
 <a href="https://linkedin.com/in/regan-zhao-743533238/" target="blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
 > “Nothing great in the world has ever been accomplished without passion.” – Georg Hegel.  
+
 > I am Regan Zhao, a BSc Computer Science Student at the University of Pretoria. Software development is my passion and I thrive in environments that mentally challenge me. I am goal-driven, curious and open-minded in every aspect of my life. I have experience in Android app development and Web development. In areas where I fall short of knowledge I strive to educate myself on these matters to the best of my abilities. Even though my future is uncertain, I'll continue to keep my head up and my passion ignited.
 
 
