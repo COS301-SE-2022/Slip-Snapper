@@ -11,6 +11,7 @@ node_modules
 # IDEs and editors
 /.idea
 .project
+.prettierignore
 .classpath
 .c9/
 *.launch
