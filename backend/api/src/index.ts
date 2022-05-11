@@ -16,7 +16,11 @@ app.listen(1234, () =>{
  */
 app.get('/users',async(req,res)=>{
     fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
-        res.status(200).end(data);
+        if(err) {
+            return console.log(err);
+        }
+
+        return res.status(200).end(data);
     });
 })
 
@@ -26,6 +30,9 @@ app.get('/users',async(req,res)=>{
  */
 app.get('/items',async(req,res)=>{
     fs.readFile( __dirname + "/" + "items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
         let d = JSON.parse(data);
         let resp = [];
         for(var i = 0;i < Object.keys(d).length;i++){
@@ -33,6 +40,89 @@ app.get('/items',async(req,res)=>{
                 resp.push(d[Object.keys(d)[i]]);
             }
         }
-        res.status(200).end(JSON.stringify(resp));
+
+        return res.status(200).end(JSON.stringify(resp));
+    });
+})
+
+/**
+ * Add an item
+ * Uses the user id to add the item
+ */
+app.post('/addItem',async(req,res)=>{
+    fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        let itemid = "item"+(Object.keys(d).length+1);
+        let item = {
+            [itemid]:{
+                "user": req.body.user,
+                "name": req.body.name
+            }
+        }
+        d[itemid] = item[itemid];
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        });
+
+        return res.status(200).end(JSON.stringify(d));
+    });
+})
+
+/**
+ * Delete an item
+ * Uses the user id and itemId to delete the item
+ */
+ app.post('/deleteItem',async(req,res)=>{
+    fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
+                delete d[req.body.item];
+                break;
+            }
+        }
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d));
+    });
+})
+
+/**
+ * Update an item
+ * Uses the user itemId to update the item
+ */
+ app.post('/updateItem',async(req,res)=>{
+    fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
+                if(req.body.name != undefined){
+                    d[req.body.item].name = req.body.name;
+                }
+                break;
+            }
+        }
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d));
     });
 })
