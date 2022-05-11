@@ -56,27 +56,27 @@ jobs:
 
   test-affected-lint-backend:
     if: ${{ github.event.inputs.testchoice == 'lint' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
-    uses: ./.github/workflows/BackendCItest.yml
+    uses: ./.github/workflows/BackendCITest.yml
     with:
       test: 'affected'
       testtype: 'lint'
 
   test-affected-build-backend:
-    uses: ./.github/workflows/BackendCItest.yml
+    uses: ./.github/workflows/BackendCITest.yml
     if: ${{ github.event.inputs.testchoice == 'build' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
     with:
       test: 'affected'
       testtype: 'build'
   
   test-affected-unit-backend:
-    uses: ./.github/workflows/BackendCItest.yml
+    uses: ./.github/workflows/BackendCITest.yml
     if: ${{ github.event.inputs.testchoice == 'unit' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
     with:
       test: 'affected'
       testtype: 'unit'
 
   test-all-backend:
-    uses: ./.github/workflows/BackendCItest.yml
+    uses: ./.github/workflows/BackendCITest.yml
     if: ${{ github.event.inputs.testchoice == 'all'}}
     with:
       test: 'all'
