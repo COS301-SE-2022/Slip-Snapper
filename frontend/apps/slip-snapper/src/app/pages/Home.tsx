@@ -120,10 +120,11 @@ const Home: React.FC = () => {
         </IonItem>
       </IonCard>
 
+      <TakePictureButton />
 
       </IonContent>
 
-      <IonFooter><TakePictureButton /></IonFooter>
+      
 
       <IonFooter>
         <IonToolbar color="primary">
