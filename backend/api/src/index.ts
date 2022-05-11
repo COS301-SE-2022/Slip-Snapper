@@ -27,7 +27,7 @@ app.get('/users',async(req,res)=>{
 
 /**
  * Add a user
- * Uses the user id to add the item
+ * Adds a user with an Name, Age, ID
  */
  app.post('/addUser',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
@@ -36,21 +36,45 @@ app.get('/users',async(req,res)=>{
         }
         let d = JSON.parse(data);
         let userid = "user"+(Object.keys(d).length+1);
-        let t = d["user"+(Object.keys(d).length)].id+1;
         let user = {
             [userid]:{
-                "id": t,
                 "name": req.body.name,
                 "age": req.body.age
             }
         }
         d[userid] = user[userid];
-        console.log(d)
         fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
         });
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
+ * Delete an item
+ * Uses the user id delete the user
+ */
+ app.post('/deleteUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(Object.keys(d)[i] == req.body.userid){
+                delete d[req.body.userid];
+                break;
+            }
+        }
+        console.log(d)
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
 
         return res.status(200).end(JSON.stringify(d,null,2));
     });
