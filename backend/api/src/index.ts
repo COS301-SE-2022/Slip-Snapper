@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
 const app = express();
 
@@ -20,7 +21,7 @@ app.get('/users',async(req,res)=>{
             return console.log(err);
         }
 
-        return res.status(200).end(data);
+        return res.status(200).end(data,null,2);
     });
 })
 
@@ -41,7 +42,7 @@ app.get('/items',async(req,res)=>{
             }
         }
 
-        return res.status(200).end(JSON.stringify(resp));
+        return res.status(200).end(JSON.stringify(resp,null,2));
     });
 })
 
@@ -69,7 +70,7 @@ app.post('/addItem',async(req,res)=>{
             }
         });
 
-        return res.status(200).end(JSON.stringify(d));
+        return res.status(200).end(JSON.stringify(d,null,2));
     });
 })
 
@@ -95,13 +96,13 @@ app.post('/addItem',async(req,res)=>{
             }
         }); 
 
-        return res.status(200).end(JSON.stringify(d));
+        return res.status(200).end(JSON.stringify(d,null,2));
     });
 })
 
 /**
  * Update an item
- * Uses the user itemId to update the item
+ * Uses the user id and itemId to update the item
  */
  app.post('/updateItem',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
@@ -123,6 +124,50 @@ app.post('/addItem',async(req,res)=>{
             }
         }); 
 
-        return res.status(200).end(JSON.stringify(d));
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
+ * Generate the pdf report for a user
+ * Uses the user id to get the items
+ */
+ app.get('/generatePDFReport',async(req,res)=>{
+    let pdf = new PDFDocument;
+    let date = new Date();
+    let name = "report-" + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear() + "-a.pdf";
+    console.log(name);
+    pdf.pipe(fs.createWriteStream(name))
+    fs.readFile( __dirname + "/" + "items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        let typeF = [];
+        let typeC = [];
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(d[Object.keys(d)[i]].user == req.query.user){
+                typeF.push(d[Object.keys(d)[i]]);
+                typeC.push(d[Object.keys(d)[i]]);
+            }
+        }
+        let temp = "Report for " + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+        pdf.text(temp);
+
+        pdf.text("Food items");
+        for(var i = 0;i < typeF.length;i++){
+            let temp = "item: " + typeF[Object.keys(typeF)[i]].name;
+            pdf.text(temp);
+        }
+
+        pdf.text("Clothing items");
+        for(var i = 0;i < typeC.length;i++){
+            let temp = "item: " + typeF[Object.keys(typeF)[i]].name;
+            pdf.text(temp);
+        }
+
+        pdf.end();
+
+        return res.status(200).end(JSON.stringify("Report Genereated",null,2));
     });
 })
