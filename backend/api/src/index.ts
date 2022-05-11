@@ -27,7 +27,7 @@ app.get('/users',async(req,res)=>{
 
 /**
  * Add a user
- * Adds a user with an Name, Age, ID
+ * Adds a user with an Name, Age
  */
  app.post('/addUser',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
@@ -69,7 +69,37 @@ app.get('/users',async(req,res)=>{
                 break;
             }
         }
-        console.log(d)
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
+ * Update a user
+ * Uses the user id to update the user
+ */
+ app.post('/updateUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(Object.keys(d)[i] == req.body.userid){
+                if(req.body.name != undefined){
+                    d[req.body.userid].name = req.body.name;
+                }
+                if(req.body.age != undefined){
+                    d[req.body.userid].age = req.body.age;
+                }
+                break;
+            }
+        }
         fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
