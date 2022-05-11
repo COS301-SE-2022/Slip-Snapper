@@ -86,9 +86,37 @@ app.post('/addItem',async(req,res)=>{
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
                 delete d[req.body.item];
+                break;
             }
         }
-        console.log(d)
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d));
+    });
+})
+
+/**
+ * Update an item
+ * Uses the user itemId to update the item
+ */
+ app.post('/updateItem',async(req,res)=>{
+    fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
+                if(req.body.name != undefined){
+                    d[req.body.item].name = req.body.name;
+                }
+                break;
+            }
+        }
         fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
             if(err) {
                 return console.log(err);
