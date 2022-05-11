@@ -40,7 +40,7 @@ jobs:
         #installs yarn
       - name: Install yarn
         run: |
-          cd backend\api
+          cd backend/api
           npm install yarn -g
 
       - name: Cache Yarn Packages
@@ -53,25 +53,25 @@ jobs:
         #installs the yarn lockfile
       - name: Install packages
         run: |
-          cd backend\api
+          cd backend/api
           yarn install --frozen-lockfile
 
       - name: Lint test affected
         if: inputs.testtype == 'lint' && inputs.test == 'affected'
         run: |
-          cd backend\api
+          cd backend/api
           yarn nx affected:lint --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} 
 
       - name: Build test affected
         if: inputs.testtype == 'build' && inputs.test == 'affected'
         run: |
-          cd backend\api
+          cd backend/api
           yarn nx affected:build --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
       - name: Unit test affected
         if: inputs.testtype == 'unit' && inputs.test == 'affected'
         run: |
-          cd backend\api
+          cd backend/api
           yarn nx affected:test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
 
      # - name: E2E test affected
@@ -84,7 +84,7 @@ jobs:
       - name: Test all
         if: inputs.test == 'all' 
         run: |
-          cd backend\api
+          cd backend/api
           yarn nx run-many --target=lint --all --skip-nx-cache --parallel
           yarn nx run-many --target=build --all --skip-nx-cache --parallel
           yarn nx run-many --target=test --all --skip-nx-cache --parallel 
