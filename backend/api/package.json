@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "slip-snapper-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.1",
-    "fs": "^0.0.1-security"
+    "fs": "^0.0.1-security",
+    "nodemon": "^2.0.16",
+    "nx": "^14.1.4"
   }
 }
