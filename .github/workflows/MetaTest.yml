@@ -34,7 +34,7 @@ jobs:
         with:
           mode: minimum
           count: 1
-          labels: 'scope:api, scope:cicd, scope:db, scope:ui, scope:repository'
+          labels: 'scope:api, scope:cicd, scope:db, scope:ui, scope:repository, scope:feature'
 
   milestone-check:
     name: Checks if milestone is used
