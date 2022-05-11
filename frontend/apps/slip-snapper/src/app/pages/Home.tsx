@@ -9,12 +9,11 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent,
   IonItem,
   IonButton
 } from '@ionic/react';
 import React from 'react';
-import './Home.css';
+import '../theme/variables.css'
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 
