@@ -8,8 +8,11 @@ import {
     IonMenuToggle,
     IonItem,
     IonLabel,
+    IonIcon
   } from "@ionic/react";
   import React from "react";
+  import {home, person, documents} from 'ionicons/icons';
+
   
   export const Menu = () => {
     return (
@@ -24,11 +27,19 @@ import {
             <IonMenuToggle auto-hide="false">
               <IonItem button routerLink={"/home"} routerDirection="none">
                 <IonLabel>Home</IonLabel>
+                <IonIcon src={home}/>
               </IonItem>
             </IonMenuToggle>
             <IonMenuToggle auto-hide="false">
               <IonItem button routerLink={"/viewreports"} routerDirection="none">
-                <IonLabel>View Reports</IonLabel>
+                <IonLabel>Reports</IonLabel>
+                <IonIcon src={documents}/>
+              </IonItem>
+            </IonMenuToggle>
+            <IonMenuToggle auto-hide="false">
+              <IonItem button routerLink={"/profile"} routerDirection="none">
+                <IonLabel>Profile</IonLabel>
+                <IonIcon src={person}/>
               </IonItem>
             </IonMenuToggle>
           </IonList>

@@ -1,9 +1,14 @@
 import React from 'react';
+
+/*Page Imports*/
+import Home from './pages/Home';
+import ViewReports from './pages/ViewReports';
+import Profile from './pages/Profile';
+
+/*Component Imports*/
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
-import ViewReports from './pages/ViewReports';
 import { Menu } from './components/Menu';
 
 /* Core CSS required for Ionic components to work properly */
@@ -33,6 +38,7 @@ const App: React.FC = () => (
         <Route path="/home" component={Home} exact={true} />
         <Route exact path="/" render={() => <Redirect to="/home" />} />
         <Route path="/viewreports" component={ViewReports} exact={true} />
+        <Route path="/profile" component={Profile} exact={true} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

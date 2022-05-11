@@ -1,5 +1,6 @@
-import { IonButton, IonMenuButton } from "@ionic/react";
+import { IonButton, IonMenuButton, IonIcon } from "@ionic/react";
 import React, { useEffect } from "react";
+import {home, person, documents} from 'ionicons/icons';
 
 export const NavButtons = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,8 +23,9 @@ export const NavButtons = () => {
         <IonMenuButton />
       ) : (
         <>
-          <IonButton routerLink={"/home"}>Home </IonButton>
-          <IonButton routerLink={"/viewreports"}>View Reports</IonButton>
+          <IonButton routerLink={"/home"}>Home</IonButton>
+          <IonButton routerLink={"/viewreports"}>Reports</IonButton>
+          <IonButton routerLink={"/profile"}>Profile</IonButton>
         </>
       )}
     </div>
