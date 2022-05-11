@@ -80,3 +80,4 @@ jobs:
     if: ${{ github.event.inputs.testchoice == 'all'}}
     with:
       test: 'all'
+      
