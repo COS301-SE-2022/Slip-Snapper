@@ -11,7 +11,7 @@ const TakePictureButton = () => {
    return(
   <IonContent>
     <IonFab vertical="bottom" horizontal="center" slot="fixed">
-      <IonFabButton>
+      <IonFabButton color="secondary">
         <IonIcon icon={receipt}></IonIcon>
       </IonFabButton>
     </IonFab>
