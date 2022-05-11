@@ -26,6 +26,91 @@ app.get('/users',async(req,res)=>{
 })
 
 /**
+ * Add a user
+ * Adds a user with an Name, Age
+ */
+ app.post('/addUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        let userid = "user"+(Object.keys(d).length+1);
+        let user = {
+            [userid]:{
+                "name": req.body.name,
+                "age": req.body.age
+            }
+        }
+        d[userid] = user[userid];
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        });
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
+ * Delete an item
+ * Uses the user id delete the user
+ */
+ app.post('/deleteUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(Object.keys(d)[i] == req.body.userid){
+                delete d[req.body.userid];
+                break;
+            }
+        }
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
+ * Update a user
+ * Uses the user id to update the user
+ */
+ app.post('/updateUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(Object.keys(d)[i] == req.body.userid){
+                if(req.body.name != undefined){
+                    d[req.body.userid].name = req.body.name;
+                }
+                if(req.body.age != undefined){
+                    d[req.body.userid].age = req.body.age;
+                }
+                break;
+            }
+        }
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
  * Get all items for a user
  * Uses the user id to get the items
  */
@@ -64,7 +149,7 @@ app.post('/addItem',async(req,res)=>{
             }
         }
         d[itemid] = item[itemid];
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
@@ -90,7 +175,7 @@ app.post('/addItem',async(req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
@@ -118,7 +203,7 @@ app.post('/addItem',async(req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
