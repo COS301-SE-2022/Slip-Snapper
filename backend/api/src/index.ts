@@ -26,6 +26,37 @@ app.get('/users',async(req,res)=>{
 })
 
 /**
+ * Add a user
+ * Uses the user id to add the item
+ */
+ app.post('/addUser',async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        let userid = "user"+(Object.keys(d).length+1);
+        let t = d["user"+(Object.keys(d).length)].id+1;
+        let user = {
+            [userid]:{
+                "id": t,
+                "name": req.body.name,
+                "age": req.body.age
+            }
+        }
+        d[userid] = user[userid];
+        console.log(d)
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        });
+
+        return res.status(200).end(JSON.stringify(d,null,2));
+    });
+})
+
+/**
  * Get all items for a user
  * Uses the user id to get the items
  */
@@ -64,7 +95,7 @@ app.post('/addItem',async(req,res)=>{
             }
         }
         d[itemid] = item[itemid];
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
@@ -90,7 +121,7 @@ app.post('/addItem',async(req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
@@ -118,7 +149,7 @@ app.post('/addItem',async(req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d), function(err) {
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
             if(err) {
                 return console.log(err);
             }
