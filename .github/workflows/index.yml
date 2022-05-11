@@ -18,38 +18,66 @@ on:
         - unit
         - all
 
-#jobs in the workflow with passed in parameters
+#jobs in the workflow with passed in parameters for frontend and backend code
 jobs:
-  test-affected-lint:
+  test-affected-lint-frontend:
     if: ${{ github.event.inputs.testchoice == 'lint' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
-    uses: ./.github/workflows/CItest.yml
+    uses: ./.github/workflows/FrontendCItest.yml
     with:
       test: 'affected'
       testtype: 'lint'
 
-  test-affected-build:
-    uses: ./.github/workflows/CItest.yml
+  test-affected-build-frontend:
+    uses: ./.github/workflows/FrontendCItest.yml
     if: ${{ github.event.inputs.testchoice == 'build' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
     with:
       test: 'affected'
       testtype: 'build'
   
-  test-affected-unit:
-    uses: ./.github/workflows/CItest.yml
+  test-affected-unit-frontend:
+    uses: ./.github/workflows/FrontendCItest.yml
     if: ${{ github.event.inputs.testchoice == 'unit' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
     with:
       test: 'affected'
       testtype: 'unit'
 
-  #test-affected-e2e:
-  #  uses: ./.github/workflows/CItest.yml
+  #test-affected-e2e-frontend:
+  #  uses: ./.github/workflows/FrontendCItest.yml
   #  if: ${{ github.event.inputs.testchoice == 'e2e' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
   #  with:
   #    test: 'affected'
   #    testtype: 'e2e'
 
-  test-all:
-    uses: ./.github/workflows/CItest.yml
+  test-all-frontend:
+    uses: ./.github/workflows/FrontendCItest.yml
     if: ${{ github.event.inputs.testchoice == 'all'}}
     with:
       test: 'all'
+
+  test-affected-lint-backend:
+    if: ${{ github.event.inputs.testchoice == 'lint' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
+    uses: ./.github/workflows/BackendCITest.yml
+    with:
+      test: 'affected'
+      testtype: 'lint'
+
+  test-affected-build-backend:
+    uses: ./.github/workflows/BackendCITest.yml
+    if: ${{ github.event.inputs.testchoice == 'build' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
+    with:
+      test: 'affected'
+      testtype: 'build'
+  
+  test-affected-unit-backend:
+    uses: ./.github/workflows/BackendCITest.yml
+    if: ${{ github.event.inputs.testchoice == 'unit' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
+    with:
+      test: 'affected'
+      testtype: 'unit'
+
+  test-all-backend:
+    uses: ./.github/workflows/BackendCITest.yml
+    if: ${{ github.event.inputs.testchoice == 'all'}}
+    with:
+      test: 'all'
+      

@@ -1,5 +1,5 @@
 ---
-name: 'CI Tests'
+name: 'Frontend CI Tests'
 
 #Reusable workflow with input parameters to choose a type of test
 on:
