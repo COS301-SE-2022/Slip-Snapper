@@ -16,9 +16,9 @@ import {
   
   export const Menu = () => {
     return (
-      <IonMenu side="end" contentId="main">
+      <IonMenu side="end" contentId="main" >
         <IonHeader>
-          <IonToolbar color="light">
+          <IonToolbar color="primary">
             <IonTitle>Menu</IonTitle>
           </IonToolbar>
         </IonHeader>

@@ -1,6 +1,5 @@
-import { IonButton, IonMenuButton, IonIcon } from "@ionic/react";
+import { IonButton, IonMenuButton } from "@ionic/react";
 import React, { useEffect } from "react";
-import {home, person, documents} from 'ionicons/icons';
 
 export const NavButtons = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
