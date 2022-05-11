@@ -1,7 +1,6 @@
 ---
 name: 'Backend CI Tests'
 
-#Reusable workflow with input parameters to choose a type of test
 on:
   workflow_call:
     inputs:
@@ -14,6 +13,7 @@ on:
         required: false
         type: string
 
+#jobs to run for backend folder
 jobs:
   build:
     name: Generate cache
