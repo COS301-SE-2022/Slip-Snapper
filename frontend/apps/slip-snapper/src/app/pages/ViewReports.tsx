@@ -7,7 +7,7 @@ const ViewReports: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar>
+        <IonToolbar color="primary">
           <IonTitle>View Reports</IonTitle>
           <IonButtons slot="end">
             <NavButtons/>
