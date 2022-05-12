@@ -1,34 +1,35 @@
-.div {
+.inputcredentials {
 
 
 
-    padding-top: 5%;
+    padding-top: 3%;
     padding-left: 25%;
     font-size: 16px;
     color: #fff;
     display: list-item;
     max-width: 60%;
-    border: 2px;
-    border-radius: 5px;
+
     border-color: "secondary";
-    margin: 3px;
+
     text-align: center;
+    align-content: center;
 }
 
-.textArea {
-    /* max-width: 60%; */
-}
 
-.placeHolder {
-    width: 25%;
-    height: 25%;
-
+.LRLogo {
+  
+    height:120px ;
+    font-size: 40px;
     padding-left: 35%;
+    align-content: center;
+    
 
 }
 
-.buttonStyles {
+.LRButtons {
     color: rgb(65, 4, 4);
     /* background-color: blue; */
-    padding-left: 35%;
+    padding-left: 38.5%;
+    border-color: "secondary";
+    border: 10px; 
 }
