@@ -3,7 +3,6 @@ import { IonButton } from '@ionic/react';
 import '../pages/FetchData.css';
 class FetchData extends React.Component {
    
-    // Constructor 
     constructor(props) {
         super(props);
    
@@ -13,8 +12,6 @@ class FetchData extends React.Component {
         };
     }
    
-    // ComponentDidMount is used to
-    // execute the code 
     componentDidMount() {
         fetch("http://localhost:1234/items?user=1", {
                 method: 'get',
@@ -40,13 +37,14 @@ class FetchData extends React.Component {
     render() {
         const { DataisLoaded, items } = this.state;
         if (!DataisLoaded) return <div>
-            <h1> Pleses wait some time.... </h1> </div> ;
+            <h1> Items Loading.... </h1> </div> ;
         return (
         <div className = "App">
-            <h1> Fetch data from an api in react </h1>  {
+            <h1> Items </h1>  {
                 items.map((item) => ( 
-                <div class="div">
-                    <ul key = { item.id } class="no-bullets">
+                <div className="div" id={item.id} contentEditable="false" suppressContentEditableWarning={true}>
+                    <h2>Item { item.id }</h2>
+                    <ul key = { item.id } className="no-bullets">
                         <li>Item Name: { item.item_name }</li>
                         <li>Quantity: { item.quantity }</li>
                         <li>Price: { item.price }</li>
@@ -54,12 +52,26 @@ class FetchData extends React.Component {
                         <li>Date: { item.date }</li>
                         <li>Location: { item.location }</li>
                     </ul>
-                    <IonButton fill="outline" color="secondary">Edit</IonButton>
+                    <IonButton id={item.id+"b"} fill="outline" color="secondary" onClick={()=>toggleEditable(item.id)}>Edit</IonButton>
                 </div>
                 ))
             }
         </div>
     );
+
+    function toggleEditable(id) {
+        var editDiv = document.getElementById(id);
+        var btn = document.getElementById(id+"b");
+        var editedText = document.getElementById(id).innerText;
+        if (editDiv.contentEditable === "true") {
+            editDiv.contentEditable = "false";
+            btn.color = "secondary";
+            console.log(editedText);
+        } else {
+            editDiv.contentEditable = "true";
+            btn.color = "tertiary";
+        }
+    }
 }
 }
    
