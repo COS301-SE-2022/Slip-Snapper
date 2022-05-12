@@ -1,7 +1,7 @@
 .div {
-
-
-
+   
+   
+   
     padding-top: 5%;
     padding-left: 25%;
     font-size: 16px;
@@ -15,19 +15,17 @@
     text-align: center;
 }
 
-.textArea {
+.textArea{
     /* max-width: 60%; */
 }
-
-.placeHolder {
+.placeHolder{
     width: 25%;
     height: 25%;
-
+  
     padding-left: 35%;
 
 }
-
-.buttonStyles {
+.buttonStyles{
     color: rgb(65, 4, 4);
     /* background-color: blue; */
     padding-left: 35%;
