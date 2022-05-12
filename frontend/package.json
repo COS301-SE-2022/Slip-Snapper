@@ -53,6 +53,7 @@
     "@ionic/pwa-elements": "^3.1.1",
     "@ionic/react": "^5.8.3",
     "@ionic/react-router": "^5.8.3",
+    "@ionic/react-test-utils": "^0.3.0",
     "core-js": "^3.6.5",
     "ionicons": "^5.5.3",
     "react": "18.0.0",
