@@ -2,6 +2,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from
 import React from 'react';
 import './Home.css';
 import { NavButtons } from '../components/NavButtons';
+import FetchData from '../components/FetchData';
 
 const EditItem: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const EditItem: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <FetchData/>
       </IonContent>
     </IonPage>
   );
