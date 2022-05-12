@@ -50,7 +50,7 @@
 <!-- Update when there are more demos, create links for each demo -->
 # [Recorded Demo]()
 
-# [Functional Requirements]()
+# [Functional Requirements](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
 
 # [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
