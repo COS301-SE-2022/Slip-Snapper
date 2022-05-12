@@ -1,16 +1,16 @@
 {
   "item1": {
-    "id":1,
+    "id": 1,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
     "item_name": "Orange",
-    "quantity": 3,
+    "quantity": "3",
     "price": "12,99",
     "type": "food"
   },
   "item2": {
-    "id":2,
+    "id": 2,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -20,7 +20,7 @@
     "type": "food"
   },
   "item3": {
-    "id":3,
+    "id": 3,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -30,7 +30,7 @@
     "type": "food"
   },
   "item5": {
-    "id":5,
+    "id": 5,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -40,7 +40,7 @@
     "type": "food"
   },
   "item6": {
-    "id":6,
+    "id": 6,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -50,7 +50,7 @@
     "type": "cleaning"
   },
   "item7": {
-    "id":7,
+    "id": 7,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -60,7 +60,7 @@
     "type": "cleaning"
   },
   "item8": {
-    "id":8,
+    "id": 8,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
@@ -70,7 +70,7 @@
     "type": "cleaning"
   },
   "item9": {
-    "id":9,
+    "id": 9,
     "user": 1,
     "location": "Woolworths",
     "date": "09/05/22",
