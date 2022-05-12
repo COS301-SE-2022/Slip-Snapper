@@ -11,7 +11,7 @@ import {
     IonIcon
   } from "@ionic/react";
   import React from "react";
-  import {home, person, documents} from 'ionicons/icons';
+  import {home, person, documents, pencil} from 'ionicons/icons';
 
   
   export const Menu = () => {
@@ -40,6 +40,12 @@ import {
               <IonItem button routerLink={"/profile"} routerDirection="none">
                 <IonLabel>Profile</IonLabel>
                 <IonIcon src={person}/>
+              </IonItem>
+            </IonMenuToggle>
+            <IonMenuToggle auto-hide="false">
+              <IonItem button routerLink={"/edititem"} routerDirection="none">
+                <IonLabel>Edit Item</IonLabel>
+                <IonIcon src={pencil}/>
               </IonItem>
             </IonMenuToggle>
           </IonList>
