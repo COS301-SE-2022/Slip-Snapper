@@ -1,0 +1,11 @@
+name: Full Test Coverage
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  test-all:
+    uses: ./.github/workflows/FrontendCItest.yml
+    with:
+      test: 'all'

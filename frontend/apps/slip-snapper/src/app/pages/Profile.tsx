@@ -1,6 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from '@ionic/react';
 import React from 'react';
-import './Home.css';
 import { NavButtons } from '../components/NavButtons';
 
 const Profile: React.FC = () => {
