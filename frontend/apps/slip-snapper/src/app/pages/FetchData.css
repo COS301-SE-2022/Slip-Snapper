@@ -1,0 +1,23 @@
+.div{
+    border:none;
+    background-color: #333C4A;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    display:list-item;
+    max-width: 60%; 
+    border-radius: 10px;
+    margin: 10px;
+    text-align: center;
+}
+
+ul.no-bullets {
+    list-style-type: none;
+    line-height: 1.5;
+}
+
+@media only screen and (max-width: 390px) {
+    .div {
+        min-width: 95%;
+    }
+}

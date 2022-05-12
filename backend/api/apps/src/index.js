@@ -1,16 +1,12 @@
-const express = require('express');
+const express =require('express');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const Cors = require('cors')
-const app = express();
-
 const bodyParser = require('body-parser');
+
+const app = express();
 app.use(bodyParser.json());
 app.use(Cors())
-
-app.listen(1234, () =>{
-    console.log('Server ready');
-})
 
 /**
  * Example api call
@@ -22,7 +18,7 @@ app.get('/users',async(_req,res)=>{
             return console.log(err);
         }
 
-        return res.status(200).end(data,null,2);
+        return res.status(200).end(data);
     });
 })
 
@@ -37,7 +33,7 @@ app.get('/users',async(_req,res)=>{
         }
         let d = JSON.parse(data);
         let last = Object.keys(d)[Object.keys(d).length-1].slice(-1)
-        let userid = "item"+(parseInt(last)+1);
+        let userid = "user"+(parseInt(last)+1);
         let user = {
             [userid]:{
                 "name": req.body.name,
@@ -280,3 +276,5 @@ app.post('/addItem',async(req,res)=>{
         return res.status(200).end(JSON.stringify("Report Genereated",null,2));
     });
 })
+
+module.exports = {app}

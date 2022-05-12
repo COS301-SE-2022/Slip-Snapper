@@ -1,4 +1,6 @@
 import React from "react";
+import { IonButton } from '@ionic/react';
+import '../pages/FetchData.css';
 class FetchData extends React.Component {
    
     // Constructor 
@@ -43,11 +45,17 @@ class FetchData extends React.Component {
         <div className = "App">
             <h1> Fetch data from an api in react </h1>  {
                 items.map((item) => ( 
-                <ol key = { item.id } >
-                    Item_Name: { item.item_name }, 
-                    Date: { item.date }, 
-                    Location: { item.location } 
-                    </ol>
+                <div class="div">
+                    <ul key = { item.id } class="no-bullets">
+                        <li>Item Name: { item.item_name }</li>
+                        <li>Quantity: { item.quantity }</li>
+                        <li>Price: { item.price }</li>
+                        <li>Type: { item.type }</li>
+                        <li>Date: { item.date }</li>
+                        <li>Location: { item.location }</li>
+                    </ul>
+                    <IonButton fill="outline" color="secondary">Edit</IonButton>
+                </div>
                 ))
             }
         </div>
