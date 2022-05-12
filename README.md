@@ -2,7 +2,7 @@
 
 <!-- Code Coverage badges 
 ============================ -->
-
+[![codecov](https://codecov.io/gh/COS301-SE-2022/Slip-Snapper/branch/develop/graph/badge.svg?token=5WLXQ1T5QA)](https://codecov.io/gh/COS301-SE-2022/Slip-Snapper)
 <!-- Build badges
 ============================
 (GitHub Actions) -->

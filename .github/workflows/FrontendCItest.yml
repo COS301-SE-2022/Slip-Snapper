@@ -96,5 +96,5 @@ jobs:
         with:
           # Organization codecov token to be placed below
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./frontend/coverage/
+          directory: ./frontend/coverage/apps/slip-snapper
           
