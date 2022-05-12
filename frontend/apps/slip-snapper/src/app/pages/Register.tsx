@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonTextarea, IonItem, IonLabel, IonItemDivider, IonList, IonButton } from '@ionic/react';
-
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonTextarea, IonItem, IonLabel, IonItemDivider, IonList, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import '../pages/LoginRegister.css';
 export const Register: React.FC = () => {
   const [text, setText] = useState<string>();
 
@@ -11,31 +11,37 @@ export const Register: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen color="primary">
        
-       
-       <IonItem  color="primary" class="placement">
-            <IonLabel position="floating">First</IonLabel>
+     <IonCard color="tertiary" class="placeHolder">
+        <IonCardHeader>
+            LOGO Placeholder
+        </IonCardHeader>
+        
+      </IonCard>
+
+       <IonItem  color="primary" class="div">
+            <IonLabel position="floating">First Name</IonLabel>
+            <IonTextarea class="textArea" value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
+          </IonItem>
+
+          <IonItem  color="primary" class="div">
+            <IonLabel position="floating">Last Name</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
-          <IonItem  color="primary">
-            <IonLabel position="floating">LastName</IonLabel>
-            <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
-          </IonItem>
-
        
-          <IonItem  color="primary">
+          <IonItem  color="primary" class="div">
             <IonLabel position="floating">Username</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
          
-          <IonItem  color="primary">
+          <IonItem  color="primary" class="div">
             <IonLabel position="floating">Password</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
-           <IonItem color="primary">
-              <IonButton routerLink={"/home"}  fill="outline" color="secondary">Register</IonButton>
+           <IonItem routerLink={"/home"} color="primary" class="buttonStyles">
+               <IonButton>Register</IonButton>
             </IonItem>
      
       </IonContent>
