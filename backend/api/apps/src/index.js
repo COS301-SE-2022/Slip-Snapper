@@ -253,22 +253,38 @@ app.post('/addItem',async(req,res)=>{
         let typeC = [];
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.query.user){
-                typeF.push(d[Object.keys(d)[i]]);
-                typeC.push(d[Object.keys(d)[i]]);
+                if(d[Object.keys(d)[i]].type == "food"){
+                    typeF.push(d[Object.keys(d)[i]]);
+                }
+                else{
+                    typeC.push(d[Object.keys(d)[i]]);
+                }
             }
         }
         let temp = "Report for " + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
-        pdf.text(temp);
+        pdf.fontSize(20).text(temp);
 
-        pdf.text("Food items");
-        for(var i = 0;i < typeF.length;i++){
-            let temp = "item: " + typeF[Object.keys(typeF)[i]].name;
+        pdf.fontSize(17).text("Food items",110);
+        for(i = 0;i < typeF.length;i++){
+            temp = "Item: " + typeF[Object.keys(typeF)[i]].item_name;
+            pdf.fontSize(15).text(temp,120);
+            temp = "quantity: " + typeF[Object.keys(typeF)[i]].quantity;
+            pdf.fontSize(12).text(temp,150);
+            temp = "Price: R " + typeF[Object.keys(typeF)[i]].price;
+            pdf.text(temp);
+            temp = "Location: " + typeF[Object.keys(typeF)[i]].location;
             pdf.text(temp);
         }
 
-        pdf.text("Clothing items");
-        for(var i = 0;i < typeC.length;i++){
-            let temp = "item: " + typeF[Object.keys(typeF)[i]].name;
+        pdf.fontSize(17).text("\nCleaning items",110);
+        for(i = 0;i < typeC.length;i++){
+            temp = "Item: " + typeC[Object.keys(typeF)[i]].item_name;
+            pdf.fontSize(15).text(temp,120);
+            temp = "quantity: " + typeC[Object.keys(typeF)[i]].quantity;
+            pdf.fontSize(12).text(temp,150);
+            temp = "Price: R " + typeC[Object.keys(typeF)[i]].price;
+            pdf.text(temp);
+            temp = "Location: " + typeC[Object.keys(typeF)[i]].location;
             pdf.text(temp);
         }
 
