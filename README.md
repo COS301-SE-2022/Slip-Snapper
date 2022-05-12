@@ -6,7 +6,7 @@
 <!-- Build badges
 ============================
 (GitHub Actions) -->
-[![CI Tests](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/index.yml/badge.svg?branch=develop)](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/index.yml)
+[![Full Test Coverage](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/full.yml/badge.svg?branch=develop)](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/full.yml)
 
 <!-- Requirements badges 
 ============================
