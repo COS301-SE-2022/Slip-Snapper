@@ -7,7 +7,7 @@
     font-size: 16px;
     color: #fff;
     display: list-item;
-    max-width: 60%;
+    width: 15%;
 
     border-color: "secondary";
 
@@ -30,6 +30,12 @@
     color: rgb(65, 4, 4);
     /* background-color: blue; */
     padding-left: 38.5%;
-    border-color: "secondary";
-    border: 10px; 
+ border-color: "secondary";
+    
+}
+#outerLRcontainer{
+    margin: auto;
+width: 60%;
+height: 60%;
+padding: 10px;
 }
