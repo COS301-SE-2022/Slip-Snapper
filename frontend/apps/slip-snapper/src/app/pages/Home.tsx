@@ -95,7 +95,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R137.69</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary">Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R912.21</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary">Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R4013.01</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary">Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
