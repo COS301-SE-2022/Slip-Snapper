@@ -230,8 +230,5 @@ http://ionicframework.com/docs/theming/ */
 
     --ion-card-background: #1e1e1e;
   }
-    .placement {
-      --padding-top: 5cm;
-      --padding-left: 5cm;
-    }
+  
 }

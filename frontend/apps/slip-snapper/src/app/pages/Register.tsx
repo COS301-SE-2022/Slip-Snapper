@@ -11,37 +11,37 @@ export const Register: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen color="primary">
        
-     <IonCard color="tertiary" class="placeHolder">
+     <IonCard color="tertiary" class="LRLogo">
         <IonCardHeader>
             LOGO Placeholder
         </IonCardHeader>
         
       </IonCard>
 
-       <IonItem  color="primary" class="div">
+       <IonItem  color="primary" class="inputcredentials">
             <IonLabel position="floating">First Name</IonLabel>
-            <IonTextarea class="textArea" value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
+            <IonTextarea  value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
-          <IonItem  color="primary" class="div">
+          <IonItem  color="primary" class="inputcredentials">
             <IonLabel position="floating">Last Name</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
        
-          <IonItem  color="primary" class="div">
+          <IonItem  color="primary" class="inputcredentials">
             <IonLabel position="floating">Username</IonLabel>
-            <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
+            <IonTextarea  value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
          
-          <IonItem  color="primary" class="div">
+          <IonItem  color="primary" class="inputcredentials">
             <IonLabel position="floating">Password</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
-           <IonItem routerLink={"/home"} color="primary" class="buttonStyles">
-               <IonButton>Register</IonButton>
+           <IonItem  border-color= "secondary" color = "primary"  class="LRButtons">
+               <IonButton color= "tertiary" routerLink={"/home"} >Register</IonButton>
             </IonItem>
      
       </IonContent>
