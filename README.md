@@ -48,9 +48,9 @@
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and create comprehensive expense reports.
 
 <!-- Update when there are more demos, create links for each demo -->
-# [Recorded Demo]()
+# [Recorded Demo](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
 
-# [Functional Requirements](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
+# [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
 
 # [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
