@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonItem, IonLabel, IonPage, IonTextarea} from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonItem, IonLabel, IonPage, IonTextarea} from '@ionic/react';
 import React, { useState } from 'react';
 import './LoginRegister.css';
 
@@ -21,6 +21,14 @@ const Login: React.FC = () => {
           <IonLabel position="floating">Password</IonLabel>
           <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
         </IonItem>
+
+        <IonItem>
+            <IonButton routerLink={"/home"}className='buttons' slot="end" color="secondary">Login</IonButton>
+           
+          </IonItem>
+          <IonItem>
+            <IonButton routerLink={"/register"} className='buttons' slot="end" color="secondary">Register</IonButton>
+          </IonItem>
 
 
   
