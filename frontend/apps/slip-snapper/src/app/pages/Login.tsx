@@ -16,7 +16,12 @@ const Login: React.FC = () => {
             <IonLabel position="floating">Username</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
-  
+          
+          <IonItem className='inputcredentials' color="primary">
+          <IonLabel position="floating">Password</IonLabel>
+          <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
+        </IonItem>
+
 
   
       </IonContent>
