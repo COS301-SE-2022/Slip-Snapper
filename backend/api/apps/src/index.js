@@ -204,7 +204,6 @@ app.post('/addItem',async(req,res)=>{
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
                 a = req.body.itemid;
-                console.log(a)
                 break;
             }
         }

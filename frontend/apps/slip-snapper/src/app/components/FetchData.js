@@ -66,12 +66,40 @@ class FetchData extends React.Component {
         if (editDiv.contentEditable === "true") {
             editDiv.contentEditable = "false";
             btn.color = "secondary";
-            console.log(editedText);
+            updateItem(editedText);
         } else {
             editDiv.contentEditable = "true";
             btn.color = "tertiary";
         }
     }
+
+    function updateItem(editedText){
+        let lines = editedText.split("\n")
+        let _item = lines[0].split(" ")[0].toLowerCase() + lines[0].split(" ").pop()
+        let _name = lines[1].split(" ").pop();
+        let _location = lines[6].split(" ").pop();
+        let _quantity = lines[2].split(" ").pop();
+        let _price = lines[3].split(" ").pop();
+        let _type = lines[4].split(" ").pop();
+
+        fetch("http://localhost:1234/updateItem", {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    itemid: _item,
+                    user: 1,
+                    name : _name,
+                    location : _location,
+                    quantity : _quantity,
+                    price : _price,
+                    type : _type
+                })
+            })
+            .then((res) => res.json());
+    }
+
 }
 }
    
