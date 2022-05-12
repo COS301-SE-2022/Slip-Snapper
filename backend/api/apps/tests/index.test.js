@@ -32,8 +32,8 @@ const users = {
   }
 }
 
-const items = {
-  "item1": {
+const items = [
+  {
     "id":1,
     "user": 1,
     "location": "Woolworths",
@@ -43,7 +43,7 @@ const items = {
     "price": "12,99",
     "type": "food"
   },
-  "item2": {
+  {
     "id":2,
     "user": 1,
     "location": "Woolworths",
@@ -53,7 +53,7 @@ const items = {
     "price": "22,99",
     "type": "food"
   },
-  "item3": {
+  {
     "id":3,
     "user": 1,
     "location": "Woolworths",
@@ -63,7 +63,7 @@ const items = {
     "price": "16,99",
     "type": "food"
   },
-  "item5": {
+  {
     "id":5,
     "user": 1,
     "location": "Woolworths",
@@ -73,7 +73,7 @@ const items = {
     "price": "19,99",
     "type": "food"
   },
-  "item6": {
+  {
     "id":6,
     "user": 1,
     "location": "Woolworths",
@@ -83,7 +83,7 @@ const items = {
     "price": "35,99",
     "type": "cleaning"
   },
-  "item7": {
+  {
     "id":7,
     "user": 1,
     "location": "Woolworths",
@@ -93,7 +93,7 @@ const items = {
     "price": "10,00",
     "type": "cleaning"
   },
-  "item8": {
+  {
     "id":8,
     "user": 1,
     "location": "Woolworths",
@@ -103,7 +103,7 @@ const items = {
     "price": "40,00",
     "type": "cleaning"
   },
-  "item9": {
+  {
     "id":9,
     "user": 1,
     "location": "Woolworths",
@@ -113,7 +113,7 @@ const items = {
     "price": "40.00",
     "type": "food"
   }
-}
+]
 
 /**
  * Test for the get users query
@@ -169,6 +169,75 @@ describe('Get /users?user=1', ()=>{
       .post('/deleteUser')
       .send({
         userid: "user6"
+      })
+
+      expect(res.statusCode).toEqual(200)
+  })
+})
+
+/**
+ * Test for the get items for user query
+ */
+ describe('Get /items', ()=>{
+  test('Should return a json array of items', async ()=>{
+    const res = await request(app)
+      .get('/items?user=1')
+
+      expect(res.statusCode).toEqual(200)
+      expect(JSON.parse(res.text)).toEqual(items)
+  })
+})
+
+/**
+ * Test for the add user query
+ */
+ describe('Post /addItem', ()=>{
+  test('Should add an item to the database', async ()=>{
+    const res = await request(app)
+      .post('/addItem')
+      .send({
+        user: 1,
+        location:"Woolworths",
+        date:"09/05/22",
+        name:"Orange",
+        quantity:1,
+        price:"20.00",
+        type: "food"
+      })
+
+      expect(res.statusCode).toEqual(200)
+  })
+})
+
+/**
+ * Test for the update item query
+ */
+ describe('Post /updateItem', ()=>{
+  test('Should update an item in the database', async ()=>{
+    const res = await request(app)
+      .post('/updateItem')
+      .send({
+        user: 1,
+        itemid: "item10",
+        name:"Oranges",
+        quantity:2,
+        price:"40.00"
+      })
+
+      expect(res.statusCode).toEqual(200)
+  })
+})
+
+/**
+ * Test for the delete item query
+ */
+ describe('Post /deleteItem', ()=>{
+  test('Should delete an item in the database', async ()=>{
+    const res = await request(app)
+      .post('/deleteItem')
+      .send({
+        user: 1,
+        item: "item10"
       })
 
       expect(res.statusCode).toEqual(200)
