@@ -18,12 +18,12 @@ export const Register: React.FC = () => {
         
       </IonCard>
 
-       <IonItem  color="primary" class="inputcredentials">
+       <IonItem  color="secondary" class="inputcredentials">
             <IonLabel position="floating">First Name</IonLabel>
             <IonTextarea  value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
 
-          <IonItem  color="primary" class="inputcredentials">
+          <IonItem  color="secondary" class="inputcredentials">
             <IonLabel position="floating">Last Name</IonLabel>
             <IonTextarea value={text} onIonChange={e => setText(e.detail.value!)}></IonTextarea>
           </IonItem>
