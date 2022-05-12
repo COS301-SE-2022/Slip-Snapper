@@ -15,7 +15,7 @@ app.listen(1234, () =>{
  * Example api call
  * Gets all users
  */
-app.get('/users',async(req,res)=>{
+app.get('/users',async(_req,res)=>{
     fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -35,7 +35,8 @@ app.get('/users',async(req,res)=>{
             return console.log(err);
         }
         let d = JSON.parse(data);
-        let userid = "user"+(Object.keys(d).length+1);
+        let last = Object.keys(d)[Object.keys(d).length-1].slice(-1)
+        let userid = "item"+(parseInt(last)+1);
         let user = {
             [userid]:{
                 "name": req.body.name,
@@ -141,11 +142,17 @@ app.post('/addItem',async(req,res)=>{
             return console.log(err);
         }
         let d = JSON.parse(data);
-        let itemid = "item"+(Object.keys(d).length+1);
+        let last = Object.keys(d)[Object.keys(d).length-1].slice(-1)
+        let itemid = "item"+(parseInt(last)+1);
         let item = {
             [itemid]:{
                 "user": req.body.user,
-                "name": req.body.name
+                "location":req.body.location,
+                "date":req.body.date,
+                "item_name":req.body.name,
+                "quantity":req.body.quantity,
+                "price":req.body.price,
+                "type":req.body.type
             }
         }
         d[itemid] = item[itemid];
@@ -196,9 +203,24 @@ app.post('/addItem',async(req,res)=>{
         }
         let d = JSON.parse(data);
         for(var i = 0;i < Object.keys(d).length;i++){
-            if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
+            if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
                 if(req.body.name != undefined){
-                    d[req.body.item].name = req.body.name;
+                    d[req.body.itemid].item_name = req.body.name;
+                }
+                if(req.body.location != undefined){
+                    d[req.body.itemid].location = req.body.location;
+                }
+                if(req.body.date != undefined){
+                    d[req.body.itemid].date = req.body.date;
+                }
+                if(req.body.quantity != undefined){
+                    d[req.body.itemid].quantity = req.body.quantity;
+                }
+                if(req.body.price != undefined){
+                    d[req.body.itemid].price = req.body.price;
+                }
+                if(req.body.type != undefined){
+                    d[req.body.itemid].type = req.body.type;
                 }
                 break;
             }
