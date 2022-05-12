@@ -54,8 +54,8 @@ jobs:
     with:
       test: 'all'
 
-  # test-backend:
-  #   if: ${{ github.event.inputs.testchoice == 'unit' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
-  #   uses: ./.github/workflows/BackendCITest.yml
-  #   with:
-  #     test: 'test'
+  test-backend:
+    if: ${{ github.event.inputs.testchoice == 'unit' || github.event.inputs.testchoice == 'full' || github.event.inputs.testchoice == ''}}
+    uses: ./.github/workflows/BackendCITest.yml
+    with:
+      test: 'test'
