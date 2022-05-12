@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import ViewReports from './pages/ViewReports';
 import Profile from './pages/Profile';
 import EditItem from './pages/EditItem';
+import Register from './pages/Register';
 
 /*Component Imports*/
 import { Redirect, Route } from 'react-router-dom';
@@ -41,6 +42,7 @@ const App: React.FC = () => (
         <Route path="/viewreports" component={ViewReports} exact={true} />
         <Route path="/profile" component={Profile} exact={true} />
         <Route path="/edititem" component={EditItem} exact={true} />
+        <Route path="/register" component={Register} exact={true} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

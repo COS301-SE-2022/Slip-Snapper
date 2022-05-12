@@ -124,8 +124,6 @@ const Home: React.FC = () => {
 
       </IonContent>
 
-      
-
       <IonFooter>
         <IonToolbar color="primary">
         </IonToolbar>
