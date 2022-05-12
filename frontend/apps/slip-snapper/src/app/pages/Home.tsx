@@ -16,7 +16,6 @@ import {
   IonFooter
 } from '@ionic/react';
 import React from 'react';
-import './Home.css';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 
