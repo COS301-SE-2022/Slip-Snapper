@@ -17,7 +17,7 @@ app.listen(1234, () =>{
  * Gets all users
  */
 app.get('/users',async(_req,res)=>{
-    fs.readFile( __dirname + "/" + "users.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
         }
@@ -45,9 +45,9 @@ app.get('/users',async(_req,res)=>{
             }
         }
         d[userid] = user[userid];
-        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         });
 
@@ -71,9 +71,9 @@ app.get('/users',async(_req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         }); 
 
@@ -102,9 +102,9 @@ app.get('/users',async(_req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+        fs.writeFile(__dirname + "/users.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         }); 
 
@@ -147,6 +147,7 @@ app.post('/addItem',async(req,res)=>{
         let itemid = "item"+(parseInt(last)+1);
         let item = {
             [itemid]:{
+                "id":parseInt(last)+1,
                 "user": req.body.user,
                 "location":req.body.location,
                 "date":req.body.date,
@@ -157,9 +158,9 @@ app.post('/addItem',async(req,res)=>{
             }
         }
         d[itemid] = item[itemid];
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         });
 
@@ -183,9 +184,9 @@ app.post('/addItem',async(req,res)=>{
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         }); 
 
@@ -205,30 +206,30 @@ app.post('/addItem',async(req,res)=>{
         let d = JSON.parse(data);
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
-                if(req.body.name != undefined){
-                    d[req.body.itemid].item_name = req.body.name;
-                }
-                if(req.body.location != undefined){
-                    d[req.body.itemid].location = req.body.location;
-                }
-                if(req.body.date != undefined){
-                    d[req.body.itemid].date = req.body.date;
-                }
-                if(req.body.quantity != undefined){
-                    d[req.body.itemid].quantity = req.body.quantity;
-                }
-                if(req.body.price != undefined){
-                    d[req.body.itemid].price = req.body.price;
-                }
-                if(req.body.type != undefined){
-                    d[req.body.itemid].type = req.body.type;
-                }
+                let a = req.body.itemid;
                 break;
             }
         }
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(err) {
-            if(err) {
-                return console.log(err);
+
+        if(req.body.name != undefined){
+            d[a].item_name = req.body.name;
+        }
+        if(req.body.location != undefined){
+            d[a].location = req.body.location;
+        }
+        if(req.body.quantity != undefined){
+            d[a].quantity = req.body.quantity;
+        }
+        if(req.body.price != undefined){
+            d[a].price = req.body.price;
+        }
+        if(req.body.type != undefined){
+            d[a].type = req.body.type;
+        }
+
+        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
+            if(erra) {
+                return console.log(erra);
             }
         }); 
 
