@@ -1,11 +1,12 @@
 const express = require('express');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
-
+const Cors = require('cors')
 const app = express();
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+app.use(Cors())
 
 app.listen(1234, () =>{
     console.log('Server ready');

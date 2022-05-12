@@ -1,19 +1,27 @@
 {
-  "name": "slip-snapper-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/index.js",
+  "name": "slip-snapper",
+  "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node apps/src/index.js",
+    "test": "jest src/app.test.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "private": true,
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.16",
-    "nx": "^14.1.4",
-    "pdfkit": "^0.13.0"
+    "pdfkit": "^0.13.0",
+    "supertest": "^6.2.3"
+  },
+  "devDependencies": {
+    "@nrwl/cli": "14.1.5",
+    "@nrwl/nx-cloud": "latest",
+    "@nrwl/workspace": "14.1.5",
+    "nx": "14.1.5",
+    "prettier": "^2.5.1",
+    "typescript": "~4.6.2"
   }
 }
