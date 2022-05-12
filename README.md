@@ -6,11 +6,14 @@
 <!-- Build badges
 ============================
 (GitHub Actions) -->
-
+[![CI Tests](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/index.yml/badge.svg?branch=develop)](https://github.com/COS301-SE-2022/Slip-Snapper/actions/workflows/index.yml)
 
 <!-- Requirements badges 
 ============================
-(requires.io which needs the repo to be public to be used) -->
+(libraries.io which needs the repo to be public to be used) -->
+<a href = "https://libraries.io/github/COS301-SE-2022/Slip-Snapper">
+  <img alt="GitHub Issues" src="https://img.shields.io/librariesio/github/COS301-SE-2022/Slip-Snapper">
+</a>
 
 
 <!-- Issue  Tracking badges
@@ -19,10 +22,6 @@
 <!-- Issues -->
 <a href = "https://github.com/COS301-SE-2022/Slip-Snapper/issues">
   <img alt="GitHub Issues" src="https://img.shields.io/github/issues/COS301-SE-2022/Slip-Snapper?style=flat-square">
-</a>
-<!-- Project Board -->
-<a href = "https://github.com/COS301-SE-2022/Slip-Snapper/projects/1">
-  <img alt="Project Board" src="https://img.shields.io/badge/Project%20Board-1-red">
 </a>
 
 <!-- Monitoring badges 
@@ -45,7 +44,7 @@
 
 ## About
 
-> The Slip Snapper is a cross-platform application that assists in managing an individuals’ expenses.
+> The Slip Snapper is a cross-platform application that assists in managing an individual's expenses.
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and create comprehensive expense reports.
 
 <!-- Update when there are more demos, create links for each demo -->
