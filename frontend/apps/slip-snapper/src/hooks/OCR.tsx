@@ -10,7 +10,7 @@ import { createWorker } from 'tesseract.js';
 
 export function ScanSlip(photo : string) {
   const worker = createWorker({
-    logger: m => console.log(m),
+    logger: (m:any) => console.log(m),
   });
   const doOCR = async () => {
     await worker.load();

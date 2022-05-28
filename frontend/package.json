@@ -60,6 +60,7 @@
     "react-dom": "18.0.0",
     "react-router-dom": "5.3.0",
     "regenerator-runtime": "0.13.7",
+    "tesseract.js": "^2.1.5",
     "tslib": "^2.0.0"
   },
   "main": "index.js",
