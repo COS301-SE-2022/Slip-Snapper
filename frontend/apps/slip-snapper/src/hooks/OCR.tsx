@@ -1,5 +1,5 @@
 import { IonText } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createWorker } from 'tesseract.js';
 
 /**
@@ -10,6 +10,7 @@ import { createWorker } from 'tesseract.js';
 
 export function ScanSlip(photo : string) {
   const worker = createWorker({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: (m:any) => console.log(m),
   });
   const doOCR = async () => {
