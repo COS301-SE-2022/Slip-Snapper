@@ -175,6 +175,20 @@ describe('Get /users?user=1', ()=>{
   })
 })
 
+describe('Post /user/login', ()=>{
+  test('Should log a user in', async ()=>{
+    const res = await request(app)
+      .post('/user/login')
+      .send({
+        name: "John Doe"
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.text).toEqual("\"User logged in successfully\"")
+  })
+  
+})
+
 /**
  * Test for the get items for user query
  */

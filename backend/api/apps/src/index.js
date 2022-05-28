@@ -26,7 +26,7 @@ app.get('/users',async(_req,res)=>{
  * Add a user
  * Adds a user with an Name, Age
  */
- app.post('/addUser',async(req,res)=>{
+ app.post('/user/signup',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -63,7 +63,7 @@ app.post("/user/login",async(req,res)=>{
         let d = JSON.parse(data);
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].name === req.body.name){
-                return res.status(200).end(JSON.stringify("User logged in successfully",null,2));
+                return res.status(200).end(JSON.stringify("User logged in successfully"));
             }
         }
 
