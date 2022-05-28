@@ -52,6 +52,26 @@ app.get('/users',async(_req,res)=>{
 })
 
 /**
+ * Log a user in
+ * Logs the user in with their password and username
+ */
+app.post("/user/login",async(req,res)=>{
+    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
+        if(err) {
+            return console.log(err);
+        }
+        let d = JSON.parse(data);
+        for(var i = 0;i < Object.keys(d).length;i++){
+            if(d[Object.keys(d)[i]].name === req.body.name){
+                return res.status(200).end(JSON.stringify("User logged in successfully",null,2));
+            }
+        }
+
+        return res.status(400).end(JSON.stringify("Login Failed",null,2));
+    });
+})
+
+/**
  * Delete an item
  * Uses the user id delete the user
  */
@@ -244,7 +264,7 @@ app.post('/addItem',async(req,res)=>{
     let name = "report-" + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear() + "-a.pdf";
     console.log(name);
     pdf.pipe(fs.createWriteStream(name))
-    fs.readFile( __dirname + "/" + "items.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
         }
