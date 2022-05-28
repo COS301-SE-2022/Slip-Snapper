@@ -131,10 +131,10 @@ describe('Get /users?user=1', ()=>{
 /**
  * Test for the add user query
  */
- describe('Post /addUser', ()=>{
+ describe('Post /user/signup', ()=>{
   test('Should add a user to the database', async ()=>{
     const res = await request(app)
-      .post('/addUser')
+      .post('/user/signup')
       .send({
         name: "jeff",
         age: "18"
