@@ -131,10 +131,10 @@ describe('Get /users?user=1', ()=>{
 /**
  * Test for the add user query
  */
- describe('Post /addUser', ()=>{
+ describe('Post /user/signup', ()=>{
   test('Should add a user to the database', async ()=>{
     const res = await request(app)
-      .post('/addUser')
+      .post('/user/signup')
       .send({
         name: "jeff",
         age: "18"
@@ -173,6 +173,20 @@ describe('Get /users?user=1', ()=>{
 
       expect(res.statusCode).toEqual(200)
   })
+})
+
+describe('Post /user/login', ()=>{
+  test('Should log a user in', async ()=>{
+    const res = await request(app)
+      .post('/user/login')
+      .send({
+        name: "John Doe"
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.text).toEqual("\"User logged in successfully\"")
+  })
+  
 })
 
 /**

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon apps/server.js",
-    "test": "jest tests/index.test.js"
+    "test": "jest --coverage"
   },
   "private": true,
   "dependencies": {
