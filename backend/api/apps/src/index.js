@@ -331,8 +331,6 @@ app.post('/addItem',async(req,res)=>{
         }
 
         pdf.end();
-
-        return res.status(200).end(JSON.stringify("Report Generated",null,2));
     });
     
     return res.status(200).end(JSON.stringify("Report Generated",null,2));
