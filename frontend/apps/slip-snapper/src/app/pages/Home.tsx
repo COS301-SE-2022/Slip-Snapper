@@ -95,7 +95,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R137.69</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("daily")}>Generate Report</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("day")}>Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R912.21</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("weekly")}>Generate Report</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("week")}>Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
@@ -115,7 +115,7 @@ const Home: React.FC = () => {
           <IonCardSubtitle>R4013.01</IonCardSubtitle>
         </IonCardHeader>
         <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("monthly")}>Generate Report</IonButton>
+          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("month")}>Generate Report</IonButton>
         </IonItem>
       </IonCard>
 
@@ -131,7 +131,8 @@ const Home: React.FC = () => {
   );
 
   function generateReport(type: string){
-    fetch("http://localhost:55555/generatePDFReport?user=1", {
+    const url = "http://localhost:55555/report/generate?user=1&period="+type
+    fetch(url, {
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

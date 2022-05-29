@@ -264,6 +264,7 @@ app.post('/addItem',async(req,res)=>{
     let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
     var date = new Date();
     var periodStart;
+    
     switch (period) {
         case "day":
             periodStart = periodEnd;
@@ -284,7 +285,6 @@ app.post('/addItem',async(req,res)=>{
 
     let pdf = new PDFDocument;
     let name = "report-" + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "-a.pdf";
-    console.log(name);
     pdf.pipe(fs.createWriteStream(name))
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
