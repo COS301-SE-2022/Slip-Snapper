@@ -19,7 +19,18 @@ model Users {
   lastname String?
   password String @db.VarChar(255)
   isBusiness Boolean  @default(false)
+  slips Slip[]
 }
+
+model Slip{
+  id  Int @id @default(autoincrement())
+  location String?
+  transactionDate DateTime @default(now())  
+  total Float
+  user  Users @relation(fields: [userId], references: [id])
+  userId  Int
+}
+
 
 
 
