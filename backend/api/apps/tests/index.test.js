@@ -3,34 +3,7 @@ const {app} = require('../src/index.js');
 
 jest.mock('../src/items.json', ()=>({
   foo: 'bar'
-}), {
-  virtual: true
-})
-
-jest.mock('../src/users.json', ()=>({
-  foo: 'bar'
-}), {
-  virtual: true
-})
-
-const users = {
-  "user1": {
-    "name": "Jane Doe",
-    "age": "22"
-  },
-  "user2": {
-    "name": "John Doe",
-    "age": "31"
-  },
-  "user4": {
-    "name": "jefferey",
-    "age": "25"
-  },
-  "user5": {
-    "name": "peter de",
-    "age": "22"
-  }
-}
+}))
 
 const items = [
   {
@@ -114,19 +87,6 @@ const items = [
     "type": "food"
   }
 ]
-
-/**
- * Test for the get users query
- */
-describe('Get /users?user=1', ()=>{
-  test('Should return a json array of users', async ()=>{
-    const res = await request(app)
-      .get('/users?user=1')
-
-      expect(res.statusCode).toEqual(200)
-      expect(JSON.parse(res.text)).toEqual(users)
-  })
-})
 
 /**
  * Test for the add user query
