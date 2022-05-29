@@ -1,24 +1,30 @@
-.inputcredentials {
-    padding-top: 3%;
-    /* padding-left: 25%; */
+.logincard {
+    width: 90%;
+    margin-left: 5%;
+}
+
+.logoimg {
+    padding: 3%;
+    width: 60%;
+    margin-left: 20%;
+}
+
+.loginitems {
+    padding: 1%;
     font-size: 16px;
-    color: #fff;
-    display: list-item;
-
-    border-color: "secondary";
-
     text-align: center;
     align-content: center;
 }
 
-
-.LRLogo {
-    height:120px ;
-    font-size: 400%;
-    /* padding-left: 35%; */
-    text-align: center;
-}
-
 .LRButtons {
    margin: auto;
+   padding: 8px;
+   width:20%;
+   font-size: 16px;
+}
+
+@media only screen and (max-width: 390px) {
+    .LRButtons {
+        min-width: 50%;
+    }
 }

@@ -1,44 +1,40 @@
-import { IonButton, IonCard, IonCardHeader, IonContent, IonHeader, IonItem, IonLabel, IonPage, IonTextarea} from '@ionic/react';
+import { IonButton, IonCard, IonContent, IonImg, IonInput, IonItem, IonLabel, IonPage} from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/LoginRegister.css';
 
 const Login: React.FC = () => {
   
-  const [text3, setText3] = useState<string>();
-  const [text4, setText4] = useState<string>();
+  const [usernameInput, setUsernameInput] = useState<string>();
+  const [passwordInput, setPasswordInput] = useState<string>();
   
     return (
       <IonPage>
 
-      <IonHeader>
-      </IonHeader>
       <IonContent fullscreen color="primary">
-          <IonCard color = "tertiary" class = "LRLogo">
-        <IonCardHeader >
-           Slip-Snapper
-        </IonCardHeader>
 
-          </IonCard>
-       
-          <IonItem  color="primary" class="inputcredentials">
-            <IonLabel position="floating">Username</IonLabel>
-            <IonTextarea  value={text3} onIonChange={e => setText3(e.detail.value!)}></IonTextarea>
-          </IonItem>
+          <IonImg src="/assets/icon/temp_logo.png" class="logoimg"></IonImg>
 
-         
-          <IonItem   color="primary" class="inputcredentials">
-            <IonLabel position="floating">Password</IonLabel>
-            <IonTextarea value={text4} onIonChange={e => setText4(e.detail.value!)}></IonTextarea>
-          </IonItem>
+          <IonCard color = "tertiary" class="logincard">
+            
+            <IonItem  color="tertiary" class="loginitems">
+              <IonLabel position="floating">Username</IonLabel>
+              <IonInput type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
+            </IonItem>
 
-         <IonItem text-align="center" color="primary">
-              <IonButton class="LRButtons" color= "tertiary" routerLink={"/home"} >Login</IonButton>
-              </IonItem>
+            <IonItem   color="tertiary" class="loginitems">
+              <IonLabel position="floating">Password</IonLabel>
+              <IonInput type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
+            </IonItem>
 
-              <IonItem text-align="center" color="primary">
-              <IonButton class="LRButtons" color= "tertiary" routerLink={"/register"} >Register</IonButton>
-              </IonItem>
-      
+            <IonItem color="tertiary" text-align="center" class="loginitems">
+              <IonButton type="submit" class="LRButtons" color= "secondary" size="large" routerLink={"/home"}>Login</IonButton>
+            </IonItem>
+
+            <IonItem color="tertiary" text-align="center" class="loginitems">
+              <IonButton class="LRButtons" color= "secondary" size="large" routerLink={"/register"}>Register</IonButton>
+            </IonItem>
+
+          </IonCard>  
       </IonContent>
       
     </IonPage>
