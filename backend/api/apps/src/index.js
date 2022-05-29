@@ -200,43 +200,48 @@ app.post('/item/add',async(req,res)=>{
  * Update an item
  * Uses the user id and itemId to update the item
  */
- app.post('/updateItem',async(req,res)=>{
+ app.post('/item/update',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
         }
         let d = JSON.parse(data);
         var a;
+        var found = false;
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
                 a = req.body.itemid;
+                found = true;
                 break;
             }
         }
-
-        if(req.body.name != undefined){
-            d[a].item_name = req.body.name;
-        }
-        if(req.body.location != undefined){
-            d[a].location = req.body.location;
-        }
-        if(req.body.quantity != undefined){
-            d[a].quantity = req.body.quantity;
-        }
-        if(req.body.price != undefined){
-            d[a].price = req.body.price;
-        }
-        if(req.body.type != undefined){
-            d[a].type = req.body.type;
-        }
-
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
-            if(erra) {
-                return console.log(erra);
+        
+        if(found){
+            if(req.body.name != undefined){
+                d[a].item_name = req.body.name;
             }
-        }); 
+            if(req.body.location != undefined){
+                d[a].location = req.body.location;
+            }
+            if(req.body.quantity != undefined){
+                d[a].quantity = req.body.quantity;
+            }
+            if(req.body.price != undefined){
+                d[a].price = req.body.price;
+            }
+            if(req.body.type != undefined){
+                d[a].type = req.body.type;
+            }
 
-        return res.status(200).end(JSON.stringify(d,null,2));
+            fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
+                if(erra) {
+                    return console.log(erra);
+                }
+            }); 
+        }
+        else{
+            return res.status(404).end("Item was not found");
+        }
     });
 })
 

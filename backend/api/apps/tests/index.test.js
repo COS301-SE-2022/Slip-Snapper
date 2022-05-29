@@ -48,6 +48,9 @@ const {app} = require('../src/index.js');
   })
 })
 
+/**
+ * Test for logging a user in
+ */
 describe('Post /user/login', ()=>{
   test('Should log a user in', async ()=>{
     const res = await request(app)
@@ -98,10 +101,10 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the update item query
  */
- describe('Post /updateItem', ()=>{
+ describe('Post /item/update', ()=>{
   test('Should update an item in the database', async ()=>{
     const res = await request(app)
-      .post('/updateItem')
+      .post('/item/update')
       .send({
         user: 1,
         itemid: "item10",
@@ -111,6 +114,21 @@ describe('Post /user/login', ()=>{
       })
 
       expect(res.statusCode).toEqual(200)
+  })
+
+  test('Should fail to update an item in the database', async ()=>{
+    const res = await request(app)
+      .post('/item/update')
+      .send({
+        user: 1,
+        itemid: "item10",
+        name:"Oranges",
+        quantity:2,
+        price:"40.00"
+      })
+
+      expect(res.statusCode).toEqual(404)
+      expect(res.text).toEqual("Item was not found")
   })
 })
 
