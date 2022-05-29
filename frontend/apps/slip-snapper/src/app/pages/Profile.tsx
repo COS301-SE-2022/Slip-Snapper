@@ -84,10 +84,63 @@ const Profile: React.FC = () => {
           </IonList>
           <IonItem>
             <IonButton fill="outline" slot="end" color="secondary">
-              View 
+              View
             </IonButton>
           </IonItem>
         </IonCard>
+
+        <IonRow>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Least spent at a store</IonCardTitle>
+                <IonCardSubtitle>Store: Tuks Shop</IonCardSubtitle>
+                <IonCardSubtitle>Total: R21.99</IonCardSubtitle>
+              </IonCardHeader>
+            </IonCard>
+          </IonCol>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Most spent at a store</IonCardTitle>
+                <IonCardSubtitle>Store: Sportsmans Warehouse</IonCardSubtitle>
+                <IonCardSubtitle>Total: R5899.99</IonCardSubtitle>
+              </IonCardHeader>
+            </IonCard>
+          </IonCol>
+        </IonRow>
+
+        <IonRow>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Expenditure compared to last week</IonCardTitle>
+                <IonCardSubtitle>Last Week's Total: R1390.34</IonCardSubtitle>
+                <IonCardSubtitle>This Week's Total: R900.54</IonCardSubtitle>
+              </IonCardHeader>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  Compare Reports
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
+
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Expenditure compared to last month</IonCardTitle>
+                <IonCardSubtitle>Last Month's Total: R10399.34</IonCardSubtitle>
+                <IonCardSubtitle>This Month's Total: R12030.59</IonCardSubtitle>
+              </IonCardHeader>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  Compare Reports
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
+        </IonRow>
       </IonContent>
     </IonPage>
   );
