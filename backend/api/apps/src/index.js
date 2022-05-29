@@ -9,20 +9,6 @@ app.use(bodyParser.json());
 app.use(Cors())
 
 /**
- * Example api call
- * Gets all users
- */
-app.get('/users',async(_req,res)=>{
-    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
-        if(err) {
-            return console.log(err);
-        }
-
-        return res.status(200).end(data);
-    });
-})
-
-/**
  * Add a user
  * Adds a user with an Name, Age
  */
@@ -75,7 +61,7 @@ app.post("/user/login",async(req,res)=>{
  * Delete an item
  * Uses the user id delete the user
  */
- app.post('/deleteUser',async(req,res)=>{
+ app.post('/user/delete',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -101,7 +87,7 @@ app.post("/user/login",async(req,res)=>{
  * Update a user
  * Uses the user id to update the user
  */
- app.post('/updateUser',async(req,res)=>{
+ app.post('/user/update',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -132,7 +118,7 @@ app.post("/user/login",async(req,res)=>{
  * Get all items for a user
  * Uses the user id to get the items
  */
-app.get('/items',async(req,res)=>{
+app.get('/item/all',async(req,res)=>{
     fs.readFile( __dirname + "/" + "items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -153,7 +139,7 @@ app.get('/items',async(req,res)=>{
  * Add an item
  * Uses the user id to add the item
  */
-app.post('/addItem',async(req,res)=>{
+app.post('/item/add',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -188,7 +174,7 @@ app.post('/addItem',async(req,res)=>{
  * Delete an item
  * Uses the user id and itemId to delete the item
  */
- app.post('/deleteItem',async(req,res)=>{
+ app.post('/item/delete',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -214,43 +200,50 @@ app.post('/addItem',async(req,res)=>{
  * Update an item
  * Uses the user id and itemId to update the item
  */
- app.post('/updateItem',async(req,res)=>{
+ app.post('/item/update',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
         }
         let d = JSON.parse(data);
         var a;
+        var found = false;
         for(var i = 0;i < Object.keys(d).length;i++){
             if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
                 a = req.body.itemid;
+                found = true;
                 break;
             }
         }
 
-        if(req.body.name != undefined){
-            d[a].item_name = req.body.name;
-        }
-        if(req.body.location != undefined){
-            d[a].location = req.body.location;
-        }
-        if(req.body.quantity != undefined){
-            d[a].quantity = req.body.quantity;
-        }
-        if(req.body.price != undefined){
-            d[a].price = req.body.price;
-        }
-        if(req.body.type != undefined){
-            d[a].type = req.body.type;
-        }
-
-        fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
-            if(erra) {
-                return console.log(erra);
+        if(found){
+            if(req.body.name != undefined){
+                d[a].item_name = req.body.name;
             }
-        }); 
+            if(req.body.location != undefined){
+                d[a].location = req.body.location;
+            }
+            if(req.body.quantity != undefined){
+                d[a].quantity = req.body.quantity;
+            }
+            if(req.body.price != undefined){
+                d[a].price = req.body.price;
+            }
+            if(req.body.type != undefined){
+                d[a].type = req.body.type;
+            }
 
-        return res.status(200).end(JSON.stringify(d,null,2));
+            fs.writeFile(__dirname + "/items.json", JSON.stringify(d,null,2), function(erra) {
+                if(erra) {
+                    return console.log(erra);
+                }
+            }); 
+
+            return res.status(200).end("Item updated successfully");
+        }
+        else{
+            return res.status(404).end("Item was not found");
+        }
     });
 })
 
