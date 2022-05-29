@@ -26,12 +26,21 @@ model Slip{
   id  Int @id @default(autoincrement())
   location String?
   transactionDate DateTime @default(now())  
+  items Item[]
   total Float
   user  Users @relation(fields: [userId], references: [id])
   userId  Int
 }
 
-
+model Item {
+  id Int @id @default(autoincrement())
+  item  String?
+  itemType  String?
+  itemQuantities Int
+  itemPrices Float
+  slip  Slip @relation(fields: [slipId], references: [id])
+  slipId Int
+}
 
 
 
