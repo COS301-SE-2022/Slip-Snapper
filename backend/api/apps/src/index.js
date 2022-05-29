@@ -258,11 +258,33 @@ app.post('/addItem',async(req,res)=>{
  * Generate the pdf report for a user
  * Uses the user id to get the items
  */
- app.get('/generatePDFReport',async(req,res)=>{
+ app.get('/report/generate',async(req,res)=>{
+    let period = req.query.period;
+    var today = new Date();
+    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    var date = new Date();
+    var periodStart;
+    
+    switch (period) {
+        case "day":
+            periodStart = periodEnd;
+            break;
+        case "week":
+            date.setDate(date.getDate() - 7);
+            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            break;
+        case "month":
+            date.setMonth(date.getMonth() - 1);
+            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            break;
+        case "year":
+            d.setFullYear(date.getFullYear() - 1);
+            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            break;
+    }
+
     let pdf = new PDFDocument;
-    let date = new Date();
-    let name = "report-" + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear() + "-a.pdf";
-    console.log(name);
+    let name = "report-" + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "-a.pdf";
     pdf.pipe(fs.createWriteStream(name))
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
@@ -309,9 +331,9 @@ app.post('/addItem',async(req,res)=>{
         }
 
         pdf.end();
-
-        return res.status(200).end(JSON.stringify("Report Genereated",null,2));
     });
+    
+    return res.status(200).end(JSON.stringify("Report Generated",null,2));
 })
 
 module.exports = {app}
