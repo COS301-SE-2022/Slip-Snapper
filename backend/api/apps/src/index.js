@@ -9,20 +9,6 @@ app.use(bodyParser.json());
 app.use(Cors())
 
 /**
- * Example api call
- * Gets all users
- */
-app.get('/users',async(_req,res)=>{
-    fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
-        if(err) {
-            return console.log(err);
-        }
-
-        return res.status(200).end(data);
-    });
-})
-
-/**
  * Add a user
  * Adds a user with an Name, Age
  */
