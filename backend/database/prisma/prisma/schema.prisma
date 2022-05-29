@@ -11,6 +11,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Users {
+  id  Int @id @default(autoincrement())
+  email String  @unique
+  username  String?
+  firstname String?
+  lastname String?
+  password String @db.VarChar(255)
+  isBusiness Boolean  @default(false)
+}
+
+
 
 
 
