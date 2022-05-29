@@ -131,7 +131,7 @@ const Home: React.FC = () => {
   );
 
   function generateReport(type: string){
-    fetch("http://localhost:1234/generatePDFReport?user=1", {
+    fetch("http://localhost:55555/generatePDFReport?user=1", {
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

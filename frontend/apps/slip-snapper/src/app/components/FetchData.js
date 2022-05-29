@@ -13,7 +13,7 @@ class FetchData extends React.Component {
     }
    
     componentDidMount() {
-        fetch("http://localhost:1234/items?user=1", {
+        fetch("http://localhost:55555/items?user=1", {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ class FetchData extends React.Component {
         let _price = lines[3].split(" ").pop();
         let _type = lines[4].split(" ").pop();
 
-        fetch("http://localhost:1234/updateItem", {
+        fetch("http://localhost:55555/updateItem", {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json'
