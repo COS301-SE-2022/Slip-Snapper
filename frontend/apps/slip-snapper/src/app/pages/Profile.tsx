@@ -15,11 +15,16 @@ import {
   IonList,
   IonCol,
   IonRow,
+  IonAlert,
+  IonImg,
+  IonThumbnail,
 } from '@ionic/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
+import '../theme/profile.css';
 
 const Profile: React.FC = () => {
+  const [showAlert2, setShowAlert2] = useState(false);
   return (
     <IonPage>
       <IonHeader>
@@ -36,7 +41,18 @@ const Profile: React.FC = () => {
             <IonCard color="primary">
               <IonCardHeader>
                 <IonCardTitle>User details</IonCardTitle>
-                <IonCardSubtitle>Name: </IonCardSubtitle>
+                <IonCardSubtitle>Name: Christian Devraj </IonCardSubtitle>
+                <IonCardSubtitle>
+                  My Business: Isabella's Decor and Gifts
+                </IonCardSubtitle>
+
+                <IonCardSubtitle>
+                  <IonItem class="profilePhoto">
+                    <IonThumbnail slot="start">
+                      <IonImg src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
+                    </IonThumbnail>
+                  </IonItem>
+                </IonCardSubtitle>
               </IonCardHeader>
             </IonCard>
           </IonCol>
@@ -62,6 +78,7 @@ const Profile: React.FC = () => {
               Favorite Store (Most frequent this month)
             </IonCardTitle>
             <IonCardSubtitle>Name: Woolworths</IonCardSubtitle>
+
             <IonCardSubtitle>Total: R2593.99</IonCardSubtitle>
           </IonCardHeader>
 
@@ -93,9 +110,9 @@ const Profile: React.FC = () => {
           <IonCol>
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Least spent at a store</IonCardTitle>
-                <IonCardSubtitle>Store: Tuks Shop</IonCardSubtitle>
-                <IonCardSubtitle>Total: R21.99</IonCardSubtitle>
+                <IonCardTitle>Most purchased item category</IonCardTitle>
+                <IonCardSubtitle>Category: Food</IonCardSubtitle>
+                <IonCardSubtitle>Total: R310.99</IonCardSubtitle>
               </IonCardHeader>
             </IonCard>
           </IonCol>
@@ -141,6 +158,24 @@ const Profile: React.FC = () => {
             </IonCard>
           </IonCol>
         </IonRow>
+        <IonButton onClick={() => setShowAlert2(true)} expand="block">
+          Logout
+        </IonButton>
+        <IonAlert
+          isOpen={showAlert2}
+          onDidDismiss={() => setShowAlert2(false)}
+          // cssClass="my-custom-class"
+          header={'Are you sure you want to logout?'}
+          buttons={[
+            'Cancel',
+            {
+              text: 'Logout',
+              // role: 'cancel',
+              cssClass: 'secondary',
+              // href: "/login",
+            },
+          ]}
+        ></IonAlert>
       </IonContent>
     </IonPage>
   );
