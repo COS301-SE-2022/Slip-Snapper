@@ -139,7 +139,7 @@ app.get('/item/all',async(req,res)=>{
  * Add an item
  * Uses the user id to add the item
  */
-app.post('/addItem',async(req,res)=>{
+app.post('/item/add',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -174,7 +174,7 @@ app.post('/addItem',async(req,res)=>{
  * Delete an item
  * Uses the user id and itemId to delete the item
  */
- app.post('/deleteItem',async(req,res)=>{
+ app.post('/item/delete',async(req,res)=>{
     fs.readFile( __dirname + "/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);

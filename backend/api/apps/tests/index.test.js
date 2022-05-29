@@ -77,10 +77,10 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the add user query
  */
- describe('Post /addItem', ()=>{
+ describe('Post /item/add', ()=>{
   test('Should add an item to the database', async ()=>{
     const res = await request(app)
-      .post('/addItem')
+      .post('/item/add')
       .send({
         user: 1,
         location:"Woolworths",
@@ -117,10 +117,10 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the delete item query
  */
- describe('Post /deleteItem', ()=>{
+ describe('Post /item/delete', ()=>{
   test('Should delete an item in the database', async ()=>{
     const res = await request(app)
-      .post('/deleteItem')
+      .post('/item/delete')
       .send({
         user: 1,
         item: "item10"
