@@ -114,6 +114,7 @@ describe('Post /user/login', ()=>{
       })
 
       expect(res.statusCode).toEqual(200)
+      expect(res.text).toEqual("Item updated successfully")
   })
 
   test('Should fail to update an item in the database', async ()=>{
@@ -121,7 +122,7 @@ describe('Post /user/login', ()=>{
       .post('/item/update')
       .send({
         user: 1,
-        itemid: "item10",
+        itemid: "item100",
         name:"Oranges",
         quantity:2,
         price:"40.00"

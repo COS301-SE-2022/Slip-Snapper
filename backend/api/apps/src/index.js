@@ -215,7 +215,7 @@ app.post('/item/add',async(req,res)=>{
                 break;
             }
         }
-        
+
         if(found){
             if(req.body.name != undefined){
                 d[a].item_name = req.body.name;
@@ -238,6 +238,8 @@ app.post('/item/add',async(req,res)=>{
                     return console.log(erra);
                 }
             }); 
+
+            return res.status(200).end("Item updated successfully");
         }
         else{
             return res.status(404).end("Item was not found");
