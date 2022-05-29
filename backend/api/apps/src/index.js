@@ -61,7 +61,7 @@ app.post("/user/login",async(req,res)=>{
  * Delete an item
  * Uses the user id delete the user
  */
- app.post('/deleteUser',async(req,res)=>{
+ app.post('/user/delete',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
@@ -87,7 +87,7 @@ app.post("/user/login",async(req,res)=>{
  * Update a user
  * Uses the user id to update the user
  */
- app.post('/updateUser',async(req,res)=>{
+ app.post('/user/update',async(req,res)=>{
     fs.readFile( __dirname + "/users.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);

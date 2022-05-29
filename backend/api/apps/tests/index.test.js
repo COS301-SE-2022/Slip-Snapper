@@ -107,10 +107,10 @@ const items = [
 /**
  * Test for the update user query
  */
- describe('Post /updateUser', ()=>{
+ describe('Post /user/update', ()=>{
   test('Should update a user in the database', async ()=>{
     const res = await request(app)
-      .post('/updateUser')
+      .post('/user/update')
       .send({
         userid: "user6",
         name: "jefferson",
@@ -123,10 +123,10 @@ const items = [
 /**
  * Test for the delete user query
  */
- describe('Post /deleteUser', ()=>{
+ describe('Post /user/delete', ()=>{
   test('Should delete a user in the database', async ()=>{
     const res = await request(app)
-      .post('/deleteUser')
+      .post('/user/delete')
       .send({
         userid: "user6"
       })
