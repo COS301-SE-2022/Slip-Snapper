@@ -52,7 +52,8 @@ const Login: React.FC = () => {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            name: user
+            name: user,
+            pass: password
         })
       })
       .then((res) => res.json())
