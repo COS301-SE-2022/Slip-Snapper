@@ -13,7 +13,7 @@ class FetchData extends React.Component {
     }
    
     componentDidMount() {
-        fetch("http://localhost:55555/items?user=1", {
+        fetch("http://localhost:55555/item/all?user=1", {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json'

@@ -118,7 +118,7 @@ app.post("/user/login",async(req,res)=>{
  * Get all items for a user
  * Uses the user id to get the items
  */
-app.get('/items',async(req,res)=>{
+app.get('/item/all',async(req,res)=>{
     fs.readFile( __dirname + "/" + "items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);

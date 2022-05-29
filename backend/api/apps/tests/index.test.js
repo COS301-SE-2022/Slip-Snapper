@@ -1,93 +1,6 @@
 const request = require("supertest")
 const {app} = require('../src/index.js');
 
-jest.mock('../src/items.json', ()=>({
-  foo: 'bar'
-}))
-
-const items = [
-  {
-    "id":1,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Orange",
-    "quantity": 3,
-    "price": "12,99",
-    "type": "food"
-  },
-  {
-    "id":2,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Milk",
-    "quantity": 1,
-    "price": "22,99",
-    "type": "food"
-  },
-  {
-    "id":3,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Jelly Tots",
-    "quantity": 2,
-    "price": "16,99",
-    "type": "food"
-  },
-  {
-    "id":5,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Bread",
-    "quantity": 1,
-    "price": "19,99",
-    "type": "food"
-  },
-  {
-    "id":6,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Sunlight liquid",
-    "quantity": 1,
-    "price": "35,99",
-    "type": "cleaning"
-  },
-  {
-    "id":7,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "sponge",
-    "quantity": 1,
-    "price": "10,00",
-    "type": "cleaning"
-  },
-  {
-    "id":8,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "Handy Andy",
-    "quantity": 1,
-    "price": "40,00",
-    "type": "cleaning"
-  },
-  {
-    "id":9,
-    "user": 1,
-    "location": "Woolworths",
-    "date": "09/05/22",
-    "item_name": "frootloops",
-    "quantity": 1,
-    "price": "40.00",
-    "type": "food"
-  }
-]
-
 /**
  * Test for the add user query
  */
@@ -152,13 +65,12 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the get items for user query
  */
- describe('Get /items', ()=>{
+ describe('Get /item/all', ()=>{
   test('Should return a json array of items', async ()=>{
     const res = await request(app)
-      .get('/items?user=1')
+      .get('/item/all?user=1')
 
       expect(res.statusCode).toEqual(200)
-      //expect(JSON.parse(res.text)).toEqual(items)
   })
 })
 
