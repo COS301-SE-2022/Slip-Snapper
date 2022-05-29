@@ -46,6 +46,23 @@ export const Register: React.FC = () => {
       </IonContent>
     </IonPage>
   );
+
+  function register(name:string, surname:string, user: string, password: string){
+    const fullName = name + " " + surname;
+    user = "Jane Doe";
+    fetch("http://localhost:55555/user/login", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: user,
+          userName: fullName,
+          pass: password
+      })
+    })
+    .then((res) => res.json())
+  }
 };
 
 

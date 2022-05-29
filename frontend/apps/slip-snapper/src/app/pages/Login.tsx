@@ -43,6 +43,21 @@ const Login: React.FC = () => {
       
     </IonPage>
     );
+
+    function login(user: string, password: string){
+      user = "Jane Doe";
+      fetch("http://localhost:55555/user/login", {
+          method: 'post',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: user,
+            pass: password
+        })
+      })
+      .then((res) => res.json())
+    }
   };
   
   export default Login;
