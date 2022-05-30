@@ -82,7 +82,7 @@
 <a href="https://linkedin.com/in/tshegofatso-m-83a640120/" target="blank">
 <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
 
-> “Commenting your code is like cleaning your bathroom — you never want to do it, but it really does create a more pleasant experience for you and your guests.” - Ryan Campbell
+> “Programs must be written for people to read, and only incidentally for machines to execute.” - Abelson and Sussman
 
 > I am a final year Computer Science student at the University of Pretoria with experience and practice in Java and C++ as well as other programming languages. I enjoy coding because it challenges me and invigorates my curiosity for problem solving. My passion for programming motivates my resilience for it. Over the years, I have accumulated various skills that would make me an asset to any team I join including JavaScript, HTML, Python and 8 years worth of SQL.
 
