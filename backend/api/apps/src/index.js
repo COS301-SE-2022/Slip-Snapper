@@ -329,6 +329,9 @@ app.post('/item/add',async(req,res)=>{
     return res.status(200).end(JSON.stringify("Report Generated",null,2));
 })
 
+/**
+ * Request to have text extracted to be processed by the ML
+ */
 app.post('/ocr',async(req,res)=>{
     let unprocessedText = req.body.text;
 
@@ -338,8 +341,8 @@ app.post('/ocr',async(req,res)=>{
 
     //Respond with relevant text
     let processedText = "Temporary response"
-    
-    return res.status(200).end({message:"Text has been processd",text: processedText});
+
+    return res.status(200).end(JSON.stringify({message:"Text has been processed",text: processedText}));
 })
 
 module.exports = {app}
