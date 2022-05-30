@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonTextarea, IonItem, IonLabel, IonItemDivider, IonList, IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTextarea, IonItem, IonLabel, IonButton, IonCard, IonCardHeader, IonImg} from '@ionic/react';
 import '../theme/LoginRegister.css';
 export const Register: React.FC = () => {
   const [fnameInput, setFnameInput] = useState<string>();
@@ -10,40 +10,39 @@ export const Register: React.FC = () => {
   return (
     <IonPage>
 
-      <IonHeader>
-      </IonHeader>
       <IonContent fullscreen color="primary">
-          <IonCard color = "tertiary" class = "LRLogo">
-        <IonCardHeader >
-           Slip-Snapper
-        </IonCardHeader>
-          </IonCard>
-       <IonItem  color="primary" class="inputcredentials" >
+
+        <IonImg src="/assets/icon/temp_logo.png" class="logoimg"></IonImg>
+
+        <IonCard color = "tertiary" class = "logincard">
+
+          <IonItem  color="tertiary" class="loginitems" >
             <IonLabel position="floating">First Name</IonLabel>
             <IonTextarea  value={fnameInput} onIonChange={e => setFnameInput(e.detail.value!)}></IonTextarea>
-        </IonItem>
+          </IonItem>
       
-
-          <IonItem  color="primary" class="inputcredentials">
+          <IonItem  color="tertiary" class="loginitems">
             <IonLabel position="floating">Last Name</IonLabel>
             <IonTextarea value={lnameInput} onIonChange={f => setLnameInput(f.detail.value!)}></IonTextarea>
           </IonItem>
 
-       
-          <IonItem  color="primary" class="inputcredentials">
+          <IonItem  color="tertiary" class="loginitems">
             <IonLabel position="floating">Username</IonLabel>
             <IonTextarea  value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)}></IonTextarea>
           </IonItem>
 
          
-          <IonItem   color="primary" class="inputcredentials">
+          <IonItem   color="tertiary" class="loginitems">
             <IonLabel position="floating">Password</IonLabel>
             <IonTextarea value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)}></IonTextarea>
           </IonItem>
-         <IonItem text-align="center" color="primary">
-              <IonButton class="LRButtons" color= "tertiary" routerLink={"/home"} >Register</IonButton>
+
+         <IonItem text-align="center" color="tertiary" class="loginitems">
+              <IonButton class="LRButtons" color= "secondary" size="large" routerLink={"/home"} >Register</IonButton>
               </IonItem>
+          </IonCard>
       </IonContent>
+
     </IonPage>
   );
 
