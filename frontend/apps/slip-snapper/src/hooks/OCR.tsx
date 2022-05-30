@@ -25,6 +25,17 @@ export function ScanSlip(photo : string) {
     doOCR();
   });
 
+  // fetch("http://localhost:55555/ocr", {
+  //     method: 'post',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       text: ocr,
+  //     })
+  //   })
+  //   .then((res) => res.json());
+
   return (
     <IonText color='primary'>{ocr}</IonText> 
   );
