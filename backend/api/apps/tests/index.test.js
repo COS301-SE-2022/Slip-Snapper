@@ -168,13 +168,12 @@ const {app} = require('../src/index.js');
  describe('POST /ocr', ()=>{
   test('Should Generate a report for the user', async ()=>{
     const res = await request(app)
-      .post('/ocr')
+      .post('/api/ocr/process')
       .send({
         text: "a",
       })
       
       let resp = JSON.parse(res.text);
-      console.log(resp)
       expect(res.statusCode).toEqual(200)
       expect(resp.message).toEqual("Text has been processed")
   })
