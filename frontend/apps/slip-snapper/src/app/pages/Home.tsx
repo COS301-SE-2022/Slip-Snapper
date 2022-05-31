@@ -131,7 +131,7 @@ const Home: React.FC = () => {
   );
 
   function generateReport(type: string){
-    const url = "http://localhost:55555/report/generate?user=1&period="+type
+    const url = "http://localhost:55555/api/report/generate?user=1&period="+type
     fetch(url, {
         method: 'get',
         headers: {
