@@ -25,7 +25,7 @@ export function ScanSlip(photo : string) {
     doOCR();
   });
 
-  // fetch("http://localhost:55555/ocr", {
+  // fetch("http://localhost:55555/api/ocr/process", {
   //     method: 'post',
   //     headers: {
   //         'Content-Type': 'application/json'

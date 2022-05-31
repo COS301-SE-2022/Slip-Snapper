@@ -49,7 +49,7 @@ export const Register: React.FC = () => {
   function register(name:string, surname:string, user: string, password: string){
     const fullName = name + " " + surname;
     user = "Jane Doe";
-    fetch("http://localhost:55555/user/login", {
+    fetch("http://localhost:55555/api/user/login", {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'

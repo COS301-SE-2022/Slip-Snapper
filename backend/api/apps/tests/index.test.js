@@ -7,7 +7,7 @@ const {app} = require('../src/index.js');
  describe('Post /user/signup', ()=>{
   test('Should add a user to the database', async ()=>{
     const res = await request(app)
-      .post('/user/signup')
+      .post('/api/user/signup')
       .send({
         name: "jeff",
         age: "18"
@@ -18,12 +18,29 @@ const {app} = require('../src/index.js');
 })
 
 /**
+ * Test for logging a user in
+ */
+ describe('Post /user/login', ()=>{
+  test('Should log a user in', async ()=>{
+    const res = await request(app)
+      .post('/api/user/login')
+      .send({
+        name: "John Doe"
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.text).toEqual("\"User logged in successfully\"")
+  })
+  
+})
+
+/**
  * Test for the update user query
  */
  describe('Post /user/update', ()=>{
   test('Should update a user in the database', async ()=>{
     const res = await request(app)
-      .post('/user/update')
+      .post('/api/user/update')
       .send({
         userid: "user6",
         name: "jefferson",
@@ -39,7 +56,7 @@ const {app} = require('../src/index.js');
  describe('Post /user/delete', ()=>{
   test('Should delete a user in the database', async ()=>{
     const res = await request(app)
-      .post('/user/delete')
+      .post('/api/user/delete')
       .send({
         userid: "user6"
       })
@@ -49,29 +66,12 @@ const {app} = require('../src/index.js');
 })
 
 /**
- * Test for logging a user in
- */
-describe('Post /user/login', ()=>{
-  test('Should log a user in', async ()=>{
-    const res = await request(app)
-      .post('/user/login')
-      .send({
-        name: "John Doe"
-      })
-
-      expect(res.statusCode).toEqual(200)
-      expect(res.text).toEqual("\"User logged in successfully\"")
-  })
-  
-})
-
-/**
  * Test for the get items for user query
  */
  describe('Get /item/all', ()=>{
   test('Should return a json array of items', async ()=>{
     const res = await request(app)
-      .get('/item/all?user=1')
+      .get('/api/item/all?user=1')
 
       expect(res.statusCode).toEqual(200)
   })
@@ -83,7 +83,7 @@ describe('Post /user/login', ()=>{
  describe('Post /item/add', ()=>{
   test('Should add an item to the database', async ()=>{
     const res = await request(app)
-      .post('/item/add')
+      .post('/api/item/add')
       .send({
         user: 1,
         location:"Woolworths",
@@ -104,7 +104,7 @@ describe('Post /user/login', ()=>{
  describe('Post /item/update', ()=>{
   test('Should update an item in the database', async ()=>{
     const res = await request(app)
-      .post('/item/update')
+      .post('/api/item/update')
       .send({
         user: 1,
         itemid: "item10",
@@ -119,7 +119,7 @@ describe('Post /user/login', ()=>{
 
   test('Should fail to update an item in the database', async ()=>{
     const res = await request(app)
-      .post('/item/update')
+      .post('/api/item/update')
       .send({
         user: 1,
         itemid: "item100",
@@ -139,7 +139,7 @@ describe('Post /user/login', ()=>{
  describe('Post /item/delete', ()=>{
   test('Should delete an item in the database', async ()=>{
     const res = await request(app)
-      .post('/item/delete')
+      .post('/api/item/delete')
       .send({
         user: 1,
         item: "item10"
@@ -155,7 +155,7 @@ describe('Post /user/login', ()=>{
  describe('Get /report/generate', ()=>{
   test('Should Generate a report for the user', async ()=>{
     const res = await request(app)
-      .get('/report/generate?user=1?period=week')
+      .get('/api/report/generate?user=1?period=week')
       
       expect(res.statusCode).toEqual(200)
       expect(res.text).toEqual("\"Report Generated\"")
@@ -168,13 +168,12 @@ describe('Post /user/login', ()=>{
  describe('POST /ocr', ()=>{
   test('Should Generate a report for the user', async ()=>{
     const res = await request(app)
-      .post('/ocr')
+      .post('/api/ocr/process')
       .send({
         text: "a",
       })
       
       let resp = JSON.parse(res.text);
-      console.log(resp)
       expect(res.statusCode).toEqual(200)
       expect(resp.message).toEqual("Text has been processed")
   })

@@ -42,7 +42,7 @@ const Login: React.FC = () => {
 
     function login(user: string, password: string){
       user = "Jane Doe";
-      fetch("http://localhost:55555/user/login", {
+      fetch("http://localhost:55555/api/user/login", {
           method: 'post',
           headers: {
               'Content-Type': 'application/json'
