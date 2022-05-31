@@ -33,7 +33,7 @@ router.get('/generate', async (req,res)=>{
 
     let pdf = new PDFDocument;
     let name = "report-" + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "-a.pdf";
-    pdf.pipe(fs.createWriteStream("../api/apps/src/report/"+name))
+    pdf.pipe(fs.createWriteStream(name))
     fs.readFile("../api/apps/src/items.json", 'utf8', function (err, data) {
         if(err) {
             return console.log(err);
