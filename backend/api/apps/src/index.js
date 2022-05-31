@@ -10,9 +10,11 @@ app.use(Cors())
 //Connect to db here
 
 const authRoute = require("./routes/auth")
+const itemRoute = require("./routes/item")
 
 //router middleware
 app.use("/api/user",authRoute);
+app.use("/api/item",itemRoute);
 
 /**
  * Get all items for a user
