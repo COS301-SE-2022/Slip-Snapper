@@ -3,10 +3,14 @@ const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const Cors = require('cors')
 const bodyParser = require('body-parser');
-
 const app = express();
 app.use(bodyParser.json());
 app.use(Cors())
+
+const authRoute = require("./routes/auth")
+
+//router middleware
+app.use("/api/user",authRoute);
 
 /**
  * Add a user
