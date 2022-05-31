@@ -7,7 +7,7 @@ const {app} = require('../src/index.js');
  describe('Post /user/signup', ()=>{
   test('Should add a user to the database', async ()=>{
     const res = await request(app)
-      .post('/user/signup')
+      .post('/api/user/signup')
       .send({
         name: "jeff",
         age: "18"
@@ -18,12 +18,29 @@ const {app} = require('../src/index.js');
 })
 
 /**
+ * Test for logging a user in
+ */
+ describe('Post /user/login', ()=>{
+  test('Should log a user in', async ()=>{
+    const res = await request(app)
+      .post('/api/user/login')
+      .send({
+        name: "John Doe"
+      })
+
+      expect(res.statusCode).toEqual(200)
+      expect(res.text).toEqual("\"User logged in successfully\"")
+  })
+  
+})
+
+/**
  * Test for the update user query
  */
  describe('Post /user/update', ()=>{
   test('Should update a user in the database', async ()=>{
     const res = await request(app)
-      .post('/user/update')
+      .post('/api/user/update')
       .send({
         userid: "user6",
         name: "jefferson",
@@ -39,30 +56,13 @@ const {app} = require('../src/index.js');
  describe('Post /user/delete', ()=>{
   test('Should delete a user in the database', async ()=>{
     const res = await request(app)
-      .post('/user/delete')
+      .post('/api/user/delete')
       .send({
         userid: "user6"
       })
 
       expect(res.statusCode).toEqual(200)
   })
-})
-
-/**
- * Test for logging a user in
- */
-describe('Post /user/login', ()=>{
-  test('Should log a user in', async ()=>{
-    const res = await request(app)
-      .post('/user/login')
-      .send({
-        name: "John Doe"
-      })
-
-      expect(res.statusCode).toEqual(200)
-      expect(res.text).toEqual("\"User logged in successfully\"")
-  })
-  
 })
 
 /**
