@@ -155,7 +155,7 @@ const {app} = require('../src/index.js');
  describe('Get /report/generate', ()=>{
   test('Should Generate a report for the user', async ()=>{
     const res = await request(app)
-      .get('/report/generate?user=1?period=week')
+      .get('/api/report/generate?user=1?period=week')
       
       expect(res.statusCode).toEqual(200)
       expect(res.text).toEqual("\"Report Generated\"")
