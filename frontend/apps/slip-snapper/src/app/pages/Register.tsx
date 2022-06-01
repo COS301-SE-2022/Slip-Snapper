@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTextarea, IonItem, IonLabel, IonButton, IonCard, IonCardHeader, IonImg} from '@ionic/react';
+import { IonContent, IonPage, IonTextarea, IonItem, IonLabel, IonButton, IonCard, IonImg} from '@ionic/react';
 import '../theme/LoginRegister.css';
 export const Register: React.FC = () => {
   const [fnameInput, setFnameInput] = useState<string>();
