@@ -178,6 +178,33 @@ describe('Report Routes',()=>{
         expect(res.text).toEqual("\"Report Generated\"")
     })
   })
+
+  /**
+   * Test for the get budget
+   */
+   describe('Get /report/budget', ()=>{
+    test('Should Generate a report for the user', async ()=>{
+      const res = await request(app)
+        .get('/api/report/budget')
+        
+        expect(res.statusCode).toEqual(200)
+    })
+  })
+
+  /**
+   * Test for the generate report query
+   */
+   describe('POST /report/budget', ()=>{
+    test('Should Generate a report for the user', async ()=>{
+      const res = await request(app)
+        .post('/api/report/budget')
+        .send({
+          user: 1
+        })
+        
+        expect(res.statusCode).toEqual(200)
+    })
+  })
 })
 
 /**
