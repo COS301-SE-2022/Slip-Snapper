@@ -79,9 +79,25 @@ router.get('/generate', async (req,res)=>{
         }
 
         pdf.end();
+
+        return res.status(200).end(JSON.stringify("Report Generated",null,2));
     });
-    
-    return res.status(200).end(JSON.stringify("Report Generated",null,2));
+});
+
+/**
+ * Get the users budget
+ * Uses the user id to get the items
+ */
+ router.get('/budget', async (req,res)=>{
+    return res.status(200).end(JSON.stringify("Budget is",null,2));
+});
+
+/**
+ * Set the users budget
+ * Uses the user id to get the items
+ */
+ router.post('/budget', async (req,res)=>{
+    return res.status(200).end(JSON.stringify("Budget set to",null,2));
 });
 
 module.exports = router

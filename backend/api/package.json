@@ -11,17 +11,18 @@
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
-    "pdfkit": "^0.13.0"
+    "pdfkit": "^0.13.0",
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "@nrwl/cli": "14.1.5",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "14.1.5",
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.16",
     "nx": "14.1.5",
     "prettier": "^2.5.1",
-    "typescript": "~4.6.2",
-    "jest": "^28.1.0",
     "supertest": "^6.2.3",
-    "nodemon": "^2.0.16"
+    "typescript": "~4.6.2"
   }
 }

@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 app.use(Cors())
 
 //Connect to db here
-
+const db = require('./db')
 
 const authRoute = require("./routes/auth")
 const itemRoute = require("./routes/item")
