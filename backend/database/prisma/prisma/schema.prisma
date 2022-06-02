@@ -5,46 +5,39 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//connect to the database 
+//connect to the database
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model Users {
-  id  Int @id @default(autoincrement())
-  email String  @unique
-  username  String?
-  firstname String?
-  lastname String?
-  password String @db.VarChar(255)
-  isBusiness Boolean  @default(false)
-  slips Slip[]
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  username   String
+  firstname  String
+  lastname   String
+  password   String     @db.VarChar(255)
+  isBusiness Boolean    @default(false)
+  slips      Slip[]
 }
 
-model Slip{
-  id  Int @id @default(autoincrement())
-  location String?
-  transactionDate DateTime @default(now())  
-  items Item[]
-  total Float
-  user  Users @relation(fields: [userId], references: [id])
-  userId  Int
+model Slip {
+  id              Int      @id @default(autoincrement())
+  location        String?
+  transactionDate DateTime @default(now())
+  items           Item[]
+  total           Float
+  Users    Users?     @relation(fields: [usersId], references: [id])
+  usersId  Int?
 }
 
 model Item {
-  id Int @id @default(autoincrement())
-  item  String?
-  itemType  String?
+  id             Int     @id @default(autoincrement())
+  item           String?
+  itemType       String?
   itemQuantities Int
-  itemPrices Float
-  slip  Slip @relation(fields: [slipId], references: [id])
-  slipId Int
+  itemPrices     Float
+  Slip   Slip? @relation(fields: [slipId], references: [id])
+  slipId Int?
 }
-
-
-
-
-
-
-
