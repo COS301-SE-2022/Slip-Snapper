@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput} from '@ionic/react';
-import '../theme/LoginRegister.css';
+import '../theme/register.css';
 const Register: React.FC = () => {
   const [nameInput,setNameInput ] = useState<string>();
   const [surnameInput, setSurnameInput] = useState<string>();
@@ -11,7 +11,7 @@ const Register: React.FC = () => {
     <IonPage>
       <div className="header">
         <div className="inner-header flexbox">
-          <IonCard color="tertiary" class="logincard">
+          <IonCard color="tertiary" class="registerCard">
             <h1>Slip Snapper</h1>
             <svg
               className="logo"
@@ -32,7 +32,7 @@ const Register: React.FC = () => {
               />
             </svg>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Name</IonLabel>
               <IonInput
                 type="text"
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Surname</IonLabel>
               <IonInput
                 type="text"
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Username</IonLabel>
               <IonInput
                 type="text"
@@ -62,7 +62,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 type="password"
@@ -72,7 +72,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" text-align="center" class="loginitems">
+            <IonItem color="tertiary" text-align="center" class="registerItems">
               <IonButton
                 class="LRButtons"
                 color="secondary"
@@ -150,7 +150,5 @@ const Register: React.FC = () => {
     }).then((res) => res.json());
   }
 };
-
-
 
 export default Register;
