@@ -54,8 +54,15 @@ jobs:
 
         #run tests on Node server
       - name: Test Node Server
-        if: inputs.test == 'test' 
+        if: inputs.test == 'test'
         run: |
           cd backend/api
           yarn test
+
+      - uses: codecov/codecov-action@v3.1.0
+        if: inputs.test == 'test' 
+        with:
+          # Organization codecov token to be placed below
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./backend/api/coverage
           

@@ -5,7 +5,8 @@ on:
     branches: [develop]
 
 jobs:
-  test-all:
+  test-all-frontend:
     uses: ./.github/workflows/FrontendCItest.yml
     with:
       test: 'all'
+      
