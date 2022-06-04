@@ -3,31 +3,20 @@ const router = require("express").Router();
 
 /**
  * Add a user
- * Adds a user with an Name, Age
+ * Adds a user with an Name, Password
  */
 router.post('/signup', async (req,res)=>{
-    fs.readFile("../api/apps/src/users.json", 'utf8', function (err, data) {
-        if(err) {
-            return console.log(err);
-        }
-        let d = JSON.parse(data);
-        let last = Object.keys(d)[Object.keys(d).length-1].slice(-1)
-        let userid = "user"+(parseInt(last)+1);
-        let user = {
-            [userid]:{
-                "name": req.body.name,
-                "age": req.body.age
-            }
-        }
-        d[userid] = user[userid];
-        fs.writeFile("../api/apps/src/users.json", JSON.stringify(d,null,2), function(erra) {
-            if(erra) {
-                return console.log(erra);
-            }
-        });
+    //TODO add input checking and password hashing
+    let username = req.body.username;
+    let password = req.body.password;
 
-        res.status(200).send(JSON.stringify(d,null,2));
-    });
+    const userid = await req.app.get('db').addUser(username,password);
+
+    return res.status(200)
+        .send({
+            message: "User succesfully Added",
+            userId: userid
+        });
 });
 
 

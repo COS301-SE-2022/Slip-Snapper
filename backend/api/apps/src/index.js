@@ -6,8 +6,15 @@ function makeApp(database){
     app.use(bodyParser.json());
     const Cors = require('cors')
     app.use(Cors())
-    
+
     app.set('db',database)
+
+    app.get('/api/ping', async (req,res)=>{
+        return res.status(200)
+            .send({
+                message: "API is running"
+            });
+    });
 
     const authRoute = require("./routes/auth").router
     const itemRoute = require("./routes/item").router

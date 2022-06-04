@@ -1,77 +1,27 @@
 const request = require("supertest")
 const { makeApp } = require('../src/index.js');
-const db = require('../src/db')
 
-const app = makeApp(db)
+const getUser = jest.fn();
+const addUser = jest.fn();
+const deleteUser = jest.fn();
+
+const app = makeApp({
+  getUser,
+  addUser,
+  deleteUser
+})
+
 /**
- * Tests for all user routes
+ * Test pinging the api
  */
-describe('User Routes',()=>{
+describe('Post /api/ping', ()=>{
+  test('Should ping the api to test that it is running', async ()=>{
+    const res = await request(app)
+      .get('/api/ping')
 
-  /**
-   * Test for the add user query
-   */
-  describe('Post /user/signup', ()=>{
-    test('Should add a user to the database', async ()=>{
-      const res = await request(app)
-        .post('/api/user/signup')
-        .send({
-          name: "jeff",
-          age: "18"
-        })
-  
-        expect(res.statusCode).toEqual(200)
-    })
+      expect(res.statusCode).toEqual(200)
+      expect(res.body.message).toEqual("API is running")
   })
-  
-  /**
-   * Test for logging a user in
-   */
-   describe('Post /user/login', ()=>{
-    test('Should log a user in', async ()=>{
-      const res = await request(app)
-        .post('/api/user/login')
-        .send({
-          name: "John Doe"
-        })
-  
-        expect(res.statusCode).toEqual(200)
-        expect(res.text).toEqual("\"User logged in successfully\"")
-    })
-    
-  })
-  
-  /**
-   * Test for the update user query
-   */
-   describe('Post /user/update', ()=>{
-    test('Should update a user in the database', async ()=>{
-      const res = await request(app)
-        .post('/api/user/update')
-        .send({
-          userid: "user6",
-          name: "jefferson",
-        })
-  
-        expect(res.statusCode).toEqual(200)
-    })
-  })
-  
-  /**
-   * Test for the delete user query
-   */
-   describe('Post /user/delete', ()=>{
-    test('Should delete a user in the database', async ()=>{
-      const res = await request(app)
-        .post('/api/user/delete')
-        .send({
-          userid: "user6"
-        })
-  
-        expect(res.statusCode).toEqual(200)
-    })
-  })
-
 })
 
 /**
@@ -171,15 +121,15 @@ describe('Report Routes',()=>{
   /**
    * Test for the generate report query
    */
-   describe('Get /report/generate', ()=>{
-    test('Should Generate a report for the user', async ()=>{
-      const res = await request(app)
-        .get('/api/report/generate?user=1?period=week')
+  //  describe('Get /report/generate', ()=>{
+  //   test('Should Generate a report for the user', async ()=>{
+  //     const res = await request(app)
+  //       .get('/api/report/generate?user=1?period=week')
         
-        expect(res.statusCode).toEqual(200)
-        expect(res.text).toEqual("\"Report Generated\"")
-    })
-  })
+  //       expect(res.statusCode).toEqual(200)
+  //       expect(res.text).toEqual("\"Report Generated\"")
+  //   })
+  // })
 
   /**
    * Test for the get budget
