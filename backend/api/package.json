@@ -18,6 +18,7 @@
     "@nrwl/cli": "14.1.5",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/workspace": "14.1.5",
+    "@types/jest": "^28.1.0",
     "jest": "^28.1.0",
     "nodemon": "^2.0.16",
     "nx": "14.1.5",
