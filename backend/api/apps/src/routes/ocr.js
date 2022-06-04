@@ -16,4 +16,4 @@ router.post('/process', async (req,res)=>{
     return res.status(200).end(JSON.stringify({message:"Text has been processed",text: processedText}));
 });
 
-module.exports = router
+module.exports.router = router;

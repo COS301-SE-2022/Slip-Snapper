@@ -1,6 +1,8 @@
 const request = require("supertest")
-const {app} = require('../src/index.js');
+const { makeApp } = require('../src/index.js');
+const db = require('./db')
 
+const app = makeApp(db)
 /**
  * Tests for all user routes
  */

@@ -1,6 +1,6 @@
 const { Pool } = require('pg')
 
-const pool = new Pool({
+const connection = new Pool({
     user: "",
     database: "",
     password: "",
@@ -8,4 +8,20 @@ const pool = new Pool({
     port: 0
 })
 
-module.exports = { pool }
+function getUser(username){
+    //get user from db
+}
+
+function addUser(username){
+    //add user to db
+}
+
+function deleteUser(username){
+    //delete user from db
+}
+
+module.exports = {
+    getUser,
+    addUser,
+    deleteUser
+}

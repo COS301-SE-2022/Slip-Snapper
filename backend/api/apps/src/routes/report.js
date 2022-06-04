@@ -1,4 +1,4 @@
-const fs = require('fs');
+//const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const router = require("express").Router();
 
@@ -100,4 +100,4 @@ router.get('/generate', async (req,res)=>{
     return res.status(200).end(JSON.stringify("Budget set to",null,2));
 });
 
-module.exports = router
+module.exports.router = router;

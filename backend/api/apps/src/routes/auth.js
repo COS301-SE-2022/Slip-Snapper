@@ -46,7 +46,7 @@ router.post('/login', async (req,res)=>{
                 return res.status(200).send(JSON.stringify("User logged in successfully"));
             }
         }
-
+        req.app.get('db').getUser();
         return res.status(400).send(JSON.stringify("Login Failed",null,2));
     });
 });
@@ -81,7 +81,6 @@ router.post('/delete', async (req,res)=>{
  * Update a user
  * Uses the user id to update the user
  */
-
  router.post('/update', async (req,res)=>{
     fs.readFile("../api/apps/src/users.json", 'utf8', function (err, data) {
         if(err) {
@@ -110,4 +109,4 @@ router.post('/delete', async (req,res)=>{
 });
  
 
-module.exports = router
+module.exports.router = router;
