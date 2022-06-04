@@ -88,16 +88,20 @@ router.get('/generate', async (req,res)=>{
  * Get the users budget
  * Uses the user id to get the items
  */
- router.get('/budget', async (req,res)=>{
-    return res.status(200).end(JSON.stringify("Budget is",null,2));
+router.get('/budget', async (req,res)=>{
+    return res.status(200).send({
+        message : "Your budget is a"
+    });
 });
 
 /**
  * Set the users budget
  * Uses the user id to get the items
  */
- router.post('/budget', async (req,res)=>{
-    return res.status(200).end(JSON.stringify("Budget set to",null,2));
+router.post('/budget', async (req,res)=>{
+    return res.status(200).send({
+        message : "Your budget has been set"
+    });
 });
 
 module.exports.router = router;

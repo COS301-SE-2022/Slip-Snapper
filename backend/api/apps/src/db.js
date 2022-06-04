@@ -14,7 +14,7 @@ const connection = new Pool({
  * @param {*} password The users password
  * @returns userid
  */
-function getUser(username, password){
+async function getUser(username, password){
     //get user from db
     const userid = 1;
 

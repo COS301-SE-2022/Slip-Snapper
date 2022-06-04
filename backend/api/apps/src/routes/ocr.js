@@ -13,7 +13,10 @@ router.post('/process', async (req,res)=>{
     //Respond with relevant text
     let processedText = "Temporary response"
 
-    return res.status(200).end(JSON.stringify({message:"Text has been processed",text: processedText}));
+    return res.status(200).send({
+            message : "Text has been processed",
+            text : processedText
+        });
 });
 
 module.exports.router = router;
