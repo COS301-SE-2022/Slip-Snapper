@@ -1,6 +1,6 @@
 import { IonButton, IonCard, IonInput, IonItem, IonLabel, IonPage} from '@ionic/react';
 import React, { useState } from 'react';
-import '../theme/LoginRegister.css';
+import '../theme/login.css';
 
 const Login: React.FC = () => {
   
