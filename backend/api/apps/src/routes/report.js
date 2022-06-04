@@ -1,4 +1,4 @@
-//const fs = require('fs');
+const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const router = require("express").Router();
 

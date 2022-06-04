@@ -1,6 +1,6 @@
 const request = require("supertest")
 const { makeApp } = require('../src/index.js');
-const db = require('./db')
+const db = require('../src/db')
 
 const app = makeApp(db)
 /**
