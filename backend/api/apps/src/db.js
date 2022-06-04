@@ -63,9 +63,69 @@ async function addUser(username, password){
     return userid;
 }
 
+/**
+ * Funtion to get the item from the database
+ * @param {*} userid The users id
+ * @param {*} itemid The item id
+ * @returns userid
+ */
+ async function getItem(userid, itemid){
+    //query to add user here
+
+    const userId = 1;
+
+    return userId;
+}
+
+/**
+ * Funtion to add the item to the database
+ * @param {*} userid The users id
+ * @param {*} itemid The item id
+ * @returns userid
+ */
+ async function addItem(userid, itemid){
+    //query to add user here
+
+    const userId = 1;
+
+    return userId;
+}
+
+/**
+ * Funtion to delete the item from the database
+ * @param {*} userid The users id
+ * @param {*} itemid The item id
+ * @returns userid
+ */
+ async function deleteItem(userid, itemid){
+    //query to add user here
+
+    const userId = 1;
+
+    return userId;
+}
+
+/**
+ * Funtion to update the item in the database
+ * @param {*} userid The users id
+ * @param {*} itemid The item id
+ * @returns userid
+ */
+ async function updateItem(userid, itemid){
+    //query to add user here
+
+    const userId = 1;
+
+    return userId;
+}
+
 module.exports = {
     getUser,
     addUser,
     deleteUser,
-    updateUser
+    updateUser,
+    getItem,
+    addItem,
+    deleteItem,
+    updateItem
 }
