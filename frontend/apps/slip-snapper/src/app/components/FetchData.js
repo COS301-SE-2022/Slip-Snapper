@@ -1,6 +1,7 @@
 import React from "react";
 import { IonButton } from '@ionic/react';
 import '../pages/FetchData.css';
+import { updateItemA, getItemsA } from "../../api/apiCall"
 class FetchData extends React.Component {
    
     constructor(props) {
@@ -13,25 +14,21 @@ class FetchData extends React.Component {
     }
    
     componentDidMount() {
-        fetch("http://localhost:55555/api/item/all?user=1", {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+        getItemsA(1)
             .then((res) => res.json())
             .then(
                 (json) => {
-                this.setState({
-                    items: json,
-                    DataisLoaded: true
-                });
+                    this.setState({
+                        //items: json.items,
+                        items: [],
+                        DataisLoaded: true
+                    });
             },
                 (error) => {
-                this.setState({
-                    DataisLoaded: true,
-                    error
-                });
+                    this.setState({
+                        DataisLoaded: true,
+                        error
+                    });
             })
     }
     render() {
@@ -81,23 +78,13 @@ class FetchData extends React.Component {
         let _quantity = lines[2].split(" ").pop();
         let _price = lines[3].split(" ").pop();
         let _type = lines[4].split(" ").pop();
+        let userid = 1;
 
-        fetch("http://localhost:55555/api/item/update", {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    itemid: _item,
-                    user: 1,
-                    name : _name,
-                    location : _location,
-                    quantity : _quantity,
-                    price : _price,
-                    type : _type
-                })
-            })
-            .then((res) => res.json());
+        let resp = "";
+        updateItemA(_item,userid,_name,_location,_quantity,_price,_type)
+            .then((res) => res.json())
+            .then(json => resp = json);
+        console.log(resp)
     }
 
 }
