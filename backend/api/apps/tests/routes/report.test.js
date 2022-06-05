@@ -1,5 +1,5 @@
 const request = require("supertest")
-const { makeApp } = require('../src/index.js');
+const { makeApp } = require('../../src/index.js');
 
 const getUser = jest.fn();
 const addUser = jest.fn();
@@ -16,7 +16,7 @@ const app = makeApp({
 /**
  * Test for the generate report query
  */
- describe('Get /report/generate', ()=>{
+describe('Get /report/generate', ()=>{
     test('Should Generate a report for the user', async ()=>{
         const res = await request(app)
             .get('/api/report/generate?user=1?period=week')

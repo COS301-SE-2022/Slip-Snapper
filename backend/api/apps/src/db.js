@@ -69,7 +69,7 @@ async function addUser(username, password){
  * @param {*} itemid The item id
  * @returns userid
  */
- async function getItem(userid, itemid){
+ async function getItem(userid){
     //query to add user here
 
     const userId = 1;
@@ -78,12 +78,17 @@ async function addUser(username, password){
 }
 
 /**
- * Funtion to add the item to the database
- * @param {*} userid The users id
- * @param {*} itemid The item id
- * @returns userid
+ * Function to add item to the database
+ * @param {*} userid the userid
+ * @param {*} itemname the item name
+ * @param {*} itemprice the item price
+ * @param {*} itemquantity the item quantity
+ * @param {*} itemtype the item type
+ * @param {*} location the location
+ * @param {*} date the date
+ * @returns 
  */
- async function addItem(userid, itemid){
+ async function addItem(userid,itemname,itemprice,itemquantity,itemtype,location,date){
     //query to add user here
 
     const userId = 1;
@@ -106,12 +111,17 @@ async function addUser(username, password){
 }
 
 /**
- * Funtion to update the item in the database
- * @param {*} userid The users id
- * @param {*} itemid The item id
- * @returns userid
+ * Function to update item in the database
+ * @param {*} userid the userid
+ * @param {*} itemname the item name
+ * @param {*} itemprice the item price
+ * @param {*} itemquantity the item quantity
+ * @param {*} itemtype the item type
+ * @param {*} location the location
+ * @param {*} date the date
+ * @returns 
  */
- async function updateItem(userid, itemid){
+ async function updateItem(userid,itemname,itemprice,itemquantity,itemtype,location,date){
     //query to add user here
 
     const userId = 1;
