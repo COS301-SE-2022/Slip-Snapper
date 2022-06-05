@@ -1,5 +1,5 @@
 const request = require("supertest")
-const { makeApp } = require('../src/index.js');
+const { makeApp } = require('../../src/index.js');
 
 const getUser = jest.fn();
 const addUser = jest.fn();
