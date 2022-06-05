@@ -5,7 +5,12 @@ on:
     branches: [develop]
 
 jobs:
-  test-all:
+  test-all-frontend:
     uses: ./.github/workflows/FrontendCItest.yml
+    with:
+      test: 'all'
+      
+  test-all-backend:
+    uses: ./.github/workflows/BackendCITest.yml
     with:
       test: 'all'
