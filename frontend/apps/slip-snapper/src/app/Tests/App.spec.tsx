@@ -6,6 +6,7 @@ import Home from '../pages/Home';
 import App from '../App';
 import Profile from '../pages/Profile';
 import ViewReports from '../pages/ViewReports'
+import Login from '../pages/Login';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -83,30 +84,40 @@ describe("Reports", () => {
 
 describe("Profile", () => {
   beforeAll(() => {
-    
-    Object.defineProperty(window, "matchMedia", {
+    Object.defineProperty(window, 'matchMedia', {
       writable: true,
-      value: jest.fn().mockImplementation(query => ({
+      value: jest.fn().mockImplementation((query) => ({
         matches: false,
         media: query,
         onchange: null,
-        addListener: jest.fn(), 
-        removeListener: jest.fn(), 
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
-      }))
+      })),
     });
   });
 
-  it("Correctly renders the Profile page", () => {
-    
+  it('Correctly renders the Profile page', () => {
     const Component = render(<Profile />);
+
+    expect(Component.getAllByText('Profile'));
+    expect(Component.getByText('Home'));
+    expect(Component.getByText('Reports'));
+    expect(Component.getByText('Edit Item'));
+  });
   
-    expect(Component.getAllByText("Profile"));
-    expect(Component.getByText("Home"));
-    expect(Component.getByText("Reports"));
-    expect(Component.getByText("Edit Item" ));
-    
+  /**
+   * @returns Jests tests for Login Page
+   */
+
+  it('Correctly renders the login page', () => {
+    const Component = render(<Login />);
+
+    expect(Component.getByText('Username'));
+    expect(Component.getByText('Password'));
+    expect(Component.getByText('Login'));
+    expect(Component.getByText('Password'));
   });
 });
