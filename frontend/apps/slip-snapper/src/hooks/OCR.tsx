@@ -29,7 +29,6 @@ export function ScanSlip(photo : string) {
   doProcessing(ocr)
       .then((res) => res.json())
       .then(json => resp = json);
-  console.log(resp)
 
   return (
     <IonText color='primary'>{ocr}</IonText> 
