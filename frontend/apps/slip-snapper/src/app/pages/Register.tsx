@@ -35,7 +35,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Name</IonLabel>
               <IonInput
-                type="text"
+                title="name_Input"
                 value={nameInput}
                 onIonChange={(e) => setNameInput(e.detail.value!)}
                 required
@@ -45,6 +45,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Surname</IonLabel>
               <IonInput
+                title="surname_Input"
                 type="text"
                 value={surnameInput}
                 onIonChange={(e) => setSurnameInput(e.detail.value!)}
@@ -55,6 +56,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Username</IonLabel>
               <IonInput
+                title="username_Input"
                 type="text"
                 value={userInput}
                 onIonChange={(e) => setUserInput(e.detail.value!)}
@@ -65,6 +67,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="registerItems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
+                title="password_Input"
                 type="password"
                 value={passwordInput}
                 onIonChange={(e) => setPasswordInput(e.detail.value!)}

@@ -25,12 +25,12 @@ const Login: React.FC = () => {
 
             <IonItem  color="tertiary" class="loginitems">
               <IonLabel position="floating">Username</IonLabel>
-              <IonInput type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
+              <IonInput  title="usernameInput" type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
             <IonItem   color="tertiary" class="loginitems">
               <IonLabel position="floating">Password</IonLabel>
-              <IonInput type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
+              <IonInput title="passwordInput" type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
             <IonItem color="tertiary" text-align="center" class="loginitems">
