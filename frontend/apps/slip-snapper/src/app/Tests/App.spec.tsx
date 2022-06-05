@@ -8,6 +8,7 @@ import Profile from '../pages/Profile';
 import ViewReports from '../pages/ViewReports'
 import Login from '../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
+import Register from '../pages/Register';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -114,29 +115,15 @@ describe('Profile', () => {
    * @returns Jests tests for Login Page
    */
 describe('Login', () => {
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-  });
-
+ 
  it('Correctly renders the login page', () => {
    const Component = render(<Login />);
 
+   expect(Component.getByText('Slip Snapper'));
    expect(Component.getByText('Username'));
    expect(Component.getByText('Password'));
    expect(Component.getByText('Login'));
-   expect(Component.getByText('Password'));
+   expect(Component.getByText('Register'));
  });
 
  test('Correctly renders user input', async () => {
@@ -149,6 +136,44 @@ describe('Login', () => {
  expect(Component.findByText('Jane'));
 
 fire.ionChange(passInput, 'password123');
+expect(Component.findByText('password123'));
+
+ });
+});
+
+ /**
+   * @returns Jests tests for Register Page
+   */
+describe('Register', () => {
+ 
+
+ it('Correctly renders the register page', () => {
+   const Component = render(<Register />);
+
+   expect(Component.getByText('Slip Snapper'));
+   expect(Component.getByText('Name'));
+   expect(Component.getByText('Surname'));
+   expect(Component.getByText('Username'));
+   expect(Component.getByText('Password'));
+   expect(Component.getByText('Register'));
+ });
+
+ test('Correctly renders user input', async () => {
+ const Component = render(<Register />);
+ const nameInput = await Component.findByTitle('name_Input');
+ const surnameInput = await Component.findByTitle('surname_Input');
+ const usernameInput = await Component.findByTitle('username_Input');
+ const passwordInput = await Component.findByTitle('password_Input');
+
+
+fire.ionChange(nameInput, 'Jane');
+fire.ionChange(surnameInput, 'Doe');
+fire.ionChange(usernameInput, 'Jane_Doe777');
+fire.ionChange(passwordInput, 'password123');
+
+expect(Component.findByText('Jane'));
+expect(Component.findByText('Doe'));
+expect(Component.findByText('Jane_Doe777'));
 expect(Component.findByText('password123'));
 
  });
