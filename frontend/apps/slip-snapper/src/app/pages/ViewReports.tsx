@@ -8,13 +8,10 @@ import {
   IonButton,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonCol,
-  IonImg,
   IonItem,
   IonRow,
-  IonThumbnail,
 } from '@ionic/react';
 import React from 'react';
 import { NavButtons } from '../components/NavButtons';
