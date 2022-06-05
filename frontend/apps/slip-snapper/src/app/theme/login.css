@@ -3,7 +3,7 @@
 /* Components */
 .logincard {
     width: 90%;
-    /* margin-left: 5%; */
+   
 }
 
 .logoimg {
@@ -147,7 +147,7 @@ p {
     }
 }
 
-@media only screen and (max-width: 390px) {
+@media only screen and (max-width: 400px) {
     .LRButtons {
         min-width: 50%;
     }
