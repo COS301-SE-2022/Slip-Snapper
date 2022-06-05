@@ -14,8 +14,6 @@ export const NavButtons = () => {
     return () => mediaQuery.removeListener(setMQuery);
   }, []);
 
-  console.log(mQuery.matches);
-
   return (
     <div>
       {mQuery && !mQuery.matches ? (
