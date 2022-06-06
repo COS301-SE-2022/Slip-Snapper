@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import ViewReports from './pages/ViewReports';
 import Profile from './pages/Profile';
 import EditItem from './pages/EditItem';
+import EditSlip from './pages/EditSlip';
 import Register from './pages/Register';
 import Login from './pages/Login'
 /*Component Imports*/
@@ -42,6 +43,7 @@ const App: React.FC = () => (
         <Route path="/viewreports" component={ViewReports} exact={true} />
         <Route path="/profile" component={Profile} exact={true} />
         <Route path="/edititem" component={EditItem} exact={true} />
+        <Route path="/editslip" component={EditSlip} exact={true} />
         <Route path="/register" component={Register} exact={true} />
         <Route path="/login" component={Login} exact={true} />
       </IonRouterOutlet>
