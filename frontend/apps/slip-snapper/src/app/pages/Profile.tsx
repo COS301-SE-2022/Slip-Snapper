@@ -24,7 +24,8 @@ import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
 
 const Profile: React.FC = () => {
-  const [showAlert2, setShowAlert2] = useState(false);
+  const [logoutAlert, setLogoutAlert] = useState(false);
+  const [budgetAlert, setBudgetAlert] = useState(false);
   return (
     <IonPage>
       <IonHeader>
@@ -65,9 +66,39 @@ const Profile: React.FC = () => {
               <IonItem>Daily Budget: R200</IonItem>
               <IonItem>Weekly Budget: R1500</IonItem>
               <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
+                <IonButton onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
                   Adjust Budget
                 </IonButton>
+                 <IonAlert
+          isOpen={budgetAlert}
+          onDidDismiss={() => setBudgetAlert(false)}
+         
+          header={'Change Budget'}
+         
+          inputs={[
+            {
+              name: 'dailyBudget',
+              type: 'text',
+              placeholder: 'Insert Daily Budget'
+              
+            },
+            {
+              name: 'weeklyBudget',
+              type: 'text',
+              placeholder: 'Insert Weekly Budget'
+            },]}
+
+          buttons={[
+          {
+            text:'Cancel'
+          },
+          {
+            text:'Apply',
+            
+          },
+            
+          ]}
+        ></IonAlert>
               </IonItem>
             </IonCard>
           </IonCol>
@@ -158,21 +189,21 @@ const Profile: React.FC = () => {
             </IonCard>
           </IonCol>
         </IonRow>
-        <IonButton onClick={() => setShowAlert2(true)} expand="block">
+        <IonButton onClick={() => setLogoutAlert(true)} expand="block">
           Logout
         </IonButton>
         <IonAlert
-          isOpen={showAlert2}
-          onDidDismiss={() => setShowAlert2(false)}
-          // cssClass="my-custom-class"
+          isOpen={logoutAlert}
+          onDidDismiss={() => setLogoutAlert(false)}
           header={'Are you sure you want to logout?'}
           buttons={[
             'Cancel',
             {
               text: 'Logout',
-              // role: 'cancel',
-              cssClass: 'secondary',
-              // href: "/login",
+              cssClass: 'my-custom-class',
+                handler: () => {
+                 Logout();
+          }
             },
           ]}
         ></IonAlert>
@@ -182,3 +213,8 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
+function Logout() {
+  throw new Error('Function not implemented.');
+}
+
