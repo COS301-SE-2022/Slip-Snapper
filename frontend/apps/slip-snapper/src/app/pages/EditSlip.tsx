@@ -11,17 +11,16 @@ import {
     IonButton,
     IonFooter,
     IonLabel,
-    IonInput
+    IonInput,
+    IonGrid,
+    IonRow,
+    IonCol
   } from '@ionic/react';
   import React, { useState } from 'react';
 
   const EditSlip: React.FC = () => {
-    const [items, setItems] = useState([{ id: 0, number: 'Item 1', itemName:'Chocolate' ,price:'R100' },
-   { id: 1, number: 'Item 2', itemName:'Cheese'  ,price:'R150' },{ id: 2, number: 'Item 3', itemName:'Chips',price:'R300' }]);
-    
-     
-   
-    const [nameInput,setNameInput ] = useState<string>();
+    const [items, setItems] = useState([{ id: 0, itemName:'Chocolate' ,price:'R100', quantity:3, type:"Food", date:"21/05/22", location:"Kauai" },
+    { id: 1, itemName:'Chips',price:'R300', quantity:1, type:"Food", date:"21/05/22", location:"Kauai" }]);
    
 
     return (
@@ -37,7 +36,7 @@ import {
             <IonCardHeader>
             <IonCardTitle>Receipt Title</IonCardTitle>
                 <IonItem color="primary">
-                    <img src="..\assets\mock-receipts\IMG_5593.jpg" width="40%"></img>
+                    <img src="..\assets\mock-receipts\IMG_5593.jpg" alt="" width="40%"></img>
                 </IonItem>
             </IonCardHeader>
 
@@ -47,29 +46,75 @@ import {
             <IonCardHeader>
             <IonCardTitle>Edit Details</IonCardTitle>
             </IonCardHeader>
-             {items.map(item => {
+
+            <IonGrid>
+                <IonRow>
+                    <IonCol></IonCol>
+
+                    <IonCol>
+                        <IonLabel>Item Name</IonLabel>
+                    </IonCol>
+
+                    <IonCol>
+                        <IonLabel>Quantity</IonLabel>
+                    </IonCol>
+
+                    <IonCol>
+                        <IonLabel>Price</IonLabel>
+                    </IonCol>
+
+                    <IonCol>
+                        <IonLabel>Type</IonLabel>
+                    </IonCol>
+
+                </IonRow>
+            </IonGrid>
+                {items.map(item => {
                
-          return (
-            
-            <IonItem key={item.id}>
-              <IonLabel>{item.number+" Name"}</IonLabel>
-               <IonInput
-                placeholder='Hello'
-                value={nameInput}
-                onIonChange={(e) => setNameInput(e.detail.value!)}
-                clearOnEdit
-                contentEditable="true"
-                required
-              ></IonInput>
+                return (
 
-            </IonItem>
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol>
+                                <IonLabel>Item #{item.id+1}</IonLabel>
+                            </IonCol>
 
-            
-          )
-        })}
+                            <IonCol>
+                                <IonItem color="tertiary">
+                                    <IonInput value={item.itemName} contentEditable="true" required></IonInput>
+                                </IonItem>
+                            </IonCol>
+
+                            <IonCol>
+                                <IonItem color="tertiary">
+                                    <IonInput value={item.quantity} contentEditable="true" required></IonInput>
+                                </IonItem>
+                            </IonCol>
+
+                            <IonCol>
+                                <IonItem color="tertiary">
+                                    <IonInput value={item.price} contentEditable="true" required></IonInput>
+                                </IonItem>
+                            </IonCol>
+
+                            <IonCol>
+                                <IonItem color="tertiary">
+                                    <IonInput value={item.type} contentEditable="true" required></IonInput>
+                                </IonItem>
+                            </IonCol>
+                            
+
+                        </IonRow>
+
+                    </IonGrid>
+                    
+
+                )
+                })}
 
             <IonItem color="primary">
-            <IonButton fill="solid" slot="end" color="secondary">Confirm</IonButton>
+            <IonButton fill="solid" slot="start" color="secondary">Confirm</IonButton>
+            <IonButton fill="outline" slot="end" color="secondary">Cancel</IonButton>
             </IonItem>
         </IonCard>
   
