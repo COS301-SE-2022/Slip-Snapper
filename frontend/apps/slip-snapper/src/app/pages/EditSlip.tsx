@@ -9,11 +9,21 @@ import {
     IonCardTitle,
     IonItem,
     IonButton,
-    IonFooter
+    IonFooter,
+    IonLabel,
+    IonInput
   } from '@ionic/react';
-  import React from 'react';
+  import React, { useState } from 'react';
 
   const EditSlip: React.FC = () => {
+    const [items, setItems] = useState([{ id: 0, number: 'Item 1', itemName:'Chocolate' ,price:'R100' },
+   { id: 1, number: 'Item 2', itemName:'Cheese'  ,price:'R150' },{ id: 2, number: 'Item 3', itemName:'Chips',price:'R300' }]);
+    
+     
+   
+    const [nameInput,setNameInput ] = useState<string>();
+   
+
     return (
       <IonPage>
         <IonHeader>
@@ -37,6 +47,26 @@ import {
             <IonCardHeader>
             <IonCardTitle>Edit Details</IonCardTitle>
             </IonCardHeader>
+             {items.map(item => {
+               
+          return (
+            
+            <IonItem key={item.id}>
+              <IonLabel>{item.number+" Name"}</IonLabel>
+               <IonInput
+                placeholder='Hello'
+                value={nameInput}
+                onIonChange={(e) => setNameInput(e.detail.value!)}
+                clearOnEdit
+                contentEditable="true"
+                required
+              ></IonInput>
+
+            </IonItem>
+
+            
+          )
+        })}
 
             <IonItem color="primary">
             <IonButton fill="solid" slot="end" color="secondary">Confirm</IonButton>
