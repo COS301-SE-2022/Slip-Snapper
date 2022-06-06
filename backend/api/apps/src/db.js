@@ -109,14 +109,13 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
 
 /**
  * Funtion to get the item from the database
- * @param {*} userid The users id
- * @param {*} itemid The item id
+ * @param {*} userId The users id
  * @returns userid
  */
- async function getItem(userid){
+ async function getItem(userId){
     const items = await prisma.slip.findMany({
         where: {
-            usersId: userid
+            usersId: userId
         },
         select: {
             items : true,
@@ -151,6 +150,64 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
                 location: location,
                 date: date
             })
+        }
+    }
+
+    return { 
+        message: "All associated items retrieved",
+        numItems: i,
+        itemList: itemList
+    };
+}
+
+/**
+ * Funtion to get the item from the database
+ * @param {*} userid The users id
+ * @param {*} start The begginning of time frame
+ * @param {*} end The end of time frame
+ * @returns items
+ */
+ async function getItemsReport(userid, start, end){
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userid,
+            // transactionDate: {
+            //     gte: start,
+            //     lt:  end
+            //   }
+        },
+        select: {
+            items : true,
+            location: true,
+            transactionDate: true,
+            total: true
+        }
+    })
+
+    if( items == null ){
+        return { 
+            message: "No items associated with the user",
+            numItems: 0,
+            items: []
+        };
+    }
+
+    let itemList = [];
+    var i = 1;
+    for(var itemL of items){
+        let location = itemL.location;
+        let date = itemL.transactionDate;
+
+        for(var it of itemL.items){
+            itemList.push({
+                itemName: it.item,
+                type: it.itemType,
+                quantity: it.itemQuantities,
+                price: it.itemPrices,
+                location: location,
+                date: date
+            })
+            i++;
         }
     }
 
@@ -263,5 +320,6 @@ module.exports = {
     getItem,
     addItem,
     deleteItem,
-    updateItem
+    updateItem,
+    getItemsReport
 }
