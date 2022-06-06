@@ -20,7 +20,7 @@ class FetchData extends React.Component {
                 (json) => {
                     this.setState({
                         //items: json.items,
-                        items: [],
+                        items: json.itemList,
                         DataisLoaded: true
                     });
             },
@@ -40,14 +40,14 @@ class FetchData extends React.Component {
             <h1> Items </h1>  {
                 items.map((item) => ( 
                 <div className="div" id={item.id} contentEditable="false" suppressContentEditableWarning={true}>
-                    <h2>Item { item.id }</h2>
+                    <h2>Item { item.id+1 }</h2>
                     <ul key = { item.id } className="no-bullets">
-                        <li>Item Name: { item.item_name }</li>
-                        <li>Quantity: { item.quantity }</li>
-                        <li>Price: { item.price }</li>
-                        <li>Type: { item.type }</li>
-                        <li>Date: { item.date }</li>
-                        <li>Location: { item.location }</li>
+                        <li key = { item.id+""+item.itemName }>Item Name: { item.itemName }</li>
+                        <li key = { item.id+""+item.quantity }>Quantity: { item.quantity }</li>
+                        <li key = { item.id+""+item.price }>Price: { item.price }</li>
+                        <li key = { item.id+""+item.type }>Type: { item.type }</li>
+                        <li key = { item.id+""+item.date }>Date: { item.date }</li>
+                        <li key = { item.id+""+item.location }>Location: { item.location }</li>
                     </ul>
                     <IonButton id={item.id+"b"} fill="outline" color="secondary" onClick={()=>toggleEditable(item.id)}>Edit</IonButton>
                 </div>

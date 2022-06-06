@@ -1,28 +1,42 @@
 const request = require("supertest")
 const { makeApp } = require('../../src/index.js');
 
-const getUser = jest.fn();
-const addUser = jest.fn();
-const deleteUser = jest.fn();
-const updateUser = jest.fn();
+const getItemsReport = jest.fn();
 
 const app = makeApp({
-  getUser,
-  addUser,
-  deleteUser,
-  updateUser
+  getItemsReport
 })
 
 /**
  * Test for the generate report query
  */
 describe('Get /report/generate', ()=>{
+
+    beforeEach(()=>{
+        getItemsReport.mockReset();
+    })
+
     test('Should Generate a report for the user', async ()=>{
+        getItemsReport.mockResolvedValue({
+            message:"All associated items retrieved",
+            numItems: 1,
+            itemList: [{
+                id: 0,
+                itemId: 1,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+                location: "location",
+                date: "date"
+            }]
+        });
+        
         const res = await request(app)
-            .get('/api/report/generate?user=1?period=week')
+            .get('/api/report/generate?user=1?period=week&userId=1')
             
-        expect(res.statusCode).toEqual(200)
-        expect(res.text).toEqual("\"Report Generated\"")
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.message).toEqual("Report Generated");
     })
 })
 
@@ -44,6 +58,7 @@ describe('Get /report/budget', ()=>{
  */
 describe('POST /report/budget', ()=>{
     test('Should Generate a report for the user', async ()=>{
+        
         const res = await request(app)
             .post('/api/report/budget')
             .send({

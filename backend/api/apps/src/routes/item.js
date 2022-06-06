@@ -1,4 +1,3 @@
-const fs = require('fs');
 const router = require("express").Router();
 
 /**
@@ -6,79 +5,46 @@ const router = require("express").Router();
  * Uses the user id to get the items
  */
 router.get('/all', async (req,res)=>{
-    // fs.readFile("../api/apps/src/items.json", 'utf8', function (err, data) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    //     let d = JSON.parse(data);
-    //     let resp = [];
-    //     for(var i = 0;i < Object.keys(d).length;i++){
-    //         if(d[Object.keys(d)[i]].user == req.query.user){
-    //             resp.push(d[Object.keys(d)[i]]);
-    //         }
-    //     }
+    let { userId } = req.query;
 
-    //     return res.status(200).end(JSON.stringify(resp,null,2));
-    // });
+    const result = await req.app.get('db').getItem(Number(userId));
 
-    let userid = req.query.userid;
+    let status = 200;
 
-    const resp = await req.app.get('db').getItem(userid);
+    //TODO checking for errors
 
-    return res.status(200).send({
-            message : "Items have been retrieved",
-            numItems : 1,
-            items : resp
+    return res.status(status)
+        .send({
+            message: result.message,
+            numItems: result.numItems,
+            itemList: result.itemList
         });
 });
 
 /**
  * Add an item
- * Uses the user id to add the item
+ * Uses the user id to add the item\s
  */
 router.post('/add', async (req,res)=>{
-    // fs.readFile("../api/apps/src/items.json", 'utf8', function (err, data) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    //     let d = JSON.parse(data);
-    //     let last = Object.keys(d)[Object.keys(d).length-1].slice(-1)
-    //     let itemid = "item"+(parseInt(last)+1);
-    //     let item = {
-    //         [itemid]:{
-    //             "id":parseInt(last)+1,
-    //             "user": req.body.user,
-    //             "location":req.body.location,
-    //             "date":req.body.date,
-    //             "item_name":req.body.name,
-    //             "quantity":req.body.quantity,
-    //             "price":req.body.price,
-    //             "type":req.body.type
-    //         }
-    //     }
-    //     d[itemid] = item[itemid];
-    //     fs.writeFile("../api/apps/src/items.json", JSON.stringify(d,null,2), function(erra) {
-    //         if(erra) {
-    //             return console.log(erra);
-    //         }
-    //     });
+    let { userId, location, date, total, data } = req.body;
+        // {
+        //     item : "abc",
+        //     itemType: "food",
+        //     itemQuantities: 1,
+        //     itemPrices: 123,
+        //     slipId: -1
+        // }
 
-    //     return res.status(200).end(JSON.stringify(d,null,2));
-    // });
+    const result = await req.app.get('db').addItem(userId, location, date, total, data);
 
-    let userid = req.body.userid;
-    let itemname = req.body.name;
-    let itemprice = req.body.price;
-    let itemquantity = req.body.quantity;
-    let itemtype = req.body.type;
-    let location = req.body.location;
-    let date = req.body.date;
+    let status = 200;
 
-    const resp = await req.app.get('db').addItem(userid,itemname,itemprice,itemquantity,itemtype,location,date);
+    //TODO checking for errors
 
-    return res.status(200).send({
-            message : "Item has been added",
-            itemId : resp
+    return res.status(status)
+        .send({
+            message: result.message,
+            numItems: result.numItems,
         });
 });
 
@@ -87,34 +53,18 @@ router.post('/add', async (req,res)=>{
  * Uses the user id and itemId to delete the item
  */
 router.post('/delete', async (req,res)=>{
-    // fs.readFile("../api/apps/src/items.json", 'utf8', function (err, data) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    //     let d = JSON.parse(data);
-    //     for(var i = 0;i < Object.keys(d).length;i++){
-    //         if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.item){
-    //             delete d[req.body.item];
-    //             break;
-    //         }
-    //     }
-    //     fs.writeFile("../api/apps/src/items.json", JSON.stringify(d,null,2), function(erra) {
-    //         if(erra) {
-    //             return console.log(erra);
-    //         }
-    //     }); 
+    let { itemId } = req.body;
 
-    //     return res.status(200).end(JSON.stringify(d,null,2));
-    // });
+    const result = await req.app.get('db').deleteItem(itemId);
 
-    let itemid = req.body.itemid;
-    let userid = req.body.userid;
+    let status = 200;
 
-    const resp = await req.app.get('db').deleteItem(userid,itemid);
+    //TODO checking for errors
 
-    return res.status(200).send({
-            message : "Item has been deleted",
-            itemId : resp
+    return res.status(status)
+        .send({
+            message: result.message,
+            item: result.item,
         });
 });
 
@@ -123,64 +73,35 @@ router.post('/delete', async (req,res)=>{
  * Uses the user id and itemId to update the item
  */
 router.post('/update', async (req,res)=>{
-    // fs.readFile("../api/apps/src/items.json", 'utf8', function (err, data) {
-    //     if(err) {
-    //         return console.log(err);
-    //     }
-    //     let d = JSON.parse(data);
-    //     var a;
-    //     var found = false;
-    //     for(var i = 0;i < Object.keys(d).length;i++){
-    //         if(d[Object.keys(d)[i]].user == req.body.user && Object.keys(d)[i] == req.body.itemid){
-    //             a = req.body.itemid;
-    //             found = true;
-    //             break;
-    //         }
-    //     }
+    let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
 
-    //     if(found){
-    //         if(req.body.name != undefined){
-    //             d[a].item_name = req.body.name;
-    //         }
-    //         if(req.body.location != undefined){
-    //             d[a].location = req.body.location;
-    //         }
-    //         if(req.body.quantity != undefined){
-    //             d[a].quantity = req.body.quantity;
-    //         }
-    //         if(req.body.price != undefined){
-    //             d[a].price = req.body.price;
-    //         }
-    //         if(req.body.type != undefined){
-    //             d[a].type = req.body.type;
-    //         }
+    let data = {}
+    if(itemname != undefined){
+        data.item = itemname;
+    }
 
-    //         fs.writeFile("../api/apps/src/items.json", JSON.stringify(d,null,2), function(erra) {
-    //             if(erra) {
-    //                 return console.log(erra);
-    //             }
-    //         }); 
+    if(itemprice != undefined){
+        data.itemPrices = itemprice;
+    }
 
-    //         return res.status(200).end("Item updated successfully");
-    //     }
-    //     else{
-    //         return res.status(404).end("Item was not found");
-    //     }
-    // });
+    if(itemquantity != undefined){
+        data.itemQuantities = itemquantity;
+    }
+    
+    if(itemtype != undefined){
+        data.itemType = itemtype;
+    }
 
-    let userid = req.body.userid;
-    let itemname = req.body.name;
-    let itemprice = req.body.price;
-    let itemquantity = req.body.quantity;
-    let itemtype = req.body.type;
-    let location = req.body.location;
-    let date = req.body.date;
+    const result = await req.app.get('db').updateItem(itemId,data);
 
-    const resp = await req.app.get('db').updateItem(userid,itemname,itemprice,itemquantity,itemtype,location,date);
+    let status = 200;
 
-    return res.status(200).send({
-            message : "Item has been updated successfully",
-            itemId : resp
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            item: result.item
         });
 });
 
