@@ -12,6 +12,12 @@ function parse( parser ){
     };
 }
 
+/**
+ * 
+ * @param ocr text
+ * @returns date of receipt
+ */
+
 function dateParser ( text ){
     var day, month, year;
 
@@ -57,12 +63,28 @@ function dateParser ( text ){
     return year + "/" + month + "/" + day;
 }
 
+/**
+ * 
+ * @param ocr text
+ * @returns total of slip (largest value at the moment)
+ */
+
 function totalParser ( text ){
-    let result = "a";
+    const regexp = new RegExp("[0-9]+([.])[0-9]{2}", "g")
+    var result =  text.match(regexp)
+    var total = 0.0
 
-    //Check for total amount on slip
-
-    return result;
+    if (result != null){
+        for (let i = 0; i<result.length; i++){
+            console.log(result[i])
+            if (total < parseFloat(result[i])){
+                total = parseFloat(result[i]);
+            }
+        }
+        return total;
+    }else{
+        return "N/A";
+    }
 }
 
 function itemsParser ( text ){
