@@ -44,6 +44,7 @@ describe('Get /report/budget', ()=>{
  */
 describe('POST /report/budget', ()=>{
     test('Should Generate a report for the user', async ()=>{
+        
         const res = await request(app)
             .post('/api/report/budget')
             .send({

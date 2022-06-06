@@ -5,14 +5,19 @@ const router = require("express").Router();
  * Uses the user id to get the items
  */
 router.get('/all', async (req,res)=>{
-    let userid = req.query.userid;
+    let { userId } = req.query;
 
-    const resp = await req.app.get('db').getItem(userid);
+    const result = await req.app.get('db').getItem(Number(userId));
 
-    return res.status(200).send({
-            message : "Items have been retrieved",
-            numItems : 1,
-            items : resp
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            numItems: result.numItems,
+            itemList: result.itemList
         });
 });
 

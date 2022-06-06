@@ -13,7 +13,7 @@ router.post('/signup', async (req,res)=>{
 
     let status = 200;
 
-    //user checking for errors
+    //TODO checking for errors
 
     return res.status(status)
         .send({
@@ -21,7 +21,6 @@ router.post('/signup', async (req,res)=>{
             userData: result.user
         });
 });
-
 
 /**
  * Log a user in
@@ -59,7 +58,7 @@ router.post('/delete', async (req,res)=>{
 
     let status = 200;
 
-    //user checking for errors
+    //TODO checking for errors
 
     return res.status(status)
         .send({
@@ -104,7 +103,7 @@ router.post('/delete', async (req,res)=>{
 
     let status = 200;
 
-    //user checking for errors
+    //TODO checking for errors
 
     return res.status(status)
         .send({

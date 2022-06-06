@@ -31,7 +31,7 @@ export async function updateItemA(_item,userid,_name,_location,_quantity,_price,
 }
 
 export async function getItemsA(userid){
-    return fetch("http://localhost:55555/api/item/all?user="+userid, {
+    return fetch("http://localhost:55555/api/item/all?userId="+userid, {
         method: 'get',
         headers: {
             'Content-Type': 'application/json'

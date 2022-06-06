@@ -114,11 +114,50 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @returns userid
  */
  async function getItem(userid){
-    //query to add user here
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userid
+        },
+        select: {
+            items : true,
+            location: true,
+            transactionDate: true,
+            total: true
+        }
+    })
 
-    const userId = 1;
+    if( items == null ){
+        return { 
+            message: "No items associated with the user",
+            numItems: 0,
+            items: []
+        };
+    }
 
-    return userId;
+    let itemList = [];
+    var i = 0;
+    for(var itemL of items){
+        let location = itemL.location;
+        let date = itemL.transactionDate;
+        
+        for(var it of itemL.items){
+            itemList.push({
+                id: i++,
+                itemName: it.item,
+                type: it.itemType,
+                quantity: it.itemQuantities,
+                price: it.itemPrices,
+                location: location,
+                date: date
+            })
+        }
+    }
+
+    return { 
+        message: "All associated items retrieved",
+        numItems: i,
+        itemList: itemList
+    };
 }
 
 /**

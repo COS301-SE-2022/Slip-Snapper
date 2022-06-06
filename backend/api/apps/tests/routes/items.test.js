@@ -24,16 +24,29 @@ describe('Get /item/all', ()=>{
 
     test('should returnall the items from the database for the user', async ()=>{
         const querydata = [
-            "1",
-            "2",
-            "3"
+            1,
+            2,
+            3
         ]
-
+        
         for (const query of querydata){
             getItem.mockReset();
+            getItem.mockResolvedValue({
+                message:"All associated items retrieved",
+                numItems: 1,
+                itemList: [{
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                    location: "location",
+                    date: "date"
+                  }]
+            });
 
             const res = await request(app)
-                .get('/api/item/all?userid='+query)
+                .get('/api/item/all?userId='+query)
 
             expect(getItem.mock.calls.length).toBe(1);
             expect(getItem.mock.calls[0][0]).toBe(query);
@@ -42,23 +55,60 @@ describe('Get /item/all', ()=>{
     })
 
     test('should return a json object containing the itemid', async ()=>{
+        let data = [{
+            id: 0,
+            itemName: "name",
+            type: "type",
+            quantity: 1,
+            price: 111111,
+            location: "location",
+            date: "date"
+          }]
+
         for (let i = 0; i < 10; i++){
             getItem.mockReset();
-            getItem.mockResolvedValue(i);
+            getItem.mockResolvedValue({
+                message:"All associated items retrieved",
+                numItems: 1,
+                itemList: [{
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                    location: "location",
+                    date: "date"
+                  }]
+            });
 
             const res = await request(app)
-                .get('/api/item/all?user=1')
+                .get('/api/item/all?userId=1')
 
-            expect(res.body.items).toEqual(i);
+            expect(res.body.itemList).toEqual(data);
+            expect(res.body.numItems).toEqual(1);
+            expect(res.body.message).toEqual("All associated items retrieved");
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        getItem.mockResolvedValue({
+            message:"All associated items retrieved",
+            numItems: 1,
+            itemList: [{
+                id: 0,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+                location: "location",
+                date: "date"
+              }]
+        });
+        
         const res = await request(app)
-            .get('/api/item/all?user=1')
+            .get('/api/item/all?userId=1')
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Items have been retrieved");
     })
 })
 
