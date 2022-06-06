@@ -89,6 +89,18 @@ describe('Post /user/signup', ()=>{
 
         for (const body of bodydata){
             getUser.mockReset();
+            getUser.mockResolvedValue({
+                message:"User logged in succesfully",
+                user: {
+                    id: 1,
+                    email: 'johndoe@gmail.com',
+                    username: 'johnny',
+                    firstname: 'John',
+                    lastname: 'Doe',
+                    password: '20042',
+                    isBusiness: false
+                  }
+            });
 
             const res = await request(app)
                 .post('/api/user/login')
@@ -103,10 +115,30 @@ describe('Post /user/signup', ()=>{
         
     })
 
-    test('should return a json object containing the user id ', async ()=>{
+    test('should return a json object containing the user data and a message ', async ()=>{
         for (let i = 0; i < 10; i++){
+            let data = {
+                id: 1,
+                email: 'johndoe@gmail.com',
+                username: 'johnny',
+                firstname: 'John',
+                lastname: 'Doe',
+                password: '20042',
+                isBusiness: false
+              }
             getUser.mockReset();
-            getUser.mockResolvedValue(i);
+            getUser.mockResolvedValue({
+                message:"User logged in succesfully",
+                user: {
+                    id: 1,
+                    email: 'johndoe@gmail.com',
+                    username: 'johnny',
+                    firstname: 'John',
+                    lastname: 'Doe',
+                    password: '20042',
+                    isBusiness: false
+                  }
+            });
 
             const res = await request(app)
             .post('/api/user/login')
@@ -114,11 +146,25 @@ describe('Post /user/signup', ()=>{
                 { username: "username1", password: "password1"}
             )
 
-            expect(res.body.userId).toEqual(i);
+            expect(res.body.userData).toEqual(data);
+            expect(res.body.message).toEqual("User logged in succesfully");
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        getUser.mockResolvedValue({
+            message:"User logged in succesfully",
+            user: {
+                id: 1,
+                email: 'johndoe@gmail.com',
+                username: 'johnny',
+                firstname: 'John',
+                lastname: 'Doe',
+                password: '20042',
+                isBusiness: false
+              }
+        });
+        
         const res = await request(app)
             .post('/api/user/login')
             .send(
@@ -126,7 +172,6 @@ describe('Post /user/signup', ()=>{
             )
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("User logged in succesfully");
     })
 
 })

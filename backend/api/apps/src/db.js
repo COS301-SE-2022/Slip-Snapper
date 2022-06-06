@@ -1,12 +1,12 @@
-const { Pool } = require('pg')
+const { PrismaClient } = require('@prisma/client')
 
-const connection = new Pool({
-    user: "",
-    database: "",
-    password: "",
-    host: "",
-    port: 0
-})
+const prisma = new PrismaClient()
+
+// async function getAllUsers() {
+//     const allUsers = await prisma.users.findMany()
+//     //console.log(allUsers)
+//     return allUsers;
+// }
 
 /**
  * Funtion to get the user from the database
@@ -14,11 +14,26 @@ const connection = new Pool({
  * @param {*} password The users password
  * @returns userid
  */
-async function getUser(username, password){
+async function getUser(userName, password){
     //get user from db
-    const userid = 1;
+    const user = await prisma.users.findUnique({
+        where: {
+            username: userName
+        }
+    })
 
-    return userid;
+    if( user == null ){
+        return { message: "Invalid Username" };
+    }
+
+    if(user.password != password){
+        return { message: "Invalid Password" };
+    }
+
+    return { 
+        message: "User logged in successfully",
+        user: user
+    };
 }
 
 /**

@@ -25,15 +25,20 @@ router.post('/signup', async (req,res)=>{
  */
 router.post('/login', async (req,res)=>{
     //TODO add input checking and password hashing
-    let username = req.body.username;
-    let password = req.body.password;
+    let { username, password } = req.body;
 
-    const userid = await req.app.get('db').getUser(username,password);
+    const result = await req.app.get('db').getUser(username,password);
 
-    return res.status(200)
+    let status = 200;
+
+    if(result.message == "Invalid Username" || result.message == "Invalid Password"){
+        status = 400;
+    }
+
+    return res.status(status)
         .send({
-            message: "User logged in succesfully",
-            userId: userid
+            message: result.message,
+            userData: result.user
         });
 });
 
