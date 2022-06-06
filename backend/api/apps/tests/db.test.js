@@ -1,5 +1,6 @@
 //const db = require('../src/db')
 
+//TODO unit test for db
 describe('Database Query Tests',()=>{
 
     /**

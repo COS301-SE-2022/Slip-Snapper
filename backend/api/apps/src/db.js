@@ -70,7 +70,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} userId The users Id
  * @returns user data
  */
- async function deleteUser(userId){
+async function deleteUser(userId){
     const user = await prisma.users.delete({
         where: {
             id: userId
@@ -91,7 +91,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} data The data that needs to be updated
  * @returns userid
  */
- async function updateUser(userId,data){
+async function updateUser(userId,data){
     const user = await prisma.users.update({
         where: {
             id: userId
@@ -112,7 +112,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} userId The users id
  * @returns userid
  */
- async function getItem(userId){
+async function getItem(userId){
     const items = await prisma.slip.findMany({
         where: {
             usersId: userId
@@ -167,7 +167,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} end The end of time frame
  * @returns items
  */
- async function getItemsReport(userid, start, end){
+async function getItemsReport(userid, start, end){
     const items = await prisma.slip.findMany({
         where: {
             usersId: userid,
@@ -227,7 +227,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} data the items to add
  * @returns 
  */
- async function addItem(userid, location, date, total, data){
+async function addItem(userid, location, date, total, data){
     const slip = await prisma.slip.create({
         data:{
             location: location,
@@ -271,7 +271,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} itemId The item id
  * @returns userid
  */
- async function deleteItem(itemId){
+async function deleteItem(itemId){
     const item = await prisma.item.delete({
         where:{
             id: itemId
@@ -290,7 +290,7 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
  * @param {*} data the data to update
  * @returns 
  */
- async function updateItem(itemId,data){
+async function updateItem(itemId,data){
     const item = await prisma.item.update({
         where: {
             id: itemId
@@ -312,6 +312,85 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
     };
 }
 
+/**
+ * Funtion to get the user budgets from the database
+ * @param {*} userId The users name
+ * @returns user data
+ */
+async function getUserBudgets( userId ){
+    const user = await prisma.users.findFirst({
+        where: {
+            id: userId
+        }
+    })
+
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userId
+            // transactionDate: {
+            //     gte: start,
+            //     lt:  end
+            //   }
+        },
+        select:{
+            items: true,
+            transactionDate: true
+        }
+    })
+
+    let weeklyTotal = 0;
+    let monthlyTotal = 0;
+    // var date = new Date();
+    // date.setDate(date.getDate() - 7);
+    // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    // date = new Date();
+    // date.setDate(date.getMonth() - 1);
+    // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    for(var itemL of items){
+        //let tDate = transactionDate;
+        for(var it of itemL.items){
+            //if(tDate > week){
+                weeklyTotal+= it.itemPrices;
+            //}
+
+            //if(tDate > month){
+                monthlyTotal+= it.itemPrices;
+            //}
+        }
+    }
+
+    return { 
+        message: "User budget retrieved",
+        weeklyTotal: weeklyTotal,
+        weekly: user,
+        monthlyTotal: monthlyTotal,
+        monthly: user
+    };
+}
+
+/**
+ * Funtion to get the user budgets from the database
+ * @param {*} userId The users name
+ * @param {*} data the data to be added
+ * @returns user data
+ */
+async function setUserBudgets( userId, data ){
+    const user = await prisma.users.update({
+        where: {
+            id: userId
+        },
+        //data: data
+    })
+
+    return { 
+        message: "User budget set",
+        weekly: user,
+        monthly: user
+    };
+}
+
 module.exports = {
     getUser,
     addUser,
@@ -321,5 +400,7 @@ module.exports = {
     addItem,
     deleteItem,
     updateItem,
-    getItemsReport
+    getItemsReport,
+    getUserBudgets,
+    setUserBudgets
 }

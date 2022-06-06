@@ -105,9 +105,23 @@ router.get('/generate', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.get('/budget', async (req,res)=>{
-    return res.status(200).send({
-        message : "Your budget is a"
-    });
+    let { userId } = req.query;
+
+    const result = await req.app.get('db').getUserBudgets(Number(userId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            weeklyTotal: result.weeklyTotal,
+            weekly: result.weekly,
+            monthlyTotal: result.monthlyTotal,
+            monthly: result.monthly
+        });
+    
 });
 
 /**
@@ -115,9 +129,33 @@ router.get('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    return res.status(200).send({
-        message : "Your budget has been set"
-    });
+    // let { userId, weeklyB, monthlyB } = req.body;
+
+    // let data = {}
+    // if(weeklyB != undefined){
+    //     data.weekly = weeklyB
+    // }
+
+    // if(monthlyB != undefined){
+    //     data.monthly = weeklyB
+    // }
+
+    let userId = 1;
+    let data = {
+        weekly: 123,
+        monthly: 1234
+    }
+
+    const result = await req.app.get('db').setUserBudgets(userId, data);
+
+    let status = 200;
+    
+    return res.status(status)
+        .send({
+            message : result.message,
+            weekly: result.weekly,
+            monthly: result.monthly
+        });
 });
 
 module.exports.router = router;

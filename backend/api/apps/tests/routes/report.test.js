@@ -2,9 +2,13 @@ const request = require("supertest")
 const { makeApp } = require('../../src/index.js');
 
 const getItemsReport = jest.fn();
+const getUserBudgets = jest.fn();
+const setUserBudgets = jest.fn();
 
 const app = makeApp({
-  getItemsReport
+  getItemsReport,
+  getUserBudgets,
+  setUserBudgets
 })
 
 /**
@@ -44,12 +48,25 @@ describe('Get /report/generate', ()=>{
  * Test for the get budget
  */
 describe('Get /report/budget', ()=>{
+
+    beforeEach(()=>{
+        getUserBudgets.mockReset();
+    })
+
     test('Should Generate a report for the user', async ()=>{
+        getUserBudgets.mockResolvedValue({
+            message: "User budget retrieved",
+            weeklyTotal: 1,
+            weekly: 2,
+            monthlyTotal: 3,
+            monthly: 4
+        });
+        
         const res = await request(app)
-            .get('/api/report/budget')
+            .get('/api/report/budget?userId=1')
         
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Your budget is a");
+        expect(res.body.message).toEqual("User budget retrieved");
     })
 })
 
@@ -58,14 +75,21 @@ describe('Get /report/budget', ()=>{
  */
 describe('POST /report/budget', ()=>{
     test('Should Generate a report for the user', async ()=>{
-        
+        setUserBudgets.mockResolvedValue({
+            message: "User budget set",
+            weekly: 1,
+            monthly: 2,
+        });
+
         const res = await request(app)
             .post('/api/report/budget')
             .send({
-                user: 1
+                userId: 1,
+                weeklyB: 1,
+                monthlyB: 2,
             })
         
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Your budget has been set");
+        expect(res.body.message).toEqual("User budget set");
     })
 })
