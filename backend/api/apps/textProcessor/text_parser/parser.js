@@ -13,11 +13,48 @@ function parse( parser ){
 }
 
 function dateParser ( text ){
-    let result = "a";
+    var day, month, year;
 
-    //Check for all dates in the text, rturn earliest
+    result = text.match("[0-9]{2}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{4}");
+    if (null != result) {
+        dateSplitted = result[0].split(result[1]);
+        day = dateSplitted[0];
+        month = dateSplitted[1];
+        year = dateSplitted[2];
+    } else {
+        result = text.match("[0-9]{4}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{2}");
+        if (null != result) {
+            console.log(true)
+            dateSplitted = result[0].split(result[1]);
+            day = dateSplitted[2];
+            month = dateSplitted[1];
+            year = dateSplitted[0];
+        } else {
+            result = text.match("[0-9]{2}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{2}");
+            if (null != result) {
 
-    return result;
+                dateSplitted = result[0].split(result[1]);
+                day = dateSplitted[0];
+                month = dateSplitted[1];
+                year = "20" + dateSplitted[2];
+            }
+        }
+    }
+    if (month > 12) {
+        aux = day;
+        day = month;
+        month = aux;
+    }
+    if (result == null) {
+        var today = new Date();
+        var day = String(today.getDate()).padStart(2, '0');
+        var month = String(today.getMonth() + 1).padStart(2, '0');
+        var year = today.getFullYear();
+
+        return year + "/" + month + "/" + day;
+    }
+
+    return year + "/" + month + "/" + day;
 }
 
 function totalParser ( text ){
