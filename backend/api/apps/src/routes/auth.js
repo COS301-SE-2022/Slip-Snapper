@@ -6,15 +6,19 @@ const router = require("express").Router();
  */
 router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
-    let username = req.body.username;
-    let password = req.body.password;
+    
+    let { username, password, firstname, lastname, isBusiness, email } = req.body;
 
-    const userid = await req.app.get('db').addUser(username,password);
+    const result = await req.app.get('db').addUser(username, password, firstname, lastname, isBusiness, email);
 
-    return res.status(200)
+    let status = 200;
+
+    //user checking for errors
+
+    return res.status(status)
         .send({
-            message: "User succesfully added",
-            userId: userid
+            message: result.message,
+            userData: result.user
         });
 });
 
@@ -48,15 +52,19 @@ router.post('/login', async (req,res)=>{
  */
 router.post('/delete', async (req,res)=>{
     //TODO add input checking and password hashing
-    let username = req.body.username;
-    let password = req.body.password;
 
-    const userid = await req.app.get('db').deleteUser(username,password);
+    let { userId } = req.body;
 
-    return res.status(200)
+    const result = await req.app.get('db').deleteUser(userId);
+
+    let status = 200;
+
+    //user checking for errors
+
+    return res.status(status)
         .send({
-            message: "User deleted succesfully",
-            userId: userid
+            message: result.message,
+            userData: result.user
         });
 });
 
@@ -65,15 +73,43 @@ router.post('/delete', async (req,res)=>{
  * Uses the user id to update the user
  */
  router.post('/update', async (req,res)=>{
-    let username = req.body.username;
-    let password = req.body.password;
+    let { userId, username, password, firstname, lastname, isBusiness, email } = req.body;
 
-    const userid = await req.app.get('db').updateUser(username,password);
+    let data = {}
+    if(username != undefined){
+        data.username = username;
+    }
 
-    return res.status(200)
+    if(password != undefined){
+        data.password = password;
+    }
+
+    if(firstname != undefined){
+        data.firstname = firstname;
+    }
+    
+    if(lastname != undefined){
+        data.lastname = lastname;
+    }
+
+    if(isBusiness != undefined){
+        data.isBusiness = isBusiness;
+    }
+
+    if(email != undefined){
+        data.email = email;
+    }
+    
+    const result = await req.app.get('db').updateUser(userId, data);
+
+    let status = 200;
+
+    //user checking for errors
+
+    return res.status(status)
         .send({
-            message: "User updated succesfully",
-            userId: userid
+            message: result.message,
+            userData: result.user
         });
 });
  

@@ -2,32 +2,31 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
-// async function getAllUsers() {
-//     const allUsers = await prisma.users.findMany()
-//     //console.log(allUsers)
-//     return allUsers;
-// }
-
 /**
  * Funtion to get the user from the database
  * @param {*} username The users name
  * @param {*} password The users password
- * @returns userid
+ * @returns user data
  */
 async function getUser(userName, password){
-    //get user from db
-    const user = await prisma.users.findUnique({
+    const user = await prisma.users.findFirst({
         where: {
             username: userName
         }
     })
 
     if( user == null ){
-        return { message: "Invalid Username" };
+        return { 
+            message: "Invalid Username",
+            user: null
+        };
     }
 
     if(user.password != password){
-        return { message: "Invalid Password" };
+        return { 
+            message: "Invalid Password",
+            user: null
+        };
     }
 
     return { 
@@ -37,45 +36,75 @@ async function getUser(userName, password){
 }
 
 /**
- * Funtion to add the user to the database
- * @param {*} username The users name
- * @param {*} password The users password
- * @returns userid
+ * Function to add user to the database
+ * @param {*} username the username
+ * @param {*} password the user password
+ * @param {*} firstname the firstname
+ * @param {*} lastname the lastname
+ * @param {*} isBusiness the business
+ * @param {*} email the email
+ * @returns the the user data
  */
-async function addUser(username, password){
-    //query to add user here
+async function addUser(username, password, firstname, lastname, isBusiness, email){
+    const user = await prisma.users.create({
+        data:{
+            username: username,
+            password: password,
+            lastname: lastname,
+            firstname: firstname,
+            isBusiness: isBusiness,
+            email: email
+        }
+    })
 
-    const userid = 1;
+    //TODO validate user added correctly
 
-    return userid;
+    return { 
+        message: "User added successfully",
+        user: user
+    };
 }
 
 /**
  * Funtion to delete the user from the database
- * @param {*} username The users name
- * @param {*} password The users password
- * @returns userid
+ * @param {*} userId The users Id
+ * @returns user data
  */
- async function deleteUser(username, password){
-    //query to add user here
+ async function deleteUser(userId){
+    const user = await prisma.users.delete({
+        where: {
+            id: userId
+        }
+    })
 
-    const userid = 1;
+    //TODO validate user deleted correctly
 
-    return userid;
+    return { 
+        message: "User deleted successfully",
+        user: user
+    };
 }
 
 /**
  * Funtion to delete the user from the database
- * @param {*} username The users name
- * @param {*} password The users password
+ * @param {*} userId The users id
+ * @param {*} data The data that needs to be updated
  * @returns userid
  */
- async function updateUser(username, password){
-    //query to add user here
+ async function updateUser(userId,data){
+    const user = await prisma.users.update({
+        where: {
+            id: userId
+        },
+        data: data
+    })
 
-    const userid = 1;
+    //TODO validate user deleted correctly
 
-    return userid;
+    return { 
+        message: "User updated successfully",
+        user: user
+    };
 }
 
 /**
