@@ -23,22 +23,28 @@ router.get('/all', async (req,res)=>{
 
 /**
  * Add an item
- * Uses the user id to add the item
+ * Uses the user id to add the item\s
  */
 router.post('/add', async (req,res)=>{
-    let userid = req.body.userid;
-    let itemname = req.body.name;
-    let itemprice = req.body.price;
-    let itemquantity = req.body.quantity;
-    let itemtype = req.body.type;
-    let location = req.body.location;
-    let date = req.body.date;
+    let { userId, location, date, total, data } = req.body;
+        // {
+        //     item : "abc",
+        //     itemType: "food",
+        //     itemQuantities: 1,
+        //     itemPrices: 123,
+        //     slipId: -1
+        // }
 
-    const resp = await req.app.get('db').addItem(userid,itemname,itemprice,itemquantity,itemtype,location,date);
+    const result = await req.app.get('db').addItem(userId, location, date, total, data);
 
-    return res.status(200).send({
-            message : "Item has been added",
-            itemId : resp
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            numItems: result.numItems,
         });
 });
 
@@ -47,14 +53,18 @@ router.post('/add', async (req,res)=>{
  * Uses the user id and itemId to delete the item
  */
 router.post('/delete', async (req,res)=>{
-    let itemid = req.body.itemid;
-    let userid = req.body.userid;
+    let { itemId } = req.body;
 
-    const resp = await req.app.get('db').deleteItem(userid,itemid);
+    const result = await req.app.get('db').deleteItem(itemId);
 
-    return res.status(200).send({
-            message : "Item has been deleted",
-            itemId : resp
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            item: result.item,
         });
 });
 
@@ -63,19 +73,35 @@ router.post('/delete', async (req,res)=>{
  * Uses the user id and itemId to update the item
  */
 router.post('/update', async (req,res)=>{
-    let userid = req.body.userid;
-    let itemname = req.body.name;
-    let itemprice = req.body.price;
-    let itemquantity = req.body.quantity;
-    let itemtype = req.body.type;
-    let location = req.body.location;
-    let date = req.body.date;
+    let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
 
-    const resp = await req.app.get('db').updateItem(userid,itemname,itemprice,itemquantity,itemtype,location,date);
+    let data = {}
+    if(itemname != undefined){
+        data.item = itemname;
+    }
 
-    return res.status(200).send({
-            message : "Item has been updated successfully",
-            itemId : resp
+    if(itemprice != undefined){
+        data.itemPrices = itemprice;
+    }
+
+    if(itemquantity != undefined){
+        data.itemQuantities = itemquantity;
+    }
+    
+    if(itemtype != undefined){
+        data.itemType = itemtype;
+    }
+
+    const result = await req.app.get('db').updateItem(itemId,data);
+
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            item: result.item
         });
 });
 

@@ -135,14 +135,15 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
     }
 
     let itemList = [];
-    var i = 0;
+    var i = 1;
     for(var itemL of items){
         let location = itemL.location;
         let date = itemL.transactionDate;
-        
+
         for(var it of itemL.items){
             itemList.push({
                 id: i++,
+                itemId: it.id,
                 itemName: it.item,
                 type: it.itemType,
                 quantity: it.itemQuantities,
@@ -163,53 +164,95 @@ async function addUser(username, password, firstname, lastname, isBusiness, emai
 /**
  * Function to add item to the database
  * @param {*} userid the userid
- * @param {*} itemname the item name
- * @param {*} itemprice the item price
- * @param {*} itemquantity the item quantity
- * @param {*} itemtype the item type
  * @param {*} location the location
- * @param {*} date the date
+ * @param {*} total the total
+ * @param {*} date the location
+ * @param {*} data the items to add
  * @returns 
  */
- async function addItem(userid,itemname,itemprice,itemquantity,itemtype,location,date){
-    //query to add user here
+ async function addItem(userid, location, date, total, data){
+    const slip = await prisma.slip.create({
+        data:{
+            location: location,
+            total: total,
+            usersId: userid,
+            transactionDate: date
+        }
+    })
 
-    const userId = 1;
+    if( slip == null ){
+        return { 
+            message: "Slip could not be created",
+            numItems: 0,
+            items: []
+        };
+    }
 
-    return userId;
+    for (let item of data){
+        item.slipId = slip.id;
+    }
+
+    const items = await prisma.item.createMany({
+        data: data
+    });
+
+    if( items == null ){
+        return { 
+            message: "Item/s could not be added",
+            numItems: 0,
+        };
+    }
+
+    return { 
+        message: "Item/s has been added",
+        numItems: items.count,
+    };
 }
 
 /**
  * Funtion to delete the item from the database
- * @param {*} userid The users id
- * @param {*} itemid The item id
+ * @param {*} itemId The item id
  * @returns userid
  */
- async function deleteItem(userid, itemid){
-    //query to add user here
+ async function deleteItem(itemId){
+    const item = await prisma.item.delete({
+        where:{
+            id: itemId
+        }
+    });
 
-    const userId = 1;
-
-    return userId;
+    return { 
+        message: "Item has been deleted",
+        item: item,
+    };
 }
 
 /**
  * Function to update item in the database
- * @param {*} userid the userid
- * @param {*} itemname the item name
- * @param {*} itemprice the item price
- * @param {*} itemquantity the item quantity
- * @param {*} itemtype the item type
- * @param {*} location the location
- * @param {*} date the date
+ * @param {*} itemId the userid
+ * @param {*} data the data to update
  * @returns 
  */
- async function updateItem(userid,itemname,itemprice,itemquantity,itemtype,location,date){
-    //query to add user here
+ async function updateItem(itemId,data){
+    const item = await prisma.item.update({
+        where: {
+            id: itemId
+        },
+        data: data 
+    })
 
-    const userId = 1;
-
-    return userId;
+    if( item == null ){
+        return { 
+            message: "No item associated with the user",
+            numItems: 0,
+            items: []
+        };
+    }
+    
+    return { 
+        message: "Item has been updated successfully",
+        item: item
+    };
 }
 
 module.exports = {
