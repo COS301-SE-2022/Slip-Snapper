@@ -16,6 +16,29 @@ function parse(text) {
 
 /**
  * 
+ * @param {*} text array of slip text
+ * @returns first string - location, will change 
+ */
+function locationParser(text) {
+    const regexp = new RegExp("[a-z0-9\s]*", "igm")
+    var result = text[0].match(regexp);
+    var locationString = "";
+    if (result != null) {
+        for (let i = 0; i < result.length; i++) {
+            if (result[i] != '') {
+                locationString += result[i] + " ";
+            }
+        }
+        locationString = locationString.slice(0, -1);
+    } else {
+        locationString = "N/A";
+    }
+
+    return locationString;
+}
+
+/**
+ * 
  * @param ocr text
  * @returns date of receipt
  */
