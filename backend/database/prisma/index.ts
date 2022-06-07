@@ -78,9 +78,6 @@ async function getMostExpensiveItem(userid:number) {
         },
       },
     },
- 
-   
-
    })
    let expensiveItem=0;
    let dataItem:string=""!
@@ -100,11 +97,37 @@ async function getMostExpensiveItem(userid:number) {
   console.log(expensiveItem)
 }  
 
+async function getMostSpentATStore(userid:number)
+{
+  const mostExpensive = await prisma.slip.findMany({
+    where:{
+      usersId:{
+        in:userid
+      }
+    },
+    select:{
+      location:true,
+      total:true
+    }
+  })
+  let mostspent=0;
+  let store:string=""!;
+  for(var itemL of mostExpensive){
+    if(itemL.total>mostspent)
+    {
+      mostspent=itemL.total;
+      store=itemL.location!;
+    }
+  }
+  console.log(mostspent);
+  console.log(store);
+}
+
   var userid=1
   getAllUsers()
   getfavouritestore(userid)
   getMostExpensiveItem(userid)
-
+  getMostSpentATStore(userid)
     .catch((e) => {
       throw e
     })
