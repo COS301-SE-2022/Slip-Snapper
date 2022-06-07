@@ -82,3 +82,12 @@ export async function signupA( username, first, last, password){
         })
     })
 }
+
+export async function generateReportA( url ){
+    return fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
