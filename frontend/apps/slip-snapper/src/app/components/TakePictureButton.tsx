@@ -16,7 +16,7 @@ const TakePictureButton: React.FC = () => {
   return (
     <IonContent>
       <IonFab vertical="bottom" horizontal="center" slot="fixed">
-        <IonFabButton routerLink='/editslip' onClick={usePhotoGallery}>
+        <IonFabButton onClick={usePhotoGallery}>
           <IonIcon icon={receipt}></IonIcon>
         </IonFabButton>
       </IonFab>
