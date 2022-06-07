@@ -72,7 +72,7 @@ const Profile: React.FC = () => {
                 <IonInput readonly value={monthlyBudgetValue}></IonInput>
               </IonItem>
               <IonItem>
-                <IonButton onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
+                <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
                   Adjust Budget
                 </IonButton>
                  <IonAlert
@@ -85,13 +85,14 @@ const Profile: React.FC = () => {
             {
               name: 'weeklyBudget',
               type: 'text',
-              placeholder: 'Insert Daily Budget'
+              placeholder: 'Insert Weekly Budget'
               
             },
             {
+              id: "monthlyBudget",
               name: 'monthlyBudget',
               type: 'text',
-              placeholder: 'Insert Weekly Budget'
+              placeholder: 'Insert Monthly Budget'
             },]}
 
           buttons={[

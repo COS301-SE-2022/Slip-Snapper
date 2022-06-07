@@ -105,8 +105,8 @@ const EditSlip: React.FC = () => {
             )
           })}
           <IonItem color="primary">
-            <IonButton onClick={getItems} fill="solid" slot="start" color="secondary">Confirm</IonButton>
-            <IonButton fill="outline" slot="end" color="secondary">Cancel</IonButton>
+            <IonButton onClick={getItems} routerLink={"/home"} fill="solid" slot="start" color="secondary">Confirm</IonButton>
+            <IonButton routerLink={"/home"} fill="outline" slot="end" color="secondary">Cancel</IonButton>
           </IonItem>
         </IonCard>
       </IonContent>
