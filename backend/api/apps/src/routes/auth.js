@@ -7,9 +7,9 @@ const router = require("express").Router();
 router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
     
-    let { username, password, firstname, lastname, isBusiness, email } = req.body;
+    let { username, password, firstname, lastname } = req.body;
 
-    const result = await req.app.get('db').addUser(username, password, firstname, lastname, isBusiness, email);
+    const result = await req.app.get('db').addUser(username, password, firstname, lastname);
 
     let status = 200;
 
@@ -72,7 +72,7 @@ router.post('/delete', async (req,res)=>{
  * Uses the user id to update the user
  */
  router.post('/update', async (req,res)=>{
-    let { userId, username, password, firstname, lastname, isBusiness, email } = req.body;
+    let { userId, username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
 
     let data = {}
     if(username != undefined){
@@ -91,12 +91,12 @@ router.post('/delete', async (req,res)=>{
         data.lastname = lastname;
     }
 
-    if(isBusiness != undefined){
-        data.isBusiness = isBusiness;
+    if(weeklyBudget != undefined){
+        data.weeklyBudget = weeklyBudget;
     }
 
-    if(email != undefined){
-        data.email = email;
+    if(monthlyBudget != undefined){
+        data.monthlyBudget = monthlyBudget;
     }
     
     const result = await req.app.get('db').updateUser(userId, data);

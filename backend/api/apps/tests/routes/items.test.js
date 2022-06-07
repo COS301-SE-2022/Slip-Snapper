@@ -11,7 +11,7 @@ const app = makeApp({
   addItem,
   deleteItem,
   updateItem
-})
+}, {})
 
 /**
  * Test for the get items for user query

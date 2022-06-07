@@ -28,8 +28,11 @@ router.get('/all', async (req,res)=>{
 router.post('/add', async (req,res)=>{
     let { userId, location, date, total, data } = req.body;
         // {
-        //     item : "abc",
-        //     itemType: "food",
+        //     data :{
+        //            item : "abc",
+        //            itemType: "food",
+        //            dataId: -1
+        //      }
         //     itemQuantities: 1,
         //     itemPrices: 123,
         //     slipId: -1
@@ -75,24 +78,26 @@ router.post('/delete', async (req,res)=>{
 router.post('/update', async (req,res)=>{
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
 
-    let data = {}
+    let dataA = {}
+    let dataB = {}
+
     if(itemname != undefined){
-        data.item = itemname;
+        dataB.item = itemname;
     }
 
     if(itemprice != undefined){
-        data.itemPrices = itemprice;
+        dataA.itemPrice = itemprice;
     }
 
     if(itemquantity != undefined){
-        data.itemQuantities = itemquantity;
+        dataA.itemQuantity = itemquantity;
     }
     
     if(itemtype != undefined){
-        data.itemType = itemtype;
+        dataB.itemType = itemtype;
     }
 
-    const result = await req.app.get('db').updateItem(itemId,data);
+    const result = await req.app.get('db').updateItem(itemId, dataA, dataB);
 
     let status = 200;
 

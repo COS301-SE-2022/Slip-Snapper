@@ -10,33 +10,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id         Int        @id @default(autoincrement())
-  email      String     @unique
-  username   String
+  username   String @unique
   firstname  String
   lastname   String
+  weeklyBudget Float @default(0)
+  monthlyBudget Float @default(0)
   password   String     @db.VarChar(255)
-  isBusiness Boolean    @default(false)
   slips      Slip[]
 }
 
 model Slip {
-  id              Int      @id @default(autoincrement())
+  id              Int      @id  @default(autoincrement())
   location        String?
   transactionDate DateTime @default(now())
   items           Item[]
   total           Float
-  Users    Users?     @relation(fields: [usersId], references: [id])
+  User    User?     @relation(fields: [usersId], references: [id])
   usersId  Int?
 }
 
 model Item {
   id             Int     @id @default(autoincrement())
-  item           String?
-  itemType       String?
-  itemQuantities Int
-  itemPrices     Float
+  data dataItem? @relation(fields:[dataId],references:[id])
+  dataId Int?
+  itemQuantity Int
+  itemPrice     Float
   Slip   Slip? @relation(fields: [slipId], references: [id])
   slipId Int?
+}
+
+model dataItem{
+  id             Int     @id @default(autoincrement())
+  item           String
+  itemType       String
+  items Item[]
 }

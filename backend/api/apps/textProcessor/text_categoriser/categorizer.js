@@ -1,7 +1,7 @@
-function catgorize( text ){
+function categorize( text ){
     let result = "a";
 
     return result;
 }
 
-module.exports.categotize = catgorize;
+module.exports.categorize = categorize;

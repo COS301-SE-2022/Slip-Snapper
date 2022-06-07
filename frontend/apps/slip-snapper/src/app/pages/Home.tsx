@@ -18,6 +18,7 @@ import {
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
+import { generateReportA } from "../../api/apiCall"
 
 const Home: React.FC = () => {
   return (
@@ -158,14 +159,10 @@ const Home: React.FC = () => {
   );
 
   function generateReport(type: string) {
-    const url =
-      'http://localhost:55555/api/report/generate?user=1&period=' + type;
-    fetch(url, {
-      method: 'get',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => res.json());
+    const url = 'http://localhost:55555/api/report/generate?userId=1&period=' + type;
+    
+    generateReportA(url)
+      .then((res) => res.json());
   }
 };
 

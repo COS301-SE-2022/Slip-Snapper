@@ -129,32 +129,63 @@ router.get('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    // let { userId, weeklyB, monthlyB } = req.body;
+    let { userId, weekly, monthly } = req.body;
 
-    // let data = {}
-    // if(weeklyB != undefined){
-    //     data.weekly = weeklyB
-    // }
+    let data = {}
+    if(weekly != null){
+        data.weeklyBudget = weekly
+    }
 
-    // if(monthlyB != undefined){
-    //     data.monthly = weeklyB
-    // }
-
-    let userId = 1;
-    let data = {
-        weekly: 123,
-        monthly: 1234
+    if(monthly != null){
+        data.monthlyBudget = monthly
     }
 
     const result = await req.app.get('db').setUserBudgets(userId, data);
+
+    let status = 200;
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            weekly: result.weekly,
+            monthly: result.monthly
+        });
+});
+
+/**
+ * Get the user statistics
+ * Uses the user Id
+ */
+router.get('/statistics', async (req,res)=>{
+     let { userId } = req.body;
+
+    const result = await req.app.get('db').getUserStats( userId );
 
     let status = 200;
     
     return res.status(status)
         .send({
             message : result.message,
-            weekly: result.weekly,
-            monthly: result.monthly
+            favouriteStore: {
+                name: "",
+                items: []
+            },
+            category: {
+                amount: 0,
+                name: ""
+            },
+            mostExpensive: {
+                amount: 0,
+                name: ""
+            },
+            lastWeek:{
+                current: 0,
+                previous: 0
+            },
+            lastMonth:{
+                current: 0,
+                previous: 0
+            }
         });
 });
 

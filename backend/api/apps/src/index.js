@@ -1,13 +1,14 @@
 const express = require('express');
 
-function makeApp(database){
+function makeApp( database, parser){
     const app = express();
     const bodyParser = require('body-parser');
     app.use(bodyParser.json());
     const Cors = require('cors')
     app.use(Cors())
 
-    app.set('db',database)
+    app.set( 'db', database )
+    app.set( 'parser', parser )
 
     app.get('/api/ping', async (req,res)=>{
         return res.status(200)

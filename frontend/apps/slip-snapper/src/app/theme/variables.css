@@ -78,7 +78,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-background-color: #EBEBEB;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
    * -------------------------------------------
