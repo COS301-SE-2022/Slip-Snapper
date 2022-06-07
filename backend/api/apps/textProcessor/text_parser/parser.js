@@ -1,14 +1,14 @@
 const categorize = require("../text_categoriser/categorizer").categotize;
 
-function parse( parser ){
+function parse(parser) {
     let dateOfPurchase = dateParser(text);
     let totalSlip = totalParser(text);
     let slipItems = itemsParser(text);
 
     return {
-        date : dateOfPurchase,
-        total : totalSlip,
-        items : slipItems
+        date: dateOfPurchase,
+        total: totalSlip,
+        items: slipItems
     };
 }
 
@@ -18,25 +18,29 @@ function parse( parser ){
  * @returns date of receipt
  */
 
-function dateParser ( text ){
+function dateParser(text) {
     var day, month, year;
+    string = ""
 
-    result = text.match("[0-9]{2}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{4}");
+    for (let i = 0; i < text.length; i++) {
+        string += text[i] + " "
+    }
+
+    result = string.match("[0-9]{2}([\-/\.])[0-9]{2}[\-/\.][0-9]{4}");
     if (null != result) {
         dateSplitted = result[0].split(result[1]);
         day = dateSplitted[0];
         month = dateSplitted[1];
         year = dateSplitted[2];
     } else {
-        result = text.match("[0-9]{4}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{2}");
+        result = string.match("[0-9]{4}([\-/\.])[0-9]{2}[\-/\.][0-9]{2}");
         if (null != result) {
-            console.log(true)
             dateSplitted = result[0].split(result[1]);
             day = dateSplitted[2];
             month = dateSplitted[1];
             year = dateSplitted[0];
         } else {
-            result = text.match("[0-9]{2}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{2}");
+            result = string.match("[0-9]{2}([\-/\.])[0-9]{2}[\-/\.][0-9]{2}");
             if (null != result) {
 
                 dateSplitted = result[0].split(result[1]);
@@ -46,6 +50,7 @@ function dateParser ( text ){
             }
         }
     }
+
     if (month > 12) {
         aux = day;
         day = month;
@@ -69,39 +74,45 @@ function dateParser ( text ){
  * @returns total of slip (largest value at the moment)
  */
 
-function totalParser ( text ){
+function totalParser(text) {
     const regexp = new RegExp("[0-9]+([.])[0-9]{2}", "g")
-    var result =  text.match(regexp)
+    var result = []
+    for (let i = 0; i < text.length; i++) {
+        if (text[i].match(regexp) != null)
+            result.push(text[i].match(regexp))
+    }
+
     var total = 0.0
 
-    if (result != null){
-        for (let i = 0; i<result.length; i++){
-            console.log(result[i])
-            if (total < parseFloat(result[i])){
-                total = parseFloat(result[i]);
+    if (result != null) {
+        for (let i = 0; i < result.length; i++) {
+            for (let n = 0; n < result[i].length; n++) {
+                if (total < parseFloat(result[i][n])) {
+                    total = parseFloat(result[i][n]);
+                }
             }
         }
         return total;
-    }else{
+    } else {
         return "N/A";
     }
 }
 
-function itemsParser ( text ){
+function itemsParser(text) {
     let result = [];
 
     //get all items on slip
 
-    for (var i = 0; i < 10; i++){
+    for (var i = 0; i < 10; i++) {
         var itemName = itemNameParser(text);
         var itemType = categorize(itemName);
         var itemQuantity = itemQuantityParser(text);
         var itemPrice = itemPriceParser(text);
         var item = {
-            name  : itemName,
-            qunatity  : itemQuantity,
-            price : itemPrice,
-            type : itemType
+            name: itemName,
+            qunatity: itemQuantity,
+            price: itemPrice,
+            type: itemType
         }
 
         result.push(item)
@@ -110,7 +121,7 @@ function itemsParser ( text ){
     return result;
 }
 
-function itemNameParser ( text ){
+function itemNameParser(text) {
     let result = "a";
 
     //Check for item name on slip
@@ -118,7 +129,7 @@ function itemNameParser ( text ){
     return result;
 }
 
-function itemQuantityParser ( text ){
+function itemQuantityParser(text) {
     let result = "a";
 
     //Check for item quantity on slip
@@ -126,7 +137,7 @@ function itemQuantityParser ( text ){
     return result;
 }
 
-function itemPriceParser ( text ){
+function itemPriceParser(text) {
     let result = "a";
 
     //Check for item price on slip
