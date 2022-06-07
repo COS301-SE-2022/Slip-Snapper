@@ -129,38 +129,33 @@ router.get('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    // let { userId, weekly, monthly } = req.body;
+    let { userId, weekly, monthly } = req.body;
 
-    // let data = {}
-    // if(weekly != null){
-    //     data.weekly = weekly
-    // }
+    let data = {}
+    if(weekly != null){
+        data.weeklyBudget = weekly
+    }
 
-    // if(monthly != null){
-    //     data.monthly = monthly
-    // }
-
-    let userId = 1;
-    let data = {
-        weekly: 123,
-        monthly: 1234
+    if(monthly != null){
+        data.monthlyBudget = monthly
     }
 
     const result = await req.app.get('db').setUserBudgets(userId, data);
 
     let status = 200;
-    
-    console.log(req.body)
 
     return res.status(status)
         .send({
-            // message: "hello there"
             message: result.message,
             weekly: result.weekly,
             monthly: result.monthly
         });
 });
 
+/**
+ * Get the user statistics
+ * Uses the user Id
+ */
 router.get('/statistics', async (req,res)=>{
      let { userId } = req.body;
 
