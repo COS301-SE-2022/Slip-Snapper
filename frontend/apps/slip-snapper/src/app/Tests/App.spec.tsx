@@ -9,6 +9,7 @@ import ViewReports from '../pages/ViewReports'
 import Login from '../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
+import EditSlip from '../pages/EditSlip';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -108,7 +109,12 @@ describe('Profile', () => {
     expect(Component.getByText('Home'));
     expect(Component.getByText('Reports'));
     expect(Component.getByText('Edit Item'));
+    expect(Component.getByText('User details'));
+    expect(Component.getByText('Personal Budget'));
+ 
+
   });
+
 });
   
   /**
@@ -177,4 +183,22 @@ expect(Component.findByText('Jane_Doe777'));
 expect(Component.findByText('password123'));
 
  });
+});
+
+describe('Edit Slips', () => {
+
+
+  it('Correctly renders the Edit Slip page', () => {
+    const Component = render(<EditSlip />);
+
+    expect(Component.getByText('Edit Slip'));
+    expect(Component.getByText('Edit Details'));
+    expect(Component.getByText('Item Name'));
+    expect(Component.getByText('Quantity'));
+    expect(Component.getByText('Price'));
+    expect(Component.getByText('Type'));
+    expect(Component.getByText('Confirm'));
+    expect(Component.getByText('Cancel'));
+  });
+
 });
