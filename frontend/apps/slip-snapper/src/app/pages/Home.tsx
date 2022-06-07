@@ -13,7 +13,7 @@ import {
   IonButton,
   IonRow,
   IonCol,
-  IonFooter
+  IonFooter,
 } from '@ionic/react';
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
@@ -26,119 +26,146 @@ const Home: React.FC = () => {
         <IonToolbar color="primary">
           <IonTitle>Slip Snapper</IonTitle>
           <IonButtons slot="end">
-            <NavButtons/>
+            <NavButtons />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-      <IonTitle>Recent Reports</IonTitle>
+        <IonTitle>Recent Reports</IonTitle>
 
-      <IonRow>
-        <IonCol>
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardSubtitle>10/05/22</IonCardSubtitle>
-              <IonCardTitle>Report #11</IonCardTitle>
-            </IonCardHeader>
+        <IonRow>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardSubtitle>10/05/22</IonCardSubtitle>
+                <IonCardTitle>Report #11</IonCardTitle>
+              </IonCardHeader>
 
-            <IonItem>
-              <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
-            </IonItem>
-          </IonCard>
-        </IonCol>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  View
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
 
-        <IonCol>
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardSubtitle>10/05/22</IonCardSubtitle>
-              <IonCardTitle>Report #10</IonCardTitle>
-            </IonCardHeader>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardSubtitle>10/05/22</IonCardSubtitle>
+                <IonCardTitle>Report #10</IonCardTitle>
+              </IonCardHeader>
 
-            <IonItem>
-              <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
-            </IonItem>
-          </IonCard>
-        </IonCol>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  View
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
 
-        <IonCol>
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardSubtitle>10/05/22</IonCardSubtitle>
-              <IonCardTitle>Report #9</IonCardTitle>
-            </IonCardHeader>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardSubtitle>10/05/22</IonCardSubtitle>
+                <IonCardTitle>Report #9</IonCardTitle>
+              </IonCardHeader>
 
-            <IonItem>
-              <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
-            </IonItem>
-          </IonCard>
-        </IonCol>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  View
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
 
-        <IonCol>
-          <IonCard color="primary">
-            <IonCardHeader>
-              <IonCardSubtitle>10/05/22</IonCardSubtitle>
-              <IonCardTitle>Report #8</IonCardTitle>
-            </IonCardHeader>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardSubtitle>10/05/22</IonCardSubtitle>
+                <IonCardTitle>Report #8</IonCardTitle>
+              </IonCardHeader>
 
-            <IonItem>
-              <IonButton fill="outline" slot="end" color="secondary">View</IonButton>
-            </IonItem>
-          </IonCard>
-        </IonCol>
-      </IonRow>
+              <IonItem>
+                <IonButton fill="outline" slot="end" color="secondary">
+                  View
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
+        </IonRow>
 
-      <IonTitle>Expenditure Totals</IonTitle>
+        <IonTitle>Expenditure Totals</IonTitle>
 
-      <IonCard color="primary">
-        <IonCardHeader>
-          <IonCardTitle>Daily Total</IonCardTitle>
-          <IonCardSubtitle>R137.69</IonCardSubtitle>
-        </IonCardHeader>
-        <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("day")}>Generate Report</IonButton>
-        </IonItem>
-      </IonCard>
+        <IonCard color="primary">
+          <IonCardHeader>
+            <IonCardTitle>Daily Total</IonCardTitle>
+            <IonCardSubtitle>R137.69</IonCardSubtitle>
+          </IonCardHeader>
+          <IonItem>
+            <IonButton
+              fill="outline"
+              slot="end"
+              color="secondary"
+              onClick={() => generateReport('day')}
+            >
+              Generate Report
+            </IonButton>
+          </IonItem>
+        </IonCard>
 
-      <IonCard color="primary">
-        <IonCardHeader>
-          <IonCardTitle>Weekly Total</IonCardTitle>
-          <IonCardSubtitle>R912.21</IonCardSubtitle>
-        </IonCardHeader>
-        <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("week")}>Generate Report</IonButton>
-        </IonItem>
-      </IonCard>
+        <IonCard color="primary">
+          <IonCardHeader>
+            <IonCardTitle>Weekly Total</IonCardTitle>
+            <IonCardSubtitle>R912.21</IonCardSubtitle>
+          </IonCardHeader>
+          <IonItem>
+            <IonButton
+              fill="outline"
+              slot="end"
+              color="secondary"
+              onClick={() => generateReport('week')}
+            >
+              Generate Report
+            </IonButton>
+          </IonItem>
+        </IonCard>
 
-      <IonCard color="primary">
-        <IonCardHeader>
-          <IonCardTitle>Monthly Total</IonCardTitle>
-          <IonCardSubtitle>R4013.01</IonCardSubtitle>
-        </IonCardHeader>
-        <IonItem>
-          <IonButton fill="outline" slot="end" color="secondary" onClick={()=>generateReport("month")}>Generate Report</IonButton>
-        </IonItem>
-      </IonCard>
-
-      <TakePictureButton />
-
+        <IonCard color="primary">
+          <IonCardHeader>
+            <IonCardTitle>Monthly Total</IonCardTitle>
+            <IonCardSubtitle>R4013.01</IonCardSubtitle>
+          </IonCardHeader>
+          <IonItem>
+            <IonButton
+              fill="outline"
+              slot="end"
+              color="secondary"
+              onClick={() => generateReport('month')}
+            >
+              Generate Report
+            </IonButton>
+          </IonItem>
+        </IonCard>
       </IonContent>
-
       <IonFooter>
-        <IonToolbar color="primary">
-        </IonToolbar>
+          <TakePictureButton />
+        </IonFooter>
+      <IonFooter>
+        <IonToolbar color="primary"></IonToolbar>
       </IonFooter>
     </IonPage>
   );
 
-  function generateReport(type: string){
-    const url = "http://localhost:55555/api/report/generate?user=1&period="+type
+  function generateReport(type: string) {
+    const url =
+      'http://localhost:55555/api/report/generate?user=1&period=' + type;
     fetch(url, {
-        method: 'get',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then((res) => res.json())
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then((res) => res.json());
   }
 };
 

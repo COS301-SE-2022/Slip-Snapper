@@ -1,15 +1,14 @@
-import { useState } from 'react';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { createWorker } from 'tesseract.js';
+import { doProcessing } from '../api/apiCall';
 
 /**
- * 
+ *
  * @returns dataUrl of Photo taken
  */
 
 export function usePhotoGallery() {
-  const [photo, setPhoto] = useState('../assets/icon/icon.png');
-
-  const takePhoto = async () => {
+  (async () => {
     try {
       const p = await Camera.getPhoto({
         resultType: CameraResultType.DataUrl,
@@ -18,14 +17,38 @@ export function usePhotoGallery() {
         source: CameraSource.Prompt,
       });
 
-      const newPhoto = p.dataUrl as string;
-      setPhoto(newPhoto);
-    } catch (e) {
-      console.error(e);
+      ScanSlip(p.dataUrl as string);
+    } catch (err) {
+      console.error(err);
     }
-  };
-  return {
-    photo,
-    takePhoto,
-  };
+  })();
+}
+
+/**
+ *
+ * @param photo dataUrl of photo taken
+ * produces ocr scanned text
+ */
+function ScanSlip(photo: string) {
+  const worker = createWorker({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    logger: (m: any) => console.log(m),
+  });
+  (async () => {
+    await worker.load();
+    await worker.loadLanguage('eng');
+    await worker.initialize('eng');
+    const {
+      data: { text },
+    } = await worker.recognize(photo);
+
+    let resp = '';
+    doProcessing(text)
+      .then((res) => res.json())
+      .then((json) => (resp = json));
+
+    console.log(text);
+
+    await worker.terminate();
+  })();
 }
