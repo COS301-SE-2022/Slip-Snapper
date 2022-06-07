@@ -19,6 +19,7 @@ import {
   IonImg,
   IonThumbnail,
   IonInput,
+  IonProgressBar,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -30,6 +31,10 @@ const Profile: React.FC = () => {
   const [budgetAlert, setBudgetAlert] = useState(false);
   const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R 0.00");
   const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R 0.00");
+  let weeklyBudget: number, monthlyBudget: number
+  // 300 and 500 are used as mock values by total expenditure should be fetched by API
+  const totalWeeklySpent = 300 , totalMonthlySpent = 500
+
   return (
     <IonPage>
       <IonHeader>
@@ -68,9 +73,11 @@ const Profile: React.FC = () => {
               </IonCardHeader>
               <IonItem >
                 <IonInput readonly value={weelkyBudgetValue}></IonInput>
+                <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
               </IonItem>
               <IonItem >
                 <IonInput readonly value={monthlyBudgetValue}></IonInput>
+                <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
               </IonItem>
               <IonItem>
                 <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
@@ -105,6 +112,7 @@ const Profile: React.FC = () => {
             text:'Apply',
             handler: (alertData) => {
               applyToBudget(alertData.weeklyBudget,alertData.monthlyBudget);
+              isExceeded()
              }
           }
           ]}
@@ -225,8 +233,8 @@ const Profile: React.FC = () => {
   }
 
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
-    const weeklyBudget= parseFloat(newWeeklyBudget)
-    const monthlyBudget = parseFloat(newMonthlyBudget)
+     weeklyBudget= parseFloat(newWeeklyBudget)
+     monthlyBudget = parseFloat(newMonthlyBudget)
     if(!isNaN(weeklyBudget)){
       setWeeklyBudget("Weekly Budget: R "+weeklyBudget.toString())
     }
@@ -235,6 +243,51 @@ const Profile: React.FC = () => {
     }
     
     setBudgetA( 1, weeklyBudget, monthlyBudget )
+  }
+
+
+  function isExceeded() {
+    const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
+    const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
+    
+
+    if (totalWeeklySpent >= weeklyBudget && !isNaN(weeklyBudget))
+    {
+      document.getElementById("weeklyProgressBar")?.setAttribute("color","danger")
+    } 
+    else if (totalWeeklySpent >= weeklyBudget / 2 && !isNaN(weeklyBudget))
+    {
+      document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
+    }
+    else if(!isNaN(weeklyBudget)){
+      document.getElementById("weeklyProgressBar")?.setAttribute("color", "primary")
+    }
+
+    if (totalMonthlySpent >= monthlyBudget && !isNaN(monthlyBudget)) {
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "danger")
+    }
+    else if (totalMonthlySpent >= monthlyBudget / 2&&!isNaN(monthlyBudget)) {
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
+    }
+    else if (!isNaN(monthlyBudget)) {
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "primary")
+    }
+
+    document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
+    document.getElementById("monthlyProgressBar")?.setAttribute("value", withinMonthlyBudget.toString())
+
+    if(weeklyBudget===0)
+    {
+      document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
+      document.getElementById("weeklyProgressBar")?.setAttribute("color", "primary")
+    }
+
+    if (monthlyBudget === 0) {
+      document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "primary")
+    }
+
+
   }
 };
 

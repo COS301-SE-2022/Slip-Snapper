@@ -8,3 +8,7 @@
     margin: auto;
     display: block;
 }
+
+.progressBar{
+    max-width: 30%;
+}
