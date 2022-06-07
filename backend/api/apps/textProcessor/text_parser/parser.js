@@ -1,7 +1,7 @@
 const { categorize } = require("../text_categoriser/categorizer");
 
 function parse(text) {
-    console.log( text )
+    console.log(text)
 
     let dateOfPurchase = dateParser(text);
     let totalSlip = totalParser(text);
@@ -123,27 +123,43 @@ function totalParser(text) {
     }
 }
 
+/**
+ * 
+ * @param {*} text array of line text from ocr
+ * @returns array of arrays of items
+ */
 function itemsParser(text) {
-    let result = [];
+    const receiptRegex = /^\s*(\d+)\s+(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
+    let items = [];
 
-    //get all items on slip
+    for (let i = 0; i < text.length; i++) {
+        if (text[i].match(receiptRegex) != null) {
+            const matches = text[i].matchAll(receiptRegex)
 
-    for (var i = 0; i < 10; i++) {
-        var itemName = itemNameParser(text);
-        var itemType = categorize(itemName);
-        var itemQuantity = itemQuantityParser(text);
-        var itemPrice = itemPriceParser(text);
-        var item = {
-            name: itemName,
-            qunatity: itemQuantity,
-            price: itemPrice,
-            type: itemType
+            for (const matchedGroup of matches) {
+                const [
+                    fullString,
+                    quantity,
+                    item,
+                    space,
+                    price
+                ] = matchedGroup;
+
+                items.push({
+                    quantity,
+                    item,
+                    price,
+                }
+                );
+            }
         }
-
-        result.push(item)
     }
 
-    return result;
+    if (items.length == 0) {
+        return "N/A"
+    }
+
+    return items;
 }
 
 function itemNameParser(text) {
