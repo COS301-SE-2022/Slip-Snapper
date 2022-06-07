@@ -1,17 +1,24 @@
 const { categorize } = require("../text_categoriser/categorizer");
 
+/**
+ * 
+ * @param {*} text array of slip text
+ * @returns array of slip date, location, total amount and items
+ */
 function parse(text) {
-    console.log(text)
-
     let dateOfPurchase = dateParser(text);
+    let locationOfSlip = locationParser(text);
     let totalSlip = totalParser(text);
     let slipItems = itemsParser(text);
 
-    return {
-        date: dateOfPurchase,
-        total: totalSlip,
-        items: slipItems
-    };
+    const slip =[
+        dateOfPurchase,
+        locationOfSlip,
+        slipItems,
+        totalSlip,
+    ]
+
+    return slip;
 }
 
 /**
@@ -145,10 +152,12 @@ function itemsParser(text) {
                     price
                 ] = matchedGroup;
 
+                const type = "food";
                 items.push({
                     quantity,
                     item,
                     price,
+                    type,
                 }
                 );
             }
