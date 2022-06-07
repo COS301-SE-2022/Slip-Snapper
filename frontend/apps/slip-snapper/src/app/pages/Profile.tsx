@@ -18,6 +18,7 @@ import {
   IonAlert,
   IonImg,
   IonThumbnail,
+  IonInput,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -26,6 +27,8 @@ import '../theme/profile.css';
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [budgetAlert, setBudgetAlert] = useState(false);
+  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>();
+  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>();
   return (
     <IonPage>
       <IonHeader>
@@ -46,7 +49,6 @@ const Profile: React.FC = () => {
                 <IonCardSubtitle>
                   My Business: Isabella's Decor and Gifts
                 </IonCardSubtitle>
-
                 <IonCardSubtitle>
                   <IonItem class="profilePhoto">
                     <IonThumbnail slot="start">
@@ -63,8 +65,12 @@ const Profile: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonCardHeader>
-              <IonItem>Daily Budget: R200</IonItem>
-              <IonItem>Weekly Budget: R1500</IonItem>
+              <IonItem >
+                <IonInput readonly value={weelkyBudgetValue}></IonInput>
+              </IonItem>
+              <IonItem >
+                <IonInput readonly value={monthlyBudgetValue}></IonInput>
+              </IonItem>
               <IonItem>
                 <IonButton onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
                   Adjust Budget
@@ -77,13 +83,13 @@ const Profile: React.FC = () => {
          
           inputs={[
             {
-              name: 'dailyBudget',
+              name: 'weeklyBudget',
               type: 'text',
               placeholder: 'Insert Daily Budget'
               
             },
             {
-              name: 'weeklyBudget',
+              name: 'monthlyBudget',
               type: 'text',
               placeholder: 'Insert Weekly Budget'
             },]}
@@ -93,10 +99,12 @@ const Profile: React.FC = () => {
             text:'Cancel'
           },
           {
+            role:'applyBudget',
             text:'Apply',
-            
-          },
-            
+            handler: (alertData) => {
+              applyToBudget(alertData.weeklyBudget,alertData.monthlyBudget);
+             }
+          }
           ]}
         ></IonAlert>
               </IonItem>
@@ -210,11 +218,17 @@ const Profile: React.FC = () => {
       </IonContent>
     </IonPage>
   );
+  function Logout() {
+    throw new Error('Function not implemented.');
+  }
+
+  function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
+    const weeklyBudget= parseFloat(newWeeklyBudget)
+    const monthlyBudget = parseFloat(newMonthlyBudget)
+
+    setWeeklyBudget("Weekly Budget: R"+weeklyBudget.toString())
+    setMonthlyBudget("Weekly Budget: R"+monthlyBudget.toString())
+  }
 };
 
 export default Profile;
-
-function Logout() {
-  throw new Error('Function not implemented.');
-}
-

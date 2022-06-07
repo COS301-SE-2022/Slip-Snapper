@@ -123,8 +123,20 @@ const EditSlip: React.FC = () => {
       const newQuantity = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
       const newPrice = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
       const newType = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
+
+      if(newItemName!==undefined)
+      {
+        items[i].itemName = newItemName
+      }if (newQuantity !== undefined) {
+        items[i].quantity = parseInt(newQuantity)
+      }if (newPrice !== undefined) {
+        items[i].itemName = newPrice
+      }if (newType !== undefined) {
+        items[i].itemName = newType
+      }
     }
   }
+ 
 };
 
 export default EditSlip;
