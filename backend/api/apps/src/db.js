@@ -371,12 +371,32 @@ async function getUserBudgets( userId ){
 }
 
 /**
- * Funtion to get the user budgets from the database
+ * Funtion to set the user budgets in the database
  * @param {*} userId The users name
  * @param {*} data the data to be added
  * @returns user data
  */
 async function setUserBudgets( userId, data ){
+    const user = await prisma.users.update({
+        where: {
+            id: userId
+        },
+        //data: data
+    })
+
+    return { 
+        message: "User budget set",
+        weekly: user,
+        monthly: user
+    };
+}
+
+/**
+ * Funtion to get the user statistics from the database
+ * @param {*} userId The users name
+ * @returns user data
+ */
+ async function getUserStats( userId ){
     const user = await prisma.users.update({
         where: {
             id: userId
@@ -402,5 +422,6 @@ module.exports = {
     updateItem,
     getItemsReport,
     getUserBudgets,
-    setUserBudgets
+    setUserBudgets,
+    getUserStats
 }

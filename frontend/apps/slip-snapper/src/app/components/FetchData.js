@@ -2,6 +2,7 @@ import React from "react";
 import { IonButton } from '@ionic/react';
 import '../pages/FetchData.css';
 import { updateItemA, getItemsA } from "../../api/apiCall"
+
 class FetchData extends React.Component {
    
     constructor(props) {
@@ -19,7 +20,6 @@ class FetchData extends React.Component {
             .then(
                 (json) => {
                     this.setState({
-                        //items: json.items,
                         items: json.itemList,
                         DataisLoaded: true
                     });
@@ -40,7 +40,7 @@ class FetchData extends React.Component {
             <h1> Items </h1>  {
                 items.map((item) => ( 
                 <div className="div" id={item.id} contentEditable="false" suppressContentEditableWarning={true}>
-                    <h2>Item { item.id+1 }</h2>
+                    <h2>Item { item.id }</h2>
                     <ul key = { item.id } className="no-bullets">
                         <li key = { item.id+""+item.itemName }>Item Name: { item.itemName }</li>
                         <li key = { item.id+""+item.quantity }>Quantity: { item.quantity }</li>

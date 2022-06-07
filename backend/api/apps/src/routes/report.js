@@ -129,15 +129,15 @@ router.get('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    // let { userId, weeklyB, monthlyB } = req.body;
+    // let { userId, weekly, monthly } = req.body;
 
     // let data = {}
-    // if(weeklyB != undefined){
-    //     data.weekly = weeklyB
+    // if(weekly != null){
+    //     data.weekly = weekly
     // }
 
-    // if(monthlyB != undefined){
-    //     data.monthly = weeklyB
+    // if(monthly != null){
+    //     data.monthly = monthly
     // }
 
     let userId = 1;
@@ -150,11 +150,47 @@ router.post('/budget', async (req,res)=>{
 
     let status = 200;
     
+    console.log(req.body)
+
+    return res.status(status)
+        .send({
+            // message: "hello there"
+            message: result.message,
+            weekly: result.weekly,
+            monthly: result.monthly
+        });
+});
+
+router.get('/statistics', async (req,res)=>{
+     let { userId } = req.body;
+
+    const result = await req.app.get('db').getUserStats( userId );
+
+    let status = 200;
+    
     return res.status(status)
         .send({
             message : result.message,
-            weekly: result.weekly,
-            monthly: result.monthly
+            favouriteStore: {
+                name: "",
+                items: []
+            },
+            category: {
+                amount: 0,
+                name: ""
+            },
+            mostExpensive: {
+                amount: 0,
+                name: ""
+            },
+            lastWeek:{
+                current: 0,
+                previous: 0
+            },
+            lastMonth:{
+                current: 0,
+                previous: 0
+            }
         });
 });
 

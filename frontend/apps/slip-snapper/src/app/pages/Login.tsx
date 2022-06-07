@@ -1,6 +1,7 @@
 import { IonButton, IonCard, IonInput, IonItem, IonLabel, IonPage} from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/login.css';
+import { loginA } from "../../api/apiCall"
 
 const Login: React.FC = () => {
   
@@ -68,18 +69,8 @@ const Login: React.FC = () => {
   );
 
     function login(user: string, password: string){
-      user = "Jane Doe";
-      fetch("http://localhost:55555/api/user/login", {
-          method: 'post',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: user,
-            pass: password
-        })
-      })
-      .then((res) => res.json())
+      loginA(user, password)
+        .then((res) => res.json())
     }
   };
   

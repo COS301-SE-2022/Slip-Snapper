@@ -9,7 +9,7 @@ const app = makeApp({
   getItemsReport,
   getUserBudgets,
   setUserBudgets
-})
+}, {})
 
 /**
  * Test for the generate report query

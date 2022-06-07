@@ -38,3 +38,47 @@ export async function getItemsA(userid){
         }
     })
 }
+
+export async function setBudgetA( userid, weekly, monthly){
+    return fetch("http://localhost:55555/api/report/budget", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            userId: userid,
+            weekly: weekly,
+            monthly: monthly
+        })
+    })
+}
+
+export async function loginA( username, password){
+    return fetch("http://localhost:55555/api/user/login", {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
+    })
+}
+
+export async function signupA( username, first, last, password){
+    return fetch('http://localhost:55555/api/user/signup', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstname: first,
+          lastname: last,
+          username: username,
+          password: password,
+          isBusiness: false,
+          email: ""
+        })
+    })
+}

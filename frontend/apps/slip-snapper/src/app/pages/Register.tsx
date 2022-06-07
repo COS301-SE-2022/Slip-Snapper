@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput} from '@ionic/react';
 import '../theme/register.css';
+import { loginA, signupA } from "../../api/apiCall"
+
 const Register: React.FC = () => {
   const [nameInput,setNameInput ] = useState<string>();
   const [surnameInput, setSurnameInput] = useState<string>();
@@ -132,25 +134,9 @@ const Register: React.FC = () => {
     </IonPage>
   );
 
-  function register(
-    name: string,
-    surname: string,
-    user: string,
-    password: string
-  ) {
-    const fullName = name + ' ' + surname;
-    user = 'Jane Doe';
-    fetch('http://localhost:55555/api/user/login', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: user,
-        userName: fullName,
-        pass: password,
-      }),
-    }).then((res) => res.json());
+  function register( name: string, surname: string, user: string, password: string) {
+    signupA( user, name, surname, password)
+      .then((res) => res.json());
   }
 };
 

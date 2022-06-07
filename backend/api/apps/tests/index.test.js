@@ -1,17 +1,7 @@
 const request = require("supertest")
 const { makeApp } = require('../src/index.js');
 
-const getUser = jest.fn();
-const addUser = jest.fn();
-const deleteUser = jest.fn();
-const updateUser = jest.fn();
-
-const app = makeApp({
-  getUser,
-  addUser,
-  deleteUser,
-  updateUser
-})
+const app = makeApp({}, {})
 
 /**
  * Test pinging the api

@@ -11,7 +11,7 @@ const app = makeApp({
   addUser,
   deleteUser,
   updateUser
-})
+}, {})
 
 /**
  * Test for the signup query

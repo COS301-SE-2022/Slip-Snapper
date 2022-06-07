@@ -1,6 +1,8 @@
-const categorize = require("../text_categoriser/categorizer").categotize;
+const { categorize } = require("../text_categoriser/categorizer");
 
-function parse(parser) {
+function parse(text) {
+    console.log( text )
+
     let dateOfPurchase = dateParser(text);
     let totalSlip = totalParser(text);
     let slipItems = itemsParser(text);

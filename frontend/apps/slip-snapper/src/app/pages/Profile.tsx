@@ -23,12 +23,13 @@ import {
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
+import { setBudgetA } from "../../api/apiCall"
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [budgetAlert, setBudgetAlert] = useState(false);
-  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>();
-  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>();
+  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R 0.00");
+  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R 0.00");
   return (
     <IonPage>
       <IonHeader>
@@ -225,9 +226,14 @@ const Profile: React.FC = () => {
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
     const weeklyBudget= parseFloat(newWeeklyBudget)
     const monthlyBudget = parseFloat(newMonthlyBudget)
-
-    setWeeklyBudget("Weekly Budget: R"+weeklyBudget.toString())
-    setMonthlyBudget("Weekly Budget: R"+monthlyBudget.toString())
+    if(!isNaN(weeklyBudget)){
+      setWeeklyBudget("Weekly Budget: R "+weeklyBudget.toString())
+    }
+    if(!isNaN(monthlyBudget)){
+      setMonthlyBudget("Monthly Budget: R "+monthlyBudget.toString())
+    }
+    
+    setBudgetA( 1, weeklyBudget, monthlyBudget )
   }
 };
 

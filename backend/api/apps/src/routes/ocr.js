@@ -4,14 +4,11 @@ const router = require("express").Router();
  * Request to have text extracted to be processed by the ML
  */
 router.post('/process', async (req,res)=>{
-    let unprocessedText = req.body.text;
+    let { text } = req.body;
 
-    //Send text for processing
+    let lines = text.split('\n')
 
-    //Process Response
-
-    //Respond with relevant text
-    let processedText = "Temporary response"
+    const processedText = await req.app.get('parser').parse(lines);
 
     return res.status(200).send({
             message : "Text has been processed",
