@@ -1,8 +1,7 @@
 const CACHE_ =  "version_1";
 const urlsToCache = ['index.html','offline.html'];
-const self = this;
 
-self.addEventListener('install',(event)=>{
+this.addEventListener('install',(event)=>{
 event.waitUntil(
     caches.open(CACHE_)
     .then((cache)=>{
@@ -11,7 +10,7 @@ event.waitUntil(
 )
 });
 
-self.addEventListener('fetch',(event)=>{
+this.addEventListener('fetch',(event)=>{
     event.respondWith(
         caches.match(event.request)
         .then(()=>{
@@ -21,7 +20,7 @@ self.addEventListener('fetch',(event)=>{
     )
 });
 
-self.addEventListener('activate',(event)=>{
+this.addEventListener('activate',(event)=>{
     const cachewhitelist =[];
     cachewhitelist.push(CACHE_);
     event.waitUntil(
