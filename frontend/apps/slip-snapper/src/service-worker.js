@@ -21,3 +21,17 @@ self.addEventListener('fetch',(event)=>{
     )
 });
 
+self.addEventListener('activate',(event)=>{
+    const cachewhitelist =[];
+    cachewhitelist.push(CACHE_);
+    event.waitUntil(
+        caches.keys().then((cacheNames)=> Promise.all(
+            cacheNames.map((cacheName)=>{
+                if(!cachewhitelist.includes(cacheName)){
+                    return caches.delete(cacheName);
+                }
+            })
+        )
+        )
+    )
+ });
