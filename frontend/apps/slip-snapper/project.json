@@ -17,7 +17,9 @@
         "tsConfig": "apps/slip-snapper/tsconfig.app.json",
         "assets": [
           "apps/slip-snapper/src/assets",
-          "apps/slip-snapper/src/manifest.json"
+          "apps/slip-snapper/src/manifest.json",
+          "apps/slip-snapper/src/service-worker.js",
+          "apps/slip-snapper/src/offline.html"
         ],
         "styles": ["apps/slip-snapper/src/styles.css"],
         "scripts": [],
