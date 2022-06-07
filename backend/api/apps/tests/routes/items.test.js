@@ -24,16 +24,30 @@ describe('Get /item/all', ()=>{
 
     test('should returnall the items from the database for the user', async ()=>{
         const querydata = [
-            "1",
-            "2",
-            "3"
+            1,
+            2,
+            3
         ]
 
         for (const query of querydata){
             getItem.mockReset();
+            getItem.mockResolvedValue({
+                message:"All associated items retrieved",
+                numItems: 1,
+                itemList: [{
+                    id: 0,
+                    itemId: 1,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                    location: "location",
+                    date: "date"
+                  }]
+            });
 
             const res = await request(app)
-                .get('/api/item/all?userid='+query)
+                .get('/api/item/all?userId='+query)
 
             expect(getItem.mock.calls.length).toBe(1);
             expect(getItem.mock.calls[0][0]).toBe(query);
@@ -42,23 +56,63 @@ describe('Get /item/all', ()=>{
     })
 
     test('should return a json object containing the itemid', async ()=>{
+        let data = [{
+            id: 0,
+            itemId: 1,
+            itemName: "name",
+            type: "type",
+            quantity: 1,
+            price: 111111,
+            location: "location",
+            date: "date"
+          }]
+
         for (let i = 0; i < 10; i++){
             getItem.mockReset();
-            getItem.mockResolvedValue(i);
+            getItem.mockResolvedValue({
+                message:"All associated items retrieved",
+                numItems: 1,
+                itemList: [{
+                    id: 0,
+                    itemId: 1,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                    location: "location",
+                    date: "date"
+                  }]
+            });
 
             const res = await request(app)
-                .get('/api/item/all?user=1')
+                .get('/api/item/all?userId=1')
 
-            expect(res.body.items).toEqual(i);
+            expect(res.body.itemList).toEqual(data);
+            expect(res.body.numItems).toEqual(1);
+            expect(res.body.message).toEqual("All associated items retrieved");
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        getItem.mockResolvedValue({
+            message:"All associated items retrieved",
+            numItems: 1,
+            itemList: [{
+                id: 0,
+                itemId: 1,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+                location: "location",
+                date: "date"
+              }]
+        });
+        
         const res = await request(app)
-            .get('/api/item/all?user=1')
+            .get('/api/item/all?userId=1')
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Items have been retrieved");
     })
 })
 
@@ -73,13 +127,17 @@ describe('Post /item/add', ()=>{
 
     test('should save the item to the database', async ()=>{
         const bodydata = [
-            { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"},
-            { userid: 2, location:"location2", date:"date2", name:"name2", quantity:2, price:"price2", type: "type2"},
-            { userid: 3, location:"location3", date:"date3", name:"name3", quantity:3, price:"price3", type: "type3"},
+            { userId: 1, location:"location1", date:"date1", data: { item: "name1", itemQuantities: 1, itemPrices: 1, itemType: "type1", slipId: -1 }},
+            { userId: 2, location:"location2", date:"date2", data: { item: "name2", itemQuantities: 2, itemPrices: 2, itemType: "type2", slipId: -1 }},
+            { userId: 3, location:"location3", date:"date3", data: { item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }},
         ]
 
         for (const body of bodydata){
             addItem.mockReset();
+            addItem.mockResolvedValue({
+                message:"Item/s has been added",
+                numItems: 1,
+            });
 
             const res = await request(app)
                 .post('/api/item/add')
@@ -88,40 +146,46 @@ describe('Post /item/add', ()=>{
                 )
             
             expect(addItem.mock.calls.length).toBe(1);
-            expect(addItem.mock.calls[0][0]).toBe(body.userid);
-            expect(addItem.mock.calls[0][1]).toBe(body.name);
-            expect(addItem.mock.calls[0][2]).toBe(body.price);
-            expect(addItem.mock.calls[0][3]).toBe(body.quantity);
-            expect(addItem.mock.calls[0][4]).toBe(body.type);
-            expect(addItem.mock.calls[0][5]).toBe(body.location);
-            expect(addItem.mock.calls[0][6]).toBe(body.date);
+            expect(addItem.mock.calls[0][0]).toBe(body.userId);
+            expect(addItem.mock.calls[0][1]).toBe(body.location);
+            expect(addItem.mock.calls[0][2]).toBe(body.date);
+            expect(addItem.mock.calls[0][3]).toBe(body.total);
+            //expect(addItem.mock.calls[0][4]).toBe(body.data);
         }
     })
 
     test('should return a json object containing the item id ', async ()=>{
         for (let i = 0; i < 10; i++){
             addItem.mockReset();
-            addItem.mockResolvedValue(i);
+            addItem.mockResolvedValue({
+                message:"Item/s has been added",
+                numItems: 1,
+            });
 
             const res = await request(app)
                 .post('/api/item/add')
                 .send(
-                    { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"}
+                    { userId: 3, location:"location3", date:"date3", data: { item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }}
                 )
 
-            expect(res.body.itemId).toEqual(i);
+            expect(res.body.numItems).toEqual(1);
+            expect(res.body.message).toEqual("Item/s has been added");
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        addItem.mockResolvedValue({
+            message:"Item/s has been added",
+            numItems: 1,
+        });
+
         const res = await request(app)
             .post('/api/item/add')
             .send(
-                { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"}
+                { userId: 3, location:"location3", date:"date3", data: { item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }}
             )
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Item has been added");
     })
 })
 
@@ -136,13 +200,25 @@ describe('Post /item/update', ()=>{
 
     test('should save the item to the database', async ()=>{
         const bodydata = [
-            { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"},
-            { userid: 2, location:"location2", date:"date2", name:"name2", quantity:2, price:"price2", type: "type2"},
-            { userid: 3, location:"location3", date:"date3", name:"name3", quantity:3, price:"price3", type: "type3"},
+            { itemId: 1, itemname: "name1", itemprice: 1, itemquantity: 1, itemtype: "type1" },
+            { itemId: 1, itemname: "name2", itemprice: 2, itemquantity: 2, itemtype: "type2" },
+            { itemId: 1, itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" },
         ]
+
+        //let data = { itemname: "name", itemprice: 1, itemquantity: 1, itemtype: "type" }
 
         for (const body of bodydata){
             updateItem.mockReset();
+            updateItem.mockResolvedValue({
+                message:"Item has been updated successfully",
+                item: {
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                }
+            });
 
             const res = await request(app)
                 .post('/api/item/update')
@@ -151,40 +227,63 @@ describe('Post /item/update', ()=>{
                 )
             
             expect(updateItem.mock.calls.length).toBe(1);
-            expect(updateItem.mock.calls[0][0]).toBe(body.userid);
-            expect(updateItem.mock.calls[0][1]).toBe(body.name);
-            expect(updateItem.mock.calls[0][2]).toBe(body.price);
-            expect(updateItem.mock.calls[0][3]).toBe(body.quantity);
-            expect(updateItem.mock.calls[0][4]).toBe(body.type);
-            expect(updateItem.mock.calls[0][5]).toBe(body.location);
-            expect(updateItem.mock.calls[0][6]).toBe(body.date);
+            expect(updateItem.mock.calls[0][0]).toBe(body.itemId);
+            //expect(updateItem.mock.calls[0][1]).toBe(body.data);
         }
     })
 
     test('should return a json object containing the item id ', async ()=>{
+        let data = {
+                id: 0,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+            }
         for (let i = 0; i < 10; i++){
             updateItem.mockReset();
-            updateItem.mockResolvedValue(i);
+            updateItem.mockResolvedValue({
+                message:"Item has been updated successfully",
+                item: {
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                }
+            });
 
             const res = await request(app)
                 .post('/api/item/update')
                 .send(
-                    { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"}
+                    { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
                 )
 
-            expect(res.body.itemId).toEqual(i);
+            expect(res.body.item).toEqual(data);
+            expect(res.body.message).toEqual("Item has been updated successfully")
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        updateItem.mockResolvedValue({
+            message:"Item has been updated successfully",
+            item: {
+                id: 0,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+            }
+        });
+        
         const res = await request(app)
             .post('/api/item/update')
             .send(
-                { userid: 1, location:"location1", date:"date1", name:"name1", quantity:1, price:"price1", type: "type1"}
+                { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
             )
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Item has been updated successfully")
+        
     })
 })
 
@@ -199,13 +298,23 @@ describe('Post /item/delete', ()=>{
 
     test('should delete the item from the database', async ()=>{
         const bodydata = [
-            { userid: 1, itemid:"1" },
-            { userid: 2, itemid:"2" },
-            { userid: 3, itemid:"3" },
+            { itemId: 1 },
+            { itemId: 2 },
+            { itemId: 3 },
         ]
 
         for (const body of bodydata){
             deleteItem.mockReset();
+            deleteItem.mockResolvedValue({
+                message:"Item has been deleted",
+                item: {
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                }
+            });
 
             const res = await request(app)
                 .post('/api/item/delete')
@@ -214,35 +323,62 @@ describe('Post /item/delete', ()=>{
                 )
             
             expect(deleteItem.mock.calls.length).toBe(1);
-            expect(deleteItem.mock.calls[0][0]).toBe(body.userid);
-            expect(deleteItem.mock.calls[0][1]).toBe(body.itemid);
+            expect(deleteItem.mock.calls[0][0]).toBe(body.itemId);
         }
     })
 
     test('should return a json object containing the item id ', async ()=>{
+        let data = {
+            id: 0,
+            itemName: "name",
+            type: "type",
+            quantity: 1,
+            price: 111111,
+        }
+        
         for (let i = 0; i < 10; i++){
             deleteItem.mockReset();
-            deleteItem.mockResolvedValue(i);
+            deleteItem.mockResolvedValue({
+                message:"Item has been deleted",
+                item: {
+                    id: 0,
+                    itemName: "name",
+                    type: "type",
+                    quantity: 1,
+                    price: 111111,
+                }
+            });
 
             const res = await request(app)
                 .post('/api/item/delete')
                 .send(
-                    { userid: 1, itemid:"1" }
+                    { itemId: 1 }
                 )
 
-            expect(res.body.itemId).toEqual(i);
+            expect(res.body.item).toEqual(data);
+            expect(res.body.message).toEqual("Item has been deleted");
         }
     })
 
     test('should return a status code of 200', async ()=>{
+        deleteItem.mockResolvedValue({
+            message:"Item has been deleted",
+            item: {
+                id: 0,
+                itemName: "name",
+                type: "type",
+                quantity: 1,
+                price: 111111,
+            }
+        });
+        
         const res = await request(app)
             .post('/api/item/delete')
             .send(
-                { userid: 1, itemid:"1" }
+                { itemId: 1 }
             )
 
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("Item has been deleted");
+        
     })
 })
-  
