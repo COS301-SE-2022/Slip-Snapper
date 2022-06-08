@@ -196,6 +196,7 @@ async function getMonthlyExpenditure(userid:number)
   getMostSpentATStore(userid)
   getWeeklyExpenditure(userid)
   getMonthlyExpenditure(userid)
+  
     .catch((e) => {
       throw e
     })
