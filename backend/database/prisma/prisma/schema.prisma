@@ -11,7 +11,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model User {
   id         Int        @id @default(autoincrement())
   username   String @unique
   firstname  String
@@ -28,7 +28,7 @@ model Slip {
   transactionDate DateTime @default(now())
   items           Item[]
   total           Float
-  Users    Users?     @relation(fields: [usersId], references: [id])
+  user    User?     @relation(fields: [usersId], references: [id])
   usersId  Int?
 }
 
@@ -36,9 +36,9 @@ model Item {
   id             Int     @id @default(autoincrement())
   data dataItem? @relation(fields:[dataId],references:[id])
   dataId Int?
-  itemQuantities Int
-  itemPrices     Float
-  Slip   Slip? @relation(fields: [slipId], references: [id])
+  itemQuantity Int @default(1)
+  itemPrice    Float
+  slip   Slip? @relation(fields: [slipId], references: [id])
   slipId Int?
 }
 
@@ -46,5 +46,5 @@ model dataItem{
   id             Int     @id @default(autoincrement())
   item           String
   itemType       String
-  items Item[]
+  items          Item[]
 }
