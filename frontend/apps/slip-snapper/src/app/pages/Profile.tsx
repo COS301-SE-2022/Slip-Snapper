@@ -11,8 +11,6 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonItem,
-  IonLabel,
-  IonList,
   IonCol,
   IonRow,
   IonAlert,
@@ -20,16 +18,25 @@ import {
   IonThumbnail,
   IonInput,
   IonProgressBar,
+  IonTextarea,
+  IonList,
+  IonLabel,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
 import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
 
+const favourite = { store: "N/A", total: 0 }
+const mostSpentCategory = { itemCategory: "N/A", total: 0 }
+const mostSpentStore = { store: "N/A", total: 0 }
+const weekMonthSpent = { lastWeek: 0, thisWeek: 0, lastMonth: 0, thisMonth: 0}
+
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [budgetAlert, setBudgetAlert] = useState(false);
   const val = { weekly: 0, monthly: 0 }; 
+   
   let totalWeeklySpent = 300;
   let totalMonthlySpent = 500;
   getBudgetA(1)
@@ -46,16 +53,23 @@ const Profile: React.FC = () => {
     .then((res) => res.json())
     .then(
       (json) => {
-          console.log(json)
-          // val.weekly = json.weekly;
-          // val.monthly = json.monthly;
-          // totalWeeklySpent = json.weeklyTotal;
-          // totalMonthlySpent = json.monthlyTotal;
+        mostSpentCategory.itemCategory= json.category.name;
+        mostSpentCategory.total=json.category.amount;
+        mostSpentStore.store = json.mostExpensive.name;
+        mostSpentStore.total = json.mostExpensive.amount;
+        weekMonthSpent.lastWeek=json.lastWeek.previous;
+        weekMonthSpent.thisWeek = json.lastWeek.current;
+        weekMonthSpent.lastMonth = json.lastMonth.previous;
+        weekMonthSpent.thisMonth = json.lastMonth.current;
+        favourite.store = json.favouriteStore.name;
+        favourite.total = json.favouriteStore.total;
+         
+        setUserStatistics()
+       
     })
 
   const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R " + val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R " + val.monthly);
-
   let weeklyBudget: number, monthlyBudget: number
   
   return (
@@ -111,7 +125,6 @@ const Profile: React.FC = () => {
           onDidDismiss={() => setBudgetAlert(false)}
          
           header={'Change Budget'}
-         
           inputs={[
             {
               name: 'weeklyBudget',
@@ -149,9 +162,8 @@ const Profile: React.FC = () => {
             <IonCardTitle>
               Favorite Store (Most frequent this month)
             </IonCardTitle>
-            <IonCardSubtitle>Name: Woolworths</IonCardSubtitle>
-
-            <IonCardSubtitle>Total: R2593.99</IonCardSubtitle>
+            <IonCardSubtitle><IonTextarea id='favoriteStore' readonly ></IonTextarea></IonCardSubtitle>
+            <IonCardSubtitle><IonTextarea id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
           </IonCardHeader>
 
           <IonList>
@@ -180,11 +192,11 @@ const Profile: React.FC = () => {
 
         <IonRow>
           <IonCol>
-            <IonCard color="primary">
+            <IonCard  color="primary">
               <IonCardHeader>
                 <IonCardTitle>Most purchased item category</IonCardTitle>
-                <IonCardSubtitle>Category: Food</IonCardSubtitle>
-                <IonCardSubtitle>Total: R310.99</IonCardSubtitle>
+                <IonTextarea id='categoryName' readonly ></IonTextarea>
+                <IonTextarea id='categoryTotal' readonly></IonTextarea>
               </IonCardHeader>
             </IonCard>
           </IonCol>
@@ -192,8 +204,8 @@ const Profile: React.FC = () => {
             <IonCard color="primary">
               <IonCardHeader>
                 <IonCardTitle>Most spent at a store</IonCardTitle>
-                <IonCardSubtitle>Store: Sportsmans Warehouse</IonCardSubtitle>
-                <IonCardSubtitle>Total: R5899.99</IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea id='storeName' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea id='storeTotal' readonly ></IonTextarea></IonCardSubtitle>
               </IonCardHeader>
             </IonCard>
           </IonCol>
@@ -204,8 +216,8 @@ const Profile: React.FC = () => {
             <IonCard color="primary">
               <IonCardHeader>
                 <IonCardTitle>Expenditure compared to last week</IonCardTitle>
-                <IonCardSubtitle>Last Week's Total: R1390.34</IonCardSubtitle>
-                <IonCardSubtitle>This Week's Total: R900.54</IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea id='lastWeek' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea id='thisWeek' readonly ></IonTextarea></IonCardSubtitle>
               </IonCardHeader>
               <IonItem>
                 <IonButton fill="outline" slot="end" color="secondary">
@@ -219,8 +231,8 @@ const Profile: React.FC = () => {
             <IonCard color="primary">
               <IonCardHeader>
                 <IonCardTitle>Expenditure compared to last month</IonCardTitle>
-                <IonCardSubtitle>Last Month's Total: R10399.34</IonCardSubtitle>
-                <IonCardSubtitle>This Month's Total: R12030.59</IonCardSubtitle>
+                <IonCardSubtitle><IonTextarea id='lastMonth' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle><IonTextarea id='thisMonth' readonly ></IonTextarea></IonCardSubtitle>
               </IonCardHeader>
               <IonItem>
                 <IonButton fill="outline" slot="end" color="secondary">
@@ -268,7 +280,6 @@ const Profile: React.FC = () => {
     setBudgetA( 1, weeklyBudget, monthlyBudget )
   }
 
-
   function isExceeded() {
     const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
     const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
@@ -310,7 +321,20 @@ const Profile: React.FC = () => {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "primary")
     }
 
+  }
 
+  function setUserStatistics()
+  {
+    document.getElementById("favoriteStore")?.setAttribute("value", "Store Name: " + favourite.store)
+    document.getElementById("favoriteTotal")?.setAttribute("value", "Total: R" + favourite.total.toString())
+    document.getElementById("categoryName")?.setAttribute("value", "Item Category: " + mostSpentCategory.itemCategory)
+    document.getElementById("categoryTotal")?.setAttribute("value", "Total: R" + mostSpentCategory.total.toString())
+    document.getElementById("storeName")?.setAttribute("value", "Store Name: " + mostSpentStore.store)
+    document.getElementById("storeTotal")?.setAttribute("value", "Total: R" + mostSpentStore.total.toString())
+    document.getElementById("lastWeek")?.setAttribute("value", "Total Spent Last Week: R" + weekMonthSpent.lastWeek.toString())
+    document.getElementById("thisWeek")?.setAttribute("value", "Total Spent This Week: R" + weekMonthSpent.thisWeek.toString())
+    document.getElementById("lastMonth")?.setAttribute("value", "Total Spent Last Month: R" + weekMonthSpent.lastMonth.toString())
+    document.getElementById("thisMonth")?.setAttribute("value", "Total Spent This Month: R" + weekMonthSpent.thisMonth.toString())
   }
 };
 
