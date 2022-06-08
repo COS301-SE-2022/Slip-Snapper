@@ -123,11 +123,79 @@ async function getMostSpentATStore(userid:number)
   console.log(store);
 }
 
+async function getWeeklyExpenditure(userid:number)
+{
+  const date1= new Date()
+  const lastweek=date1.setDate(date1.getDate()-7);
+  const date2= new Date()
+  const otherWeek=date2.setDate(date2.getDate()-14)
+   
+   const weeklyExpenditure = await prisma.slip.findMany({
+     where:{
+       usersId:userid,  
+     },
+     select:{
+       transactionDate:true,
+       total:true
+     }
+   })
+   let recentWeek=0;
+   let previousWeek=0;
+   for(var weekly of weeklyExpenditure)
+   {
+    if(weekly.transactionDate.toISOString()>=date1.toISOString())
+    {
+      recentWeek=recentWeek+weekly.total;
+    }
+    else if(weekly.transactionDate.toISOString()>=date2.toISOString())
+    {
+      previousWeek=previousWeek+weekly.total;
+    }
+  }
+  console.log(recentWeek)
+  console.log(previousWeek)
+} 
+
+async function getMonthlyExpenditure(userid:number)
+{
+  const date1= new Date()
+  const lastMonth=date1.setDate(date1.getDate()-4*7);
+  const date2= new Date()
+  const otherMonth=date2.setDate(date2.getDate()-8*7)
+   
+   const MonthlyExpenditure = await prisma.slip.findMany({
+     where:{
+       usersId:userid,  
+     },
+     select:{
+       transactionDate:true,
+       total:true
+     }
+   })
+   let recentMonth=0;
+   let previousMonth=0;
+   for(var weekly of MonthlyExpenditure)
+   {
+    if(weekly.transactionDate.toISOString()>=date1.toISOString())
+    {
+      recentMonth=recentMonth+weekly.total;
+    }
+    else if(weekly.transactionDate.toISOString()>=date2.toISOString())
+    {
+      previousMonth=previousMonth+weekly.total;
+    }
+  }
+  console.log(recentMonth)
+  console.log(previousMonth)
+} 
+
   var userid=1
   getAllUsers()
   getfavouritestore(userid)
   getMostExpensiveItem(userid)
   getMostSpentATStore(userid)
+  getWeeklyExpenditure(userid)
+  getMonthlyExpenditure(userid)
     .catch((e) => {
       throw e
     })
