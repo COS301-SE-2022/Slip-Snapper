@@ -1,6 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { createWorker } from 'tesseract.js';
 import { doProcessing } from '../api/apiCall';
+import '../app/theme/loading.css';
 
 /**
  *
@@ -32,7 +33,9 @@ export function usePhotoGallery() {
 function ScanSlip(photo) {
   const editSlip = new Promise((resolve, reject) => {
     const loading = document.createElement('ion-loading');
-    loading.spinner = "bubbles"
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
     const worker = createWorker({
       logger: (m) => {if(m.status === "recognizing text"){
         loading.message = Math.trunc(m.progress*100) + "%";
