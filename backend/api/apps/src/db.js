@@ -471,7 +471,7 @@ async function setUserBudgets( userId, data ){
     let month = await getMonthlyExpenditure(userId);
 
     return { 
-        message: "User budget set",
+        message: "User statistics retrieved",
         storeDetails: store,
         expensiveItem: expItem,
         mostAtStore: mostStore,

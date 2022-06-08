@@ -24,7 +24,7 @@ import {
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
-import { setBudgetA, getBudgetA } from "../../api/apiCall"
+import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -34,13 +34,24 @@ const Profile: React.FC = () => {
   let totalMonthlySpent = 500;
   getBudgetA(1)
     .then((res) => res.json())
-      .then(
-        (json) => {
-          val.weekly = json.weekly;
-          val.monthly = json.monthly;
-          totalWeeklySpent = json.weeklyTotal;
-          totalMonthlySpent = json.monthlyTotal;
-      })
+    .then(
+      (json) => {
+        val.weekly = json.weekly;
+        val.monthly = json.monthly;
+        totalWeeklySpent = json.weeklyTotal;
+        totalMonthlySpent = json.monthlyTotal;
+    })
+
+  getStatsA(1)
+    .then((res) => res.json())
+    .then(
+      (json) => {
+          console.log(json)
+          // val.weekly = json.weekly;
+          // val.monthly = json.monthly;
+          // totalWeeklySpent = json.weeklyTotal;
+          // totalMonthlySpent = json.monthlyTotal;
+    })
 
   const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R " + val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R " + val.monthly);

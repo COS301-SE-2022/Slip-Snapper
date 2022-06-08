@@ -53,7 +53,7 @@ export async function setBudgetA( userid, weekly, monthly){
     })
 }
 
-export async function getBudgetA( userid, weekly, monthly){
+export async function getBudgetA( userid ){
     return fetch("http://localhost:55555/api/report/budget?userId=1", {
         method: 'get',
         headers: {
