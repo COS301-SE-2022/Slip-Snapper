@@ -53,6 +53,15 @@ export async function setBudgetA( userid, weekly, monthly){
     })
 }
 
+export async function getBudgetA( userid ){
+    return fetch("http://localhost:55555/api/report/budget?userId=1", {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}
+
 export async function loginA( username, password){
     return fetch("http://localhost:55555/api/user/login", {
         method: 'post',
@@ -85,6 +94,15 @@ export async function signupA( username, first, last, password){
 
 export async function generateReportA( url ){
     return fetch(url, {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
+
+export async function getStatsA( userId ){
+    return fetch('http://localhost:55555/api/report/statistics?userId=1', {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
