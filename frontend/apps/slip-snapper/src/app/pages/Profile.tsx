@@ -24,17 +24,40 @@ import {
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
-import { setBudgetA } from "../../api/apiCall"
+import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [budgetAlert, setBudgetAlert] = useState(false);
-  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R 0.00");
-  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R 0.00");
-  let weeklyBudget: number, monthlyBudget: number
-  // 300 and 500 are used as mock values by total expenditure should be fetched by API
-  const totalWeeklySpent = 300 , totalMonthlySpent = 500
+  const val = { weekly: 0, monthly: 0 }; 
+  let totalWeeklySpent = 300;
+  let totalMonthlySpent = 500;
+  getBudgetA(1)
+    .then((res) => res.json())
+    .then(
+      (json) => {
+        val.weekly = json.weekly;
+        val.monthly = json.monthly;
+        totalWeeklySpent = json.weeklyTotal;
+        totalMonthlySpent = json.monthlyTotal;
+    })
 
+  getStatsA(1)
+    .then((res) => res.json())
+    .then(
+      (json) => {
+          console.log(json)
+          // val.weekly = json.weekly;
+          // val.monthly = json.monthly;
+          // totalWeeklySpent = json.weeklyTotal;
+          // totalMonthlySpent = json.monthlyTotal;
+    })
+
+  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R " + val.weekly);
+  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R " + val.monthly);
+
+  let weeklyBudget: number, monthlyBudget: number
+  
   return (
     <IonPage>
       <IonHeader>

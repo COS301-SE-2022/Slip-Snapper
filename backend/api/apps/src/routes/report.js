@@ -167,24 +167,25 @@ router.get('/statistics', async (req,res)=>{
         .send({
             message : result.message,
             favouriteStore: {
-                name: "",
+                name: result.storeDetails.storeLocation,
+                total: result.storeDetails.total,
                 items: []
             },
             category: {
                 amount: 0,
-                name: ""
+                name: "food"
             },
             mostExpensive: {
-                amount: 0,
-                name: ""
+                amount: result.expensiveItem.expensiveItem,
+                name: result.expensiveItem.dataItem
             },
             lastWeek:{
-                current: 0,
-                previous: 0
+                current: result.week.recentWeek,
+                previous: result.week.previousWeek
             },
             lastMonth:{
-                current: 0,
-                previous: 0
+                current: result.month.recentMonth,
+                previous: result.month.previousMonth
             }
         });
 });
