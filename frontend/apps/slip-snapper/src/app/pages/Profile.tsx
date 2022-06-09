@@ -17,6 +17,8 @@ import {
   IonTextarea,
   IonList,
   IonLabel,
+  IonSelect,
+  IonSelectOption,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -106,15 +108,27 @@ const Profile: React.FC = () => {
               <IonCardTitle>Personal Budget</IonCardTitle>
             </IonItem>
           </IonCardHeader>
-          <IonItem className="center-items" color="tertiary">
+          <IonItem id="weekly-budget" className="center-items" color="tertiary">
             <IonInput readonly value={weelkyBudgetValue}></IonInput>
             <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
           </IonItem>
-          <IonItem className="center-items" color="tertiary">
+          <IonItem id="monthly-budget" className="center-items" color="tertiary">
             <IonInput readonly value={monthlyBudgetValue}></IonInput>
             <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
           </IonItem>
           <IonItem color="primary">
+            <IonButton title="newBudgetButton" fill="solid" slot="start" color="secondary">
+            <IonLabel>New Budget</IonLabel>
+              <IonSelect okText='Create' interface='popover'>
+                <IonLabel>Select Category</IonLabel>
+                <IonSelectOption value="food">Food</IonSelectOption>
+                <IonSelectOption value="fashion">Fashion</IonSelectOption>
+                <IonSelectOption value="electronics">Electronics</IonSelectOption>
+                <IonSelectOption value="home">Home</IonSelectOption>
+                <IonSelectOption value="other">Other</IonSelectOption>
+              </IonSelect>
+            </IonButton>
+            
             <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="solid" slot="end" color="secondary">
               Adjust Budget
             </IonButton>
