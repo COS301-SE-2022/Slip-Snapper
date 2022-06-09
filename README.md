@@ -56,8 +56,10 @@
 # SRS Documents
 ## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
 Architectural Structures are within the SRS Demo 2
+
 ## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
 <br>
+
 # [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
 # [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
 
