@@ -17,9 +17,16 @@ import {
   IonCol
 } from '@ionic/react';
 import React, { useState } from 'react';
+import { addItemsA } from '../../api/apiCall';
 
 const EditSlip: React.FC = () => {
   const data = JSON.parse(localStorage.getItem('value')!);
+  let photo;
+  async function a(){
+    photo = JSON.parse(localStorage.getItem('photo')!);
+  }
+  a();
+
   let id = 0;
   const [items] = useState(data.text[2]);
  
@@ -36,7 +43,7 @@ const EditSlip: React.FC = () => {
           <IonCardHeader>
             <IonCardTitle>Receipt Title</IonCardTitle>
             <IonItem color="primary">
-              <img src="..\assets\mock-receipts\IMG_5593.jpg" alt="" width="40%"></img>
+              <img src={photo} alt="" width="40%"></img>
             </IonItem>
           </IonCardHeader>
         </IonCard>
@@ -123,7 +130,6 @@ const EditSlip: React.FC = () => {
   );
 
   function getItems() {
-    
     for (let i = 0; i < data.text[2].length; i++) {
       const newItemName = document.getElementById(i+1 + "/name")?.getElementsByTagName("input")[0].value
       const newQuantity = document.getElementById(i+1 + "/quantity")?.getElementsByTagName("input")[0].value
@@ -140,6 +146,8 @@ const EditSlip: React.FC = () => {
         items[i].type = newType
       }
     }
+
+    addItemsA(1,data,items)
   }
 };
 

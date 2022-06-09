@@ -27,18 +27,23 @@ router.get('/all', async (req,res)=>{
  */
 router.post('/add', async (req,res)=>{
     let { userId, location, date, total, data } = req.body;
-        // {
-        //     data :{
-        //            item : "abc",
-        //            itemType: "food",
-        //            dataId: -1
-        //      }
-        //     itemQuantities: 1,
-        //     itemPrices: 123,
-        //     slipId: -1
-        // }
 
-    const result = await req.app.get('db').addItem(userId, location, date, total, data);
+    //TODO make use actual date
+
+    let values = []
+    for (var item of data){
+        values.push({
+            item : item.item,
+            itemType: item.type,
+            dataId: -1,
+            itemQuantity: Number(item.quantity),
+            itemPrice: Number(item.price),
+        })
+    }
+
+    let date1 = new Date().toISOString()
+
+    const result = await req.app.get('db').addItem(userId, location, date1, total, values);
 
     let status = 200;
 

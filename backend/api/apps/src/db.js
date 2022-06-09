@@ -266,6 +266,7 @@ async function addItem(userid, location, date, total, data){
     for (let item of data){
         item.slipId = slip.id;
         let matched = false
+        
         for(var dataItem of dataItems){
             if( item.item == dataItem.item){
                 item.dataId = dataItem.id;
@@ -280,7 +281,7 @@ async function addItem(userid, location, date, total, data){
                     itemType: item.itemType,
                 }
             })
-            item.dataId = dat.id;
+            item.dataId = dat.id; 
         }
 
         additions.push({
@@ -471,6 +472,7 @@ async function setUserBudgets( userId, data ){
     let mostStore = await getMostSpentATStore(userId);
     let week = await getWeeklyExpenditure(userId);
     let month = await getMonthlyExpenditure(userId);
+    let favouriteProduct = await getFavouriteProduct(userId);
 
     return { 
         message: "User statistics retrieved",
@@ -478,51 +480,64 @@ async function setUserBudgets( userId, data ){
         expensiveItem: expItem,
         mostAtStore: mostStore,
         week: week,
-        month: month
+        month: month,
+        category: favouriteProduct
     };
 }
 
-// async function getFavouriteStore(userid) {
-//     const favouritestore = await prisma.slip.groupBy({
-//         where: {
-//             usersId: userid
-//         },
-//         _count: {
-//             location:true
-//         },
-//         take:1,
-//         orderBy:{
-//             _count:{
-//             location:'desc'
-//             }
-//         }
-//     })
+/**
+ * Function to get the most spend on a single category
+ * @param {*} userid the users id
+ * @returns the most spent on a category and its amount
+ */
+async function getFavouriteProduct(userid) {
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userid
+        },
+        select:{
+            items: {
+                select:{
+                    itemPrice: true,
+                    data: {
+                        select: {
+                            itemType: true
+                        }
+                    }
+                }
+            }
+        },
+        
+    })
 
-//     let storeLocation=""
-//     for(var store of favouritestore){
-//       storeLocation = store.location
-//     }
+    let types = {
+        cat: [],
+        catNums: [],
+        catPrices: []
+    } 
+    for(var item of items){
+        for(var sub of item.items){
+            if(!types.cat.includes(sub.data.itemType)){
+                types.cat.push(sub.data.itemType)
+                types.catNums.push(0)  
+                types.catPrices.push(0)                                
+            }
+            var pos = types.cat.indexOf(sub.data.itemType)
+            types.catNums[pos]++;
+            types.catPrices[pos] += sub.itemPrice;
+        }    
+    }
 
-//     const amountSpent =await prisma.slip.findMany({
-//         where:{
-//             usersId: userid,
-//             location: storeLocation
-//         },
-//         select:{
-//             total:true
-//         }
-//     })
+    const max = Math.max(...types.catNums);
+    const index = types.catNums.indexOf(max);
+    
+    types.catPrices[index] = Math.round((types.catPrices[index] + Number.EPSILON) * 100) / 100
 
-//     let total=0;
-//     for(var amount of amountSpent){
-//         total += amount.total;
-//     }
-
-//     return {
-//         storeLocation,
-//         total
-//     }
-// } 
+    return {
+        category: types.cat[index],
+        amount: types.catPrices[index]
+    }
+} 
 
 async function getFavouriteStore(userid) {
     const favouritestore = await prisma.slip.groupBy({
@@ -704,7 +719,7 @@ async function getMonthlyExpenditure(userid){
     }
 } 
 
-async function getDataItems(userid){
+async function getDataItems(){
     const dataItems = await prisma.dataItem.findMany({
 
     })

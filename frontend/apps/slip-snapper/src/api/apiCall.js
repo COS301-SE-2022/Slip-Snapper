@@ -109,3 +109,19 @@ export async function getStatsA( userId ){
         },
       })
 }
+
+export async function addItemsA( userId, data, text){
+    return fetch('http://localhost:55555/api/item/add', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          location: data.text[1],
+          date: data.text[0],
+          total: data.text[4],
+          data: text
+        })
+    })
+}
