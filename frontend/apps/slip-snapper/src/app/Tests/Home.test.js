@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 describe('Home', () => {
   jest.spyOn(global.console, 'log').mockImplementation(jest.fn());
   jest.spyOn(global.console, 'error').mockImplementation(jest.fn());
+  jest.spyOn(fireEvent, 'click').mockImplementation(jest.fn());
   
   beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {
@@ -48,4 +49,5 @@ describe('Home', () => {
     const addButton = await findByTitle('generateMR');
     fireEvent.click(addButton);
   });
+  jest.clearAllMocks();
 });
