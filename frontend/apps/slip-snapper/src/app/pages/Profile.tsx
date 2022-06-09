@@ -162,10 +162,10 @@ const Profile: React.FC = () => {
               <IonCardTitle>(Most frequent this month)</IonCardTitle>
             </IonItem>
             <IonItem className="center-items" color="tertiary">
-              <IonCardSubtitle><IonTextarea id='favoriteStore' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle><IonInput title='favoriteStore' id='favoriteStore' readonly ></IonInput></IonCardSubtitle>
             </IonItem>
             <IonItem className="center-items" color="tertiary">
-              <IonCardSubtitle><IonTextarea id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle><IonTextarea title='favoriteTotal' id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
             </IonItem>
           </IonCardHeader>
           <IonList className="list">
@@ -203,10 +203,10 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Weekly Expenditure</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle> <IonTextarea id='thisWeek' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea title='thisWeek' id='thisWeek' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle> <IonTextarea id='lastWeek' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea title='lastWeek' id='lastWeek' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
             </IonCardHeader>
             <IonItem color="primary">
@@ -222,10 +222,10 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Monthly Expenditure</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle><IonTextarea id='thisMonth' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle><IonTextarea title='thisMonth' id='thisMonth' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle><IonTextarea id='lastMonth' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle><IonTextarea title='lastMonth' id='lastMonth' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
             </IonCardHeader>
             <IonItem color="primary">
@@ -242,10 +242,10 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Favourite Item Category</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonTextarea id='categoryName' readonly ></IonTextarea>
+                <IonTextarea title="categoryName" id='categoryName' readonly ></IonTextarea>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonTextarea id='categoryTotal' readonly></IonTextarea>
+                <IonTextarea title="categoryTotal" id='categoryTotal' readonly></IonTextarea>
               </IonItem>
             </IonCardHeader>
           </IonCard>
@@ -256,10 +256,10 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Most Spent At Store</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle> <IonTextarea id='storeName' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea title='storeName' id='storeName' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle> <IonTextarea id='storeTotal' readonly ></IonTextarea></IonCardSubtitle>
+                <IonCardSubtitle> <IonTextarea title='storeTotal' id='storeTotal' readonly ></IonTextarea></IonCardSubtitle>
               </IonItem>
             </IonCardHeader>
           </IonCard>
