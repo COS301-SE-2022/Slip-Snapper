@@ -124,7 +124,7 @@ const Profile: React.FC = () => {
                 <IonSelectOption value="food">Food</IonSelectOption>
                 <IonSelectOption value="fashion">Fashion</IonSelectOption>
                 <IonSelectOption value="electronics">Electronics</IonSelectOption>
-                <IonSelectOption value="home">Home</IonSelectOption>
+                <IonSelectOption value="household">Household</IonSelectOption>
                 <IonSelectOption value="other">Other</IonSelectOption>
               </IonSelect>
             </IonButton>
