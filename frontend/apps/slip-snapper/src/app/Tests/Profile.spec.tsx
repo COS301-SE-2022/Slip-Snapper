@@ -30,7 +30,7 @@ describe('Profile', () => {
         expect(Component.getByText('Personal Budget'));
     });
 
-    test('Correctly renders user input', async () => {
+    test('Correctly renders user statitics', async () => {
         const Component = render(<Profile />);
        
         Component.getByTitle('lastWeek').setAttribute("value","R100");

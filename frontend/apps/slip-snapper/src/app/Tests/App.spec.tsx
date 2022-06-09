@@ -50,35 +50,6 @@ describe('Reports', () => {
   });
 });
 
-describe('Profile', () => {
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: jest.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-        dispatchEvent: jest.fn(),
-      })),
-    });
-  });
-
-  it('Correctly renders the Profile page', () => {
-    const Component = render(<Profile />);
-
-    expect(Component.getAllByText('Profile'));
-    expect(Component.getByText('Home'));
-    expect(Component.getByText('Reports'));
-    expect(Component.getByText('Edit Item'));
-    expect(Component.getByText('User details'));
-    expect(Component.getByText('Personal Budget'));
-  });
-});
-
 /**
  * @returns Jests tests for Login Page
  */
