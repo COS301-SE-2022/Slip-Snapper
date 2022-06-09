@@ -49,19 +49,19 @@
 
 # Demo Recordings
 ## [Demo 1 Recording](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
-<!-- TODO: Insert SRS Demo 2 Document -->
-## [Demo 2 Recording]()
+## [Demo 2 Recording](https://drive.google.com/file/d/1wLIFnKHJh7Q3rNDHcftW2L89lJFEFFai/view?usp=sharing)
 
 <br>
 
 # SRS Documents
 ## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
-<!-- TODO: Insert SRS Demo 2 Document -->
-## [SRS Demo 2]()
+Architectural Structures are within the SRS Demo 2
+
+## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
 <br>
 
-# [User Manual]()
-# [Coding Standards]()
+# [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
+# [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
 
 # [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
