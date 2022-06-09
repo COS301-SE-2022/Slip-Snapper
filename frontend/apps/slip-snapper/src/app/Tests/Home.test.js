@@ -1,8 +1,10 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import Home from '../pages/Home';
-
 describe('Home', () => {
+  jest.spyOn(global.console, 'log').mockImplementation(jest.fn());
+  jest.spyOn(global.console, 'error').mockImplementation(jest.fn());
+  
   beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -30,12 +32,12 @@ describe('Home', () => {
     expect(Component.getByText('Edit Item'));
     expect(Component.getByText('Expenditure Totals'));
   });
-
   test('Should check if function fires for generate report for daily', async () => {
     const { findByTitle } = render(<Home />);
     const addButton = await findByTitle('generateDR');
     fireEvent.click(addButton);
   });
+
   test('Should check if function fires for generate report for daily', async () => {
     const { findByTitle } = render(<Home />);
     const addButton = await findByTitle('generateWR');
