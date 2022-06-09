@@ -1,7 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { createWorker } from 'tesseract.js';
 import { doProcessing } from '../api/apiCall';
-import '../app/theme/loading.css';
+import '../app/theme/toasts.css';
 
 /**
  *

@@ -1,0 +1,26 @@
+.loading{
+    --background: #5d6c83;
+    --spinner-color: #ebebeb;
+    color: #ebebeb;
+    --height: 7%;
+    --width: 15%;
+}
+
+#logout-alert{
+    --background: #5d6c83;
+    color: #ebebeb;
+    --height: 10%;
+    --width: 15%;
+}
+
+@media only screen and (max-width: 400px) {
+    .loading {
+        --min-width: 40%;
+        --min-height: 10%;
+    }
+
+    #logout-alert{
+        --min-width: 60%;
+        --min-height: 15%;
+    }
+}

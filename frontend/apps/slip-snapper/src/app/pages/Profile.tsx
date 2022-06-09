@@ -21,6 +21,7 @@ import {
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/profile.css';
+import '../theme/toasts.css';
 import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
 
 const favourite = { store: "N/A", total: 0 }
@@ -268,6 +269,7 @@ const Profile: React.FC = () => {
         <IonButton className="logout-button" onClick={() => setLogoutAlert(true)} expand="block" color='secondary'>Logout</IonButton>
 
         <IonAlert
+          id="logout-alert"
           isOpen={logoutAlert}
           onDidDismiss={() => setLogoutAlert(false)}
           header={'Are you sure you want to logout?'}
@@ -275,7 +277,7 @@ const Profile: React.FC = () => {
             'Cancel',
             {
               text: 'Logout',
-              cssClass: 'my-custom-class',
+              cssClass: 'toasts',
                 handler: () => {
                  Logout();
               }
@@ -316,7 +318,7 @@ const Profile: React.FC = () => {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
     }
     else if(!isNaN(weeklyBudget)){
-      document.getElementById("weeklyProgressBar")?.setAttribute("color", "primary")
+      document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
     if (totalMonthlySpent >= monthlyBudget && !isNaN(monthlyBudget)) {
@@ -326,7 +328,7 @@ const Profile: React.FC = () => {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
     }
     else if (!isNaN(monthlyBudget)) {
-      document.getElementById("monthlyProgressBar")?.setAttribute("color", "primary")
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
 
     document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
@@ -335,12 +337,12 @@ const Profile: React.FC = () => {
     if(weeklyBudget===0)
     {
       document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
-      document.getElementById("weeklyProgressBar")?.setAttribute("color", "primary")
+      document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
     if (monthlyBudget === 0) {
       document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
-      document.getElementById("monthlyProgressBar")?.setAttribute("color", "primary")
+      document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
 
   }
