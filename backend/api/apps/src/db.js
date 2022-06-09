@@ -232,7 +232,7 @@ async function getItemsReport(userid, start, end){
 
 /**
  * Function to add item to the database
- * @param {*} userid the userid
+ * @param {*} userid the user id
  * @param {*} location the location
  * @param {*} total the total
  * @param {*} date the location
@@ -328,7 +328,7 @@ async function deleteItem(itemId){
 
 /**
  * Function to update item in the database
- * @param {*} itemId the userid
+ * @param {*} itemId the item id
  * @param {*} data the data to update
  * @returns 
  */
@@ -374,7 +374,7 @@ async function updateItem(itemId, dataA, dataB){
 
 /**
  * Funtion to get the user budgets from the database
- * @param {*} userId The users name
+ * @param {*} userId The users id
  * @returns user data
  */
 async function getUserBudgets( userId ){
@@ -383,6 +383,8 @@ async function getUserBudgets( userId ){
             id: userId
         }
     })
+
+    //TODO change db query to work with the slip total and not item total
 
     const items = await prisma.slip.findMany({
         where: {
@@ -439,7 +441,7 @@ async function getUserBudgets( userId ){
 
 /**
  * Funtion to set the user budgets in the database
- * @param {*} userId The users name
+ * @param {*} userId The users id
  * @param {*} data the data to be added
  * @returns user data
  */
@@ -460,7 +462,7 @@ async function setUserBudgets( userId, data ){
 
 /**
  * Funtion to get the user statistics from the database
- * @param {*} userId The users name
+ * @param {*} userId The users id
  * @returns user data
  */
  async function getUserStats( userId ){
@@ -484,9 +486,7 @@ async function getFavouriteStore(userid) {
     const favouritestore = await prisma.slip.groupBy({
         by: ['location'],
         where: {
-            usersId: {
-            in: [userid],
-            },
+            usersId: userid
         },
         _count: {
             location:true
