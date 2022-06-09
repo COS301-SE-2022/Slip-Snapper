@@ -57,15 +57,15 @@ function ScanSlip(photo) {
       await doProcessing(text)
         .then((res) => res.json())
         .then((json) => (resp = json));
-
+     
       await worker.terminate();
       resolve(loading);
     })();
   });
 
   editSlip.then((loading) => {
-    loading.onDidDismiss();
-    window.location.assign('/editslip');
+    loading.dismiss();
+    loading.onDidDismiss(window.location.assign('/editslip'));
   });
 }
 
