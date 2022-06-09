@@ -11,11 +11,7 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonItem,
-  IonCol,
-  IonRow,
   IonAlert,
-  IonImg,
-  IonThumbnail,
   IonInput,
   IonProgressBar,
   IonTextarea,
@@ -83,168 +79,194 @@ const Profile: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow>
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>User details</IonCardTitle>
-                <IonCardSubtitle>Name: Christian Devraj </IonCardSubtitle>
-                <IonCardSubtitle>
-                  My Business: Isabella's Decor and Gifts
-                </IonCardSubtitle>
-                <IonCardSubtitle>
-                  <IonItem class="profilePhoto">
-                    <IonThumbnail slot="start">
-                      <IonImg src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" />
-                    </IonThumbnail>
-                  </IonItem>
-                </IonCardSubtitle>
-              </IonCardHeader>
-            </IonCard>
-          </IonCol>
 
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Personal Budget</IonCardTitle>
-              </IonCardHeader>
-              <IonItem >
-                <IonInput readonly value={weelkyBudgetValue}></IonInput>
-                <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
-              </IonItem>
-              <IonItem >
-                <IonInput readonly value={monthlyBudgetValue}></IonInput>
-                <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
-              </IonItem>
-              <IonItem>
-                <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="outline" slot="end" color="secondary">
-                  Adjust Budget
-                </IonButton>
-                 <IonAlert
-          isOpen={budgetAlert}
-          onDidDismiss={() => setBudgetAlert(false)}
-         
-          header={'Change Budget'}
-          inputs={[
+        <div className="wrapper">
+
+        <IonCard className="card profile" color="primary">
+          <IonCardHeader>
+            <IonItem className="headings" color="primary">
+              <IonCardTitle>User details</IonCardTitle>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonCardSubtitle>Name: Christian Devraj </IonCardSubtitle>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+            <IonCardSubtitle>My Business: Isabella's Decor and Gifts</IonCardSubtitle>
+            </IonItem>
+              {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+              <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture"/>
+          </IonCardHeader>
+        </IonCard>
+
+
+        <IonCard className="card budget" color="primary">
+          <IonCardHeader>
+            <IonItem className="headings" color="primary">
+              <IonCardTitle>Personal Budget</IonCardTitle>
+            </IonItem>
+          </IonCardHeader>
+          <IonItem className="center-items" color="tertiary">
+            <IonInput readonly value={weelkyBudgetValue}></IonInput>
+            <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
+          </IonItem>
+          <IonItem className="center-items" color="tertiary">
+            <IonInput readonly value={monthlyBudgetValue}></IonInput>
+            <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
+          </IonItem>
+          <IonItem color="primary">
+            <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="solid" slot="end" color="secondary">
+              Adjust Budget
+            </IonButton>
+          <IonAlert
+            isOpen={budgetAlert}
+            onDidDismiss={() => setBudgetAlert(false)}
+          
+            header={'Change Budget'}
+            inputs={[
+              {
+                name: 'weeklyBudget',
+                type: 'text',
+                placeholder: 'Insert Weekly Budget'
+                
+              },
+              {
+                id: "monthlyBudget",
+                name: 'monthlyBudget',
+                type: 'text',
+                placeholder: 'Insert Monthly Budget'
+              },]}
+
+            buttons={[
             {
-              name: 'weeklyBudget',
-              type: 'text',
-              placeholder: 'Insert Weekly Budget'
-              
+              text:'Cancel'
             },
             {
-              id: "monthlyBudget",
-              name: 'monthlyBudget',
-              type: 'text',
-              placeholder: 'Insert Monthly Budget'
-            },]}
+              role:'applyBudget',
+              text:'Apply',
+              handler: (alertData) => {
+                applyToBudget(alertData.weeklyBudget,alertData.monthlyBudget);
+                isExceeded()
+              }
+            }
+            ]}></IonAlert>
+          </IonItem>
+        </IonCard>
 
-          buttons={[
-          {
-            text:'Cancel'
-          },
-          {
-            role:'applyBudget',
-            text:'Apply',
-            handler: (alertData) => {
-              applyToBudget(alertData.weeklyBudget,alertData.monthlyBudget);
-              isExceeded()
-             }
-          }
-          ]}
-        ></IonAlert>
-              </IonItem>
-            </IonCard>
-          </IonCol>
-        </IonRow>
-        <IonCard color="primary">
+        <IonCard className="card favourite" color="primary">
           <IonCardHeader>
-            <IonCardTitle>
-              Favorite Store (Most frequent this month)
-            </IonCardTitle>
-            <IonCardSubtitle><IonTextarea id='favoriteStore' readonly ></IonTextarea></IonCardSubtitle>
-            <IonCardSubtitle><IonTextarea id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
+            <IonItem className="headings" color="primary">
+              <IonCardTitle>Favorite Store</IonCardTitle>
+            </IonItem>
+            <IonItem className="headings" color="primary">
+              <IonCardTitle>(Most frequent this month)</IonCardTitle>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonCardSubtitle><IonTextarea id='favoriteStore' readonly ></IonTextarea></IonCardSubtitle>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonCardSubtitle><IonTextarea id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
+            </IonItem>
           </IonCardHeader>
-
-          <IonList>
-            <IonItem>
+          <IonList className="list">
+            <IonItem className="center-items" color="tertiary">
+              <IonLabel>28 May 2022: R110.99</IonLabel>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonLabel>23 May 2022: R99.49</IonLabel>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonLabel>22 May 2022: R139.49</IonLabel>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
+              <IonLabel>20 May 2022: R350.99</IonLabel>
+            </IonItem>
+            <IonItem className="center-items" color="tertiary">
               <IonLabel>...</IonLabel>
             </IonItem>
-            <IonItem>
-              <IonLabel>20 May 2022: R110.99</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>22 May 2022: R99.49</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>23 May 2022: R139.49</IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel>28 May 2022: R350.99</IonLabel>
-            </IonItem>
           </IonList>
-          <IonItem>
-            <IonButton fill="outline" slot="end" color="secondary">
+          <IonItem color="primary">
+            <IonButton fill="solid" slot="end" color="secondary">
               View
             </IonButton>
           </IonItem>
         </IonCard>
 
-        <IonRow>
-          <IonCol>
-            <IonCard  color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Most purchased item category</IonCardTitle>
-                <IonTextarea id='categoryName' readonly ></IonTextarea>
-                <IonTextarea id='categoryTotal' readonly></IonTextarea>
-              </IonCardHeader>
-            </IonCard>
-          </IonCol>
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Most spent at a store</IonCardTitle>
-                <IonCardSubtitle> <IonTextarea id='storeName' readonly ></IonTextarea></IonCardSubtitle>
-                <IonCardSubtitle> <IonTextarea id='storeTotal' readonly ></IonTextarea></IonCardSubtitle>
-              </IonCardHeader>
-            </IonCard>
-          </IonCol>
-        </IonRow>
+        </div>
 
-        <IonRow>
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Expenditure compared to last week</IonCardTitle>
-                <IonCardSubtitle> <IonTextarea id='lastWeek' readonly ></IonTextarea></IonCardSubtitle>
+
+        <div className="wrapper">
+
+          <IonCard className="card weekly" color="primary">
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Weekly Expenditure</IonCardTitle>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
                 <IonCardSubtitle> <IonTextarea id='thisWeek' readonly ></IonTextarea></IonCardSubtitle>
-              </IonCardHeader>
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  Compare Reports
-                </IonButton>
               </IonItem>
-            </IonCard>
-          </IonCol>
+              <IonItem className="center-items" color="tertiary">
+                <IonCardSubtitle> <IonTextarea id='lastWeek' readonly ></IonTextarea></IonCardSubtitle>
+              </IonItem>
+            </IonCardHeader>
+            <IonItem color="primary">
+              <IonButton fill="solid" slot="end" color="secondary">
+                Compare Reports
+              </IonButton>
+            </IonItem>
+          </IonCard>
 
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Expenditure compared to last month</IonCardTitle>
-                <IonCardSubtitle><IonTextarea id='lastMonth' readonly ></IonTextarea></IonCardSubtitle>
-                <IonCardSubtitle><IonTextarea id='thisMonth' readonly ></IonTextarea></IonCardSubtitle>
-              </IonCardHeader>
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  Compare Reports
-                </IonButton>
+          <IonCard className="card monthly" color="primary">
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Monthly Expenditure</IonCardTitle>
               </IonItem>
-            </IonCard>
-          </IonCol>
-        </IonRow>
-        <IonButton onClick={() => setLogoutAlert(true)} expand="block">
-          Logout
-        </IonButton>
+              <IonItem className="center-items" color="tertiary">
+                <IonCardSubtitle><IonTextarea id='thisMonth' readonly ></IonTextarea></IonCardSubtitle>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonCardSubtitle><IonTextarea id='lastMonth' readonly ></IonTextarea></IonCardSubtitle>
+              </IonItem>
+            </IonCardHeader>
+            <IonItem color="primary">
+              <IonButton fill="solid" slot="end" color="secondary">
+                Compare Reports
+              </IonButton>
+            </IonItem>
+          </IonCard>
+
+
+          <IonCard className="card most-purchased" color="primary">
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Favourite Item Category</IonCardTitle>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonTextarea id='categoryName' readonly ></IonTextarea>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonTextarea id='categoryTotal' readonly></IonTextarea>
+              </IonItem>
+            </IonCardHeader>
+          </IonCard>
+
+          <IonCard className="card most-spent" color="primary">
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Most Spent At Store</IonCardTitle>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonCardSubtitle> <IonTextarea id='storeName' readonly ></IonTextarea></IonCardSubtitle>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonCardSubtitle> <IonTextarea id='storeTotal' readonly ></IonTextarea></IonCardSubtitle>
+              </IonItem>
+            </IonCardHeader>
+          </IonCard>
+
+        </div>
+        
+        <IonButton className="logout-button" onClick={() => setLogoutAlert(true)} expand="block" color='secondary'>Logout</IonButton>
+
         <IonAlert
           isOpen={logoutAlert}
           onDidDismiss={() => setLogoutAlert(false)}
@@ -256,7 +278,7 @@ const Profile: React.FC = () => {
               cssClass: 'my-custom-class',
                 handler: () => {
                  Logout();
-          }
+              }
             },
           ]}
         ></IonAlert>

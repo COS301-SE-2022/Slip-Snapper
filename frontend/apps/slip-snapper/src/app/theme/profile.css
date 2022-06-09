@@ -1,14 +1,98 @@
-.profilePhoto {
-    
-    height: 200px;
-    width: 100px;
+.headings {
+    display: inline-block;
+    vertical-align: middle;
+}
 
-    max-width: 100%;
-    max-height: 100%;
+.center-items {
+    vertical-align: middle;
+    --border-radius: 10px;
+    padding: 1px;
+}
+
+.profilePhoto {
     margin: auto;
     display: block;
+    border-radius: 20px;
+    padding: 10px;
+    float: left;
+    object-fit: contain;
 }
 
 .progressBar{
     max-width: 30%;
+    --background: #ebebeb;
 }
+
+.list {
+    background-color: #333C4A;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.logout-button{
+    width:40%;
+    margin-left:30%;
+    margin-right:30%;
+    --border-radius: 10px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+
+}
+
+/* CARD FLEX  */
+
+.wrapper{
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.card {
+    border-radius: 10px;
+    min-width: 20rem;
+    display: flex;
+}
+
+.profile {
+    flex:1;
+}
+
+.budget {
+    flex:1;
+}
+
+.favourite {
+    flex:1;
+}
+
+.most-purchased {
+    flex:1;
+}
+
+.most-spent {
+    flex:1;
+}
+
+.weekly {
+    flex:1;
+}
+
+.monthly {
+    flex:1;
+}
+
+
+/* MEDIA SCALABILITY */
+@media screen and (min-width: 390px) {
+    .wrapper {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 16rem));
+    }
+  
+    .card {
+      flex-direction: column;
+      text-align: center;
+      min-width: 16rem;
+    }
+  }
