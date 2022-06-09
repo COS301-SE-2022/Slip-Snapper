@@ -53,6 +53,9 @@ function ScanSlip(photo) {
         data: { text },
       } = await worker.recognize(photo);
 
+      localStorage.removeItem('photo')
+      localStorage.setItem('photo', JSON.stringify(photo))
+
       await doProcessing(text)
         .then((res) => res.json())
         .then((json) => {

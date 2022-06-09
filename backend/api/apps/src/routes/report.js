@@ -172,8 +172,8 @@ router.get('/statistics', async (req,res)=>{
                 items: []
             },
             category: {
-                amount: 0,
-                name: "Food"
+                amount: result.category.amount,
+                name: result.category.category
             },
             mostExpensive: {
                 amount: result.expensiveItem.expensiveItem,

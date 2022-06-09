@@ -168,7 +168,18 @@ function itemsParser(text) {
     }
 
     if (items.length == 0) {
-        return "N/A"
+        let quantity = "";
+        let item = "";
+        let price = "";
+        let type = "";
+
+        item = {
+            quantity,
+            item,
+            price,
+            type,
+        }
+        return [item]
     }
     
     return items;
