@@ -50,7 +50,7 @@
 # Demo Recordings
 ## [Demo 1 Recording](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
 <!-- TODO: Insert SRS Demo 2 Document -->
-## [Demo 2 Recording]()
+## [Demo 2 Recording](https://drive.google.com/file/d/1wLIFnKHJh7Q3rNDHcftW2L89lJFEFFai/view?usp=sharing)
 
 <br>
 
