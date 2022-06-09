@@ -11,10 +11,13 @@ function parse(text) {
     let totalSlip = totalParser(text);
     let slipItems = itemsParser(text);
 
+    let numItems = slipItems.length
+
     const slip =[
         dateOfPurchase,
         locationOfSlip,
         slipItems,
+        numItems,
         totalSlip,
     ]
 
@@ -152,7 +155,7 @@ function itemsParser(text) {
                     price
                 ] = matchedGroup;
 
-                const type = "food";
+                const type = categorize(item);
                 items.push({
                     quantity,
                     item,
@@ -167,32 +170,8 @@ function itemsParser(text) {
     if (items.length == 0) {
         return "N/A"
     }
-
+    
     return items;
-}
-
-function itemNameParser(text) {
-    let result = "a";
-
-    //Check for item name on slip
-
-    return result;
-}
-
-function itemQuantityParser(text) {
-    let result = "a";
-
-    //Check for item quantity on slip
-
-    return result;
-}
-
-function itemPriceParser(text) {
-    let result = "a";
-
-    //Check for item price on slip
-
-    return result;
 }
 
 module.exports.parse = parse;
