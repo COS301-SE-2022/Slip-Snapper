@@ -139,18 +139,3 @@ describe('Register', () => {
     expect(Component.findByText('password123'));
   });
 });
-
-describe('Edit Slips', () => {
-  it('Correctly renders the Edit Slip page', () => {
-    const Component = render(<EditSlip />);
-
-    expect(Component.getByText('Edit Slip'));
-    expect(Component.getByText('Edit Details'));
-    expect(Component.getByText('Item Name'));
-    expect(Component.getByText('Quantity'));
-    expect(Component.getByText('Price'));
-    expect(Component.getByText('Type'));
-    expect(Component.getByText('Confirm'));
-    expect(Component.getByText('Cancel'));
-  });
-});

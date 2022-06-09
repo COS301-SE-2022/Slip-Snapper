@@ -19,11 +19,10 @@ import {
 import React, { useState } from 'react';
 
 const EditSlip: React.FC = () => {
-  const [items, setItems] = useState([{ id: 0, itemName: 'Chocolate', price: 'R100', quantity: 3, type: "Food", date: "21/05/22", location: "Kauai" },
-  { id: 1, itemName: 'Chips', price: 'R300', quantity: 1, type: "Food", date: "21/05/22", location: "Kauai" }]);
   const data = JSON.parse(localStorage.getItem('value')!);
-  console.log(data)
-
+  let id = 0;
+  const [items] = useState(data.text[2]);
+ 
   return (
     <IonPage>
       <IonHeader>
@@ -40,7 +39,6 @@ const EditSlip: React.FC = () => {
               <img src="..\assets\mock-receipts\IMG_5593.jpg" alt="" width="40%"></img>
             </IonItem>
           </IonCardHeader>
-
         </IonCard>
 
         <IonCard color="primary">
@@ -70,46 +68,50 @@ const EditSlip: React.FC = () => {
 
             </IonRow>
           </IonGrid>
-          {items.map(item => {
-
+         
+          {items.map((item: { quantity: string; item: string; price: string; type: string; }) => {
+           
+            id = id + 1
             return (
 
               <IonGrid>
                 <IonRow>
-                  <IonCol>
-                    <IonLabel>Item #{item.id + 1}</IonLabel>
+                   <IonCol>
+                    <IonLabel>Item #{id}</IonLabel>
                   </IonCol>
 
                   <IonCol>
                     <IonItem color="tertiary">
-                      <IonInput id={item.id + "/name"} value={item.itemName} contentEditable="true" ></IonInput>
+                      <IonInput id={id + "/name"} value={item.item} contentEditable="true" ></IonInput>
                     </IonItem>
                   </IonCol>
 
                   <IonCol>
                     <IonItem color="tertiary">
-                      <IonInput id={item.id + "/quantity"} value={item.quantity} contentEditable="true" required></IonInput>
+                      <IonInput id={id + "/quantity"} value={item.quantity} contentEditable="true" required></IonInput>
                     </IonItem>
                   </IonCol>
 
                   <IonCol>
                     <IonItem color="tertiary">
-                      <IonInput id={item.id + "/price"} value={item.price} contentEditable="true" required></IonInput>
+                      <IonInput id={id + "/price"} value={item.price} contentEditable="true" required></IonInput>
                     </IonItem>
                   </IonCol>
 
                   <IonCol>
                     <IonItem color="tertiary">
-                      <IonInput id={item.id + "/type"} value={item.type} contentEditable="true" required></IonInput>
+                      <IonInput id={id + "/type"} value={item.type} contentEditable="true" required></IonInput>
                     </IonItem>
-                  </IonCol>
+                  </IonCol> 
                 </IonRow>
               </IonGrid>
             )
+           
           })}
           <IonItem color="primary">
-            <IonButton onClick={getItems} routerLink={"/home"} fill="solid" slot="start" color="secondary">Confirm</IonButton>
             <IonButton routerLink={"/home"} fill="outline" slot="end" color="secondary">Cancel</IonButton>
+            <IonButton onClick={getItems} routerLink={"/home"} fill="solid" slot="end" color="secondary">Confirm</IonButton>
+           
           </IonItem>
         </IonCard>
       </IonContent>
@@ -121,25 +123,24 @@ const EditSlip: React.FC = () => {
   );
 
   function getItems() {
-    for (let i = 0; i < items.length; i++) {
-      const newItemName = document.getElementById(i + "/name")?.getElementsByTagName("input")[0].value
-      const newQuantity = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
-      const newPrice = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
-      const newType = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
+    
+    for (let i = 0; i < data.text[2].length; i++) {
+      const newItemName = document.getElementById(i+1 + "/name")?.getElementsByTagName("input")[0].value
+      const newQuantity = document.getElementById(i+1 + "/quantity")?.getElementsByTagName("input")[0].value
+      const newPrice = document.getElementById(i+1 + "/price")?.getElementsByTagName("input")[0].value
+      const newType = document.getElementById(i+1 + "/type")?.getElementsByTagName("input")[0].value
 
-      if(newItemName!==undefined)
-      {
-        items[i].itemName = newItemName
+      if(newItemName!==undefined){
+        items[i].item = newItemName
       }if (newQuantity !== undefined) {
-        items[i].quantity = parseInt(newQuantity)
+        items[i].quantity = newQuantity
       }if (newPrice !== undefined) {
-        items[i].itemName = newPrice
+        items[i].price = newPrice
       }if (newType !== undefined) {
-        items[i].itemName = newType
+        items[i].type = newType
       }
     }
   }
- 
 };
 
 export default EditSlip;
