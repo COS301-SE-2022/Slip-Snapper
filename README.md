@@ -47,10 +47,21 @@
 > The Slip Snapper is a cross-platform application that assists in managing an individual's expenses.
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and create comprehensive expense reports.
 
-<!-- Update when there are more demos, create links for each demo -->
-# [Recorded Demo](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
+# Demo Recordings
+## [Demo 1 Recording](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
+<!-- TODO: Insert SRS Demo 2 Document -->
+## [Demo 2 Recording]()
 
-# [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
+<br>
+
+# SRS Documents
+## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
+<!-- TODO: Insert SRS Demo 2 Document -->
+## [SRS Demo 2]()
+<br>
+
+# [User Manual]()
+# [Coding Standards]()
 
 # [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
