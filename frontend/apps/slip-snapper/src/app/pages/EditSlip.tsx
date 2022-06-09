@@ -21,6 +21,9 @@ import React, { useState } from 'react';
 const EditSlip: React.FC = () => {
   const [items, setItems] = useState([{ id: 0, itemName: 'Chocolate', price: 'R100', quantity: 3, type: "Food", date: "21/05/22", location: "Kauai" },
   { id: 1, itemName: 'Chips', price: 'R300', quantity: 1, type: "Food", date: "21/05/22", location: "Kauai" }]);
+  const data = JSON.parse(localStorage.getItem('value')!);
+  console.log(data)
+
   return (
     <IonPage>
       <IonHeader>

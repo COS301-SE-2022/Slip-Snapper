@@ -53,11 +53,13 @@ function ScanSlip(photo) {
         data: { text },
       } = await worker.recognize(photo);
 
-      let resp = '';
       await doProcessing(text)
         .then((res) => res.json())
-        .then((json) => (resp = json));
-     
+        .then((json) => {
+          localStorage.removeItem('value')
+          localStorage.setItem('value', JSON.stringify(json))
+        });
+      
       await worker.terminate();
       resolve(loading);
     })();

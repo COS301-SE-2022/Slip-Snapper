@@ -482,6 +482,48 @@ async function setUserBudgets( userId, data ){
     };
 }
 
+// async function getFavouriteStore(userid) {
+//     const favouritestore = await prisma.slip.groupBy({
+//         where: {
+//             usersId: userid
+//         },
+//         _count: {
+//             location:true
+//         },
+//         take:1,
+//         orderBy:{
+//             _count:{
+//             location:'desc'
+//             }
+//         }
+//     })
+
+//     let storeLocation=""
+//     for(var store of favouritestore){
+//       storeLocation = store.location
+//     }
+
+//     const amountSpent =await prisma.slip.findMany({
+//         where:{
+//             usersId: userid,
+//             location: storeLocation
+//         },
+//         select:{
+//             total:true
+//         }
+//     })
+
+//     let total=0;
+//     for(var amount of amountSpent){
+//         total += amount.total;
+//     }
+
+//     return {
+//         storeLocation,
+//         total
+//     }
+// } 
+
 async function getFavouriteStore(userid) {
     const favouritestore = await prisma.slip.groupBy({
         by: ['location'],
@@ -596,9 +638,9 @@ async function getMostSpentATStore(userid) {
 
 async function getWeeklyExpenditure(userid){   
     const date1= new Date()
-    //const lastweek=date1.setDate(date1.getDate()-7);
+    const lastweek=date1.setDate(date1.getDate()-7);
     const date2= new Date()
-    //const otherWeek=date2.setDate(date2.getDate()-14)
+    const otherWeek=date2.setDate(date2.getDate()-14)
     
     const weeklyExpenditure = await prisma.slip.findMany({
         where:{
@@ -614,12 +656,12 @@ async function getWeeklyExpenditure(userid){
     let previousWeek=0;
     for(var weekly of weeklyExpenditure)
     {
-        //if(weekly.transactionDate.toISOString()>=date1.toISOString()){
+        if(weekly.transactionDate.toISOString()>=date1.toISOString()){
             recentWeek += weekly.total;
-        //}
-        //else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
+        }
+        else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
             previousWeek += weekly.total;
-        //}
+        }
     }
 
     return {
@@ -630,9 +672,9 @@ async function getWeeklyExpenditure(userid){
 
 async function getMonthlyExpenditure(userid){
     const date1= new Date()
-    //const lastMonth=date1.setDate(date1.getDate()-4*7);
+    const lastMonth=date1.setDate(date1.getDate()-4*7);
     const date2= new Date()
-    //const otherMonth=date2.setDate(date2.getDate()-8*7)
+    const otherMonth=date2.setDate(date2.getDate()-8*7)
     
     const MonthlyExpenditure = await prisma.slip.findMany({
         where:{
@@ -648,12 +690,12 @@ async function getMonthlyExpenditure(userid){
     let previousMonth=0;
     for(var weekly of MonthlyExpenditure)
     {
-        //if(weekly.transactionDate.toISOString()>=date1.toISOString()){
+        if(weekly.transactionDate.toISOString()>=date1.toISOString()){
             recentMonth += weekly.total;
-        //}
-        //else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
+        }
+        else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
             previousMonth += weekly.total;
-        //}
+        }
     }
 
     return {
@@ -661,6 +703,16 @@ async function getMonthlyExpenditure(userid){
         previousMonth
     }
 } 
+
+async function getDataItems(userid){
+    const dataItems = await prisma.dataItem.findMany({
+
+    })
+
+    return {
+        items: dataItems
+    }
+}
 
 module.exports = {
     getUser,
@@ -674,5 +726,6 @@ module.exports = {
     getItemsReport,
     getUserBudgets,
     setUserBudgets,
-    getUserStats
+    getUserStats,
+    getDataItems
 }
