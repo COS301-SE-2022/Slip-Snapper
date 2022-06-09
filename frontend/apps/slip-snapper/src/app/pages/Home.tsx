@@ -106,6 +106,7 @@ const Home: React.FC = () => {
           <IonItem>
             <IonButton
               fill="outline"
+              title="generateDR"
               slot="end"
               color="secondary"
               onClick={() => generateReport('day')}
@@ -123,6 +124,7 @@ const Home: React.FC = () => {
           <IonItem>
             <IonButton
               fill="outline"
+              title="generateWR"
               slot="end"
               color="secondary"
               onClick={() => generateReport('week')}
@@ -140,6 +142,7 @@ const Home: React.FC = () => {
           <IonItem>
             <IonButton
               fill="outline"
+              title="generateMR"
               slot="end"
               color="secondary"
               onClick={() => generateReport('month')}
