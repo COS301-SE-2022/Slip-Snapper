@@ -5,25 +5,28 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonCard,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonItem,
-  IonButton,
   IonRow,
-  IonCol,
   IonFooter,
+  IonCol,
 } from '@ionic/react';
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
+import ReportTotal from '../components/ReportTotal';
 import { generateReportA } from "../../api/apiCall"
 
+
 const Home: React.FC = () => {
-  const mockData = [{ reportNumber: "Report #8", Date: "10/05/22" }, { reportNumber: "Report #9", Date: "10/05/22" },
-  { reportNumber: "Report #10", Date: "10/05/22" }, { reportNumber: "Report #11", Date: "10/05/22" }]
+  const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
+  { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
+
+  const mockTotals = [{ timePeriod: "Daily", total: "R200.02" }, { timePeriod: "Weekly", total: "R800.02" },
+  { timePeriod: "Monthly", total: "R1000.50" }]
+
+
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -38,71 +41,21 @@ const Home: React.FC = () => {
         <IonTitle>Recent Reports</IonTitle>
 
         <IonRow>
-          {mockData.map((t) => {
+          {mockReports.map((reps, index) => {
             return (
-                <ReportItem  />
+              <ReportItem key={index} reportData={[reps.reportNumber, reps.date]} />
             )
           })
           }
-
         </IonRow>
 
-
         <IonTitle>Expenditure Totals</IonTitle>
-
-        <IonCard color="primary">
-          <IonCardHeader>
-            <IonCardTitle>Daily Total</IonCardTitle>
-            <IonCardSubtitle>R137.69</IonCardSubtitle>
-          </IonCardHeader>
-          <IonItem>
-            <IonButton
-              fill="outline"
-              title="generateDR"
-              slot="end"
-              color="secondary"
-              onClick={() => generateReport('day')}
-            >
-              Generate Report
-            </IonButton>
-          </IonItem>
-        </IonCard>
-
-        <IonCard color="primary">
-          <IonCardHeader>
-            <IonCardTitle>Weekly Total</IonCardTitle>
-            <IonCardSubtitle>R912.21</IonCardSubtitle>
-          </IonCardHeader>
-          <IonItem>
-            <IonButton
-              fill="outline"
-              title="generateWR"
-              slot="end"
-              color="secondary"
-              onClick={() => generateReport('week')}
-            >
-              Generate Report
-            </IonButton>
-          </IonItem>
-        </IonCard>
-
-        <IonCard color="primary">
-          <IonCardHeader>
-            <IonCardTitle>Monthly Total</IonCardTitle>
-            <IonCardSubtitle>R4013.01</IonCardSubtitle>
-          </IonCardHeader>
-          <IonItem>
-            <IonButton
-              fill="outline"
-              title="generateMR"
-              slot="end"
-              color="secondary"
-              onClick={() => generateReport('month')}
-            >
-              Generate Report
-            </IonButton>
-          </IonItem>
-        </IonCard>
+        {mockTotals.map((totals, index) => {
+          return (
+            <ReportTotal key={index} reportData={[totals.timePeriod, totals.total]} />
+          )
+        })
+        }
       </IonContent>
       <IonFooter>
         <TakePictureButton />
