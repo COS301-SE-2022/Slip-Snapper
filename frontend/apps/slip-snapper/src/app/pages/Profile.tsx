@@ -17,11 +17,10 @@ import {
   IonTextarea,
   IonList,
   IonLabel,
-  IonSelect,
-  IonSelectOption,
 } from '@ionic/react';
 import React, { useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
+import { EditBudgets } from '../components/EditBudgets';
 import '../theme/profile.css';
 import '../theme/toasts.css';
 import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
@@ -117,17 +116,7 @@ const Profile: React.FC = () => {
             <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
           </IonItem>
           <IonItem color="primary">
-            <IonButton title="newBudgetButton" fill="solid" slot="start" color="secondary">
-            <IonLabel>New Budget</IonLabel>
-              <IonSelect okText='Create' interface='popover'>
-                <IonLabel>Select Category</IonLabel>
-                <IonSelectOption value="food">Food</IonSelectOption>
-                <IonSelectOption value="fashion">Fashion</IonSelectOption>
-                <IonSelectOption value="electronics">Electronics</IonSelectOption>
-                <IonSelectOption value="household">Household</IonSelectOption>
-                <IonSelectOption value="other">Other</IonSelectOption>
-              </IonSelect>
-            </IonButton>
+            <EditBudgets/>
             
             <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="solid" slot="end" color="secondary">
               Adjust Budget
