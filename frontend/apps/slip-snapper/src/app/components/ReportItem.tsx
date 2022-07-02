@@ -8,14 +8,13 @@ import {
     IonItem
 } from "@ionic/react";
 
-function ReportItem()
-{
+function ReportItem({ reportData }: any) {
     return (
         <IonCol>
             <IonCard color="primary">
                 <IonCardHeader>
-                    <IonCardSubtitle></IonCardSubtitle>
-                    <IonCardTitle>Report #11</IonCardTitle>
+                    <IonCardSubtitle>{reportData.Date}</IonCardSubtitle>
+                    <IonCardTitle>{reportData.reportNumber}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
                     <IonButton fill="solid" slot="end" color="secondary">

@@ -22,8 +22,8 @@ import ReportItem from '../components/ReportItem';
 import { generateReportA } from "../../api/apiCall"
 
 const Home: React.FC = () => {
-  const mockData = [{ reportNumber: "Report #8", Date: "10/05/22" }, { reportNumber: "Report #9", Date: "10/05/22" },
-  { reportNumber: "Report #10", Date: "10/05/22" }, { reportNumber: "Report #11", Date: "10/05/22" }]
+  const mockData = [{ reportNumber: "Report #8", Date: "10/05/20" }, { reportNumber: "Report #9", Date: "10/05/21" },
+  { reportNumber: "Report #10", Date: "10/05/22" }, { reportNumber: "Report #11", Date: "10/05/23" }]
   return (
     <IonPage>
       <IonHeader>
@@ -40,7 +40,7 @@ const Home: React.FC = () => {
         <IonRow>
           {mockData.map((t) => {
             return (
-                <ReportItem  />
+              <ReportItem reportData={t} />
             )
           })
           }
