@@ -18,9 +18,12 @@ import {
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
+import ReportItem from '../components/ReportItem';
 import { generateReportA } from "../../api/apiCall"
 
 const Home: React.FC = () => {
+  const mockData = [{ reportNumber: "Report #8", Date: "10/05/22" }, { reportNumber: "Report #9", Date: "10/05/22" },
+  { reportNumber: "Report #10", Date: "10/05/22" }, { reportNumber: "Report #11", Date: "10/05/22" }]
   return (
     <IonPage>
       <IonHeader>
@@ -35,66 +38,15 @@ const Home: React.FC = () => {
         <IonTitle>Recent Reports</IonTitle>
 
         <IonRow>
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardSubtitle>10/05/22</IonCardSubtitle>
-                <IonCardTitle>Report #11</IonCardTitle>
-              </IonCardHeader>
+          {mockData.map((t) => {
+            return (
+                <ReportItem  />
+            )
+          })
+          }
 
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  View
-                </IonButton>
-              </IonItem>
-            </IonCard>
-          </IonCol>
-
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardSubtitle>10/05/22</IonCardSubtitle>
-                <IonCardTitle>Report #10</IonCardTitle>
-              </IonCardHeader>
-
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  View
-                </IonButton>
-              </IonItem>
-            </IonCard>
-          </IonCol>
-
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardSubtitle>10/05/22</IonCardSubtitle>
-                <IonCardTitle>Report #9</IonCardTitle>
-              </IonCardHeader>
-
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  View
-                </IonButton>
-              </IonItem>
-            </IonCard>
-          </IonCol>
-
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardSubtitle>10/05/22</IonCardSubtitle>
-                <IonCardTitle>Report #8</IonCardTitle>
-              </IonCardHeader>
-
-              <IonItem>
-                <IonButton fill="outline" slot="end" color="secondary">
-                  View
-                </IonButton>
-              </IonItem>
-            </IonCard>
-          </IonCol>
         </IonRow>
+
 
         <IonTitle>Expenditure Totals</IonTitle>
 
@@ -153,8 +105,8 @@ const Home: React.FC = () => {
         </IonCard>
       </IonContent>
       <IonFooter>
-          <TakePictureButton />
-        </IonFooter>
+        <TakePictureButton />
+      </IonFooter>
       <IonFooter>
         <IonToolbar color="primary"></IonToolbar>
       </IonFooter>
@@ -163,7 +115,7 @@ const Home: React.FC = () => {
 
   function generateReport(type: string) {
     const url = 'http://localhost:55555/api/report/generate?userId=1&period=' + type;
-    
+
     generateReportA(url)
       .then((res) => res.json());
   }
