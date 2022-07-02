@@ -115,10 +115,8 @@ const Profile: React.FC = () => {
             <IonInput readonly value={monthlyBudgetValue}></IonInput>
             <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
           </IonItem>
-          <IonItem color="primary">
-            <EditBudgets/>
-            
-            <IonButton title="adjustBudgetButton" onClick={() => setBudgetAlert(true)} fill="solid" slot="end" color="secondary">
+          <IonItem color="primary">            
+            <IonButton onClick={() => setBudgetAlert(true)} fill="solid" slot="start" color="secondary">
               Adjust Budget
             </IonButton>
           <IonAlert
@@ -154,6 +152,7 @@ const Profile: React.FC = () => {
             }
             ]}></IonAlert>
           </IonItem>
+          <EditBudgets/>
         </IonCard>
 
         <IonCard className="card favourite" color="primary">
