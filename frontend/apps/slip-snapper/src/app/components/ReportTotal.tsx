@@ -7,12 +7,16 @@ import {
     IonItem
 } from "@ionic/react";
 import { generateReportA } from "../../api/apiCall"
-function ReportTotal({ reportData }: any) {
+
+type Props = {
+    reportData : string[]
+}
+function ReportTotal({ reportData }: Props) {
     return (
         <IonCard color="primary">
             <IonCardHeader>
-                <IonCardTitle>{reportData.timePeriod}</IonCardTitle>
-                <IonCardSubtitle>{reportData.total}</IonCardSubtitle>
+                <IonCardTitle>{reportData[0]}</IonCardTitle>
+                <IonCardSubtitle>{reportData[1]}</IonCardSubtitle>
             </IonCardHeader>
             <IonItem color="tertiary">
                 <IonButton

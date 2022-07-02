@@ -7,6 +7,7 @@ import {
   IonButtons,
   IonRow,
   IonFooter,
+  IonCol,
 } from '@ionic/react';
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
@@ -15,12 +16,17 @@ import ReportItem from '../components/ReportItem';
 import ReportTotal from '../components/ReportTotal';
 import { generateReportA } from "../../api/apiCall"
 
+
 const Home: React.FC = () => {
   const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
   { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
 
   const mockTotals = [{ timePeriod: "Daily", total: "R200.02" }, { timePeriod: "Weekly", total: "R800.02" },
   { timePeriod: "Monthly", total: "R1000.50" }]
+
+
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -35,19 +41,18 @@ const Home: React.FC = () => {
         <IonTitle>Recent Reports</IonTitle>
 
         <IonRow>
-          {mockReports.map((reps) => {
+          {mockReports.map((reps, index) => {
             return (
-              <ReportItem reportData={reps} />
+              <ReportItem key={index} reportData={[reps.reportNumber, reps.date]} />
             )
           })
           }
         </IonRow>
 
-
         <IonTitle>Expenditure Totals</IonTitle>
-        {mockTotals.map((totals) => {
+        {mockTotals.map((totals, index) => {
           return (
-            <ReportTotal reportData={totals} />
+            <ReportTotal key={index} reportData={[totals.timePeriod, totals.total]} />
           )
         })
         }

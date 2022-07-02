@@ -8,13 +8,17 @@ import {
     IonItem
 } from "@ionic/react";
 
-function ReportItem({ reportData }: any) {
+type Props = {
+    reportData: string[]
+}
+function ReportItem({ reportData }: Props) {
     return (
+
         <IonCol>
             <IonCard color="primary">
                 <IonCardHeader>
-                    <IonCardSubtitle>{reportData.Date}</IonCardSubtitle>
-                    <IonCardTitle>{reportData.reportNumber}</IonCardTitle>
+                    <IonCardSubtitle>{reportData[0]}</IonCardSubtitle>
+                    <IonCardTitle>{reportData[1]}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
                     <IonButton fill="solid" slot="end" color="secondary">
