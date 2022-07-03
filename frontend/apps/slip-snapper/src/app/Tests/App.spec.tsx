@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import TakePictureButton from '../components/TakePictureButton';
 import { create } from 'react-test-renderer';
 import App from '../App';
@@ -8,6 +8,9 @@ import ViewReports from '../pages/ViewReports';
 import Login from '../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
+//ReportTotal Imports
+import ReportTotal from '../components/ReportTotal';
+import { mockTotals } from '../pages/Home'
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -163,3 +166,29 @@ describe('Register', () => {
     expect(Component.findByText('password123'));
   });
 });
+
+describe('Register', () => {
+
+  test('Should check if function fires for generate report for daily', async () => {
+    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[0].timePeriod, mockTotals[0].total, mockTotals[0].title]} />);
+    const addButton = await findByTitle('generateDR');
+    fireEvent.click(addButton);
+  });
+  test('Should check if function fires for generate report for weekly', async () => {
+    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[1].timePeriod, mockTotals[1].total, mockTotals[1].title]} />);
+
+    const addButton = await findByTitle('generateWR');
+    fireEvent.click(addButton);
+  });
+  test('Should check if function fires for generate report for Monthly', async () => {
+    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[2].timePeriod, mockTotals[2].total, mockTotals[2].title]} />);
+    const addButton = await findByTitle('generateMR');
+    fireEvent.click(addButton);
+  });
+});
+//Example of old Report API tests
+  // test('Should check if function fires for generate report for daily', async () => {
+  //   const { findByTitle } = render(<ReportTotal />);
+  //   const addButton = await findByTitle('generateMR');
+  //   fireEvent.click(addButton);
+  // });
