@@ -21,11 +21,7 @@ const Home: React.FC = () => {
   const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
   { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
 
-  const mockTotals = [{ timePeriod: "Daily", total: "R200.02" }, { timePeriod: "Weekly", total: "R800.02" },
-  { timePeriod: "Monthly", total: "R1000.50" }]
-
-
-
+  
 
   return (
     <IonPage>
@@ -52,7 +48,7 @@ const Home: React.FC = () => {
         <IonTitle>Expenditure Totals</IonTitle>
         {mockTotals.map((totals, index) => {
           return (
-            <ReportTotal key={index} reportData={[totals.timePeriod, totals.total]} />
+            <ReportTotal key={index} reportData={[totals.timePeriod, totals.total , totals.title]} />
           )
         })
         }
@@ -75,3 +71,5 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+export const mockTotals = [{ timePeriod: "Daily", total: "R200.02", title: "generateDR" }, { timePeriod: "Weekly", total: "R800.02", title: "generateWR" },
+{ timePeriod: "Monthly", total: "R1000.50", title: "generateMR" }]

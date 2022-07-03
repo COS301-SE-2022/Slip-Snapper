@@ -21,7 +21,7 @@ function ReportTotal({ reportData }: Props) {
             <IonItem color="tertiary">
                 <IonButton
                     fill="solid"
-                    title="generateDR"
+                    title= {reportData[2]}
                     slot="end"
                     color="secondary"
                     onClick={() => generateReport('day')}

@@ -30,20 +30,4 @@ describe('Home', () => {
     expect(Component.getByText('Edit Item'));
     expect(Component.getByText('Expenditure Totals'));
   });
-
-  // test('Should check if function fires for generate report for daily', async () => {
-  //   const { findByTitle } = render(<Home />);
-  //   const addButton = await findByTitle('generateDR');
-  //   fireEvent.click(addButton);
-  // });
-  // test('Should check if function fires for generate report for daily', async () => {
-  //   const { findByTitle } = render(<Home />);
-  //   const addButton = await findByTitle('generateWR');
-  //   fireEvent.click(addButton);
-  // });
-  // test('Should check if function fires for generate report for daily', async () => {
-  //   const { findByTitle } = render(<Home />);
-  //   const addButton = await findByTitle('generateMR');
-  //   fireEvent.click(addButton);
-  // });
 });
