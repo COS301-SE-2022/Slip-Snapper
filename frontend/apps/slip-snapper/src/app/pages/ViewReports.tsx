@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 import React from 'react';
 import { NavButtons } from '../components/NavButtons';
-import ViewReportItems from '../components/ViewReportItems';
+import ViewReportItem from '../components/ViewReportItem';
 import '../theme/viewReports.css';
 
 const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
@@ -38,10 +38,10 @@ const ViewReports: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>Todays Report:</IonCardTitle>
               </IonCardHeader>
-              <IonItem>Items Bought: 12</IonItem>
-              <IonItem>Total Expenditure: R899.99 </IonItem>
-              <IonItem>
-                <IonButton class="viewButton" fill="outline" slot="end">
+              <IonItem color="tertiary">Items Bought: 12</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R899.99 </IonItem>
+              <IonItem color="tertiary">
+                <IonButton color="success" fill="solid" slot="end">
                   View
                 </IonButton>
               </IonItem>
@@ -56,7 +56,7 @@ const ViewReports: React.FC = () => {
 
               {mockThisWeeksReports.map((item, index) => {
                 return (
-                  <ViewReportItems key={index} dateTime={item.dateTime} />
+                  <ViewReportItem key={index} dateTime={item.dateTime} />
                 )
               })
               }

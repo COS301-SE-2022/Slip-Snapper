@@ -6,14 +6,14 @@ import {
 type Props = {
     dateTime: string
 }
-function ViewReportItems({ dateTime }: Props) {
+function ViewReportItem({ dateTime }: Props) {
     return (
-        <IonItem>
+        <IonItem color="tertiary">
             {dateTime}
-            <IonButton class="viewButton" fill="outline" slot="end">
+            <IonButton color="success" slot="end" class="viewButton" >
                 View
             </IonButton>
-            <IonButton fill="outline" slot="end" color="secondary">
+            <IonButton fill="solid" slot="end" color="secondary">
                 Delete
             </IonButton>
         </IonItem>
@@ -21,4 +21,4 @@ function ViewReportItems({ dateTime }: Props) {
     );
 
 }
-export default ViewReportItems;
+export default ViewReportItem;
