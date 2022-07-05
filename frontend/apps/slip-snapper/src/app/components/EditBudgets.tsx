@@ -29,7 +29,7 @@ import {
         { val: 'Household', isChecked: household },
         { val: 'Other', isChecked: other }
       ];
-  
+
     return (
         <IonItem color="primary">
             <IonButton fill="solid" color="secondary" onClick={() => setIsOpen(true)}>
@@ -40,7 +40,9 @@ import {
             <IonToolbar color="primary">
               <IonTitle>Edit Budgets</IonTitle>
               <IonButtons slot="end">
-                <IonButton onClick={() => setIsOpen(false)}>Confirm</IonButton>
+                <IonButton onClick={() => {
+                  setIsOpen(false)
+                  renderData(categoryStates)}}>Confirm</IonButton>
               </IonButtons>
             </IonToolbar>
           </IonHeader>
@@ -76,5 +78,12 @@ import {
         </IonItem>
     );
   };
+
+function renderData(categoryStates:any) {
+  console.log(categoryStates)
+  return (
+      <p>HELLO WORLD</p>
+  )
+}
 
   

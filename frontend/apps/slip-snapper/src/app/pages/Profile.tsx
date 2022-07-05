@@ -24,12 +24,12 @@ import { EditBudgets } from '../components/EditBudgets';
 import '../theme/profile.css';
 import '../theme/toasts.css';
 import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
+import Budget from '../components/Budget';
 
 const favourite = { store: "N/A", total: 0 }
 const mostSpentCategory = { itemCategory: "N/A", total: 0 }
 const mostSpentStore = { store: "N/A", total: 0 }
 const weekMonthSpent = { lastWeek: 0, thisWeek: 0, lastMonth: 0, thisMonth: 0}
-
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [budgetAlert, setBudgetAlert] = useState(false);
@@ -66,10 +66,9 @@ const Profile: React.FC = () => {
        
     })
 
-  const [weelkyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R " + val.weekly);
-  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R " + val.monthly);
+  const [weeklyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R" + val.weekly);
+  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R" + val.monthly);
   let weeklyBudget: number, monthlyBudget: number
-  
   return (
     <IonPage>
       <IonHeader>
@@ -108,7 +107,7 @@ const Profile: React.FC = () => {
             </IonItem>
           </IonCardHeader>
           <IonItem id="weekly-budget" className="center-items" color="tertiary">
-            <IonInput readonly value={weelkyBudgetValue}></IonInput>
+            <IonInput readonly value={weeklyBudgetValue}></IonInput>
             <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
           </IonItem>
           <IonItem id="monthly-budget" className="center-items" color="tertiary">
@@ -128,8 +127,7 @@ const Profile: React.FC = () => {
               {
                 name: 'weeklyBudget',
                 type: 'text',
-                placeholder: 'Insert Weekly Budget'
-                
+                placeholder: 'Insert Weekly Budget' 
               },
               {
                 id: "monthlyBudget",
@@ -153,6 +151,7 @@ const Profile: React.FC = () => {
             ]}></IonAlert>
           </IonItem>
           <EditBudgets/>
+          <Budget/>
         </IonCard>
 
         <IonCard className="card favourite" color="primary">
@@ -193,12 +192,8 @@ const Profile: React.FC = () => {
             </IonButton>
           </IonItem>
         </IonCard>
-
         </div>
-
-
         <div className="wrapper">
-
           <IonCard className="card weekly" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
@@ -289,6 +284,7 @@ const Profile: React.FC = () => {
       </IonContent>
     </IonPage>
   );
+  
   function Logout() {
     throw new Error('Function not implemented.');
   }
@@ -297,10 +293,10 @@ const Profile: React.FC = () => {
      weeklyBudget= parseFloat(newWeeklyBudget)
      monthlyBudget = parseFloat(newMonthlyBudget)
     if(!isNaN(weeklyBudget)){
-      setWeeklyBudget("Weekly Budget: R "+weeklyBudget.toString())
+      setWeeklyBudget("Weekly Budget: R"+weeklyBudget.toString())
     }
     if(!isNaN(monthlyBudget)){
-      setMonthlyBudget("Monthly Budget: R "+monthlyBudget.toString())
+      setMonthlyBudget("Monthly Budget:R "+monthlyBudget.toString())
     }
     
     setBudgetA( 1, weeklyBudget, monthlyBudget )
@@ -363,5 +359,4 @@ const Profile: React.FC = () => {
     document.getElementById("thisMonth")?.setAttribute("value", "Total Spent This Month: R" + weekMonthSpent.thisMonth.toFixed(2).toString())
   }
 };
-
 export default Profile;
