@@ -34,12 +34,12 @@ export const EditBudgets = () => {
   return (
     <IonItem color="primary">
       <IonButton fill="solid" color="secondary" onClick={() => setIsOpen(true)}>
-        <IonLabel>Edit Budgets</IonLabel>
+        <IonLabel>Add/Remove</IonLabel>
       </IonButton>
       <IonModal isOpen={isOpen} onDidDismiss={() => setIsOpen(false)}>
         <IonHeader>
           <IonToolbar color="primary">
-            <IonTitle>Edit Budgets</IonTitle>
+            <IonTitle>Add/Remove Budgets</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => {
                 setIsOpen(false);
@@ -79,17 +79,10 @@ export const EditBudgets = () => {
       </IonModal>
     </IonItem>
   );
-
- 
- 
 };
 
 
 export function hideData(categoryStates:any) {
-
-  console.log(categoryStates)
-
-
   for (let i = 0; i < categoryStates.length; i++) {
     const temp = document.getElementById(categoryStates[i].id)
     if (categoryStates[i].isChecked === true) {
@@ -97,7 +90,6 @@ export function hideData(categoryStates:any) {
       if (temp !== null)
         temp.style.display = ""
     }
-
     else {
       if (temp !== null)
         temp.style.display = "none"
