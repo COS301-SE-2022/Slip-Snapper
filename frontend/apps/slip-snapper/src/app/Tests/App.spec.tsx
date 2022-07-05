@@ -11,6 +11,7 @@ import Register from '../pages/Register';
 //ReportTotal Imports
 import ReportTotal from '../components/ReportTotal';
 import { mockTotals } from '../pages/Home'
+import { UserStats } from '../components/UserStats';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -105,25 +106,7 @@ describe('Profile', () => {
     expect(Component.getByTitle("storeName").getAttribute("value")).toBe("PEP")
     expect(Component.getByTitle("storeTotal").getAttribute("value")).toBe("R899.99")
   });
-  test('Test if the setBudget Button fires', async () => {
-    const { findByText } = render(<Profile/>);
-    const budget = await findByText('Adjust Budget');
-    fireEvent.click(budget);
-  });
 
-  test('Test if the Adjust Budget Button aborts correctly', async () => {
-    const { findByText } = render(<Profile />);
-    const budget = await findByText('Adjust Budget');
-    fireEvent.click(budget);
-    fireEvent.abort(budget);
-  });
-
-  test('Test if the Adjust Button alert dismisses correctly', async () => {
-    const { findByText } = render(<Profile />);
-    const budget = await findByText('Adjust Budget');
-    fireEvent.click(budget);
-    fireEvent.abort(budget);
-  });
   test('Test if Logout button fires correctly', async () => {
     const Component = render(<Profile />);
     const logout = await Component.findByText('Logout');
