@@ -26,6 +26,7 @@ import '../theme/toasts.css';
 import { setBudgetA, getBudgetA, getStatsA } from "../../api/apiCall"
 import Budget from '../components/Budget';
 
+
 const favourite = { store: "N/A", total: 0 }
 const mostSpentCategory = { itemCategory: "N/A", total: 0 }
 const mostSpentStore = { store: "N/A", total: 0 }

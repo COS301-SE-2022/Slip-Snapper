@@ -15,6 +15,11 @@ function Budget() {
     const [other, setOther] = useState(false);
 
     const [amounts, setAmounts] = useState<string[]>(["100", "200", "300", "400", "500"]);
+    // const temp = document.getElementById("foodBudget")
+    // if(temp!=null)
+    // {
+    //     temp.style.display = "none"
+    // }
 
     return (
         <div>
@@ -75,7 +80,7 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setHouseHold(true)} id="weekly-budget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setHouseHold(true)} id="houseBudget" className="center-items" color="tertiary">
                 <IonInput readonly value={"Household: R" + amounts[3]}></IonInput>
                 <IonProgressBar id='houseBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -94,7 +99,7 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setOther(true)} id="weekly-budget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setOther(true)} id="otherBudget" className="center-items" color="tertiary">
                 <IonInput readonly value={"Other: R" + amounts[4]}></IonInput>
                 <IonProgressBar id='otherBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -103,7 +108,7 @@ function Budget() {
                 onDidDismiss={() => setOther(false)}
                 header={'Change Budget'}
                 inputs={[
-                    { name: 'food', placeholder: 'Insert Fashion Budget' },]}
+                    { name: 'food', placeholder: 'Insert Other Budget' },]}
                 buttons={[
                     {
                         text: 'Apply',
