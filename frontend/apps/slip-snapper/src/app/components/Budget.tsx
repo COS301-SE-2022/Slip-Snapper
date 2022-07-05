@@ -13,13 +13,8 @@ function Budget() {
     const [elec, setElec] = useState(false);
     const [houseHold, setHouseHold] = useState(false);
     const [other, setOther] = useState(false);
-
     const [amounts, setAmounts] = useState<string[]>(["100", "200", "300", "400", "500"]);
-    // const temp = document.getElementById("foodBudget")
-    // if(temp!=null)
-    // {
-    //     temp.style.display = "none"
-    // }
+    const totalSpent = 88;
 
     return (
         <div>
@@ -131,13 +126,13 @@ function Budget() {
 
   
     function isExceeded(budget:number,barID:string) {
-        const totalFoodSpent = 88;
-        const withinBudget = totalFoodSpent / budget
+        
+        const withinBudget = totalSpent / budget
 
-        if (totalFoodSpent >= budget && !isNaN(budget)) {
+        if (totalSpent >= budget && !isNaN(budget)) {
             document.getElementById(barID)?.setAttribute("color", "danger")
         }
-        else if (totalFoodSpent >= budget / 2 && !isNaN(budget)) {
+        else if (totalSpent >= budget / 2 && !isNaN(budget)) {
             document.getElementById(barID)?.setAttribute("color", "warning")
         }
         else if (!isNaN(budget)) {
