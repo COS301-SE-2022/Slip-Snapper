@@ -147,7 +147,7 @@ function itemsParser(text) {
             const matches = text[i].matchAll(receiptRegex)
 
             for (const matchedGroup of matches) {
-                const [
+                var [
                     fullString,
                     quantity,
                     item,
@@ -157,7 +157,11 @@ function itemsParser(text) {
 
                 if (!fullString.includes("TOTAL") && !fullString.includes("Change") && !fullString.includes("Total") && !fullString.includes("Cash")
                     && !fullString.includes("VAT") && !fullString.includes("items") && !fullString.includes("Amount") && !fullString.includes("%")) {
-                        
+
+                    if (quantity == "") {
+                        quantity = '1';
+                    }
+
                     const type = categorize(item);
                     items.push({
                         quantity,
