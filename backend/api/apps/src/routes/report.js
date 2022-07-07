@@ -66,7 +66,7 @@ router.get('/generate', async (req,res)=>{
     let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
     pdf.pipe(fs.createWriteStream(name))
 
-    let temp = "Report for " + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
+    let temp = "Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
     pdf.fontSize(20).text(temp);
 
     for (var key in types){
@@ -147,7 +147,7 @@ router.post('/budget', async (req,res)=>{
  * Uses the user Id
  */
 router.get('/statistics', async (req,res)=>{
-     let { userId } = req.body;
+    let { userId } = req.body;
 
     const result = await req.app.get('db').getUserStats( userId );
 

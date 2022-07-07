@@ -4,12 +4,14 @@ const { makeApp } = require('../../src/index.js');
 const getItemsReport = jest.fn();
 const getUserBudgets = jest.fn();
 const setUserBudgets = jest.fn();
+const getUserStats = jest.fn();
 
 const app = makeApp({
   getItemsReport,
   getUserBudgets,
-  setUserBudgets
-}, {})
+  setUserBudgets,
+  getUserStats
+})
 
 /**
  * Test for the generate report query
@@ -100,4 +102,42 @@ describe('POST /report/budget', ()=>{
     })
 })
 
-//TODO test statistics call
+describe('POST /report/statistics', ()=>{
+
+    //TODO expand
+    test('Should Generate a report for the user', async ()=>{
+        getUserStats.mockResolvedValue({
+            message: "User statistics retrieved",
+            storeDetails: {
+                    storeLocation:"location",
+                    total: 20
+                },
+            expensiveItem: {
+                    dataItem:"item",
+                    expensiveItem: 20
+                },
+            mostAtStore: {
+                    store: "location",
+                    mostspent: 20
+                },
+            week: {
+                    recentWeek: 20,
+                    previousWeek: 20
+                },
+            month: {
+                    recentMonth: 20,
+                    previousMonth: 20
+                },
+            category: {
+                    category:"category",
+                    amount: 20
+                },
+        });
+
+        const res = await request(app)
+            .get('/api/report/statistics?userId=1')
+        
+        expect(res.statusCode).toEqual(200);
+        expect(res.body.message).toEqual("User statistics retrieved");
+    })
+})
