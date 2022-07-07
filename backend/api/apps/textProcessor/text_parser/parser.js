@@ -13,7 +13,7 @@ function parse(text) {
 
     let numItems = slipItems.length
 
-    const slip =[
+    const slip = [
         dateOfPurchase,
         locationOfSlip,
         slipItems,
@@ -139,7 +139,7 @@ function totalParser(text) {
  * @returns array of arrays of items
  */
 function itemsParser(text) {
-    const receiptRegex = /^\s*(\d+)\s+(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
+    const receiptRegex = /^\s*(\d*)\s*(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
     let items = [];
 
     for (let i = 0; i < text.length; i++) {
@@ -147,7 +147,7 @@ function itemsParser(text) {
             const matches = text[i].matchAll(receiptRegex)
 
             for (const matchedGroup of matches) {
-                const [
+                var [
                     fullString,
                     quantity,
                     item,
@@ -155,14 +155,22 @@ function itemsParser(text) {
                     price
                 ] = matchedGroup;
 
-                const type = categorize(item);
-                items.push({
-                    quantity,
-                    item,
-                    price,
-                    type,
+                if (!fullString.includes("TOTAL") && !fullString.includes("Change") && !fullString.includes("Total") && !fullString.includes("Cash")
+                    && !fullString.includes("VAT") && !fullString.includes("items") && !fullString.includes("Amount") && !fullString.includes("%")) {
+
+                    if (quantity == "") {
+                        quantity = '1';
+                    }
+
+                    const type = categorize(item);
+                    items.push({
+                        quantity,
+                        item,
+                        price,
+                        type,
+                    }
+                    );
                 }
-                );
             }
         }
     }
@@ -181,7 +189,7 @@ function itemsParser(text) {
         }
         return [item]
     }
-    
+
     return items;
 }
 
