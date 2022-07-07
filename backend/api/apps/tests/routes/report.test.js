@@ -20,6 +20,8 @@ describe('Get /report/generate', ()=>{
         getItemsReport.mockReset();
     })
 
+    //TODO Expand
+
     test('Should Generate a report for the user', async ()=>{
         getItemsReport.mockResolvedValue({
             message:"All associated items retrieved",
@@ -43,6 +45,10 @@ describe('Get /report/generate', ()=>{
         expect(res.body.message).toEqual("Report Generated");
     })
 })
+
+//TODO test determine start period function call
+
+//TODO test sort categories function call
 
 /**
  * Test for the get budget
@@ -93,3 +99,5 @@ describe('POST /report/budget', ()=>{
         expect(res.body.message).toEqual("User budget set");
     })
 })
+
+//TODO test statistics call

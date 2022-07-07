@@ -3,41 +3,35 @@ const PDFDocument = require('pdfkit');
 const router = require("express").Router();
 
 /**
- * Generate the pdf report for a user
- * Uses the user id to get the items
+ * Determines the start date to search from
+ * @param {*} period the user specified period
+ * @returns the starting date of the period
  */
-router.get('/generate', async (req,res)=>{
-    let { period, userId } = req.query;
-    var today = new Date();
-    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+ async function determinePeriodStart(period, periodEnd){
     var date = new Date();
-    var periodStart;
     switch (period) {
         case "day":
-            periodStart = periodEnd;
-            break;
+            return periodEnd;
         case "week":
             date.setDate(date.getDate() - 7);
-            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-            break;
+            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
         case "month":
             date.setMonth(date.getMonth() - 1);
-            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-            break;
+            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
         case "year":
             d.setFullYear(date.getFullYear() - 1);
-            periodStart = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-            break;
+            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
     }
+}
 
-    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
-
-    let pdf = new PDFDocument;
-    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
-    pdf.pipe(fs.createWriteStream(name))
-
+/**
+ * Sorts the items into the relevant arrays for the relevant category
+ * @param {*} itemList list of items
+ * @returns JSON object of arrays with the items in them
+ */
+async function sortItemsIntoCategories(itemList){
     let types = { Food : [], Cleaning : [], Furniture : [], Other : [], }
-    for(var item of result.itemList){
+    for(var item of itemList){
         switch (item.type) {
             case "food": 
                 types.Food.push(item);
@@ -52,6 +46,25 @@ router.get('/generate', async (req,res)=>{
                 types.Other.push(item);
         }
     }
+    return types
+}
+
+/**
+ * Generate the pdf report for a user
+ * Uses the user id to get the items
+ */
+router.get('/generate', async (req,res)=>{
+    let { period, userId } = req.query;
+    var today = new Date();
+    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    
+    var periodStart = await determinePeriodStart(period, periodEnd);
+    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
+    let types = await sortItemsIntoCategories(result.itemList)
+
+    let pdf = new PDFDocument;
+    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
+    pdf.pipe(fs.createWriteStream(name))
 
     let temp = "Report for " + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
     pdf.fontSize(20).text(temp);
@@ -170,15 +183,15 @@ router.get('/statistics', async (req,res)=>{
 });
 
 /**
- * Get the users budget
- * Uses the user id to get the items
+ * Get the users report
+ * Uses the user id and report id to get the reports
  */
 router.get('/report', async (req,res)=>{
     let { userId, reportId } = req.query;
     
     //If report id is -1 then retrieve all reports for the user
 
-    const result = await req.app.get('db').getUserReports(Number(userId), Number(reportId));
+    //const result = await req.app.get('db').getUserReports(Number(userId), Number(reportId));
 
     let status = 200;
 
@@ -187,10 +200,7 @@ router.get('/report', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            weeklyTotal: result.weeklyTotal,
-            weekly: result.weekly,
-            monthlyTotal: result.monthlyTotal,
-            monthly: result.monthly
+            report: result.reports
         });
     
 });
