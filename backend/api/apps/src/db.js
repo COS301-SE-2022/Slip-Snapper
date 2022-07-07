@@ -4,9 +4,9 @@ const prisma = new PrismaClient()
 
 /**
  * Funtion to get the user from the database
- * @param {*} username The users name
- * @param {*} password The users password
- * @returns user data
+ * @param {*} username (String) The users name
+ * @param {*} password (String) The users password
+ * @returns (JSON Object) Contains a message and the user object || null
  */
 async function getUser(userName, password){
     const user = await prisma.user.findFirst({
@@ -29,6 +29,8 @@ async function getUser(userName, password){
         };
     }
 
+    //TODO return specific aspects of the user and not everything
+
     return { 
         message: "User logged in successfully",
         user: user
@@ -37,13 +39,11 @@ async function getUser(userName, password){
 
 /**
  * Function to add user to the database
- * @param {*} username the username
- * @param {*} password the user password
- * @param {*} firstname the firstname
- * @param {*} lastname the lastname
- * @param {*} isBusiness the business
- * @param {*} email the email
- * @returns the the user data
+ * @param {*} username (String) the username
+ * @param {*} password (String) the user password
+ * @param {*} firstname (String) the firstname
+ * @param {*} lastname (String) the lastname
+ * @returns (JSON Object) Contains a message and the user object || null
  */
 async function addUser(username, password, firstname, lastname){
     const user = await prisma.user.create({
@@ -59,6 +59,15 @@ async function addUser(username, password, firstname, lastname){
 
     //TODO validate user added correctly
 
+    if(user == null){
+        return { 
+            message: "User failed to be added",
+            user: null
+        };
+    }
+
+    //TODO return specific aspects of user and not all
+
     return { 
         message: "User added successfully",
         user: user
@@ -67,50 +76,75 @@ async function addUser(username, password, firstname, lastname){
 
 /**
  * Funtion to delete the user from the database
- * @param {*} userId The users Id
- * @returns user data
+ * @param {*} userId (Integer) The users Id
+ * @returns (JSON Object) Contains a message and the user object || null
  */
 async function deleteUser(userId){
-    const user = await prisma.user.delete({
-        where: {
-            id: userId
+    try {
+        const user = await prisma.user.delete({
+            where: {
+                id: userId
+            }
+        })
+
+        //TODO validate user deleted correctly
+        if (user == null){
+            return { 
+                message: "User could not be deleted",
+                user: null
+            };
         }
-    })
-
-    //TODO validate user deleted correctly
-
-    return { 
-        message: "User deleted successfully",
-        user: user
-    };
+    
+        return { 
+            message: "User deleted successfully",
+            user: user
+        };
+    } catch (error) {
+        return { 
+            message: error,
+            user: null
+        };
+    }
 }
 
 /**
  * Funtion to delete the user from the database
- * @param {*} userId The users id
- * @param {*} data The data that needs to be updated
- * @returns userid
+ * @param {*} userId (Integer) The users id
+ * @param {*} data (JSON Object) The data that needs to be updated
+ * @returns (JSON Object) Contains a message and the user object || null
  */
 async function updateUser(userId,data){
-    const user = await prisma.user.update({
-        where: {
-            id: userId
-        },
-        data: data
-    })
+    try {
+        const user = await prisma.user.update({
+            where: {
+                id: userId
+            },
+            data: data
+        })
 
-    //TODO validate user deleted correctly
+        let message = "User updated successfully"
+        if(user == null){
+            message = "User could not be updated"
+        }
+        
+        //TODO return certain aspects of user data
 
-    return { 
-        message: "User updated successfully",
-        user: user
-    };
+        return { 
+            message: message,
+            user: user
+        };
+    } catch (error) {
+        return { 
+            message: error,
+            user: null
+        };
+    }
 }
 
 /**
  * Funtion to get the item from the database
- * @param {*} userId The users id
- * @returns userid
+ * @param {*} userId (Integer) The users id
+ * @returns (JSON Object) Contains a message, the number of items and an array of Items
  */
 async function getItem(userId){
     const items = await prisma.slip.findMany({
@@ -141,20 +175,17 @@ async function getItem(userId){
 
     let itemList = [];
     var i = 1;
-    for(var itemL of items){
-        let location = itemL.location;
-        let date = itemL.transactionDate;
-
-        for(var it of itemL.items){
+    for(var slip of items){
+        for(var item of slip.items){
             itemList.push({
                 id: i++,
-                itemId: it.id,
-                itemName: it.data.item,
-                type: it.data.itemType,
-                quantity: it.itemQuantity,
-                price: it.itemPrice,
-                location: location,
-                date: date
+                itemId: item.id,
+                itemName: item.data.item,
+                type: item.data.itemType,
+                quantity: item.itemQuantity,
+                price: item.itemPrice,
+                location: slip.location,
+                date: slip.transactionDate
             })
         }
     }
@@ -168,7 +199,7 @@ async function getItem(userId){
 
 /**
  * Funtion to get the item from the database
- * @param {*} userid The users id
+ * @param {*} userid (Integer) The users id
  * @param {*} start The begginning of time frame
  * @param {*} end The end of time frame
  * @returns items
@@ -330,7 +361,8 @@ async function deleteItem(itemId){
 /**
  * Function to update item in the database
  * @param {*} itemId the item id
- * @param {*} data the data to update
+ * @param {*} dataA the data to update
+ * @param {*} dataB the data to update
  * @returns 
  */
 async function updateItem(itemId, dataA, dataB){
@@ -466,13 +498,13 @@ async function setUserBudgets( userId, data ){
  * @param {*} userId The users id
  * @returns user data
  */
- async function getUserStats( userId ){
+async function getUserStats( userId ){
     let store = await getFavouriteStore(userId);
     let expItem = await getMostExpensiveItem(userId);
     let mostStore = await getMostSpentATStore(userId);
     let week = await getWeeklyExpenditure(userId);
     let month = await getMonthlyExpenditure(userId);
-    let favouriteProduct = await getFavouriteProduct(userId);
+    //let favouriteCategory = await getFavouriteCategory(userId);
 
     return { 
         message: "User statistics retrieved",
@@ -481,7 +513,7 @@ async function setUserBudgets( userId, data ){
         mostAtStore: mostStore,
         week: week,
         month: month,
-        category: favouriteProduct
+        //category: favouriteCategory
     };
 }
 
@@ -490,7 +522,7 @@ async function setUserBudgets( userId, data ){
  * @param {*} userid the users id
  * @returns the most spent on a category and its amount
  */
-async function getFavouriteProduct(userid) {
+async function getFavouriteCategory(userid) {
     const items = await prisma.slip.findMany({
         where: {
             usersId: userid
@@ -719,10 +751,12 @@ async function getMonthlyExpenditure(userid){
     }
 } 
 
+/**
+ * Function to get the most spend on a single category
+ * @returns The items in the database and their defined categories
+ */
 async function getDataItems(){
-    const dataItems = await prisma.dataItem.findMany({
-
-    })
+    const dataItems = await prisma.dataItem.findMany({})
 
     return {
         items: dataItems
