@@ -33,62 +33,39 @@ router.get('/generate', async (req,res)=>{
     const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
 
     let pdf = new PDFDocument;
-    let name = "report-" + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "-a.pdf";
+    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
     pdf.pipe(fs.createWriteStream(name))
 
-    let typeFood = [];
-    let typeCleaning = [];
-    let typeFurniture = [];
-    let typeOther = [];
-
+    let types = { Food : [], Cleaning : [], Furniture : [], Other : [], }
     for(var item of result.itemList){
-        if(item.type == "food"){
-            typeFood.push(item);
-        }
-        else if(item.type == "cleaning"){
-            typeCleaning.push(item);
-        }
-        else if(item.type == "furniture"){
-            typeFurniture.push(item);
-        }
-        else{
-            typeOther.push(item);
+        switch (item.type) {
+            case "food": 
+                types.Food.push(item);
+                break
+            case "cleaning": 
+                types.Cleaning.push(item);
+                break
+            case "furniture": 
+                types.Furniture.push(item);
+                break
+            default: 
+                types.Other.push(item);
         }
     }
 
     let temp = "Report for " + date.getDate() + "-" + (date.getMonth()+1) + "-" + date.getFullYear();
     pdf.fontSize(20).text(temp);
 
-    pdf.fontSize(17).text("Food items",110);
-    for(var item of typeFood){
-        pdf.fontSize(15).text("Item: " + item.itemName, 120);
-        pdf.fontSize(12).text("quantity: " + item.quantity, 150);
-        pdf.text("Price: R " + item.price);
-        pdf.text("Location: " + item.location);
-    }
-
-    pdf.fontSize(17).text("\nCleaning items",110);
-    for(var item of typeCleaning){
-        pdf.fontSize(15).text("Item: " + item.itemName, 120);
-        pdf.fontSize(12).text("quantity: " + item.quantity, 150);
-        pdf.text("Price: R " + item.price);
-        pdf.text("Location: " + item.location);
-    }
-
-    pdf.fontSize(17).text("\nFurniture items",110);
-    for(var item of typeFurniture){
-        pdf.fontSize(15).text("Item: " + item.itemName, 120);
-        pdf.fontSize(12).text("quantity: " + item.quantity, 150);
-        pdf.text("Price: R " + item.price);
-        pdf.text("Location: " + item.location);
-    }
-
-    pdf.fontSize(17).text("\nOther items",110);
-    for(var item of typeOther){
-        pdf.fontSize(15).text("Item: " + item.itemName, 120);
-        pdf.fontSize(12).text("quantity: " + item.quantity, 150);
-        pdf.text("Price: R " + item.price);
-        pdf.text("Location: " + item.location);
+    for (var key in types){
+        if(types.hasOwnProperty(key) && types[key].length > 0){
+            pdf.fontSize(17).text(`${key} items`,110);
+            for(var item of types[key]){
+                pdf.fontSize(15).text("Item: " + item.itemName, 120);
+                pdf.fontSize(12).text("quantity: " + item.quantity, 150);
+                pdf.text("Price: R " + item.price);
+                pdf.text("Location: " + item.location);
+            }
+        }
     }
 
     pdf.end();
@@ -190,6 +167,32 @@ router.get('/statistics', async (req,res)=>{
                 previous: result.month.previousMonth
             }
         });
+});
+
+/**
+ * Get the users budget
+ * Uses the user id to get the items
+ */
+router.get('/report', async (req,res)=>{
+    let { userId, reportId } = req.query;
+    
+    //If report id is -1 then retrieve all reports for the user
+
+    const result = await req.app.get('db').getUserReports(Number(userId), Number(reportId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            weeklyTotal: result.weeklyTotal,
+            weekly: result.weekly,
+            monthlyTotal: result.monthlyTotal,
+            monthly: result.monthly
+        });
+    
 });
 
 module.exports.router = router;
