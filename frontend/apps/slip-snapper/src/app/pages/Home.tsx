@@ -17,8 +17,6 @@ import ReportTotal from '../components/ReportTotal';
 import { generateReportA } from "../../api/apiCall"
 import '../theme/home.css';
 
-
-
 const Home: React.FC = () => {
   const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
   { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
