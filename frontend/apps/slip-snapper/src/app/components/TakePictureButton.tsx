@@ -17,7 +17,7 @@ const TakePictureButton: React.FC = () => {
   return (
     <IonContent>
         <IonFab horizontal ="center" vertical="bottom" slot="fixed" className='takePicture'>
-        <IonFabButton >
+        <IonFabButton color='secondary'>
           <IonIcon icon={receipt}></IonIcon>
         </IonFabButton>
         <IonFabList side="top">
