@@ -82,11 +82,11 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
             </IonCardHeader>
-            <IonItem onClick={() => setBudgetAlert(true)} id="weekly-budget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setBudgetAlert(true)} id="weekly-budget" className="dynamic-items" color="tertiary">
               <IonInput readonly value={weeklyBudgetValue}></IonInput>
               <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
             </IonItem>
-            <IonItem onClick={() => setBudgetAlert(true)} id="monthly-budget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setBudgetAlert(true)} id="monthly-budget" className="dynamic-items" color="tertiary">
               <IonInput readonly value={monthlyBudgetValue}></IonInput>
               <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
             </IonItem>
