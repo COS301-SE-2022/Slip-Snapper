@@ -15,6 +15,8 @@ import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
 import ReportTotal from '../components/ReportTotal';
 import { generateReportA } from "../../api/apiCall"
+import '../theme/home.css';
+
 
 
 const Home: React.FC = () => {

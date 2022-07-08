@@ -15,9 +15,16 @@ import React from 'react';
 const TakePictureButton: React.FC = () => {
   return (
     <IonContent>
-      <IonFab vertical="bottom" horizontal="center" slot="fixed">
+
+        <IonFab vertical="bottom" slot="fixed" className='takePicture'>
         <IonFabButton onClick={usePhotoGallery}>
           <IonIcon icon={receipt}></IonIcon>
+        </IonFabButton>
+      </IonFab>
+  
+      <IonFab vertical="bottom" slot="fixed" className='addEntry'>
+        <IonFabButton routerLink={"/addentry"}>
+          <IonIcon></IonIcon>
         </IonFabButton>
       </IonFab>
     </IonContent>
