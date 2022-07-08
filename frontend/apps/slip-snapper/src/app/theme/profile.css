@@ -18,6 +18,11 @@
     margin-left: 8px;
 }
 
+.edit-budget:hover {
+    color:red;
+    cursor: pointer;
+}
+
 .profilePhoto {
     margin: auto;
     display: block;
