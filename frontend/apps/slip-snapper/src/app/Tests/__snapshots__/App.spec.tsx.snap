@@ -8,6 +8,7 @@ exports[`TakePicture Button component Matches the snapshot of the TakePicture bu
     vertical="bottom"
   >
     <ion-fab-button
+      color="secondary"
       onClick={[Function]}
     >
       <ion-icon
