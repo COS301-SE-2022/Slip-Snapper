@@ -1,13 +1,16 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
+import { add } from 'ionicons/icons'; 
 
 
 const AddEntry: React.FC = () => {
-    const [items, setItems] = useState([{ name: "Eggs", quantity: "3", price: "20", type: "Food" },
-    { name: "Mayo", quantity: "4", price: "20", type: "Food" }]);
-    // renderItems(items)
+    const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" },
+    { name: "", quantity: "", price: "", type: "" }]);
+
+    const[counter,setCounter]=useState([1])
+
     return (
         <IonPage>
             <IonHeader>
@@ -53,11 +56,17 @@ const AddEntry: React.FC = () => {
                             </IonCol>
                         </IonRow>
                     </IonGrid>
-                        <RenderItems input={items} />
+                    <RenderItems/>
+                  
+                    <div className='slipTotal'>
+                    
+                    </div>
                     <IonItem color="primary">
+                        <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
                         <IonButton routerLink={"/home"} fill="solid" slot="end" color="secondary">Cancel</IonButton>
-                        <IonButton routerLink={"/home"} fill="solid" slot="end" color="secondary">Confirm</IonButton>
+                        <IonButton onClick={()=>{console.log(items); getData()}} fill="solid" slot="end" color="secondary">Confirm</IonButton>
                     </IonItem>
+                   
                 </IonCard>
             </IonContent>
             <IonFooter>
@@ -67,15 +76,11 @@ const AddEntry: React.FC = () => {
         </IonPage>
     );
 
-     function RenderItems(props:any) {
-        // console.log(items)
-         const test : number[] = [1, 2, 3];
+    function RenderItems() {
         return (
             <div>
-                {test.map((item, index) => {
-                    // console.log(items[index].name)
+                {items.map((item: any, index: number) => {
                     return (
-
                         <IonGrid>
                             <IonRow>
                                 <IonCol>
@@ -84,39 +89,71 @@ const AddEntry: React.FC = () => {
 
                                 <IonCol>
                                     <IonItem color="tertiary">
-                                        <IonInput contentEditable="true" ></IonInput>
-                                        {/* id={id + "/name"} */}
+                                        <IonInput key={index + "/name"} id={index + "/name"} value={item.name} ></IonInput>
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
                                     <IonItem color="tertiary">
+                                        <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
+
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
                                     <IonItem color="tertiary">
+                                        <IonInput key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
+
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
                                     <IonItem color="tertiary">
+                                        <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
                                     </IonItem>
+                                </IonCol>
+                                <IonCol>
+                                    <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
                     )
-
                 })}
-                </div>
-            
+            </div>
         )
-           
 
     };
 
-
-
+    function addItem() {
+        getData()
+        setItems([...items, { name: "", quantity: "", price: "", type: "" }])
+    }
+    function removeItem(index:number) {
+        getData()
+        const data = [...items];
+        data.splice(index, 1)
+        setItems(data)
+        console.log(items)
+    }
+    
+    function getData() {
+        for (let i = 0; i < items.length; i++) {
+            const n =document.getElementById(i + "/name")?.getElementsByTagName("input")[0].value
+            const q = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
+            const p = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
+            const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
+            
+            if (n !== undefined) {
+                items[i].name = n
+            } if (q !== undefined) {
+                items[i].quantity = q
+            } if (p !== undefined) {
+                items[i].price = p
+            } if (t !== undefined) {
+                items[i].type = t
+            }
+        }
+    }
 }
 
 export default AddEntry;
