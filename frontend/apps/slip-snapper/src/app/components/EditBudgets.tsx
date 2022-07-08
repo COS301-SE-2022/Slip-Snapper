@@ -44,7 +44,7 @@ export const EditBudgets = () => {
               <IonButton onClick={() => {
                 setIsOpen(false);
                 hideData(categoryStates)
-              }}>Confirm</IonButton>
+              }}>Close</IonButton>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
