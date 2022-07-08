@@ -1,10 +1,15 @@
 import {
     IonAlert,
+    IonButton,
+    IonFab,
+    IonIcon,
     IonInput,
     IonItem,
     IonProgressBar,
 } from "@ionic/react";
 import { useState } from "react";
+import '../theme/profile.css';
+import { create } from 'ionicons/icons'
 
 
 function Budget() {
@@ -18,7 +23,8 @@ function Budget() {
 
     return (
         <div>
-            <IonItem onClick={() => setFood(true)} id="foodBudget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setFood(true)} id="foodBudget" className="dynamic-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create}/>
                 <IonInput readonly value={"Food: R"+amounts[0]}></IonInput>
                 <IonProgressBar id='foodBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -37,7 +43,8 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setFashion(true)} id="fashionBudget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setFashion(true)} id="fashionBudget" className="dynamic-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create}/>
                 <IonInput readonly value={"Fashion: R" + amounts[1]}></IonInput>
                 <IonProgressBar id='fashionBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -56,7 +63,8 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setElec(true)} id="electronicsBudget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setElec(true)} id="electronicsBudget" className="dynamic-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create}/>
                 <IonInput readonly value={"Electronics: R" + amounts[2]}></IonInput>
                 <IonProgressBar id='elecBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -75,7 +83,8 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setHouseHold(true)} id="houseBudget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setHouseHold(true)} id="houseBudget" className="dynamic-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create}/>
                 <IonInput readonly value={"Household: R" + amounts[3]}></IonInput>
                 <IonProgressBar id='houseBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
@@ -94,7 +103,8 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setOther(true)} id="otherBudget" className="center-items" color="tertiary">
+            <IonItem onClick={() => setOther(true)} id="otherBudget" className="dynamic-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create}/> 
                 <IonInput readonly value={"Other: R" + amounts[4]}></IonInput>
                 <IonProgressBar id='otherBar' class='progressBar'></IonProgressBar><br />
             </IonItem>
