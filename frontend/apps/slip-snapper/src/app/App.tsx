@@ -8,6 +8,7 @@ import EditItem from './pages/EditItem';
 import EditSlip from './pages/EditSlip';
 import Register from './pages/Register';
 import Login from './pages/Login'
+import AddEntry from './pages/AddEntry'
 /*Component Imports*/
 import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
@@ -46,6 +47,7 @@ const App: React.FC = () => (
         <Route path="/editslip" component={EditSlip} exact={true} />
         <Route path="/register" component={Register} exact={true} />
         <Route path="/login" component={Login} exact={true} />
+        <Route path="/addentry" component={AddEntry} exact={true} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
