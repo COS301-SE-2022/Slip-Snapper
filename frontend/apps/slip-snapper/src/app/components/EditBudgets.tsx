@@ -9,7 +9,8 @@ import {
   IonTitle,
   IonContent,
   IonCheckbox,
-  IonList
+  IonList,
+  IonToggle
 } from "@ionic/react";
 import React, { useState } from 'react';
 
@@ -31,6 +32,22 @@ export const EditBudgets = () => {
   ];
   hideData(categoryStates)
 
+  const [foodInterval, setFoodInterval] = useState(false);
+  const [fashionInterval, setFashionInterval] = useState(false);
+  const [electronicsInterval, setElectronicsInterval] = useState(false);
+  const [householdInterval, setHouseholdInterval] = useState(false);
+  const [otherInterval, setOtherInterval] = useState(false);
+
+  //true for weekly
+  //false for monthly
+  const budgetIntervals = [
+    { name: 'Food', isChecked: foodInterval, id: "foodInterval" },
+    { name: 'Fashion', isChecked: fashionInterval, id: "fashionInterval" },
+    { name: 'Electronics', isChecked: electronicsInterval, id: "electronicsInterval" },
+    { name: 'Household', isChecked: householdInterval, id: "houseInterval" },
+    { name: 'Other', isChecked: otherInterval, id: "otherInterval" }
+  ];
+
   return (
     <IonItem color="primary">
       <IonButton fill="solid" color="secondary" onClick={() => setIsOpen(true)}>
@@ -43,7 +60,7 @@ export const EditBudgets = () => {
             <IonButtons slot="end">
               <IonButton onClick={() => {
                 setIsOpen(false);
-                hideData(categoryStates)
+                hideData(categoryStates);
               }}>Close</IonButton>
             </IonButtons>
           </IonToolbar>
@@ -52,27 +69,47 @@ export const EditBudgets = () => {
           <IonList>
             <IonItem>
               <IonLabel>Food</IonLabel>
-              <IonCheckbox slot="end" checked={food} onIonChange={e => setFood(e.detail.checked)} />
+              <IonItem>
+                <IonLabel>{foodInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={foodInterval} onClick={() => setFoodInterval(!foodInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={food} onIonChange={e => setFood(e.detail.checked)} />
+              </IonItem>
             </IonItem>
 
             <IonItem>
               <IonLabel>Fashion</IonLabel>
-              <IonCheckbox slot="end" checked={fashion} onIonChange={e => setFashion(e.detail.checked)} />
+              <IonItem>
+                <IonLabel>{fashionInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={fashionInterval} onClick={() => setFashionInterval(!fashionInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={fashion} onIonChange={e => setFashion(e.detail.checked)} />
+              </IonItem>
             </IonItem>
 
             <IonItem>
               <IonLabel>Electronics</IonLabel>
-              <IonCheckbox slot="end" checked={electronics} onIonChange={e => setElectronics(e.detail.checked)} />
+              <IonItem>
+                <IonLabel>{electronicsInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={electronicsInterval} onClick={() => setElectronicsInterval(!electronicsInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={electronics} onIonChange={e => setElectronics(e.detail.checked)} />
+              </IonItem>
             </IonItem>
 
             <IonItem>
               <IonLabel>Household</IonLabel>
-              <IonCheckbox slot="end" checked={household} onIonChange={e => setHousehold(e.detail.checked)} />
+              <IonItem>
+                <IonLabel>{householdInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={householdInterval} onClick={() => setHouseholdInterval(!householdInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={household} onIonChange={e => setHousehold(e.detail.checked)} />
+              </IonItem>
             </IonItem>
 
             <IonItem>
               <IonLabel>Other</IonLabel>
-              <IonCheckbox slot="end" checked={other} onIonChange={e => setOther(e.detail.checked)} />
+              <IonItem>
+                <IonLabel>{otherInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={otherInterval} onClick={() => setOtherInterval(!otherInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={other} onIonChange={e => setOther(e.detail.checked)} />
+              </IonItem>
             </IonItem>
           </IonList>
         </IonContent>
