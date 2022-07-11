@@ -184,8 +184,8 @@ function itemsParser(text) {
                     price
                 ] = matchedGroup;
 
-                if (!fullString.includes("TOTAL") && !fullString.includes("Change") && !fullString.includes("Total") && !fullString.includes("Cash")
-                    && !fullString.includes("VAT") && !fullString.includes("items") && !fullString.includes("Amount") && !fullString.includes("%")) {
+                if (!fullString.includes("total") && !fullString.includes("change") && !fullString.includes("cash")
+                    && !fullString.includes("vat ") && !fullString.includes("items") && !fullString.includes("amount") && !fullString.includes("%")) {
 
                     if (quantity == "") {
                         quantity = '1';
