@@ -6,10 +6,11 @@ const { categorize } = require("../text_categoriser/categorizer");
  * @returns array of slip date, location, total amount and items
  */
 function parse(text) {
-    let dateOfPurchase = dateParser(text);
-    let locationOfSlip = locationParser(text);
-    let totalSlip = totalParser(text);
-    let slipItems = itemsParser(text);
+    let correctedText = textCorrection(text)
+    let dateOfPurchase = dateParser(correctedText);
+    let locationOfSlip = locationParser(correctedText);
+    let totalSlip = totalParser(correctedText);
+    let slipItems = itemsParser(correctedText);
 
     let numItems = slipItems.length
 
@@ -23,6 +24,38 @@ function parse(text) {
 
     return slip;
 }
+
+
+/**
+ * 
+ * @param {*} text array of ocr scanned text 
+ * @returns array of text with some correction to aid in parsing
+ */
+function textCorrection(text) {
+    var correctedText = []
+    const xquantityRegex = /^(x)(\d+)\s/gm
+    const quantityxRegex = /^(\d+)(x)\s/gm
+
+    for (let i = 0; i < text.length; i++) {
+
+        var str = text[i].toLowerCase();
+
+        if (text[i] != " " && text[i] != '') {
+            correctedText.push(
+                str.replaceAll(",", ".")
+                    .replaceAll("(", " ")
+                    .replaceAll(")", " ")
+                    .replaceAll("=", " ")
+                    .replace(xquantityRegex, "$2 ")
+                    .replace(quantityxRegex, "$1 ")
+            )
+        }
+
+    }
+
+    return correctedText;
+}
+
 
 /**
  * 
@@ -141,6 +174,7 @@ function totalParser(text) {
 function itemsParser(text) {
     const receiptRegex = /^\s*(\d*)\s*(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
     let items = [];
+    const unwantedEntryRegex = /\b(total)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b/gm
 
     for (let i = 0; i < text.length; i++) {
         if (text[i].match(receiptRegex) != null) {
@@ -155,9 +189,7 @@ function itemsParser(text) {
                     price
                 ] = matchedGroup;
 
-                if (!fullString.includes("TOTAL") && !fullString.includes("Change") && !fullString.includes("Total") && !fullString.includes("Cash")
-                    && !fullString.includes("VAT") && !fullString.includes("items") && !fullString.includes("Amount") && !fullString.includes("%")) {
-
+                if (fullString.search(unwantedEntryRegex) == -1 && !fullString.includes("%")) {
                     if (quantity == "") {
                         quantity = '1';
                     }
