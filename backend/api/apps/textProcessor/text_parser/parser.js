@@ -6,10 +6,11 @@ const { categorize } = require("../text_categoriser/categorizer");
  * @returns array of slip date, location, total amount and items
  */
 function parse(text) {
-    let dateOfPurchase = dateParser(text);
-    let locationOfSlip = locationParser(text);
-    let totalSlip = totalParser(text);
-    let slipItems = itemsParser(text);
+    let correctedText = textCorrection(text)
+    let dateOfPurchase = dateParser(correctedText);
+    let locationOfSlip = locationParser(correctedText);
+    let totalSlip = totalParser(correctedText);
+    let slipItems = itemsParser(correctedText);
 
     let numItems = slipItems.length
 
@@ -23,6 +24,34 @@ function parse(text) {
 
     return slip;
 }
+
+
+/**
+ * 
+ * @param {*} text array of ocr scanned text 
+ * @returns array of text with some correction to aid in parsing
+ */
+function textCorrection(text) {
+    var correctedText = []
+
+    for (let i = 0; i < text.length; i++) {
+
+        var str = text[i].toLowerCase();
+
+        if (text[i] != " " && text[i] != '') {
+            correctedText.push(
+                str.replaceAll(",", ".")
+                    .replaceAll("(", " ")
+                    .replaceAll(")", " ")
+                    .replaceAll("=", " ")
+            )
+        }
+
+    }
+
+    return correctedText;
+}
+
 
 /**
  * 
