@@ -1,0 +1,8 @@
+.inputs{
+    --border-radius: 5px;
+}
+
+.itemlabels{
+    left: 2%;
+    margin-top: 10px;
+}

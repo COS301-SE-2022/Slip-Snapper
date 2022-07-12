@@ -166,7 +166,7 @@ const AddEntry: React.FC = () => {
         return (
         <IonItem color="primary">
             <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-            <IonButton fill="solid" slot="end" color="secondary" expand="block" routerLink={'/home'}>Cancel</IonButton>
+            <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
             <IonButton onClick={()=>{getData(); console.log(items)}} fill="solid" slot="end" color="secondary">Submit</IonButton>
         </IonItem>
         );
