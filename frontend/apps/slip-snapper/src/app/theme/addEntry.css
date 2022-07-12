@@ -1,11 +1,21 @@
 .addEntry{
-    width: 19%;
+    width: 20%;
     position: relative;
-    left: 20%;
-    margin-top:-2.5%
+    left: 0%;
+    margin-top: 5px;
+    --border-radius: 5px;
 }
 .slipTotal{
     width: 19%;
     position: relative;
     left: 60%;
+}
+
+.inputs{
+    --border-radius: 5px;
+}
+
+.itemlabels{
+    left: 2%;
+    margin-top: 10px;
 }

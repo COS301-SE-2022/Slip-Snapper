@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
@@ -6,10 +6,8 @@ import { add } from 'ionicons/icons';
 
 
 const AddEntry: React.FC = () => {
-    const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" },
-    { name: "", quantity: "", price: "", type: "" }]);
-
-    const[counter,setCounter]=useState([1])
+    const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" }]);
+    const [showAlert, setShowAlert] = useState(false);
 
     return (
         <IonPage>
@@ -54,6 +52,8 @@ const AddEntry: React.FC = () => {
                             <IonCol>
                                 <IonLabel>Type</IonLabel>
                             </IonCol>
+                            <IonCol>
+                            </IonCol>
                         </IonRow>
                     </IonGrid>
                     <RenderItems/>
@@ -61,11 +61,7 @@ const AddEntry: React.FC = () => {
                     <div className='slipTotal'>
                     
                     </div>
-                    <IonItem color="primary">
-                        <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                        <IonButton routerLink={"/home"} fill="solid" slot="end" color="secondary">Cancel</IonButton>
-                        <IonButton onClick={()=>{console.log(items); getData()}} fill="solid" slot="end" color="secondary">Confirm</IonButton>
-                    </IonItem>
+                    <ActionButtons/>
                    
                 </IonCard>
             </IonContent>
@@ -83,37 +79,44 @@ const AddEntry: React.FC = () => {
                     return (
                         <IonGrid>
                             <IonRow>
-                                <IonCol>
+                                <IonCol className='itemlabels'>
                                     <IonLabel>Item #{index + 1}</IonLabel>
                                 </IonCol>
 
                                 <IonCol>
-                                    <IonItem color="tertiary">
-                                        <IonInput key={index + "/name"} id={index + "/name"} value={item.name} ></IonInput>
+                                    <IonItem color="tertiary" className='inputs'>
+                                        <IonInput key={index + "/name"} id={index + "/name"} value={item.name}></IonInput>
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
-                                    <IonItem color="tertiary">
+                                    <IonItem color="tertiary" className='inputs'>
                                         <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
 
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
-                                    <IonItem color="tertiary">
+                                    <IonItem color="tertiary" className='inputs'>
                                         <IonInput key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
 
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
-                                    <IonItem color="tertiary">
+                                    <IonItem color="tertiary" className='inputs'>
                                         <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
                                     </IonItem>
                                 </IonCol>
                                 <IonCol>
                                     <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
+                                    <IonAlert
+                                    isOpen={showAlert}
+                                    onDidDismiss={() => setShowAlert(false)}
+                                    header="Oops..."
+                                    message="A receipt needs to have at least one item."
+                                    buttons={['Ok']}
+                                />
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
@@ -131,9 +134,13 @@ const AddEntry: React.FC = () => {
     function removeItem(index:number) {
         getData()
         const data = [...items];
-        data.splice(index, 1)
-        setItems(data)
-        console.log(items)
+        if(data.length === 1){
+            setShowAlert(true);
+        }
+        else{
+            data.splice(index, 1)
+            setItems(data)
+        }  
     }
     
     function getData() {
@@ -154,6 +161,16 @@ const AddEntry: React.FC = () => {
             }
         }
     }
+
+    function ActionButtons() {      
+        return (
+        <IonItem color="primary">
+            <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
+            <IonButton fill="solid" slot="end" color="secondary" expand="block" routerLink={'/home'}>Cancel</IonButton>
+            <IonButton onClick={()=>{getData(); console.log(items)}} fill="solid" slot="end" color="secondary">Submit</IonButton>
+        </IonItem>
+        );
+      }
 }
 
 export default AddEntry;
