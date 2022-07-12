@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
@@ -7,6 +7,7 @@ import { add } from 'ionicons/icons';
 
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" }]);
+    const [showAlert, setShowAlert] = useState(false);
 
     return (
         <IonPage>
@@ -109,6 +110,13 @@ const AddEntry: React.FC = () => {
                                 </IonCol>
                                 <IonCol>
                                     <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
+                                    <IonAlert
+                                    isOpen={showAlert}
+                                    onDidDismiss={() => setShowAlert(false)}
+                                    header="Oops..."
+                                    message="A receipt needs to have at least one item."
+                                    buttons={['Ok']}
+                                />
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
@@ -126,8 +134,13 @@ const AddEntry: React.FC = () => {
     function removeItem(index:number) {
         getData()
         const data = [...items];
-        data.splice(index, 1)
-        setItems(data)
+        if(data.length === 1){
+            setShowAlert(true);
+        }
+        else{
+            data.splice(index, 1)
+            setItems(data)
+        }  
     }
     
     function getData() {
