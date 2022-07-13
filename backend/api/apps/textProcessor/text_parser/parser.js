@@ -67,7 +67,7 @@ function textCorrection(text) {
 /**
  * 
  * @param {*} text array of slip text
- * @returns first string - location, will change 
+ * @returns first string - location
  */
 function locationParser(text) {
     const regexp = new RegExp("[a-z0-9\s]*", "igm")
@@ -146,12 +146,23 @@ function dateParser(text) {
 /**
  * 
  * @param ocr text
- * @returns total of slip (largest value at the moment)
+ * @returns total of slip
  */
 
 function totalParser(text) {
+    const totalRegex = /\btotal\b/gm
     const regexp = new RegExp("[0-9]+([.])[0-9]{2}", "g")
     var result = []
+
+    for (let i = 0; i < text.length; i++) {
+        if (text[i].search(totalRegex) != -1) {
+            if (text[i].search(regexp) != -1) {
+                var total = parseFloat(text[i].match(regexp)[0])
+                return total;
+            }
+        }
+    }
+
     for (let i = 0; i < text.length; i++) {
         if (text[i].match(regexp) != null)
             result.push(text[i].match(regexp))
