@@ -35,6 +35,7 @@ function textCorrection(text) {
     var correctedText = []
     const xquantityRegex = /^(x)(\d+)\s/gm
     const quantityxRegex = /^(\d+)(x)\s/gm
+    const removeCurrency = /\b(r)(\d+\.{1}\d+)/gm
 
     for (let i = 0; i < text.length; i++) {
 
@@ -46,8 +47,14 @@ function textCorrection(text) {
                     .replaceAll("(", " ")
                     .replaceAll(")", " ")
                     .replaceAll("=", " ")
+                    .replaceAll("'", " ")
+                    .replaceAll('"', " ")
+                    .replaceAll(":", " ")
+                    .replaceAll(">", " ")
+                    .replaceAll("<", " ")
                     .replace(xquantityRegex, "$2 ")
                     .replace(quantityxRegex, "$1 ")
+                    .replaceAll(removeCurrency, " $2")
             )
         }
 
@@ -60,7 +67,7 @@ function textCorrection(text) {
 /**
  * 
  * @param {*} text array of slip text
- * @returns first string - location, will change 
+ * @returns first string - location
  */
 function locationParser(text) {
     const regexp = new RegExp("[a-z0-9\s]*", "igm")
@@ -139,12 +146,23 @@ function dateParser(text) {
 /**
  * 
  * @param ocr text
- * @returns total of slip (largest value at the moment)
+ * @returns total of slip
  */
 
 function totalParser(text) {
+    const totalRegex = /\btotal\b/gm
     const regexp = new RegExp("[0-9]+([.])[0-9]{2}", "g")
     var result = []
+
+    for (let i = 0; i < text.length; i++) {
+        if (text[i].search(totalRegex) != -1) {
+            if (text[i].search(regexp) != -1) {
+                var total = parseFloat(text[i].match(regexp)[0])
+                return total;
+            }
+        }
+    }
+
     for (let i = 0; i < text.length; i++) {
         if (text[i].match(regexp) != null)
             result.push(text[i].match(regexp))
@@ -174,7 +192,8 @@ function totalParser(text) {
 function itemsParser(text) {
     const receiptRegex = /^\s*(\d*)\s*(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
     let items = [];
-    const unwantedEntryRegex = /\b(total)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b/gm
+    const unwantedEntryRegex = /\b(total)\b|\b(subtotal)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b|\b(rounding)\b|\b(debit)\b/gm
+    const itemNumRemoval = /\b(\d+)\.(\d{2})\b/gm
 
     for (let i = 0; i < text.length; i++) {
         if (text[i].match(receiptRegex) != null) {
@@ -194,14 +213,18 @@ function itemsParser(text) {
                         quantity = '1';
                     }
 
-                    const type = categorize(item);
-                    items.push({
-                        quantity,
-                        item,
-                        price,
-                        type,
+                    item = item.replaceAll(itemNumRemoval, "").replaceAll("@", "")
+
+                    if (item != "" && !/^(\d*\s*)*$/.test(item)) {
+                        const type = categorize(item);
+                        items.push({
+                            quantity,
+                            item,
+                            price,
+                            type,
+                        }
+                        );
                     }
-                    );
                 }
             }
         }
