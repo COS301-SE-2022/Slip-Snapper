@@ -54,6 +54,7 @@
     "@ionic/react": "^5.8.3",
     "@ionic/react-router": "^5.8.3",
     "@ionic/react-test-utils": "^0.3.0",
+    "aws-sdk": "^2.1174.0",
     "core-js": "^3.6.5",
     "http-server": "^14.1.1",
     "ionicons": "^5.5.3",
