@@ -7,11 +7,15 @@ import {
     IonCol,
     IonItem
 } from "@ionic/react";
+import S3BucketFunctions from "../../AWS/S3Bucket"
+
 
 type Props = {
     reportData: string[]
 }
 function ReportItem({ reportData }: Props) {
+    const bucket = new S3BucketFunctions();
+
     return (
 
         <IonCol>
@@ -21,7 +25,7 @@ function ReportItem({ reportData }: Props) {
                     <IonCardTitle>{reportData[1]}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
-                    <IonButton fill="solid" slot="end" color="secondary">
+                    <IonButton onClick={() => { bucket.getFile("ChrisDev/temp.tsx"); }} fill="solid" slot="end" color="secondary">
                         View
                     </IonButton>
                 </IonItem>
