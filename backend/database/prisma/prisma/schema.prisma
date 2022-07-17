@@ -20,6 +20,7 @@ model User {
   monthlyBudget Float @default(0)
   password   String     @db.VarChar(255)
   slips      Slip[]
+  budgets Budgets?
 }
 
 model Slip {
@@ -34,7 +35,7 @@ model Slip {
 
 model Item {
   id             Int     @id @default(autoincrement())
-  data dataItem? @relation(fields:[dataId],references:[id])
+  data DataItem? @relation(fields:[dataId],references:[id])
   dataId Int?
   itemQuantity Int @default(1)
   itemPrice    Float
@@ -42,9 +43,25 @@ model Item {
   slipId Int?
 }
 
-model dataItem{
+model DataItem{
   id             Int     @id @default(autoincrement())
   item           String
   itemType       String
   items          Item[]
+}
+
+model Budgets{
+  id  Int   @id @default(autoincrement())
+  user    User?     @relation(fields: [usersId], references: [id])
+  usersId  Int?
+  weeklyFoodBudget Float @default(0)
+  weeklyFashionBudget Float @default(0)
+  weeklyElectronicsBudget Float @default(0)
+  weeklyHouseholdBudget Float @default(0)
+  weeklyOtherBudget Float @default(0)
+  monthlyFoodBudget Float @default(0)
+  monthlyFashionBudget Float @default(0)
+  monthlyElectronicsBudget Float @default(0)
+  monthlyHouseholdBudget Float @default(0)
+  monthlyOtherBudget Float @default(0)
 }

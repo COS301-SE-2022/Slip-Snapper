@@ -189,6 +189,7 @@ async function getMonthlyExpenditure(userid:number)
   console.log(previousMonth)
 } 
 
+
   var userid=1
   getAllUsers()
   getfavouritestore(userid)
