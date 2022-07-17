@@ -25,7 +25,7 @@ function ReportItem({ reportData }: Props) {
                     <IonCardTitle>{reportData[1]}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
-                    <IonButton onClick={() => { bucket.getFile("ChrisDev/temp.tsx"); }} fill="solid" slot="end" color="secondary">
+                    <IonButton onClick={() => { bucket.getFile("ChrisDev/temp.pdf"); }} fill="solid" slot="end" color="secondary">
                         View
                     </IonButton>
                 </IonItem>
