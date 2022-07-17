@@ -51,8 +51,8 @@ model dataItem{
 
 model Budgets{
   id  Int   @id @default(autoincrement())
-  user    User?     @relation(fields: [usersId], references: [id])
-  usersId  Int?
+  user    User?    @relation(fields: [usersId], references: [id]) 
+  usersId  Int? @unique
   weeklyFoodBudget Float @default(0)
   weeklyFashionBudget Float @default(0)
   weeklyElectronicsBudget Float @default(0)
