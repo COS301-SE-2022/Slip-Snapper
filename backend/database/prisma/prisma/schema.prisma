@@ -5,7 +5,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-//connect to the database
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -20,7 +19,8 @@ model User {
   monthlyBudget Float @default(0)
   password   String     @db.VarChar(255)
   slips      Slip[]
-  budgets Budgets?
+  budgets    Budgets?
+  reports    Reports[]
 }
 
 model Slip {
@@ -29,31 +29,31 @@ model Slip {
   transactionDate DateTime @default(now())
   items           Item[]
   total           Float
-  user    User?     @relation(fields: [usersId], references: [id])
+  User    User?     @relation(fields: [usersId], references: [id])
   usersId  Int?
 }
 
 model Item {
   id             Int     @id @default(autoincrement())
-  data DataItem? @relation(fields:[dataId],references:[id])
+  data dataItem? @relation(fields:[dataId],references:[id])
   dataId Int?
-  itemQuantity Int @default(1)
-  itemPrice    Float
-  slip   Slip? @relation(fields: [slipId], references: [id])
+  itemQuantity Int
+  itemPrice     Float
+  Slip   Slip? @relation(fields: [slipId], references: [id])
   slipId Int?
 }
 
-model DataItem{
+model dataItem{
   id             Int     @id @default(autoincrement())
   item           String
   itemType       String
-  items          Item[]
+  items Item[]
 }
 
 model Budgets{
   id  Int   @id @default(autoincrement())
-  user    User?     @relation(fields: [usersId], references: [id])
-  usersId  Int?
+  user    User?    @relation(fields: [usersId], references: [id]) 
+  usersId  Int? @unique
   weeklyFoodBudget Float @default(0)
   weeklyFashionBudget Float @default(0)
   weeklyElectronicsBudget Float @default(0)
@@ -64,4 +64,12 @@ model Budgets{
   monthlyElectronicsBudget Float @default(0)
   monthlyHouseholdBudget Float @default(0)
   monthlyOtherBudget Float @default(0)
+}
+
+model Reports{
+    id  Int   @id @default(autoincrement())
+    user    User?    @relation(fields: [usersId], references: [id]) 
+    usersId  Int? 
+    reportName String @db.VarChar(255)
+    generatedDate DateTime @default(now())
 }
