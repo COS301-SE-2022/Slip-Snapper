@@ -13,11 +13,13 @@ const myBucket = new AWS.S3({
 })
 
 export default class S3BucketFunctions {
-    uploadFile = (path:string) => {
+    uploadFile = (path) => {
         const params = {
-            Body: "",
             Bucket: S3_BUCKET,
-            Key: path
+            Key: path,
+            ContentDispostion: 'inline',
+            ContentType: 'application/pdf',
+            ContentEncoding: 'base64'
         };
         // myBucket.putObject(params)
         //     .send((err) => {
@@ -25,18 +27,31 @@ export default class S3BucketFunctions {
         //     })
     }
 
-     getFile(path:string) {
-         const params = {
-             Bucket: S3_BUCKET,
-             Key: path
-         };
+    async getFile(path) {
+
+        //For listing the files within a folder 
+        /*const response = await myBucket.listObjectsV2({
+            Bucket: S3_BUCKET,
+            Prefix: 'ChrisDev'
+        }).promise();*/
+
+        //let files = response.Contents.map(item => item.Key)
+
+        const params = {
+            Bucket: S3_BUCKET,
+            Key: path
+        };
         try {
             myBucket.getObject(params, (err, data) => {
                 if (err) {
                     console.log(err, err.stack);
                 } else {
-                    if(data.Body!==undefined)
-                    console.log(data.Body.toString());
+                    if (data.Body !== undefined) {
+                        const blob = new Blob([data.Body], { type: "application/pdf" });
+                        const docUrl = URL.createObjectURL(blob);
+                        window.open(docUrl)
+                    }
+
                 }
             });
         }
