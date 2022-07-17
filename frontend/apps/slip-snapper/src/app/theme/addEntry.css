@@ -15,6 +15,18 @@
     --border-radius: 5px;
 }
 
+.totalHeader {
+    margin-left: 60.7%;
+    width:6%;
+    top: 5%;
+}
+.total {
+    --border-radius: 5px;
+    width: 40%;
+    left: 67.7%;
+}
+
+
 .itemlabels{
     left: 2%;
     margin-top: 10px;
