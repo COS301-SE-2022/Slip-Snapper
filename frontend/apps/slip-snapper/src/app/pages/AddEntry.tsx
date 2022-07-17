@@ -8,6 +8,7 @@ import { add } from 'ionicons/icons';
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
+    const [total, setTotal] = useState(0);
 
     return (
         <IonPage>
@@ -57,10 +58,7 @@ const AddEntry: React.FC = () => {
                         </IonRow>
                     </IonGrid>
                     <RenderItems/>
-                  
-                    <div className='slipTotal'>
-                    
-                    </div>
+                    <RenderTotal/>
                     <ActionButtons/>
                    
                 </IonCard>
@@ -98,8 +96,8 @@ const AddEntry: React.FC = () => {
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
-
+                                        <IonInput onIonInput={() => { calcTotal(); }}
+                                            key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
                                     </IonItem>
                                 </IonCol>
 
@@ -122,6 +120,17 @@ const AddEntry: React.FC = () => {
                         </IonGrid>
                     )
                 })}
+            </div>
+        )
+
+    };
+    function RenderTotal() {
+        return (
+            <div className='slipTotal'>
+                <div className='totalHeader'>Total:</div>
+                <IonItem color="tertiary" className='total'>
+                    {total}
+                </IonItem>
             </div>
         )
 
@@ -171,6 +180,21 @@ const AddEntry: React.FC = () => {
         </IonItem>
         );
       }
+
+    function calcTotal(): React.FormEventHandler<HTMLIonInputElement> | undefined {
+        let total = 0;
+        for (let i = 0; i < items.length; i++) {
+            const n = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
+            if (n !== undefined) {
+                total = total + +n
+            }
+        }
+        console.log(total)
+        // getData()
+        // setTotal(total)
+
+        return undefined;
+    }
 }
 
 export default AddEntry;

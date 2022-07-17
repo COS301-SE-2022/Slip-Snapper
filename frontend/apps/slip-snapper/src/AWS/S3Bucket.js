@@ -17,9 +17,6 @@ export default class S3BucketFunctions {
         const params = {
             Bucket: S3_BUCKET,
             Key: path,
-            ContentDispostion: 'inline',
-            ContentType: 'application/pdf',
-            ContentEncoding: 'base64'
         };
         // myBucket.putObject(params)
         //     .send((err) => {
