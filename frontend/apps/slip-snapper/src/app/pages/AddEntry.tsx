@@ -75,10 +75,10 @@ const AddEntry: React.FC = () => {
             <div>
                 {items.map((item: any, index: number) => {
                     return (
-                        <IonGrid>
-                            <IonRow>
+                        <IonGrid key={index}>
+                            <IonRow key={index}>
                                 <IonCol className='itemlabels'>
-                                    <IonLabel>Item #{index + 1}</IonLabel>
+                                    <IonLabel key={index}>Item #{index + 1}</IonLabel>
                                 </IonCol>
 
                                 <IonCol>
@@ -107,13 +107,14 @@ const AddEntry: React.FC = () => {
                                     </IonItem>
                                 </IonCol>
                                 <IonCol>
-                                    <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
+                                    <IonButton key={index + "/remove"} size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
                                     <IonAlert
                                     isOpen={showAlert}
                                     onDidDismiss={() => setShowAlert(false)}
                                     header="Oops..."
                                     message="A receipt needs to have at least one item."
                                     buttons={['Ok']}
+                                    key={index + "/alert"}
                                 />
                                 </IonCol>
                             </IonRow>
