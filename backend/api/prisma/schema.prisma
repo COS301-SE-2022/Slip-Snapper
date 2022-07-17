@@ -20,6 +20,7 @@ model User {
   password   String     @db.VarChar(255)
   slips      Slip[]
   budgets    Budgets?
+  reports    Reports[]
 }
 
 model Slip {
@@ -63,4 +64,12 @@ model Budgets{
   monthlyElectronicsBudget Float @default(0)
   monthlyHouseholdBudget Float @default(0)
   monthlyOtherBudget Float @default(0)
+}
+
+model Reports{
+    id  Int   @id @default(autoincrement())
+    user    User?    @relation(fields: [usersId], references: [id]) 
+    usersId  Int? 
+    reportName String @db.VarChar(255)
+    generatedDate DateTime @default(now())
 }
