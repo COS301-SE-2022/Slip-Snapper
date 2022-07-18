@@ -92,13 +92,6 @@ const Home: React.FC = () => {
       </IonFooter>
     </IonPage>
   );
-
-  function generateReport(type: string) {
-    const url = 'http://localhost:55555/api/report/generate?userId=1&period=' + type;
-
-    generateReportA(url)
-      .then((res) => res.json());
-  }
 };
 
 export default Home;
