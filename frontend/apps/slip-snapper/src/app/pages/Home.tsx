@@ -8,20 +8,25 @@ import {
   IonRow,
   IonFooter,
   IonCol,
+  IonCard,
+  IonButton,
+  IonCardHeader,
+  IonCardTitle,
+  IonItem,
 } from '@ionic/react';
 import React from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import ReportTotal from '../components/ReportTotal';
 import { generateReportA } from "../../api/apiCall"
 import '../theme/home.css';
+import ViewReportItem from '../components/ViewReportItem';
 
 const Home: React.FC = () => {
   const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
   { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
 
-  
+  const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
 
   return (
     <IonPage>
@@ -45,13 +50,39 @@ const Home: React.FC = () => {
           }
         </IonRow>
 
-        <IonTitle>Expenditure Totals</IonTitle>
-        {mockTotals.map((totals, index) => {
-          return (
-            <ReportTotal key={index} reportData={[totals.timePeriod, totals.total , totals.title]} />
-          )
-        })
-        }
+        <IonTitle>Report Summary</IonTitle>
+        <IonRow>
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Todays Report:</IonCardTitle>
+              </IonCardHeader>
+              <IonItem color="tertiary">Items Bought: 12</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R899.99 </IonItem>
+              <IonItem color="tertiary">
+                <IonButton color="success" fill="solid" slot="end">
+                  View
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
+
+          <IonCol>
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>This Week's Reports:</IonCardTitle>
+              </IonCardHeader>
+
+              {mockThisWeeksReports.map((item, index) => {
+                return (
+                  <ViewReportItem key={index} dateTime={item.dateTime} />
+                )
+              })
+              }
+            </IonCard>
+          </IonCol>
+        </IonRow>
+
       </IonContent>
       <IonFooter>
         <TakePictureButton />
@@ -71,5 +102,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-export const mockTotals = [{ timePeriod: "Daily", total: "R200.02", title: "generateDR" }, { timePeriod: "Weekly", total: "R800.02", title: "generateWR" },
-{ timePeriod: "Monthly", total: "R1000.50", title: "generateMR" }]
