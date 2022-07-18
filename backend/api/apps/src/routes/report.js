@@ -183,15 +183,14 @@ router.get('/statistics', async (req,res)=>{
 });
 
 /**
- * Get the users report
- * Uses the user id and report id to get the reports
+ * Get all the reports for a particular user
+ * Uses the user id to get all linked reports
  */
-router.get('/report', async (req,res)=>{
-    let { userId, reportId } = req.query;
+router.get('/user', async (req,res)=>{
+    let { userId } = req.query;
     
-    //If report id is -1 then retrieve all reports for the user
-
-    //const result = await req.app.get('db').getUserReports(Number(userId), Number(reportId));
+    //const result = {message:'Hello', reports:['name1','name2','name3']}
+    const result = {message:'Hello', reports:['name1','name2','name3']}
 
     let status = 200;
 

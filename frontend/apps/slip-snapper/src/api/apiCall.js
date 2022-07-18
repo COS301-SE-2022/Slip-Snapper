@@ -125,3 +125,12 @@ export async function addItemsA( userId, data, text){
         })
     })
 }
+
+export async function getAllUserReports(userId){
+    return fetch('http://localhost:55555/api/report/user?userId=1', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
