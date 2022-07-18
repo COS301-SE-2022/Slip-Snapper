@@ -134,3 +134,12 @@ export async function getAllUserReports(userId){
         },
       })
 }
+
+export async function getUserReport(userName, fileName){
+    return fetch('http://localhost:55555/api/report/pdf?userName=ChrisDev&fileName=temp', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
