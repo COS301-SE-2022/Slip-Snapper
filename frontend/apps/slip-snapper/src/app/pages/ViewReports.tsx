@@ -57,10 +57,10 @@ const ViewReports: React.FC = () => {
             return (
               <IonItem color="tertiary">
                 {report.reportName}
-                <IonButton color="success" slot="end" class="viewButton" >
+                <IonButton onClick={() => view(report.reportData)} color="success" slot="end" class="viewButton" >
                   View
                 </IonButton>
-                <IonButton fill="solid" slot="end" color="secondary">
+                <IonButton onClick={() => deleteReport()} fill="solid" slot="end" color="secondary">
                   Delete
                 </IonButton>
               </IonItem>
@@ -70,10 +70,16 @@ const ViewReports: React.FC = () => {
         </IonCard>
       </IonContent>
     </IonPage>
-
-
   );
+  function view(data:any) {
+    if (data.Body !== undefined) {
+      const blob = new Blob([data.Body], { type: "application/pdf" });
+      const docUrl = URL.createObjectURL(blob);
+      window.open(docUrl)
+    }
+  }
+  function deleteReport(){
+    console.log(123)
+  }
 };
-
 export default ViewReports;
-
