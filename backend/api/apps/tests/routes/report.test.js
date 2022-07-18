@@ -79,7 +79,7 @@ describe('Get /report/budget', ()=>{
 })
 
 /**
- * Test for the generate report query
+ * Test for the update budget query
  */
 describe('POST /report/budget', ()=>{
     test('Should Generate a report for the user', async ()=>{
@@ -102,6 +102,9 @@ describe('POST /report/budget', ()=>{
     })
 })
 
+/**
+ * Test for the get user statistics query
+ */
 describe('POST /report/statistics', ()=>{
 
     //TODO expand

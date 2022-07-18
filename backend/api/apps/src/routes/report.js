@@ -1,6 +1,7 @@
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 const router = require("express").Router();
+const {S3BucketFunctions} = require("./S3Bucket")
 
 /**
  * Determines the start date to search from
@@ -183,15 +184,14 @@ router.get('/statistics', async (req,res)=>{
 });
 
 /**
- * Get the users report
- * Uses the user id and report id to get the reports
+ * Get all the reports for a particular user
+ * Uses the user id to get all linked reports
  */
-router.get('/report', async (req,res)=>{
-    let { userId, reportId } = req.query;
+router.get('/user', async (req,res)=>{
+    let { userId } = req.query;
     
-    //If report id is -1 then retrieve all reports for the user
-
-    //const result = await req.app.get('db').getUserReports(Number(userId), Number(reportId));
+    //const result = {message:'Hello', reports:['name1','name2','name3']}
+    const result = {message:'Hello', reports:['name1','name2','name3']}
 
     let status = 200;
 
@@ -200,7 +200,29 @@ router.get('/report', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            report: result.reports
+            reports: result.reports
+        });
+    
+});
+
+/**
+ * Get a specific report from the S3 bucket
+ * Uses the report name and UserName
+ */
+router.get('/pdf', async (req,res)=>{
+    let { userName, fileName } = req.query;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = await bucket.getFile(path)
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            report: result.data
         });
     
 });

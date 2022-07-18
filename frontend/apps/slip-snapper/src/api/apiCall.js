@@ -125,3 +125,21 @@ export async function addItemsA( userId, data, text){
         })
     })
 }
+
+export async function getAllUserReports(userId){
+    return fetch('http://localhost:55555/api/report/user?userId=1', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
+
+export async function getUserReport(userName, fileName){
+    return fetch('http://localhost:55555/api/report/pdf?userName=ChrisDev&fileName=temp', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}

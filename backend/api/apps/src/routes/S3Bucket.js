@@ -1,18 +1,18 @@
-import AWS from 'aws-sdk';
+const AWS = require('aws-sdk');
 
 AWS.config.update({
-    accessKeyId: '',
-    secretAccessKey: ''
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
 })
-const S3_BUCKET = '';
-const REGION = '';
+const S3_BUCKET = process.env.AWS_S3_BUCKET
 
 const myBucket = new AWS.S3({
     params: { Bucket: S3_BUCKET },
-    region: REGION,
+    region: process.env.AWS_REGION
 })
 
-export default class S3BucketFunctions {
+class S3BucketFunctions {
+
     uploadFile = (path) => {
         const params = {
             Bucket: S3_BUCKET,
@@ -33,29 +33,25 @@ export default class S3BucketFunctions {
         }).promise();*/
 
         //let files = response.Contents.map(item => item.Key)
-
         const params = {
             Bucket: S3_BUCKET,
             Key: path
         };
         try {
-            myBucket.getObject(params, (err, data) => {
-                if (err) {
-                    console.log(err, err.stack);
-                } else {
-                    if (data.Body !== undefined) {
-                        const blob = new Blob([data.Body], { type: "application/pdf" });
-                        const docUrl = URL.createObjectURL(blob);
-                        window.open(docUrl)
-                    }
-
-                }
-            });
+            const value = await myBucket.getObject(params).promise();
+            return {
+                message: "Report retrieved Succesfully",
+                data: value.Body
+            }
         }
         catch (err) {
-            console.log(err)
+            return {
+                message: err,
+                data: []
+            }
         }
     }
+
     // deleteFile = (path:string) =>{
     //     const params = { Bucket: S3_BUCKET, Key: path };
     //     console.log("TESTS")
@@ -64,4 +60,8 @@ export default class S3BucketFunctions {
     //         else console.log();                 // deleted
     //     });
     // }
+}
+
+module.exports = {
+    S3BucketFunctions
 }
