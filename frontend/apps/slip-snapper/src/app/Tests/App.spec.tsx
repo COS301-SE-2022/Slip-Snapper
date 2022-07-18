@@ -10,7 +10,7 @@ import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
 //ReportTotal Imports
 import ReportTotal from '../components/ReportTotal';
-import { mockTotals } from '../pages/Home'
+import { mockTotals } from '../pages/ViewReports'
 import { UserStats } from '../components/UserStats';
 
 test('renders without crashing', () => {
@@ -175,7 +175,7 @@ describe('Register', () => {
   });
 });
 
-describe('Register', () => {
+describe('Generate Report', () => {
 
   test('Should check if function fires for generate report for daily', async () => {
     const { findByTitle } = render(<ReportTotal reportData={[mockTotals[0].timePeriod, mockTotals[0].total, mockTotals[0].title]} />);

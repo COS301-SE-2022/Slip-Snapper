@@ -28,6 +28,6 @@ describe('Home', () => {
     expect(Component.getByText('Reports'));
     expect(Component.getByText('Profile'));
     expect(Component.getByText('Edit Item'));
-    expect(Component.getByText('Expenditure Totals'));
+    expect(Component.getByText('Report Summary'));
   });
 });

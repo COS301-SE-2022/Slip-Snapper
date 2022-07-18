@@ -5,20 +5,12 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonButton,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCol,
-  IonItem,
   IonRow,
 } from '@ionic/react';
 import React from 'react';
 import { NavButtons } from '../components/NavButtons';
-import ViewReportItem from '../components/ViewReportItem';
+import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
-
-const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
 
 const ViewReports: React.FC = () => {
   return (
@@ -32,40 +24,21 @@ const ViewReports: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRow>
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>Todays Report:</IonCardTitle>
-              </IonCardHeader>
-              <IonItem color="tertiary">Items Bought: 12</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R899.99 </IonItem>
-              <IonItem color="tertiary">
-                <IonButton color="success" fill="solid" slot="end">
-                  View
-                </IonButton>
-              </IonItem>
-            </IonCard>
-          </IonCol>
 
-          <IonCol>
-            <IonCard color="primary">
-              <IonCardHeader>
-                <IonCardTitle>This Week's Reports:</IonCardTitle>
-              </IonCardHeader>
-
-              {mockThisWeeksReports.map((item, index) => {
-                return (
-                  <ViewReportItem key={index} dateTime={item.dateTime} />
-                )
-              })
-              }
-            </IonCard>
-          </IonCol>
-        </IonRow>
+        <IonTitle>Expenditure Totals</IonTitle>
+          <IonRow>
+            {mockTotals.map((totals, index) => {
+              return (
+                <ReportTotal key={index} reportData={[totals.timePeriod, totals.total , totals.title]} />
+              )
+            })
+            }
+          </IonRow>
       </IonContent>
     </IonPage>
   );
 };
 
 export default ViewReports;
+export const mockTotals = [{ timePeriod: "Daily", total: "R200.02", title: "generateDR" }, { timePeriod: "Weekly", total: "R800.02", title: "generateWR" },
+{ timePeriod: "Monthly", total: "R1000.50", title: "generateMR" }]
