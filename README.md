@@ -11,9 +11,9 @@
 <!-- Requirements badges 
 ============================
 (libraries.io which needs the repo to be public to be used) -->
-<a href = "https://libraries.io/github/COS301-SE-2022/Slip-Snapper">
+<!-- <a href = "https://libraries.io/github/COS301-SE-2022/Slip-Snapper">
   <img alt="GitHub Issues" src="https://img.shields.io/librariesio/github/COS301-SE-2022/Slip-Snapper">
-</a>
+</a> -->
 
 
 <!-- Issue  Tracking badges
