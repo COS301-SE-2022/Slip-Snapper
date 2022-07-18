@@ -7,18 +7,12 @@ import {
     IonCol,
     IonItem
 } from "@ionic/react";
-import S3BucketFunctions from "../../AWS/S3Bucket"
 import '../theme/reportItem.css'
-
-
 type Props = {
     reportData: string[]
 }
 function ReportItem({ reportData }: Props) {
-    const bucket = new S3BucketFunctions();
-
     return (
-
         <IonCol className="item-col">
             <IonCard color="primary">
                 <IonCardHeader>
@@ -26,7 +20,7 @@ function ReportItem({ reportData }: Props) {
                     <IonCardTitle>{reportData[1]}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
-                    <IonButton onClick={() => { bucket.getFile("ChrisDev/temp.pdf"); }} fill="solid" slot="end" color="secondary">
+                    <IonButton fill="solid" slot="end" color="secondary">
                         View
                     </IonButton>
                 </IonItem>

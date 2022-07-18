@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput} from '@ionic/react';
 import '../theme/register.css';
 import { loginA, signupA } from "../../api/apiCall"
-import S3BucketFunctions from "../../AWS/S3Bucket"
 
 
 const Register: React.FC = () => {
@@ -10,7 +9,6 @@ const Register: React.FC = () => {
   const [surnameInput, setSurnameInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
-  const upload = new S3BucketFunctions();
 
  
   return (
@@ -86,7 +84,6 @@ const Register: React.FC = () => {
                 class="LRButtons"
                 color="secondary"
                 size="large"
-                onClick={() => { validateInput();}}
                 routerLink={'/home'}
               >
                 Register
@@ -143,11 +140,7 @@ const Register: React.FC = () => {
     signupA( user, name, surname, password)
       .then((res) => res.json());
   }
-  function validateInput() {
 
-    if(nameInput!==undefined&&surnameInput!==undefined)
-      upload.uploadFile(nameInput+surnameInput +"/")
-  }
 };
 
 export default Register;

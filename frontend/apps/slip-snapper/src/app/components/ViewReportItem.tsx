@@ -17,7 +17,6 @@ function ViewReportItem({ dateTime }: Props) {
                 Delete
             </IonButton>
         </IonItem>
-
     );
 
 }
