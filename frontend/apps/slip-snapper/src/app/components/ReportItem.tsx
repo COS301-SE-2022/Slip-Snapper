@@ -8,6 +8,7 @@ import {
     IonItem
 } from "@ionic/react";
 import S3BucketFunctions from "../../AWS/S3Bucket"
+import '../theme/reportItem.css'
 
 
 type Props = {
@@ -18,7 +19,7 @@ function ReportItem({ reportData }: Props) {
 
     return (
 
-        <IonCol>
+        <IonCol className="item-col">
             <IonCard color="primary">
                 <IonCardHeader>
                     <IonCardSubtitle>{reportData[0]}</IonCardSubtitle>

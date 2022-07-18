@@ -1,0 +1,15 @@
+.item-col {
+    max-width: 25%;
+}
+
+@media only screen and (max-width: 700px) {
+    .item-col {
+        min-width: 50%;
+    }
+}
+
+@media only screen and (max-width: 350px) {
+    .item-col {
+        min-width: 100%;
+    }
+}
