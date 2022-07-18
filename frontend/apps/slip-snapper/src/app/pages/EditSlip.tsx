@@ -17,7 +17,21 @@ const EditSlip: React.FC = () => {
 
     const [items, setItems] = useState(data.text[2]);
     const [showAlert, setShowAlert] = useState(false);
-    console.log(data.text)
+    
+    const handleCostsChange = (event: any) => {
+
+        const _tempCosts = [...items];
+        let temp = event.target.id
+        temp = temp.substring(0, 1)
+        _tempCosts[temp].price = event.target.value
+        getData();
+        setItems(_tempCosts);
+    };
+    const getTotalCosts = () => {
+        return items.reduce((total: number, item: { price: any; }) => {
+            return total + Number(item.price);
+        }, 0);
+    };
 
     return (
         <IonPage>
@@ -116,7 +130,8 @@ const EditSlip: React.FC = () => {
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
+                                        <IonInput onIonChange={handleCostsChange}
+                                         key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
 
                                     </IonItem>
                                 </IonCol>
@@ -140,6 +155,12 @@ const EditSlip: React.FC = () => {
                         </IonGrid>
                     )
                 })}
+                <div className='slipTotal'>
+                    <div className='totalHeader'>Total:</div>
+                    <IonItem color="tertiary" className='total'>
+                        {getTotalCosts()}
+                    </IonItem>
+                </div>
             </div>
         )
 

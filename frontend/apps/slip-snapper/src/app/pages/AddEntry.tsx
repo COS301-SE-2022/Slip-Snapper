@@ -6,9 +6,23 @@ import { add } from 'ionicons/icons';
 
 
 const AddEntry: React.FC = () => {
-    const [items, setItems] = useState([{ name: "", quantity: "", price: "", type: "" }]);
+    const [items, setItems] = useState([{ name: "", quantity: 1, price: 0, type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
-    const [total, setTotal] = useState(0);
+
+    const handleCostsChange = (event: any) => {
+
+        const _tempCosts = [...items];
+        let temp = event.target.id
+        temp = temp.substring(0,1)
+        _tempCosts[temp].price = event.target.value
+        getData();
+        setItems(_tempCosts);
+    };
+    const getTotalCosts = () => {
+        return items.reduce((total, item) => {
+            return total + Number(item.price);
+        }, 0);
+    };
 
     return (
         <IonPage>
@@ -57,8 +71,60 @@ const AddEntry: React.FC = () => {
                             </IonCol>
                         </IonRow>
                     </IonGrid>
-                    <RenderItems/>
-                    <RenderTotal/>
+
+                    {items.map((item: any, index: number) => {
+                        return (
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol className='itemlabels'>
+                                        <IonLabel>Item #{index + 1}</IonLabel>
+                                    </IonCol>
+
+                                    <IonCol>
+                                        <IonItem color="tertiary" className='inputs'>
+                                            <IonInput key={index + "/name"} id={index + "/name"} value={item.name}></IonInput>
+                                        </IonItem>
+                                    </IonCol>
+
+                                    <IonCol>
+                                        <IonItem color="tertiary" className='inputs'>
+                                            <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
+
+                                        </IonItem>
+                                    </IonCol>
+
+                                    <IonCol>
+                                        <IonItem color="tertiary" className='inputs'>
+                                            <IonInput onIonChange={handleCostsChange}
+                                                key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
+                                        </IonItem>
+                                    </IonCol>
+
+                                    <IonCol>
+                                        <IonItem color="tertiary" className='inputs'>
+                                            <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
+                                        </IonItem>
+                                    </IonCol>
+                                    <IonCol>
+                                        <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
+                                        <IonAlert
+                                            isOpen={showAlert}
+                                            onDidDismiss={() => setShowAlert(false)}
+                                            header="Oops..."
+                                            message="A receipt needs to have at least one item."
+                                            buttons={['Ok']}
+                                        />
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        )
+                    })}
+                    <div className='slipTotal'>
+                        <div className='totalHeader'>Total:</div>
+                        <IonItem color="tertiary" className='total'>
+                           {getTotalCosts()}
+                        </IonItem>
+                    </div>
                     <ActionButtons/>
                    
                 </IonCard>
@@ -70,75 +136,10 @@ const AddEntry: React.FC = () => {
         </IonPage>
     );
 
-    function RenderItems() {
-        return (
-            <div>
-                {items.map((item: any, index: number) => {
-                    return (
-                        <IonGrid>
-                            <IonRow>
-                                <IonCol className='itemlabels'>
-                                    <IonLabel>Item #{index + 1}</IonLabel>
-                                </IonCol>
-
-                                <IonCol>
-                                    <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/name"} id={index + "/name"} value={item.name}></IonInput>
-                                    </IonItem>
-                                </IonCol>
-
-                                <IonCol>
-                                    <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
-
-                                    </IonItem>
-                                </IonCol>
-
-                                <IonCol>
-                                    <IonItem color="tertiary" className='inputs'>
-                                        <IonInput onIonInput={() => { calcTotal(); }}
-                                            key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
-                                    </IonItem>
-                                </IonCol>
-
-                                <IonCol>
-                                    <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
-                                    </IonItem>
-                                </IonCol>
-                                <IonCol>
-                                    <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
-                                    <IonAlert
-                                    isOpen={showAlert}
-                                    onDidDismiss={() => setShowAlert(false)}
-                                    header="Oops..."
-                                    message="A receipt needs to have at least one item."
-                                    buttons={['Ok']}
-                                />
-                                </IonCol>
-                            </IonRow>
-                        </IonGrid>
-                    )
-                })}
-            </div>
-        )
-
-    };
-    function RenderTotal() {
-        return (
-            <div className='slipTotal'>
-                <div className='totalHeader'>Total:</div>
-                <IonItem color="tertiary" className='total'>
-                    {total}
-                </IonItem>
-            </div>
-        )
-
-    };
 
     function addItem() {
         getData()
-        setItems([...items, { name: "", quantity: "", price: "", type: "" }])
+        setItems([...items, { name: "", quantity: 1, price: 0, type: "" }])
     }
     function removeItem(index:number) {
         getData()
@@ -162,9 +163,9 @@ const AddEntry: React.FC = () => {
             if (n !== undefined) {
                 items[i].name = n
             } if (q !== undefined) {
-                items[i].quantity = q
+                items[i].quantity = Number(q)
             } if (p !== undefined) {
-                items[i].price = p
+                items[i].price = Number(p)
             } if (t !== undefined) {
                 items[i].type = t
             }
@@ -180,21 +181,6 @@ const AddEntry: React.FC = () => {
         </IonItem>
         );
       }
-
-    function calcTotal(): React.FormEventHandler<HTMLIonInputElement> | undefined {
-        let total = 0;
-        for (let i = 0; i < items.length; i++) {
-            const n = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
-            if (n !== undefined) {
-                total = total + +n
-            }
-        }
-        console.log(total)
-        // getData()
-        // setTotal(total)
-
-        return undefined;
-    }
 }
 
 export default AddEntry;
