@@ -767,12 +767,17 @@ async function getDataItems(){
 /**
  * Function to get the reports
  * @param {*} userId (Integer) The users id
- * @returns Number of reports :numreports and the id,
+ * @returns numreports which is the number of reports, reportsList which consists of the report id, report name and the date.
  */
  async function getAllReports(userid){
     const userReports = await prisma.reports.findMany({
         where:{
             userId:userid
+        },
+        select:{
+            id:true,
+            reportName:true,
+            generatedDate:true  
         }
     })
     let numReports=0
@@ -785,7 +790,7 @@ async function getDataItems(){
         }
     }
     else{
-        for(var report in userReports)
+        for(var report of userReports)
         {
             numReports++
             reportsList.push({
@@ -800,14 +805,23 @@ async function getDataItems(){
         }
     }
 }
-async function getRecentReports(userid){
+
+/**
+ * Function to get the daily reports
+ * @param {*} userId (Integer) The users id
+ * @returns numreports which is the number of reports, reportsList which consists of the report id, report name and the date.
+ */
+ async function getDailyReports(userid){
+    const date1= new Date()
+    const lastweek=date1.setDate(date1.getDate()-1)
     const userReports = await prisma.reports.findMany({
         where:{
             userId:userid
         },
-        take:5,
-         orderBy:{
-            generatedDate:'desc'
+        select:{
+            id:true,
+            reportName:true,
+            generatedDate:true  
         }
     })
     let numReports=0
@@ -820,9 +834,57 @@ async function getRecentReports(userid){
         }
     }
     else{
-        for(var report in userReports)
+        const date1= new Date()
+        for(var report of userReports)
         {
-            numReports++
+            if(report.generatedDate.toISOString()<date1.toISOString()){
+                numReports++
+                reportsList.push({
+                reportId: report.id,
+                reportName:report.reportName,
+                reportDate: report.generatedDate
+            }) 
+            }
+         
+        }
+         return {
+        numReports,
+        reportsList
+        }
+    }
+}
+
+/**
+ * Function to get the most recent reports.
+ * @param {*} userId (Integer) The users id.
+ * @returns reportsList which consists of the report id, report name and the date.
+ */
+async function getRecentReports(userid){
+    const userReports = await prisma.reports.findMany({
+        where:{
+            userId:userid
+        }, 
+        select:{
+            id:true,
+            reportName:true,
+            generatedDate:true  
+        },
+        take:5,
+        orderBy:{
+            generatedDate:'desc'
+        }
+    })
+    let numReports=0
+    let reportsList=[]
+    if(userReports=null)
+    {
+        return{
+            reportsList
+        }
+    }
+    else{
+        for(var report of userReports)
+        {
             reportsList.push({
                 reportId: report.id,
                 reportName:report.reportName,
@@ -830,7 +892,6 @@ async function getRecentReports(userid){
             })
         }
          return {
-        numReports,
         reportsList
         }
     }
