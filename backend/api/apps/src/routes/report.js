@@ -227,4 +227,22 @@ router.get('/pdf', async (req,res)=>{
     
 });
 
+router.post('/pdf', async (req,res)=>{
+    let { userName, fileName } = req.body;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = bucket.uploadFile(path)
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            report: result.data
+        });
+    
+});
+
 module.exports.router = router;
