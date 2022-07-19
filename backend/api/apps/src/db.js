@@ -807,9 +807,9 @@ async function getDataItems(){
 }
 
 /**
- * Function to get the daily reports
+ * Function to get the daily, weekly and monthly reports
  * @param {*} userId (Integer) The users id
- * @returns reportsList which consists of the report id, report name and the date.
+ * @returns daily/weekly/monthly ReportsList which consists of the report id, report name and the date, numReports which is the number of reports.
  */
  async function getDailyWeeklyMonthlyReports(userid){
     const date1= new Date()
@@ -874,7 +874,9 @@ async function getDataItems(){
         }
          return {
         numReports,
-        reportsList
+        dailyReportsList,
+        weeklyReportsList,
+        monthlyReportsList
         }
     }
 }
@@ -922,6 +924,24 @@ async function getRecentReports(userid){
         }
     }
 }
+
+
+/**
+ * Function to create a report record in the Reports model.
+ * @param {*} userId (Integer) The users id.
+ * @returns null
+ */
+ async function createReportRecord(userid){
+    const date1= new Date()
+    
+    const userReports = await prisma.reports.create({
+        data:{
+            usersId:userid,
+            reportName:"report_"+date1.toISOString()
+        }
+    })
+      
+  }
 
 module.exports = {
     getUser,

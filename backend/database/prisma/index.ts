@@ -248,17 +248,28 @@ async function getWeeklyReports(userid: number){
 
     console.log(date1)
 }
+async function createReportRecord(userid: number){
+  const date1= new Date()
   
+  const userReports = await prisma.reports.create({
+      data:{
+          usersId:userid,
+          reportName:"report_"+date1.toISOString()
+      }
+  })
+    
+}
 
   var userid=1
-  getWeeklyReports(userid)
-  getAllUsers()
-  getfavouritestore(userid)
-  getMostExpensiveItem(userid)
-  getMostSpentATStore(userid)
-  getWeeklyExpenditure(userid)
-  getMonthlyExpenditure(userid)
-  getAllReports(userid)  
+  createReportRecord(userid)
+ // getWeeklyReports(userid)
+ // getAllUsers()
+  //getfavouritestore(userid)
+  //getMostExpensiveItem(userid)
+  //getMostSpentATStore(userid)
+  //getWeeklyExpenditure(userid)
+  //getMonthlyExpenditure(userid)
+  //getAllReports(userid)  
     .catch((e) => {
       throw e
     })
