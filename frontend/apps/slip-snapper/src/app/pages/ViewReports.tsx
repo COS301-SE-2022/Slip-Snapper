@@ -77,7 +77,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => deleteReport('ChrisDev/Bug_Busters_SRS.pdf')}
+                  onClick={() => deleteReport(report)}
                   fill="solid"
                   slot="end"
                   color="secondary"

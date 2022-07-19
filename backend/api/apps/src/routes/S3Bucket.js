@@ -13,30 +13,28 @@ const myBucket = new AWS.S3({
 
 class S3BucketFunctions {
 
-    uploadFile = (path) => {
+    async uploadFile (path, dir){
         const params = {
             Bucket: S3_BUCKET,
-            Key: path,
+            Body: dir,
+            Key: path,          //needs to be in the form of user/name.pdf
+            contentType: 'application/pdf'
         };
-        // myBucket.putObject(params)
-        //     .send((err) => {
-        //         if (err) console.log(err)
-        //     })
-
-        return{
-            message:"File hase been uploaded"
-        }
+        myBucket.putObject(params, function (err, response) {
+            if (err) {
+                return {
+                    message: "Could not upload Report."
+                }
+            } else {
+                return {
+                    message: "Successfully uploaded Report!"
+                }
+            }
+        });
     }
 
     async getFile(path) {
 
-        //For listing the files within a folder 
-        /*const response = await myBucket.listObjectsV2({
-            Bucket: S3_BUCKET,
-            Prefix: 'ChrisDev'
-        }).promise();*/
-
-        //let files = response.Contents.map(item => item.Key)
         const params = {
             Bucket: S3_BUCKET,
             Key: path
