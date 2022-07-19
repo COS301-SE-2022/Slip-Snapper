@@ -143,3 +143,30 @@ export async function getUserReport(userName, fileName){
         },
       })
 }
+
+export async function addReport( userName, fileName){
+    return fetch('http://localhost:55555/api/report/pdf', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName: userName,
+          fileName: fileName,
+        })
+    })
+}
+
+//Temporary
+export async function removeReport( userName, fileName){
+    return fetch('http://localhost:55555/api/report/pdf', {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userName: userName,
+          fileName: fileName,
+        })
+    })
+}
