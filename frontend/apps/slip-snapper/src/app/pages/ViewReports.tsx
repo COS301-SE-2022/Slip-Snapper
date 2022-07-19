@@ -12,11 +12,11 @@ import {
   IonCardTitle,
   IonItem,
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
-import AWS from 'aws-sdk';
+import { getAllUserReports, getUserReport } from "../../api/apiCall"
 
 export const mockTotals = [
   { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR' },
@@ -24,13 +24,17 @@ export const mockTotals = [
   { timePeriod: 'Monthly', total: 'R1000.50', title: 'generateMR' },
 ];
 
-export const mockReports = [
-  { reportName: 'Report #1', reportData: '' },
-  { reportName: 'Report #2', reportData: '' },
-  { reportName: 'Report #3', reportData: '' },
-];
-
 const ViewReports: React.FC = () => {
+  const [r, setR] = useState([])
+  useEffect(() => {
+    getAllUserReports(1)
+      .then((res: { json: () => any; }) => res.json())
+      .then(
+        (json: { reports: any; }) => {
+          setR(json.reports)
+        })
+  }, []);
+  
   return (
     <IonPage>
       <IonHeader>
@@ -60,12 +64,12 @@ const ViewReports: React.FC = () => {
           <IonCardHeader>
             <IonCardTitle>Todays Report:</IonCardTitle>
           </IonCardHeader>
-          {mockReports.map((report, index) => {
+          {r.map((report, index) => {
             return (
               <IonItem color="tertiary">
-                {report.reportName}
+                {report}
                 <IonButton
-                  onClick={() => view(report.reportData)}
+                  onClick={() => view(report)}
                   color="success"
                   slot="end"
                   class="viewButton"
@@ -89,11 +93,18 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    if (data.Body !== undefined) {
-      const blob = new Blob([data.Body], { type: 'application/pdf' });
-      const docUrl = URL.createObjectURL(blob);
-      window.open(docUrl);
-    }
+    console.log(data)
+    getUserReport(1, data)
+      .then((res) => res.json())
+      .then(
+        (json) => {
+          if (json.report.data !== undefined) {
+            const arr = new Uint8Array(json.report.data)
+            const blob = new Blob([arr], { type: "application/pdf" });
+            const docUrl = URL.createObjectURL(blob);
+            window.open(docUrl)
+          }
+        })
   }
   function deleteReport(path: string) {
     return;
