@@ -943,6 +943,22 @@ async function getRecentReports(userid){
       
   }
 
+  /**
+ * Function to delete a report record in the Reports model.
+ * @param {*} reportId (Integer) The record id.
+ * @returns null
+ */
+ async function deleteReportRecord(reportid){
+    
+    const userReports = await prisma.reports.delete({
+        where:{
+            id:reportid
+        }
+    })
+      
+  }
+
+
 module.exports = {
     getUser,
     addUser,
