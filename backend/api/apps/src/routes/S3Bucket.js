@@ -52,14 +52,29 @@ class S3BucketFunctions {
         }
     }
 
-    // deleteFile = (path:string) =>{
-    //     const params = { Bucket: S3_BUCKET, Key: path };
-    //     console.log("TESTS")
-    //     myBucket.deleteObject(params, function (err, data) {
-    //         if (err) console.log(err, err.stack);  // error
-    //         else console.log();                 // deleted
-    //     });
-    // }
+    async deleteFile(path) {
+        const myBucket = new AWS.S3({
+            params: { Bucket: S3_BUCKET },
+            region: REGION,
+        });
+
+        const params = {
+            Bucket: S3_BUCKET,
+            Key: path,
+        };
+
+        myBucket.deleteObject(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+                return;
+            }
+            else {
+                console.log("Sucesss");
+                return;
+            }
+        });
+    }
+
 }
 
 module.exports = {
