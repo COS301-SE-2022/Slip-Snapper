@@ -902,7 +902,6 @@ async function getRecentReports(userid){
             generatedDate:'desc'
         }
     })
-    let numReports=0
     let reportsList=[]
     if(userReports=null)
     {
@@ -949,7 +948,6 @@ async function getRecentReports(userid){
  * @returns null
  */
  async function deleteReportRecord(reportid){
-    
     const userReports = await prisma.reports.delete({
         where:{
             id:reportid
@@ -972,5 +970,10 @@ module.exports = {
     getUserBudgets,
     setUserBudgets,
     getUserStats,
-    getDataItems
+    getDataItems,
+    getDailyWeeklyMonthlyReports,
+    getAllReports,
+    getRecentReports,
+    deleteReportRecord,
+    createReportRecord
 }
