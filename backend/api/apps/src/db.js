@@ -767,7 +767,7 @@ async function getDataItems(){
 /**
  * Function to get the reports
  * @param {*} userId (Integer) The users id
- * @returns The specific users reports
+ * @returns Number of reports :numreports and the id,
  */
  async function getAllReports(userid){
     const userReports = await prisma.reports.findMany({
@@ -789,6 +789,42 @@ async function getDataItems(){
         {
             numReports++
             reportsList.push({
+                reportId: report.id,
+                reportName:report.reportName,
+                reportDate: report.generatedDate
+            })
+        }
+         return {
+        numReports,
+        reportsList
+        }
+    }
+}
+async function getRecentReports(userid){
+    const userReports = await prisma.reports.findMany({
+        where:{
+            userId:userid
+        },
+        take:5,
+         orderBy:{
+            generatedDate:'desc'
+        }
+    })
+    let numReports=0
+    let reportsList=[]
+    if(userReports=null)
+    {
+        return{
+            numReports,
+            reportsList
+        }
+    }
+    else{
+        for(var report in userReports)
+        {
+            numReports++
+            reportsList.push({
+                reportId: report.id,
                 reportName:report.reportName,
                 reportDate: report.generatedDate
             })
