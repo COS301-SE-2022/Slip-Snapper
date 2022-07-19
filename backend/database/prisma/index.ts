@@ -4,7 +4,7 @@ const prisma = new PrismaClient()
 
 async function getAllUsers() {
     const allUsers = await prisma.user.findMany()
-    //console.log(allUsers)
+    ////console.log(allUsers)
   }
   //get the users favourite store
 async function getfavouritestore(userid:number) {
@@ -50,8 +50,8 @@ for(var amount of amountSpent)
 {
   total=total+amount.total;
 }
-  console.log(storeLocation)
-  console.log(total)
+  //console.log(storeLocation)
+  //console.log(total)
 }   
 
 //the most expensive item 
@@ -93,8 +93,8 @@ async function getMostExpensiveItem(userid:number) {
        }     
      }
     }
-  console.log(dataItem)
-  console.log(expensiveItem)
+  //console.log(dataItem)
+  //console.log(expensiveItem)
 }  
 
 async function getMostSpentATStore(userid:number)
@@ -119,8 +119,8 @@ async function getMostSpentATStore(userid:number)
       store=itemL.location!;
     }
   }
-  console.log(mostspent);
-  console.log(store);
+  //console.log(mostspent);
+  //console.log(store);
 }
 
 async function getWeeklyExpenditure(userid:number)
@@ -152,8 +152,8 @@ async function getWeeklyExpenditure(userid:number)
       previousWeek=previousWeek+weekly.total;
     }
   }
-  console.log(recentWeek)
-  console.log(previousWeek)
+  //console.log(recentWeek)
+  //console.log(previousWeek)
 } 
 
 async function getMonthlyExpenditure(userid:number)
@@ -185,9 +185,29 @@ async function getMonthlyExpenditure(userid:number)
       previousMonth=previousMonth+weekly.total;
     }
   }
-  console.log(recentMonth)
-  console.log(previousMonth)
+  //console.log(recentMonth)
+  //console.log(previousMonth)
 } 
+async function getAllReports(userid: number){
+const userReports = await prisma.reports.findMany({
+  where:{
+    usersId: userid
+  }
+})
+var numReports=0
+var reportsList =[]
+
+
+  for(var report in userReports)
+  {
+      numReports++
+      reportsList.push({
+        
+        
+      })
+  }
+   console.log(numReports,userReports) 
+}
 
 
   var userid=1
@@ -197,7 +217,7 @@ async function getMonthlyExpenditure(userid:number)
   getMostSpentATStore(userid)
   getWeeklyExpenditure(userid)
   getMonthlyExpenditure(userid)
-  
+  getAllReports(userid)  
     .catch((e) => {
       throw e
     })
@@ -205,3 +225,4 @@ async function getMonthlyExpenditure(userid:number)
     .finally(async () => {
       await prisma.$disconnect()
     })
+

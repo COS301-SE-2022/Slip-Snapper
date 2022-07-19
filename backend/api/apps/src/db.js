@@ -410,7 +410,7 @@ async function updateItem(itemId, dataA, dataB){
  * @param {*} userId The users id
  * @returns user data
  */
-async function getUserBudgets( userId ){
+async function getUserBudgets(userId ){
     const user = await prisma.user.findFirst({
         where: {
             id: userId
@@ -760,6 +760,43 @@ async function getDataItems(){
 
     return {
         items: dataItems
+    }
+}
+
+
+/**
+ * Function to get the reports
+ * @param {*} userId (Integer) The users id
+ * @returns The specific users reports
+ */
+ async function getAllReports(userid){
+    const userReports = await prisma.reports.findMany({
+        where:{
+            userId:userid
+        }
+    })
+    let numReports=0
+    let reportsList=[]
+    if(userReports=null)
+    {
+        return{
+            numReports,
+            reportsList
+        }
+    }
+    else{
+        for(var report in userReports)
+        {
+            numReports++
+            reportsList.push({
+                reportName:report.reportName,
+                reportDate: report.generatedDate
+            })
+        }
+         return {
+        numReports,
+        reportsList
+        }
     }
 }
 
