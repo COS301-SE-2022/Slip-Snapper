@@ -211,7 +211,7 @@ var reportsList =[]
 }
 async function getWeeklyReports(userid: number){
   const date1= new Date()
-  const lastweek=date1.setDate(date1.getDate()-7)
+  const lastweek=date1.setDate(date1.getDate()-0.5)
 
   const userReports = await prisma.reports.findMany({
       where:{

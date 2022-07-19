@@ -809,11 +809,16 @@ async function getDataItems(){
 /**
  * Function to get the daily reports
  * @param {*} userId (Integer) The users id
- * @returns numreports which is the number of reports, reportsList which consists of the report id, report name and the date.
+ * @returns reportsList which consists of the report id, report name and the date.
  */
- async function getDailyReports(userid){
+ async function getDailyWeeklyMonthlyReports(userid){
     const date1= new Date()
-    const lastweek=date1.setDate(date1.getDate()-1)
+    const daily=date1.setDate(date1.getDate()-1)
+    const date2= new Date()
+    const weekly=date2.setDate(date1.getDate()-7)
+    const date3= new Date()
+    const monthly=date3.setDate(date1.getDate()-30)
+
     const userReports = await prisma.reports.findMany({
         where:{
             userId:userid
@@ -825,12 +830,16 @@ async function getDataItems(){
         }
     })
     let numReports=0
-    let reportsList=[]
+    let dailyReportsList=[]
+    let weeklyReportsList=[]
+    let monthlyReportsList=[]
     if(userReports=null)
     {
         return{
             numReports,
-            reportsList
+            dailyReportsList,
+            weeklyReportsList,
+            monthlyReportsList
         }
     }
     else{
@@ -839,7 +848,23 @@ async function getDataItems(){
         {
             if(report.generatedDate.toISOString()<date1.toISOString()){
                 numReports++
-                reportsList.push({
+                dailyReportsList.push({
+                reportId: report.id,
+                reportName:report.reportName,
+                reportDate: report.generatedDate
+            }) 
+            }
+            if(report.generatedDate.toISOString()<date2.toISOString()){
+                numReports++
+                weeklyReportsList.push({
+                reportId: report.id,
+                reportName:report.reportName,
+                reportDate: report.generatedDate
+            }) 
+            }
+            if(report.generatedDate.toISOString()<date3.toISOString()){
+                numReports++
+                monthlyReportsList.push({
                 reportId: report.id,
                 reportName:report.reportName,
                 reportDate: report.generatedDate
@@ -853,6 +878,7 @@ async function getDataItems(){
         }
     }
 }
+
 
 /**
  * Function to get the most recent reports.
