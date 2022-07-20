@@ -16,16 +16,18 @@ import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
-import { getAllUserReports, getUserReport} from "../../api/apiCall"
+import { getAllUserReports, getUserReport, removeReport } from "../../api/apiCall"
 
 export const mockTotals = [
   { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR',call:"day" },
   { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: "week" },
   { timePeriod: 'Monthly', total: 'R1000.50', title: 'generateMR', call: "month" },
 ];
+
 // day week month
 const ViewReports: React.FC = () => {
   const [r, setR] = useState([])
+  
   useEffect(() => {
     getAllUserReports(1)
       .then((res: { json: () => any; }) => res.json())
@@ -104,8 +106,8 @@ const ViewReports: React.FC = () => {
           }
         })
   }
-  function deleteReport(path: string) {
-    return;
+  function deleteReport(reportName: string) {
+    removeReport(1, reportName);
   }
 };
 export default ViewReports;

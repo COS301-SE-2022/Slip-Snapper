@@ -19,7 +19,7 @@ import {
   IonLabel,
   IonIcon,
 } from '@ionic/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import { EditBudgets } from '../components/EditBudgets';
 import '../theme/profile.css';
@@ -36,19 +36,23 @@ const Profile: React.FC = () => {
 
   let totalWeeklySpent = 300;
   let totalMonthlySpent = 500;
-  getBudgetA(1)
-    .then((res) => res.json())
-    .then(
-      (json) => {
-        val.weekly = json.weekly;
-        val.monthly = json.monthly;
-        totalWeeklySpent = json.weeklyTotal;
-        totalMonthlySpent = json.monthlyTotal;
-      })
+  useEffect(() => {
+    getBudgetA(1)
+      .then((res) => res.json())
+      .then(
+        (json) => {
+          val.weekly = json.weekly;
+          val.monthly = json.monthly;
+          totalWeeklySpent = json.weeklyTotal;
+          totalMonthlySpent = json.monthlyTotal;
+          setWeeklyBudget("Weekly Budget: R" + val.weekly)
+          setMonthlyBudget("Monthly Budget: R" + val.monthly)
+        })
+  }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R" + val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R" + val.monthly);
   let weeklyBudget: number, monthlyBudget: number
-  return (
+  return(
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
@@ -76,7 +80,6 @@ const Profile: React.FC = () => {
               <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture" />
             </IonCardHeader>
           </IonCard>
-
 
           <IonCard className="card budget" color="primary">
             <IonCardHeader>

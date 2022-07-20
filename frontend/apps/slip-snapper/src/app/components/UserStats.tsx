@@ -1,33 +1,32 @@
 import { IonButton, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonTextarea } from "@ionic/react";
-import React from 'react';
+import React, { useEffect } from 'react';
 import {  getStatsA } from "../../api/apiCall"
 
 const favourite = { store: "N/A", total: 0 }
 const mostSpentCategory = { itemCategory: "N/A", total: 0 }
 const mostSpentStore = { store: "N/A", total: 0 }
 const weekMonthSpent = { lastWeek: 0, thisWeek: 0, lastMonth: 0, thisMonth: 0 }
-
-
-getStatsA(1)
-    .then((res) => res.json())
-    .then(
-        (json) => {
-            mostSpentCategory.itemCategory = json.category.name;
-            mostSpentCategory.total = json.category.amount;
-            mostSpentStore.store = json.mostExpensive.name;
-            mostSpentStore.total = json.mostExpensive.amount;
-            weekMonthSpent.lastWeek = json.lastWeek.previous;
-            weekMonthSpent.thisWeek = json.lastWeek.current;
-            weekMonthSpent.lastMonth = json.lastMonth.previous;
-            weekMonthSpent.thisMonth = json.lastMonth.current;
-            favourite.store = json.favouriteStore.name;
-            favourite.total = json.favouriteStore.total;
-
-            setUserStatistics()
-
-        })
-
 export const UserStats = () => {
+    useEffect(() => {
+        getStatsA(1)
+            .then((res) => res.json())
+            .then(
+                (json) => {
+                    mostSpentCategory.itemCategory = json.category.name;
+                    mostSpentCategory.total = json.category.amount;
+                    mostSpentStore.store = json.mostExpensive.name;
+                    mostSpentStore.total = json.mostExpensive.amount;
+                    weekMonthSpent.lastWeek = json.lastWeek.previous;
+                    weekMonthSpent.thisWeek = json.lastWeek.current;
+                    weekMonthSpent.lastMonth = json.lastMonth.previous;
+                    weekMonthSpent.thisMonth = json.lastMonth.current;
+                    favourite.store = json.favouriteStore.name;
+                    favourite.total = json.favouriteStore.total;
+
+                    setUserStatistics()
+
+                })
+    }, []);
     return(
         <div className="wrapper">
             <IonCard className="card weekly" color="primary">
