@@ -16,14 +16,14 @@ import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
-import { getAllUserReports, getUserReport } from "../../api/apiCall"
+import { getAllUserReports, getUserReport} from "../../api/apiCall"
 
 export const mockTotals = [
-  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR' },
-  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR' },
-  { timePeriod: 'Monthly', total: 'R1000.50', title: 'generateMR' },
+  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR',call:"day" },
+  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: "week" },
+  { timePeriod: 'Monthly', total: 'R1000.50', title: 'generateMR', call: "month" },
 ];
-
+// day week month
 const ViewReports: React.FC = () => {
   const [r, setR] = useState([])
   useEffect(() => {
@@ -52,14 +52,12 @@ const ViewReports: React.FC = () => {
             return (
               <ReportTotal
                 key={index}
-                reportData={[totals.timePeriod, totals.total, totals.title]}
+                reportData={[totals.timePeriod, totals.total, totals.title,totals.call]}
               />
             );
           })}
         </IonRow>
-
         <IonTitle>All Reports</IonTitle>
-
         <IonCard color="primary">
           <IonCardHeader>
             <IonCardTitle>Todays Report:</IonCardTitle>
