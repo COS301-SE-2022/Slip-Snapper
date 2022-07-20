@@ -55,9 +55,9 @@ const EditSlip: React.FC = () => {
 
                 <IonCard color="primary">
                     <IonCardHeader>
-                        <IonCardTitle>Receipt Title
+                        <IonCardTitle>Store Name/Location
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput contentEditable="true" ></IonInput>
+                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -117,20 +117,20 @@ const EditSlip: React.FC = () => {
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/item"} id={index + "/item"} value={item.item}></IonInput>
+                                        <IonInput onClick={() => setNormalColour(index + "/item")} key={index + "/item"} id={index + "/item"} value={item.item}></IonInput>
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
+                                        <IonInput onClick={() => setNormalColour(index + "/quantity")} key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
 
                                     </IonItem>
                                 </IonCol>
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput onIonChange={handleCostsChange}
+                                        <IonInput onClick={() => setNormalColour(index + "/price")} onIonChange={handleCostsChange}
                                          key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
 
                                     </IonItem>
@@ -138,7 +138,7 @@ const EditSlip: React.FC = () => {
 
                                 <IonCol>
                                     <IonItem color="tertiary" className='inputs'>
-                                        <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
+                                        <IonInput onClick={() => setNormalColour(index + "/type")} key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
                                     </IonItem>
                                 </IonCol>
                                 <IonCol>
@@ -165,6 +165,16 @@ const EditSlip: React.FC = () => {
         )
 
     };
+
+    function ActionButtons() {
+        return (
+            <IonItem color="primary">
+                <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
+                <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
+            </IonItem>
+        );
+    }
 
     function addItem() {
         getData()
@@ -200,18 +210,45 @@ const EditSlip: React.FC = () => {
             }
         }
 
-      addItemsA(1,data,items)
+      
     }
 
-    function ActionButtons() {      
-        return (
-        <IonItem color="primary">
-            <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-            <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
-            <IonButton onClick={()=>{getData(); console.log(items)}} fill="solid" slot="end" color="secondary">Submit</IonButton>
-        </IonItem>
-        );
-      }
+    function validateData() {
+        let submitFlag =true;
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].item === "" || items[i].item === "*") {
+                const temp = [...items];
+                temp[i].name = "*";
+                setItems(temp)
+                document.getElementById(i + "/item")?.setAttribute("color", "danger");
+                submitFlag = false;
+            }
+            if (items[i].type === "" || items[i].type === "*") {
+                const temp = [...items];
+                temp[i].type = "*";
+                setItems(temp)
+                document.getElementById(i + "/type")?.setAttribute("color", "danger");
+                submitFlag = false;
+
+            }
+            if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity) !== 1) {
+                document.getElementById(i + "/quantity")?.setAttribute("color", "danger");
+                submitFlag = false;
+
+            }
+            if (Math.sign(items[i].price) === -1) {
+                document.getElementById(i + "/price")?.setAttribute("color", "danger");
+                submitFlag = false;
+
+            }
+        }
+        if(submitFlag===true)
+            {addItemsA(1, data, items)}
+        
+    }
+    function setNormalColour(i: string) {
+        document.getElementById(i)?.setAttribute("color", "light");
+    }
 }
 
 export default EditSlip;
