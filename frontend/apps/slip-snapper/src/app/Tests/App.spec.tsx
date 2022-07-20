@@ -12,6 +12,7 @@ import Register from '../pages/Register';
 import ReportTotal from '../components/ReportTotal';
 import { mockTotals } from '../pages/ViewReports'
 import { UserStats } from '../components/UserStats';
+import AddEntry from '../pages/AddEntry';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -176,27 +177,45 @@ describe('Register', () => {
 });
 
 describe('Generate Report', () => {
-
-  test('Should check if function fires for generate report for daily', async () => {
-    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[0].timePeriod, mockTotals[0].total, mockTotals[0].title]} />);
-    const addButton = await findByTitle('generateDR');
-    fireEvent.click(addButton);
-  });
-  test('Should check if function fires for generate report for weekly', async () => {
-    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[1].timePeriod, mockTotals[1].total, mockTotals[1].title]} />);
-
-    const addButton = await findByTitle('generateWR');
-    fireEvent.click(addButton);
-  });
-  test('Should check if function fires for generate report for Monthly', async () => {
-    const { findByTitle } = render(<ReportTotal reportData={[mockTotals[2].timePeriod, mockTotals[2].total, mockTotals[2].title]} />);
-    const addButton = await findByTitle('generateMR');
-    fireEvent.click(addButton);
-  });
-});
-//Example of old Report API tests
   // test('Should check if function fires for generate report for daily', async () => {
-  //   const { findByTitle } = render(<ReportTotal />);
+  //   const { findByTitle } = render(<ReportTotal reportData={[mockTotals[0].timePeriod, mockTotals[0].total, mockTotals[0].title]} />);
+  //   const addButton = await findByTitle('generateDR');
+  //   fireEvent.click(addButton);
+  // });
+  // test('Should check if function fires for generate report for weekly', async () => {
+  //   const { findByTitle } = render(<ReportTotal reportData={[mockTotals[1].timePeriod, mockTotals[1].total, mockTotals[1].title]} />);
+
+  //   const addButton = await findByTitle('generateWR');
+  //   fireEvent.click(addButton);
+  // });
+  // test('Should check if function fires for generate report for Monthly', async () => {
+  //   const { findByTitle } = render(<ReportTotal reportData={[mockTotals[2].timePeriod, mockTotals[2].total, mockTotals[2].title]} />);
   //   const addButton = await findByTitle('generateMR');
   //   fireEvent.click(addButton);
   // });
+});
+
+/**
+ * @returns Jests tests for Register Page
+ */
+describe('AddEntry', () => {
+  it('Correctly renders the AddEntry page', () => {
+    const Component = render(<AddEntry />);
+
+    expect(Component.getByText('Add Entries'));
+    expect(Component.getByText('Store Name/Location'));
+    expect(Component.getByText('Edit Details'));
+    expect(Component.getByText('Item Name'));
+    expect(Component.getByText('Quantity'));
+    expect(Component.getByText('Price'));
+    expect(Component.getByText('Type'));
+    expect(Component.getByText('Total:'));
+  });
+
+  test('Correctly fires onClicks', async () => {
+    const Component = render(<AddEntry />);
+    const name = await Component.findByTestId("0/name")
+    fireEvent.click(name);
+
+  });
+});

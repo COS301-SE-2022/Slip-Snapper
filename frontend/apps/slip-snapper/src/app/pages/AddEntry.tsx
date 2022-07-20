@@ -74,38 +74,38 @@ const AddEntry: React.FC = () => {
 
                     {items.map((item: any, index: number) => {
                         return (
-                            <IonGrid>
+                            <IonGrid key={index} >
                                 <IonRow>
                                     <IonCol className='itemlabels'>
                                         <IonLabel>Item #{index + 1}</IonLabel>
                                     </IonCol>
 
                                     <IonCol>
-                                        <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/name")} key={index + "/name"} id={index + "/name"} value={item.name}></IonInput>
+                                        <IonItem data-testid={index+"/name"} color="tertiary" className='inputs'>
+                                            <IonInput onClick={() => setNormalColour(index + "/name")} id={index + "/name"} value={item.name}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
-                                             key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
+                                            id={index + "/quantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/price")} type='number' onIonChange={handleCostsChange}
-                                                key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
+                                              id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/type")} key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
+                                            <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.type} ></IonInput>
                                         </IonItem>
                                     </IonCol>
-                                    <IonCol>
+                                    <IonCol >
                                         <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
                                         <IonAlert
                                             isOpen={showAlert}
