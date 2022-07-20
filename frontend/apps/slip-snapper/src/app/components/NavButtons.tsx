@@ -1,18 +1,26 @@
 import { IonButton, IonMenuButton } from "@ionic/react";
 import React, { useEffect } from "react";
 
+/**
+ * Implements the Burger Menu used for navigation on mobile devices
+ */
 export const NavButtons = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  //Media Query State
   const [mQuery, setMQuery] = React.useState<any>({
     matches: window.innerWidth > 768 ? true : false,
   });
 
+  //Update state based on screen size
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
-    mediaQuery.addListener(setMQuery);
-
-    return () => mediaQuery.removeListener(setMQuery);
-  }, []);
+    mediaQuery.onchange = (e) => {
+        if (e.matches) {
+        setMQuery(false)
+      } else {
+        setMQuery(true)
+      }
+    }}, []);
 
   return (
     <div>
@@ -20,6 +28,7 @@ export const NavButtons = () => {
         <IonMenuButton />
       ) : (
         <>
+          {/* Burger Menu Routing */}
           <IonButton routerLink={"/home"}>Home</IonButton>
           <IonButton routerLink={"/viewreports"}>Reports</IonButton>
           <IonButton routerLink={"/profile"}>Profile</IonButton>
