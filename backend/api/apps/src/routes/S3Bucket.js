@@ -69,12 +69,14 @@ class S3BucketFunctions {
         myBucket.deleteObject(params, function (err, data) {
             if (err) {
                 return{
-                    message: err
+                    message: err,
+                    deleted: false
                 };
             }
             else {
                 return{
-                    message:"File has been deleted successfully"
+                    message:"File has been deleted successfully",
+                    deleted: true
                 };
             }
         });

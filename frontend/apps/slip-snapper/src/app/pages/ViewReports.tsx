@@ -16,28 +16,34 @@ import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
-import { getAllUserReports, getUserReport, removeReport } from "../../api/apiCall"
+import {
+  getAllUserReports,
+  getUserReport,
+  removeReport,
+} from '../../api/apiCall';
 
 export const mockTotals = [
-  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR',call:"day" },
-  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: "week" },
-  { timePeriod: 'Monthly', total: 'R1000.50', title: 'generateMR', call: "month" },
+  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'day' },
+  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: 'week' },
+  {
+    timePeriod: 'Monthly',
+    total: 'R1000.50',
+    title: 'generateMR',
+    call: 'month',
+  },
 ];
 
 // day week month
 const ViewReports: React.FC = () => {
-  const [r, setR] = useState<any[]>([])
+  const [r, setR] = useState<any[]>([]);
   useEffect(() => {
     getAllUserReports(1)
       .then((res) => res.json())
-      .then(
-        (json) => {
-          console.log(json.reports)
-          setR(json.reports)
-        })
-      
+      .then((json) => {
+        setR(json.reports);
+      });
   }, []);
-  
+
   return (
     <IonPage>
       <IonHeader>
@@ -55,7 +61,12 @@ const ViewReports: React.FC = () => {
             return (
               <ReportTotal
                 key={index}
-                reportData={[totals.timePeriod, totals.total, totals.title,totals.call]}
+                reportData={[
+                  totals.timePeriod,
+                  totals.total,
+                  totals.title,
+                  totals.call,
+                ]}
               />
             );
           })}
@@ -66,7 +77,6 @@ const ViewReports: React.FC = () => {
             <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
           {r.map((report, index) => {
-            console.log(report)
             return (
               <IonItem color="tertiary">
                 {report.reportName}
@@ -95,29 +105,24 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    console.log(data)
+    console.log(data);
     getUserReport(1, data)
       .then((res) => res.json())
-      .then(
-        (json) => {
-          if (json.report.data !== undefined) {
-            const arr = new Uint8Array(json.report.data)
-            const blob = new Blob([arr], { type: "application/pdf" });
-            const docUrl = URL.createObjectURL(blob);
-            window.open(docUrl)
-          }
-        })
+      .then((json) => {
+        if (json.report.data !== undefined) {
+          const arr = new Uint8Array(json.report.data);
+          const blob = new Blob([arr], { type: 'application/pdf' });
+          const docUrl = URL.createObjectURL(blob);
+          window.open(docUrl);
+        }
+      });
   }
   function deleteReport(reportName: string) {
-    console.log(reportName)
-    
     removeReport(1, reportName)
-     .then((res) => res.json())
-    .then(
-    (json) => {
-      console.log(json.message)
-      }
-    )
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json.message);
+      });
   }
 };
 export default ViewReports;
