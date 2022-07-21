@@ -14,20 +14,27 @@ import {
   IonCardTitle,
   IonItem,
 } from '@ionic/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import { generateReportA } from "../../api/apiCall"
+import { generateReportA, getRecentReports } from "../../api/apiCall"
 import '../theme/home.css';
 import ViewReportItem from '../components/ViewReportItem';
 
 const Home: React.FC = () => {
-  const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
-  { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
+  // const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
+  // { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
 
   const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
-
+  const [r, setR] = useState<any[]>([]);
+  useEffect(() => {
+    getRecentReports(1)
+      .then((res) => res.json())
+      .then((json) => {
+        setR(json.reports);
+      });
+  }, []);
   return (
     <IonPage>
       <IonHeader>
@@ -42,9 +49,9 @@ const Home: React.FC = () => {
         <IonTitle>Recent Reports</IonTitle>
 
         <IonRow>
-          {mockReports.map((reps, index) => {
+          {r.map((reps, index) => {
             return (
-              <ReportItem key={index} reportData={[reps.reportNumber, reps.date]} />
+              <ReportItem key={index} reportData={[reps.reportId, reps.reportName]} />
             )
           })
           }
