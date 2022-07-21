@@ -136,12 +136,13 @@ export async function getAllUserReports(userId){
 }
 
 export async function getUserReport(userName, fileName){
-    return fetch('http://localhost:55555/api/report/pdf?userName=ChrisDev&fileName=temp', {
+    const url = 'http://localhost:55555/api/report/pdf?userName=' + userName + '&fileName=' + fileName
+    return fetch(url, {
         method: 'get',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
-      })
+    })
 }
 
 export async function getRecentReports(userID){
