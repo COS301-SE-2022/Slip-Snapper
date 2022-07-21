@@ -271,7 +271,7 @@ router.delete('/pdf', async (req,res)=>{
     const bucket = new S3BucketFunctions
     const result = bucket.deleteFile(path)
     
-    await req.app.get("db").deleteReportRecord(reportID)
+    await req.app.get("db").deleteReportRecord(Number(reportID))
     
     //TODO: find way to check if it deleted from bucket
     let status = 200;
