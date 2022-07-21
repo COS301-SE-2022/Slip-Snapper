@@ -26,15 +26,16 @@ export const mockTotals = [
 
 // day week month
 const ViewReports: React.FC = () => {
-  const [r, setR] = useState([])
-  
+  const [r, setR] = useState<any[]>([])
   useEffect(() => {
     getAllUserReports(1)
-      .then((res: { json: () => any; }) => res.json())
+      .then((res) => res.json())
       .then(
-        (json: { reports: any; }) => {
+        (json) => {
+          console.log(json.reports)
           setR(json.reports)
         })
+      
   }, []);
   
   return (
@@ -62,14 +63,15 @@ const ViewReports: React.FC = () => {
         <IonTitle>All Reports</IonTitle>
         <IonCard color="primary">
           <IonCardHeader>
-            <IonCardTitle>Todays Report:</IonCardTitle>
+            <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
           {r.map((report, index) => {
+            console.log(report)
             return (
               <IonItem color="tertiary">
-                {report}
+                {report.reportName}
                 <IonButton
-                  onClick={() => view(report)}
+                  onClick={() => view(report.reportName)}
                   color="success"
                   slot="end"
                   class="viewButton"
@@ -77,7 +79,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => deleteReport(report)}
+                  onClick={() => deleteReport(report.reportName)}
                   fill="solid"
                   slot="end"
                   color="secondary"
@@ -107,7 +109,15 @@ const ViewReports: React.FC = () => {
         })
   }
   function deleteReport(reportName: string) {
-    removeReport(1, reportName);
+    console.log(reportName)
+    
+    removeReport(1, reportName)
+     .then((res) => res.json())
+    .then(
+    (json) => {
+      console.log(json.message)
+      }
+    )
   }
 };
 export default ViewReports;
