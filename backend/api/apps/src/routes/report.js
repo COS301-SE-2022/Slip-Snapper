@@ -205,6 +205,27 @@ router.get('/user', async (req,res)=>{
 });
 
 /**
+ * Get recent reports 
+ * Uses the usersId
+ */
+router.get('/recent', async (req,res)=>{
+    let { userId } = req.query;
+    
+    const result = await req.app.get("db").getRecentReports(Number(userId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: "Recent Reports retrieved.",
+            reports: result.reportsList
+        });
+    
+});
+
+/**
  * Get a specific report from the S3 bucket
  * Uses the report name and UserName
  */
@@ -251,7 +272,7 @@ router.delete('/pdf', async (req,res)=>{
     const bucket = new S3BucketFunctions
     const result = bucket.deleteFile(path)
     let status = 200;
-
+    console.log(result)
     //TODO error checking
     return res.status(status)
         .send({
