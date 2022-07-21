@@ -144,6 +144,15 @@ export async function getUserReport(userName, fileName){
       })
 }
 
+export async function getRecentReports(userID){
+    return fetch('http://localhost:55555/api/report/recent?userId=1', {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+}
+
 export async function addReport( userName, fileName){
     return fetch('http://localhost:55555/api/report/pdf', {
         method: 'post',
