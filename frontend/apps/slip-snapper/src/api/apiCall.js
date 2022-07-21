@@ -168,7 +168,7 @@ export async function addReport( userName, fileName){
 }
 
 //Temporary
-export async function removeReport( userName, fileName){
+export async function removeReport( userName, fileName , reportID){
     return fetch('http://localhost:55555/api/report/pdf', {
         method: 'delete',
         headers: {
@@ -177,6 +177,7 @@ export async function removeReport( userName, fileName){
         body: JSON.stringify({
           userName: userName,
           fileName: fileName,
+          reportID: reportID
         })
     })
 }

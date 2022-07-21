@@ -89,7 +89,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => deleteReport(report.reportId)}
+                  onClick={() => deleteReport(1, " ", report.reportId)}
                   fill="solid"
                   slot="end"
                   color="secondary"
@@ -117,8 +117,8 @@ const ViewReports: React.FC = () => {
         }
       });
   }
-  function deleteReport(reportId: string) {
-    removeReport(1, reportId)
+  function deleteReport(user: number, fileName: string, reportId: string) {
+    removeReport(user,fileName, reportId)
       .then((res) => res.json())
       .then((json) => {
         console.log(json.message);

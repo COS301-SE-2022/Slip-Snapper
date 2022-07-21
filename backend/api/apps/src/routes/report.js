@@ -265,13 +265,17 @@ router.post('/pdf', async (req,res)=>{
 });
 
 router.delete('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.body;
+    let { userName, fileName, reportID } = req.body;
     
     const path = `${userName}/${fileName}.pdf`
-    console.log(path)
     const bucket = new S3BucketFunctions
     const result = bucket.deleteFile(path)
+    
+    await req.app.get("db").deleteReportRecord(reportID)
+    
+    //TODO: find way to check if it deleted from bucket
     let status = 200;
+
     console.log(result)
     //TODO error checking
     return res.status(status)
