@@ -190,8 +190,7 @@ router.get('/statistics', async (req,res)=>{
 router.get('/user', async (req,res)=>{
     let { userId } = req.query;
     
-    //const result = {message:'Hello', reports:['name1','name2','name3']}
-    const result = {message:'Hello', reports:['name1','name2','name3']}
+    const result = await req.app.get("db").getAllReports(Number(userId));
 
     let status = 200;
 
@@ -199,8 +198,8 @@ router.get('/user', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: result.message,
-            reports: result.reports
+            numReports: result.numReports,
+            reports: result.reportsList
         });
     
 });
