@@ -74,7 +74,7 @@ const ViewReports: React.FC = () => {
         <IonTitle>All Reports</IonTitle>
         <IonCard color="primary">
           <IonCardHeader>
-            <IonCardTitle>Reports:</IonCardTitle>
+            <IonCardTitle>Reports:</IonCardTitle>           
           </IonCardHeader>
           {r.map((report, index) => {
             return (
@@ -89,7 +89,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => deleteReport(1, " ", report.reportId)}
+                  onClick={() => deleteReport(1, report.reportName, report.reportId)}
                   fill="solid"
                   slot="end"
                   color="secondary"
@@ -100,6 +100,7 @@ const ViewReports: React.FC = () => {
             );
           })}
         </IonCard>
+      
       </IonContent>
     </IonPage>
   );
@@ -117,12 +118,22 @@ const ViewReports: React.FC = () => {
         }
       });
   }
-  function deleteReport(user: number, fileName: string, reportId: string) {
-    removeReport(user,fileName, reportId)
-      .then((res) => res.json())
+ async function deleteReport(user: number, fileName: string, reportId: string) {
+    
+     await removeReport(user,fileName, reportId)
+      .then(async (res) => await res.json())
       .then((json) => {
         console.log(json.message);
       });
+
+    getAllUserReports(1)
+      .then(async (res) => await res.json())
+      .then((json) => {
+        setR(json.reports);
+      });
   }
+
+
+ 
 };
 export default ViewReports;
