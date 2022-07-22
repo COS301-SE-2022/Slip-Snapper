@@ -145,15 +145,15 @@ async function getWeeklyExpenditure(userid:number)
    {
     if(weekly.transactionDate.toISOString()>=date1.toISOString())
     {
-      
       recentWeek=recentWeek+weekly.total;
+      console.log("hey there",date1.toISOString())
     }
     else if(weekly.transactionDate.toISOString()>=date2.toISOString())
     {
       previousWeek=previousWeek+weekly.total;
     }
   }
-  //console.log(recentWeek)
+  console.log(recentWeek)
   //console.log(previousWeek)
 } 
 
@@ -211,7 +211,7 @@ var reportsList =[]
 }
 async function getWeeklyReports(userid: number){
   const date1= new Date()
-  const lastweek=date1.setDate(date1.getDate()-0.5)
+  const lastweek=date1.setDate(date1.getDate()-1);
 
   const userReports = await prisma.reports.findMany({
       where:{
@@ -227,26 +227,23 @@ async function getWeeklyReports(userid: number){
   let reportsList=[]
   if(userReports==null)
   {
-        console.log(lastweek)    
+        //console.log(lastweek)    
       
   }
   else{
-      const date1= new Date()
       for(var rep of userReports)
       {
-        console.log(numReports, rep.generatedDate.toISOString())
 
 
-        if(rep.generatedDate.toISOString()<date1.toISOString()){
+        if(rep.generatedDate.toISOString()>date1.toISOString()){
           numReports++
-
           }
        
       }
    
   }
 
-    console.log(date1)
+    console.log(numReports)
 }
 async function createReportRecord(userid: number){
   const date1= new Date()
@@ -261,13 +258,13 @@ async function createReportRecord(userid: number){
 }
 
   var userid=1
-  createReportRecord(userid)
- // getWeeklyReports(userid)
+  //createReportRecord(userid)
+  getWeeklyReports(userid)
  // getAllUsers()
   //getfavouritestore(userid)
   //getMostExpensiveItem(userid)
   //getMostSpentATStore(userid)
-  //getWeeklyExpenditure(userid)
+  getWeeklyExpenditure(userid)
   //getMonthlyExpenditure(userid)
   //getAllReports(userid)  
     .catch((e) => {

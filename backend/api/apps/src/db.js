@@ -695,7 +695,8 @@ async function getWeeklyExpenditure(userid){
         },
         select:{
             transactionDate:true,
-            total:true
+            total:true,
+            items:true
         }
     })
     
@@ -763,6 +764,7 @@ async function getDataItems(){
     }
 }
 
+/** Report page */
 
 /**
  * Function to get the reports
@@ -843,10 +845,9 @@ async function getDataItems(){
         }
     }
     else{
-        const date1= new Date()
         for(var report of userReports)
         {
-            if(report.generatedDate.toISOString()<date1.toISOString()){
+            if(report.generatedDate.toISOString()>date1.toISOString()){
                 numReports++
                 dailyReportsList.push({
                 reportId: report.id,
@@ -854,7 +855,7 @@ async function getDataItems(){
                 reportDate: report.generatedDate
             }) 
             }
-            if(report.generatedDate.toISOString()<date2.toISOString()){
+            if(report.generatedDate.toISOString()>date2.toISOString()){
                 numReports++
                 weeklyReportsList.push({
                 reportId: report.id,
@@ -862,7 +863,7 @@ async function getDataItems(){
                 reportDate: report.generatedDate
             }) 
             }
-            if(report.generatedDate.toISOString()<date3.toISOString()){
+            if(report.generatedDate.toISOString()>date3.toISOString()){
                 numReports++
                 monthlyReportsList.push({
                 reportId: report.id,
@@ -948,7 +949,7 @@ async function getRecentReports(userid){
  * @returns null
  */
  async function deleteReportRecord(reportid){
-    const userReports = await prisma.reports.delete({
+    const deleteReport = await prisma.reports.delete({
         where:{
             id:reportid
         }
@@ -956,7 +957,28 @@ async function getRecentReports(userid){
       
   }
 
+  /**
+ * Function to .
+ * @param {*} reportId (Integer) The record id.
+ * @returns null
+ */
+   async function reportSummary(userid){
+    const todaysReport= await prisma.slip.findMany({
+        where:{
+            usersId:userid
+        },
+        select:{
+            items:true,
+            total:true
+        }
+    }) 
+    
+      for(var countItems of todaysReport)
+      {
 
+      }
+  }
+  
 module.exports = {
     getUser,
     addUser,
