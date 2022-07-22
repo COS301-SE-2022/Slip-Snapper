@@ -190,8 +190,7 @@ router.get('/statistics', async (req,res)=>{
 router.get('/user', async (req,res)=>{
     let { userId } = req.query;
     
-    //const result = {message:'Hello', reports:['name1','name2','name3']}
-    const result = {message:'Hello', reports:['name1','name2','name3']}
+    const result = await req.app.get("db").getAllReports(Number(userId));
 
     let status = 200;
 
@@ -199,8 +198,29 @@ router.get('/user', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: result.message,
-            reports: result.reports
+            numReports: result.numReports,
+            reports: result.reportsList
+        });
+    
+});
+
+/**
+ * Get recent reports 
+ * Uses the usersId
+ */
+router.get('/recent', async (req,res)=>{
+    let { userId } = req.query;
+    
+    const result = await req.app.get("db").getRecentReports(Number(userId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: "Recent Reports retrieved.",
+            reports: result.reportsList
         });
     
 });
@@ -245,15 +265,19 @@ router.post('/pdf', async (req,res)=>{
 });
 
 router.delete('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.body;
+    let { userName, fileName, reportID } = req.body;
     
     const path = `${userName}/${fileName}.pdf`
     const bucket = new S3BucketFunctions
     const result = bucket.deleteFile(path)
+    
+    await req.app.get("db").deleteReportRecord(Number(reportID))
+    
+    //TODO: find way to check if it deleted from bucket
     let status = 200;
 
+    console.log(result)
     //TODO error checking
-
     return res.status(status)
         .send({
             message: result.message,

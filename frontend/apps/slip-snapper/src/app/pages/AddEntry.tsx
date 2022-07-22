@@ -38,9 +38,9 @@ const AddEntry: React.FC = () => {
 
                 <IonCard color="primary">
                     <IonCardHeader>
-                        <IonCardTitle>Receipt Title
+                        <IonCardTitle>Store Name/Location
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput contentEditable="true" ></IonInput>
+                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -74,38 +74,38 @@ const AddEntry: React.FC = () => {
 
                     {items.map((item: any, index: number) => {
                         return (
-                            <IonGrid>
+                            <IonGrid key={index} >
                                 <IonRow>
                                     <IonCol className='itemlabels'>
                                         <IonLabel>Item #{index + 1}</IonLabel>
                                     </IonCol>
 
                                     <IonCol>
-                                        <IonItem color="tertiary" className='inputs'>
-                                            <IonInput key={index + "/name"} id={index + "/name"} value={item.name}></IonInput>
+                                        <IonItem data-testid={index+"/name"} color="tertiary" className='inputs'>
+                                            <IonInput onClick={() => setNormalColour(index + "/name")} id={index + "/name"} value={item.name}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput key={index + "/quantity"} id={index + "/quantity"} value={item.quantity}  ></IonInput>
-
+                                            <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
+                                            id={index + "/quantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onIonChange={handleCostsChange}
-                                                key={index + "/price"} id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput onClick={() => setNormalColour(index + "/price")} type='number' onIonChange={handleCostsChange}
+                                              id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput key={index + "/type"} id={index + "/type"} value={item.type} ></IonInput>
+                                            <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.type} ></IonInput>
                                         </IonItem>
                                     </IonCol>
-                                    <IonCol>
+                                    <IonCol >
                                         <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
                                         <IonAlert
                                             isOpen={showAlert}
@@ -136,6 +136,15 @@ const AddEntry: React.FC = () => {
         </IonPage>
     );
 
+    function ActionButtons() {
+        return (
+            <IonItem color="primary">
+                <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
+                <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                <IonButton onClick={() => { getData(); validateData();}} fill="solid" slot="end" color="secondary">Submit</IonButton>
+            </IonItem>
+        );
+    }
 
     function addItem() {
         getData()
@@ -172,15 +181,37 @@ const AddEntry: React.FC = () => {
         }
     }
 
-    function ActionButtons() {      
-        return (
-        <IonItem color="primary">
-            <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-            <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
-            <IonButton onClick={()=>{getData(); console.log(items)}} fill="solid" slot="end" color="secondary">Submit</IonButton>
-        </IonItem>
-        );
-      }
+    function validateData()
+    {
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].name === "" || items[i].name === "*")
+            {
+                const temp = [...items];
+                temp[i].name="*";
+                setItems(temp)
+                document.getElementById(i + "/name")?.setAttribute("color", "danger"); 
+            }
+            if (items[i].type === "" || items[i].type === "*") {
+                const temp = [...items];
+                temp[i].type = "*";
+                setItems(temp)
+                document.getElementById(i + "/type")?.setAttribute("color", "danger");
+            }
+            if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity)!==1)
+            {
+                document.getElementById(i + "/quantity")?.setAttribute("color","danger");
+            }
+            if (Math.sign(items[i].price)===-1) {
+                document.getElementById(i + "/price")?.setAttribute("color", "danger");
+            }
+        }
+    }
+
+    function setNormalColour(i:string)
+    {
+        document.getElementById(i)?.setAttribute("color", "light");
+    }
+   
 }
 
 export default AddEntry;

@@ -5,10 +5,11 @@ AWS.config.update({
     secretAccessKey: process.env.AWS_SECRET_KEY
 })
 const S3_BUCKET = process.env.AWS_S3_BUCKET
+const REGION = process.env.AWS_REGION
 
 const myBucket = new AWS.S3({
     params: { Bucket: S3_BUCKET },
-    region: process.env.AWS_REGION
+    region: REGION
 })
 
 class S3BucketFunctions {
@@ -68,12 +69,14 @@ class S3BucketFunctions {
         myBucket.deleteObject(params, function (err, data) {
             if (err) {
                 return{
-                    message: err
+                    message: err,
+                    deleted: false
                 };
             }
             else {
                 return{
-                    message:"File has been deleted successfully"
+                    message:"File has been deleted successfully",
+                    deleted: true
                 };
             }
         });

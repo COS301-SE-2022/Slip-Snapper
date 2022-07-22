@@ -774,7 +774,7 @@ async function getDataItems(){
  async function getAllReports(userid){
     const userReports = await prisma.reports.findMany({
         where:{
-            userId:userid
+            usersId:userid
         },
         select:{
             id:true,
@@ -784,7 +784,7 @@ async function getDataItems(){
     })
     let numReports=0
     let reportsList=[]
-    if(userReports=null)
+    if(userReports==null)
     {
         return{
             numReports,
@@ -891,7 +891,7 @@ async function getDataItems(){
 async function getRecentReports(userid){
     const userReports = await prisma.reports.findMany({
         where:{
-            userId:userid
+            usersId:userid
         }, 
         select:{
             id:true,
@@ -904,7 +904,7 @@ async function getRecentReports(userid){
         }
     })
     let reportsList=[]
-    if(userReports=null)
+    if(userReports==null)
     {
         return{
             reportsList

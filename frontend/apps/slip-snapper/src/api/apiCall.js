@@ -136,7 +136,17 @@ export async function getAllUserReports(userId){
 }
 
 export async function getUserReport(userName, fileName){
-    return fetch('http://localhost:55555/api/report/pdf?userName=ChrisDev&fileName=temp', {
+    const url = 'http://localhost:55555/api/report/pdf?userName=' + userName + '&fileName=' + fileName
+    return fetch(url, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+}
+
+export async function getRecentReports(userID){
+    return fetch('http://localhost:55555/api/report/recent?userId=1', {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +168,7 @@ export async function addReport( userName, fileName){
 }
 
 //Temporary
-export async function removeReport( userName, fileName){
+export async function removeReport( userName, fileName , reportID){
     return fetch('http://localhost:55555/api/report/pdf', {
         method: 'delete',
         headers: {
@@ -167,6 +177,7 @@ export async function removeReport( userName, fileName){
         body: JSON.stringify({
           userName: userName,
           fileName: fileName,
+          reportID: reportID
         })
     })
 }
