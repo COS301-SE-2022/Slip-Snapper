@@ -57,7 +57,12 @@ const EditSlip: React.FC = () => {
                     <IonCardHeader>
                         <IonCardTitle>Store Name/Location
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput value={data.text[1]} onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                            </IonItem>
+                        </IonCardTitle>
+                        <IonCardTitle>Date:
+                            <IonItem className='addEntry' color="tertiary">
+                                <IonInput value={data.text[0]} onClick={() => setNormalColour("date")} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -91,7 +96,6 @@ const EditSlip: React.FC = () => {
                     <RenderItems/>
                   
                     <div className='slipTotal'>
-                    
                     </div>
                     <ActionButtons/>
                    
@@ -178,7 +182,7 @@ const EditSlip: React.FC = () => {
 
     function addItem() {
         getData()
-        setItems([...items, { item: "", quantity: "", price: "", type: "" }]) // custom
+        setItems([...items, { item: "", quantity: "", price: "", type: "" }])
     }
     function removeItem(index:number) {
         getData()
@@ -231,7 +235,7 @@ const EditSlip: React.FC = () => {
                 submitFlag = false;
 
             }
-            if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity) !== 1) {
+            if (items[i].quantity%1 !==0 || items[i].quantity < 0) {
                 document.getElementById(i + "/quantity")?.setAttribute("color", "danger");
                 submitFlag = false;
 

@@ -38,7 +38,12 @@ const AddEntry: React.FC = () => {
 
                 <IonCard color="primary">
                     <IonCardHeader>
-                        <IonCardTitle>Store Name/Location
+                        <IonCardTitle>Store Name/Location:
+                            <IonItem className='addEntry' color="tertiary">
+                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                            </IonItem>
+                        </IonCardTitle>
+                        <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
                                 <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
@@ -125,7 +130,11 @@ const AddEntry: React.FC = () => {
                            {getTotalCosts()}
                         </IonItem>
                     </IonItem>
-                    <ActionButtons/>
+                    <IonItem color="primary">
+                        <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
+                        <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                        <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
+                    </IonItem>
                    
                 </IonCard>
             </IonContent>
@@ -135,16 +144,6 @@ const AddEntry: React.FC = () => {
             </IonFooter>
         </IonPage>
     );
-
-    function ActionButtons() {
-        return (
-            <IonItem color="primary">
-                <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
-                <IonButton onClick={() => { getData(); validateData();}} fill="solid" slot="end" color="secondary">Submit</IonButton>
-            </IonItem>
-        );
-    }
 
     function addItem() {
         getData()
