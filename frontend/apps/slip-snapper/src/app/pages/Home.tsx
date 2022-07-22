@@ -30,9 +30,8 @@ const Home: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
     getRecentReports(1)
-      .then((res) => res.json())
-      .then((json) => {
-        setR(json.reports);
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
       });
   }, []);
   return (

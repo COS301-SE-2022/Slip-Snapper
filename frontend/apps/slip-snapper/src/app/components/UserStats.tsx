@@ -9,19 +9,18 @@ const weekMonthSpent = { lastWeek: 0, thisWeek: 0, lastMonth: 0, thisMonth: 0 }
 export const UserStats = () => {
     useEffect(() => {
         getStatsA(1)
-            .then((res) => res.json())
             .then(
-                (json) => {
-                    mostSpentCategory.itemCategory = json.category.name;
-                    mostSpentCategory.total = json.category.amount;
-                    mostSpentStore.store = json.mostExpensive.name;
-                    mostSpentStore.total = json.mostExpensive.amount;
-                    weekMonthSpent.lastWeek = json.lastWeek.previous;
-                    weekMonthSpent.thisWeek = json.lastWeek.current;
-                    weekMonthSpent.lastMonth = json.lastMonth.previous;
-                    weekMonthSpent.thisMonth = json.lastMonth.current;
-                    favourite.store = json.favouriteStore.name;
-                    favourite.total = json.favouriteStore.total;
+                apiResponse => {
+                    mostSpentCategory.itemCategory = apiResponse.data.category.name;
+                    mostSpentCategory.total = apiResponse.data.category.amount;
+                    mostSpentStore.store = apiResponse.data.mostExpensive.name;
+                    mostSpentStore.total = apiResponse.data.mostExpensive.amount;
+                    weekMonthSpent.lastWeek = apiResponse.data.lastWeek.previous;
+                    weekMonthSpent.thisWeek = apiResponse.data.lastWeek.current;
+                    weekMonthSpent.lastMonth = apiResponse.data.lastMonth.previous;
+                    weekMonthSpent.thisMonth = apiResponse.data.lastMonth.current;
+                    favourite.store = apiResponse.data.favouriteStore.name;
+                    favourite.total = apiResponse.data.favouriteStore.total;
 
                     setUserStatistics()
 

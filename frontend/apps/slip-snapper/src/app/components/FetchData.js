@@ -16,15 +16,15 @@ class FetchData extends React.Component {
    
     componentDidMount() {
         getItemsA(1)
-            .then((res) => res.json())
             .then(
-                (json) => {
+                apiResponse => {
+                    const res = apiResponse.data
                     this.setState({
-                        items: json.itemList,
+                        items: res.itemList,
                         DataisLoaded: true
                     });
             },
-                (error) => {
+                error => {
                     this.setState({
                         DataisLoaded: true,
                         error

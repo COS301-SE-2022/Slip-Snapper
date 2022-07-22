@@ -888,7 +888,7 @@ async function getDataItems(){
  * @returns reportsList which consists of the report id, report name and the date.
  */
 async function getRecentReports(userid){
-    const userReports = await prisma.reports.findMany({
+    const userReports = await prisma.Reports.findMany({
         where:{
             usersId:userid
         }, 

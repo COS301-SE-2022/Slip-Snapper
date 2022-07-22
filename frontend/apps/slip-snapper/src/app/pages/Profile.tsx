@@ -38,13 +38,12 @@ const Profile: React.FC = () => {
   let totalMonthlySpent = 500;
   useEffect(() => {
     getBudgetA(1)
-      .then((res) => res.json())
       .then(
-        (json) => {
-          val.weekly = json.weekly;
-          val.monthly = json.monthly;
-          totalWeeklySpent = json.weeklyTotal;
-          totalMonthlySpent = json.monthlyTotal;
+        apiResponse => {
+          val.weekly = apiResponse.data.weekly;
+          val.monthly = apiResponse.data.monthly;
+          totalWeeklySpent = apiResponse.data.weeklyTotal;
+          totalMonthlySpent = apiResponse.data.monthlyTotal;
           setWeeklyBudget("Weekly Budget: R" + val.weekly)
           setMonthlyBudget("Monthly Budget: R" + val.monthly)
         })

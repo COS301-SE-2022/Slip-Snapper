@@ -24,7 +24,7 @@ const {S3BucketFunctions} = require("./S3Bucket")
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
     }
 }
-
+ 
 /**
  * Sorts the items into the relevant arrays for the relevant category
  * @param {*} itemList list of items
@@ -51,25 +51,18 @@ async function sortItemsIntoCategories(itemList){
 }
 
 /**
- * Generate the pdf report for a user
- * Uses the user id to get the items
+ * Function to geneerate a pdf
+ * @param {*} name The name of the pdf
+ * @param {*} types The items list
+ * @param {*} today The date for today
+ * @returns the total for the pdf
  */
-router.get('/generate', async (req,res)=>{
-    let { period, userId } = req.query;
-    var today = new Date();
-    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
-    
-    var periodStart = await determinePeriodStart(period, periodEnd);
-    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
-    let types = await sortItemsIntoCategories(result.itemList)
-
+async function generatePDF(name, types, today){
     let pdf = new PDFDocument;
-    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
     pdf.pipe(fs.createWriteStream(name))
-
     let temp = "Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
     pdf.fontSize(20).text(temp);
-
+    let pdfTotal = 0
     for (var key in types){
         if(types.hasOwnProperty(key) && types[key].length > 0){
             pdf.fontSize(17).text(`${key} items`,110);
@@ -78,16 +71,42 @@ router.get('/generate', async (req,res)=>{
                 pdf.fontSize(12).text("quantity: " + item.quantity, 150);
                 pdf.text("Price: R " + item.price);
                 pdf.text("Location: " + item.location);
+                pdfTotal+=item.price;
             }
         }
     }
 
     pdf.end();
 
+    return pdfTotal;
+}
+
+/**
+ * Generate the pdf report for a user
+ * Uses the user id to get the items
+ */
+router.get('/generate', async (req,res)=>{
+    let { period, userId, userName } = req.query;
+    var today = new Date();
+    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    
+    var periodStart = await determinePeriodStart(period, periodEnd);
+    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
+    let types = await sortItemsIntoCategories(result.itemList)
+
+    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
+    
+    let reportTotal = await generatePDF(name, types, today)
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const resultPDF = bucket.uploadFile(path, name)
+
     return res.status(200)
         .send({
-            message: "Report Generated",
-            title: name
+            message: "Report Generated and uploaded",
+            title: name,
+
         });
 });
 
@@ -210,7 +229,6 @@ router.get('/user', async (req,res)=>{
  */
 router.get('/recent', async (req,res)=>{
     let { userId } = req.query;
-    
     const result = await req.app.get("db").getRecentReports(Number(userId));
 
     let status = 200;
@@ -248,11 +266,7 @@ router.get('/pdf', async (req,res)=>{
 });
 
 router.post('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.body;
     
-    const path = `${userName}/${fileName}.pdf`
-    const bucket = new S3BucketFunctions
-    const result = bucket.uploadFile(path)
     let status = 200;
 
     //TODO error checking
@@ -280,7 +294,8 @@ router.delete('/pdf', async (req,res)=>{
     //TODO error checking
     return res.status(status)
         .send({
-            message: result.message,
+            //message: result.message,
+            message: "File has been deleted"
         });
     
 });

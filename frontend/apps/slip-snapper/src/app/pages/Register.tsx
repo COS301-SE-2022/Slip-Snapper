@@ -138,7 +138,7 @@ const Register: React.FC = () => {
 
   function register( name: string, surname: string, user: string, password: string) {
     signupA( user, name, surname, password)
-      .then((res) => res.json());
+      .then(apiResponse => apiResponse.data);
   }
 
 };
