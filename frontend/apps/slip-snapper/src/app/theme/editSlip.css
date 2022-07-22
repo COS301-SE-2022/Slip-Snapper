@@ -6,3 +6,11 @@
     left: 2%;
     margin-top: 10px;
 }
+
+.slipTotal{
+    width: 15.7%;
+    position: relative;
+    left: 83%;
+    border-radius: 5px;
+    margin-top: 5px;
+}

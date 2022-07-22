@@ -55,7 +55,9 @@ const ViewReports: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonTitle>Expenditure Totals</IonTitle>
+        <IonItem>
+          <IonTitle>Expenditure Totals</IonTitle>
+        </IonItem>
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
@@ -71,7 +73,9 @@ const ViewReports: React.FC = () => {
             );
           })}
         </IonRow>
-        <IonTitle>All Reports</IonTitle>
+        <IonItem>
+          <IonTitle>All Reports</IonTitle>
+        </IonItem>
         <IonCard color="primary">
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>           

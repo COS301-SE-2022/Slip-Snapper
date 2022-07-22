@@ -119,12 +119,12 @@ const AddEntry: React.FC = () => {
                             </IonGrid>
                         )
                     })}
-                    <div className='slipTotal'>
+                    <IonItem color="tertiary" className='slipTotal'>
                         <div className='totalHeader'>Total:</div>
                         <IonItem color="tertiary" className='total'>
                            {getTotalCosts()}
                         </IonItem>
-                    </div>
+                    </IonItem>
                     <ActionButtons/>
                    
                 </IonCard>
