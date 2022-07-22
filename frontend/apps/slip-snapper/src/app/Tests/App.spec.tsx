@@ -49,7 +49,7 @@ describe('Reports', () => {
     expect(Component.getByText('Profile'));
     expect(Component.getByText('Home'));
     expect(Component.getByText('Reports'));
-    expect(Component.getByText('Edit Item'));
+    expect(Component.getByText('Receipts'));
     expect(Component.getByText('View Reports'));
   });
 });
@@ -77,7 +77,7 @@ describe('Profile', () => {
     expect(Component.getAllByText('Profile'));
     expect(Component.getByText('Home'));
     expect(Component.getByText('Reports'));
-    expect(Component.getByText('Edit Item'));
+    expect(Component.getByText('Receipts'));
     expect(Component.getByText('User details'));
     expect(Component.getByText('Personal Budget'));
   });
@@ -203,19 +203,12 @@ describe('AddEntry', () => {
     const Component = render(<AddEntry />);
 
     expect(Component.getByText('Add Entries'));
-    expect(Component.getByText('Store Name/Location'));
+    expect(Component.getByText('Store Name/Location:'));
     expect(Component.getByText('Edit Details'));
     expect(Component.getByText('Item Name'));
     expect(Component.getByText('Quantity'));
     expect(Component.getByText('Price'));
     expect(Component.getByText('Type'));
     expect(Component.getByText('Total:'));
-  });
-
-  test('Correctly fires onClicks', async () => {
-    const Component = render(<AddEntry />);
-    const name = await Component.findByTestId("0/name")
-    fireEvent.click(name);
-
   });
 });

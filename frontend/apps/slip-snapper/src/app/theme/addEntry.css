@@ -6,9 +6,11 @@
     --border-radius: 5px;
 }
 .slipTotal{
-    width: 19%;
+    width: 15.7%;
     position: relative;
-    left: 60%;
+    left: 83%;
+    border-radius: 5px;
+    margin-top: 5px;
 }
 
 .inputs{
@@ -18,4 +20,7 @@
 .itemlabels{
     left: 2%;
     margin-top: 10px;
+}
+.successRedirect {
+    display: none;
 }

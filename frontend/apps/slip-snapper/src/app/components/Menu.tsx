@@ -43,8 +43,8 @@ import {
               </IonItem>
             </IonMenuToggle>
             <IonMenuToggle auto-hide="false">
-              <IonItem button routerLink={"/edititem"} routerDirection="none">
-                <IonLabel>Edit Item</IonLabel>
+              <IonItem button routerLink={"/receipts"} routerDirection="none">
+                <IonLabel>Receipts</IonLabel>
                 <IonIcon src={pencil}/>
               </IonItem>
             </IonMenuToggle>
