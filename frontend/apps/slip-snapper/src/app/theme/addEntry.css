@@ -21,3 +21,6 @@
     left: 2%;
     margin-top: 10px;
 }
+.successRedirect {
+    display: none;
+}
