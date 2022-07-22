@@ -1,6 +1,6 @@
 import React from "react";
 import { IonCol, IonRow, IonTitle, IonButton, IonCard, IonItem, } from '@ionic/react';
-import '../pages/FetchData.css';
+import '../theme/FetchData.css';
 import { updateItemA, getItemsA } from "../../api/apiCall"
 
 class FetchData extends React.Component {
