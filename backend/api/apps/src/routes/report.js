@@ -24,7 +24,7 @@ const {S3BucketFunctions} = require("./S3Bucket")
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
     }
 }
-
+ 
 /**
  * Sorts the items into the relevant arrays for the relevant category
  * @param {*} itemList list of items
@@ -229,7 +229,6 @@ router.get('/user', async (req,res)=>{
  */
 router.get('/recent', async (req,res)=>{
     let { userId } = req.query;
-    
     const result = await req.app.get("db").getRecentReports(Number(userId));
 
     let status = 200;

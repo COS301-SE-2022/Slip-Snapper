@@ -70,7 +70,7 @@ const Login: React.FC = () => {
 
     function login(user: string, password: string){
       loginA(user, password)
-        .then((res) => res.json())
+        .then(apiResponse => apiResponse.data)
     }
   };
   
