@@ -49,7 +49,7 @@ describe('Reports', () => {
     expect(Component.getByText('Profile'));
     expect(Component.getByText('Home'));
     expect(Component.getByText('Reports'));
-    expect(Component.getByText('Edit Item'));
+    expect(Component.getByText('Receipts'));
     expect(Component.getByText('View Reports'));
   });
 });
@@ -77,7 +77,7 @@ describe('Profile', () => {
     expect(Component.getAllByText('Profile'));
     expect(Component.getByText('Home'));
     expect(Component.getByText('Reports'));
-    expect(Component.getByText('Edit Item'));
+    expect(Component.getByText('Receipts'));
     expect(Component.getByText('User details'));
     expect(Component.getByText('Personal Budget'));
   });
