@@ -38,9 +38,8 @@ const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
     getAllUserReports(1)
-      .then((res) => res.json())
-      .then((json) => {
-        setR(json.reports);
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
       });
   }, []);
 
@@ -55,7 +54,9 @@ const ViewReports: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonTitle>Expenditure Totals</IonTitle>
+        <IonItem>
+          <IonTitle>Expenditure Totals</IonTitle>
+        </IonItem>
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
@@ -71,7 +72,9 @@ const ViewReports: React.FC = () => {
             );
           })}
         </IonRow>
-        <IonTitle>All Reports</IonTitle>
+        <IonItem>
+          <IonTitle>All Reports</IonTitle>
+        </IonItem>
         <IonCard color="primary">
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>           
@@ -108,10 +111,9 @@ const ViewReports: React.FC = () => {
   function view(data: any) {
     console.log(data);
     getUserReport(1, data)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.report.data !== undefined) {
-          const arr = new Uint8Array(json.report.data);
+      .then(apiResponse => {
+        if (apiResponse.data.report.data !== undefined) {
+          const arr = new Uint8Array(apiResponse.data.report.data);
           const blob = new Blob([arr], { type: 'application/pdf' });
           const docUrl = URL.createObjectURL(blob);
           window.open(docUrl);
@@ -121,15 +123,13 @@ const ViewReports: React.FC = () => {
  async function deleteReport(user: number, fileName: string, reportId: string) {
     
      await removeReport(user,fileName, reportId)
-      .then(async (res) => await res.json())
-      .then((json) => {
-        console.log(json.message);
+      .then(apiResponse => {
+        console.log(apiResponse.data.message);
       });
 
     getAllUserReports(1)
-      .then(async (res) => await res.json())
-      .then((json) => {
-        setR(json.reports);
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
       });
   }
 

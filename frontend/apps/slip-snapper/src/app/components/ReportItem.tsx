@@ -33,10 +33,9 @@ function ReportItem({ reportData }: Props) {
 function view(data: any) {
     console.log(data)
     getUserReport(1, data)
-        .then((res) => res.json())
-        .then((json) => {
-            if (json.report.data !== undefined) {
-                const arr = new Uint8Array(json.report.data);
+        .then(apiResponse => {
+            if (apiResponse.data.report.data !== undefined) {
+                const arr = new Uint8Array(apiResponse.data.report.data);
                 const blob = new Blob([arr], { type: 'application/pdf' });
                 const docUrl = URL.createObjectURL(blob);
                 window.open(docUrl);

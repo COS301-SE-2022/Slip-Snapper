@@ -30,9 +30,8 @@ const Home: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
     getRecentReports(1)
-      .then((res) => res.json())
-      .then((json) => {
-        setR(json.reports);
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
       });
   }, []);
   return (
@@ -46,7 +45,9 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonTitle>Recent Reports</IonTitle>
+        <IonItem>
+          <IonTitle>Recent Reports</IonTitle>
+        </IonItem>
 
         <IonRow>
           {r.map((reps, index) => {
@@ -57,7 +58,9 @@ const Home: React.FC = () => {
           }
         </IonRow>
 
-        <IonTitle>Report Summary</IonTitle>
+        <IonItem>
+          <IonTitle>Report Summary</IonTitle>
+        </IonItem>
         <IonRow>
           <IonCol>
             <IonCard color="primary">

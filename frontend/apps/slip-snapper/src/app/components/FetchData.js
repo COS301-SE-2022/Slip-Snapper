@@ -1,6 +1,6 @@
 import React from "react";
 import { IonCol, IonRow, IonTitle, IonButton, IonCard, IonItem, } from '@ionic/react';
-import '../pages/FetchData.css';
+import '../theme/FetchData.css';
 import { updateItemA, getItemsA } from "../../api/apiCall"
 
 class FetchData extends React.Component {
@@ -16,15 +16,15 @@ class FetchData extends React.Component {
    
     componentDidMount() {
         getItemsA(1)
-            .then((res) => res.json())
             .then(
-                (json) => {
+                apiResponse => {
+                    const res = apiResponse.data
                     this.setState({
-                        items: json.itemList,
+                        items: res.itemList,
                         DataisLoaded: true
                     });
             },
-                (error) => {
+                error => {
                     this.setState({
                         DataisLoaded: true,
                         error
