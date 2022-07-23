@@ -4,6 +4,6 @@ const parser = require("./textProcessor/text_parser/parser");
 
 const app = makeApp( db, parser);
 
-app.listen(55555, () =>{
+app.listen(process.env.PORT || 55555, () =>{
     console.log('Server ready');
 })
