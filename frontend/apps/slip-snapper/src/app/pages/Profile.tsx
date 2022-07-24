@@ -8,16 +8,13 @@ import {
   IonButton,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
   IonItem,
   IonAlert,
-  IonInput,
   IonProgressBar,
-  IonTextarea,
   IonList,
-  IonLabel,
   IonIcon,
+  IonText,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -44,12 +41,12 @@ const Profile: React.FC = () => {
           val.monthly = apiResponse.data.monthly;
           totalWeeklySpent = apiResponse.data.weeklyTotal;
           totalMonthlySpent = apiResponse.data.monthlyTotal;
-          setWeeklyBudget("Weekly Budget: R" + val.weekly)
-          setMonthlyBudget("Monthly Budget: R" + val.monthly)
+          setWeeklyBudget(val.weekly)
+          setMonthlyBudget(val.monthly)
         })
   }, []);
-  const [weeklyBudgetValue, setWeeklyBudget] = useState<string>("Weekly Budget: R" + val.weekly);
-  const [monthlyBudgetValue, setMonthlyBudget] = useState<string>("Monthly Budget: R" + val.monthly);
+  const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
+  const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
   let weeklyBudget: number, monthlyBudget: number
   return(
     <IonPage>
@@ -70,10 +67,10 @@ const Profile: React.FC = () => {
                 <IonCardTitle>User details</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle>Name: Christian Devraj </IonCardSubtitle>
+                <IonText>Name: Christian Devraj </IonText>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle>My Business: Isabella's Decor and Gifts</IonCardSubtitle>
+                <IonText>My Business: Isabella's Decor and Gifts</IonText>
               </IonItem>
               {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
               <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture" />
@@ -85,17 +82,17 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
+              <IonItem id="weekly-budget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setBudgetAlert(true)}/>
+                <IonText>Weekly: R{weeklyBudgetValue}</IonText>
+                <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
+              </IonItem>
+              <IonItem id="monthly-budget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setBudgetAlert(true)}/>
+                <IonText>Monthly: R{monthlyBudgetValue}</IonText>
+                <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
+              </IonItem>
             </IonCardHeader>
-            <IonItem onClick={() => setBudgetAlert(true)} id="weekly-budget" className="dynamic-items" color="tertiary">
-              <IonIcon className="edit-budget" src={create}/>
-              <IonInput readonly value={weeklyBudgetValue}></IonInput>
-              <IonProgressBar id='weeklyProgressBar' class='progressBar' ></IonProgressBar><br />
-            </IonItem>
-            <IonItem onClick={() => setBudgetAlert(true)} id="monthly-budget" className="dynamic-items" color="tertiary">
-              <IonIcon className="edit-budget" src={create}/>
-              <IonInput readonly value={monthlyBudgetValue}></IonInput>
-              <IonProgressBar id='monthlyProgressBar' class='progressBar' ></IonProgressBar><br />
-            </IonItem>
             <IonAlert
               isOpen={budgetAlert}
               onDidDismiss={() => setBudgetAlert(false)}
@@ -127,56 +124,71 @@ const Profile: React.FC = () => {
                 }
               ]}></IonAlert>
 
-            <IonItem className="headings" color="primary">
-              <IonCardTitle>Category Budgets</IonCardTitle>
-            </IonItem>
-            <Budget />
-            <EditBudgets />
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Category Budgets</IonCardTitle>
+              </IonItem>
+              <Budget />
+              <EditBudgets />
+            </IonCardHeader>
           </IonCard>
           
           <IonCard className="card favourite" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
-                <IonCardTitle>Favorite Store</IonCardTitle>
-              </IonItem>
-              <IonItem className="headings" color="primary">
-                <IonCardTitle>(Most frequent this month)</IonCardTitle>
+                <IonCardTitle>Most Frequent Store</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle><IonTextarea title="favoriteStore" id='favoriteStore' readonly ></IonTextarea></IonCardSubtitle>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonCardSubtitle><IonTextarea title="favoriteTotal" id='favoriteTotal' readonly ></IonTextarea></IonCardSubtitle>
+                <IonText id='favoriteStore'></IonText>
               </IonItem>
             </IonCardHeader>
-            <IonList className="list">
-              <IonItem className="center-items" color="tertiary">
-                <IonLabel>28 May 2022: R110.99</IonLabel>
+
+            <IonCardHeader>
+              <IonItem className="headings" color="primary">
+                <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonLabel>23 May 2022: R99.49</IonLabel>
+                <IonText>28 May 2022: R110.99</IonText>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonLabel>22 May 2022: R139.49</IonLabel>
+                <IonText>23 May 2022: R99.49</IonText>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonLabel>20 May 2022: R350.99</IonLabel>
+                <IonText>22 May 2022: R139.49</IonText>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonLabel>...</IonLabel>
+                <IonText>20 May 2022: R350.99</IonText>
               </IonItem>
-            </IonList>
+            </IonCardHeader>
+
+            
             <IonItem color="primary">
               <IonButton fill="solid" slot="end" color="secondary">
-                View
+                More
               </IonButton>
             </IonItem>
           </IonCard>
         </div>
         <UserStats />
         <IonButton className="logout-button" onClick={() => setLogoutAlert(true)} expand="block" color='secondary'>Logout</IonButton>
-
         <IonAlert
+          isOpen={logoutAlert}
+          onDidDismiss={() => setLogoutAlert(false)}
+          header="Confirm Logout"
+          message="Are you sure you want to logout?"
+          buttons={[
+            'Cancel',
+            {
+              text: 'Logout',
+              cssClass: 'toasts',
+              handler: () => {
+                Logout();
+              }
+            },
+          ]}
+        />
+
+        {/* <IonAlert
           id="logout-alert"
           isOpen={logoutAlert}
           onDidDismiss={() => setLogoutAlert(false)}
@@ -191,7 +203,7 @@ const Profile: React.FC = () => {
               }
             },
           ]}
-        ></IonAlert>
+        /> */}
       </IonContent>
     </IonPage>
   );
@@ -204,10 +216,10 @@ const Profile: React.FC = () => {
     weeklyBudget = parseFloat(newWeeklyBudget)
     monthlyBudget = parseFloat(newMonthlyBudget)
     if (!isNaN(weeklyBudget)) {
-      setWeeklyBudget("Weekly Budget: R" + weeklyBudget.toString())
+      setWeeklyBudget(weeklyBudget)
     }
     if (!isNaN(monthlyBudget)) {
-      setMonthlyBudget("Monthly Budget:R " + monthlyBudget.toString())
+      setMonthlyBudget(monthlyBudget)
     }
 
     setBudgetA(1, weeklyBudget, monthlyBudget)

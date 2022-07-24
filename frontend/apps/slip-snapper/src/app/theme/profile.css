@@ -9,15 +9,6 @@
     padding: 2px;
 }
 
-.dynamic-items {
-    vertical-align: middle;
-    --border-radius: 10px;
-    padding: 2px;
-    width: auto;
-    margin-right: 8px;
-    margin-left: 8px;
-}
-
 .edit-budget:hover {
     color:red;
     cursor: pointer;
@@ -35,12 +26,6 @@
 .progressBar {
     max-width: 30%;
     --background: #ebebeb;
-}
-
-.list {
-    background-color: #333C4A;
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 .logout-button{

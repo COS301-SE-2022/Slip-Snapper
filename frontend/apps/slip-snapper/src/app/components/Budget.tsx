@@ -1,9 +1,9 @@
 import {
     IonAlert,
     IonIcon,
-    IonInput,
     IonItem,
     IonProgressBar,
+    IonText
 } from "@ionic/react";
 import { useState } from "react";
 import '../theme/profile.css';
@@ -21,10 +21,10 @@ function Budget() {
 
     return (
         <div>
-            <IonItem onClick={() => setFood(true)} id="foodBudget" className="dynamic-items" color="tertiary">
-                <IonIcon className="edit-budget" src={create}/>
-                <IonInput readonly value={"Food: R"+amounts[0]}></IonInput>
-                <IonProgressBar id='foodBar' class='progressBar'></IonProgressBar><br />
+            <IonItem id="foodBudget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setFood(true)}/>
+                <IonText>{"Food: R"+amounts[0]}</IonText>
+                <IonProgressBar id='foodBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
                 isOpen={food}
@@ -41,10 +41,10 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setFashion(true)} id="fashionBudget" className="dynamic-items" color="tertiary">
-                <IonIcon className="edit-budget" src={create}/>
-                <IonInput readonly value={"Fashion: R" + amounts[1]}></IonInput>
-                <IonProgressBar id='fashionBar' class='progressBar'></IonProgressBar><br />
+            <IonItem id="fashionBudget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setFashion(true)}/>
+                <IonText>{"Fashion: R" + amounts[1]}</IonText>
+                <IonProgressBar id='fashionBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
                 isOpen={fashion}
@@ -61,10 +61,10 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setElec(true)} id="electronicsBudget" className="dynamic-items" color="tertiary">
-                <IonIcon className="edit-budget" src={create}/>
-                <IonInput readonly value={"Electronics: R" + amounts[2]}></IonInput>
-                <IonProgressBar id='elecBar' class='progressBar'></IonProgressBar><br />
+            <IonItem id="electronicsBudget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setElec(true)}/>
+                <IonText>{"Electronics: R" + amounts[2]}</IonText>
+                <IonProgressBar id='elecBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
                 isOpen={elec}
@@ -81,10 +81,10 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setHouseHold(true)} id="houseBudget" className="dynamic-items" color="tertiary">
-                <IonIcon className="edit-budget" src={create}/>
-                <IonInput readonly value={"Household: R" + amounts[3]}></IonInput>
-                <IonProgressBar id='houseBar' class='progressBar'></IonProgressBar><br />
+            <IonItem id="houseBudget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setHouseHold(true)}/>
+                <IonText>{"Household: R" + amounts[3]}</IonText>
+                <IonProgressBar id='houseBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
                 isOpen={houseHold}
@@ -101,10 +101,10 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem onClick={() => setOther(true)} id="otherBudget" className="dynamic-items" color="tertiary">
-                <IonIcon className="edit-budget" src={create}/> 
-                <IonInput readonly value={"Other: R" + amounts[4]}></IonInput>
-                <IonProgressBar id='otherBar' class='progressBar'></IonProgressBar><br />
+            <IonItem id="otherBudget" className="center-items" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)}/> 
+                <IonText>{"Other: R" + amounts[4]}</IonText>
+                <IonProgressBar id='otherBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
                 isOpen={other}
