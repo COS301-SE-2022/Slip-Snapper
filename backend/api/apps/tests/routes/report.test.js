@@ -67,6 +67,33 @@ describe('Get /report/budget', ()=>{
     })
 
     test('Should Generate a report for the user', async ()=>{
+        const userId = [
+            1,
+            2,
+            3
+        ]
+
+        for(const id of userId){
+            getUserBudgets.mockReset()
+            getUserBudgets.mockResolvedValue({
+                message: "User budget retrieved",
+                weeklyTotal: 1,
+                weekly: 2,
+                monthlyTotal: 3,
+                monthly: 4
+            });
+        
+            const res = await request(app)
+                .get('/api/report/budget?userId='+id)
+            
+            expect(getUserBudgets.mock.calls.length).toBe(1);
+            expect(getUserBudgets.mock.calls[0][0]).toBe(id);
+        }
+
+        
+    })
+
+    test('Should return a json object with the message', async ()=>{
         getUserBudgets.mockResolvedValue({
             message: "User budget retrieved",
             weeklyTotal: 1,
@@ -74,13 +101,28 @@ describe('Get /report/budget', ()=>{
             monthlyTotal: 3,
             monthly: 4
         });
+
+        const res = await request(app)
+            .get('/api/report/budget?userId=1')
         
+        expect(res.body.message).toEqual("User budget retrieved");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        getUserBudgets.mockResolvedValue({
+            message: "User budget retrieved",
+            weeklyTotal: 1,
+            weekly: 2,
+            monthlyTotal: 3,
+            monthly: 4
+        });
+
         const res = await request(app)
             .get('/api/report/budget?userId=1')
         
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("User budget retrieved");
     })
+
 })
 
 /**
@@ -88,6 +130,32 @@ describe('Get /report/budget', ()=>{
  */
 describe('POST /report/budget', ()=>{
     test('Should Generate a report for the user', async ()=>{
+        const body = [
+            {userId:1, weeklyB: 1, monthlyB:1},
+            {userId:2, weeklyB: 2, monthlyB:2},
+            {userId:3, weeklyB: 3, monthlyB:3}
+        ]
+
+        data = {}
+
+        for (const bod of body){
+            setUserBudgets.mockReset();
+            setUserBudgets.mockResolvedValue({
+                message: "User budget set",
+                weekly: 1,
+                monthly: 2,
+            });
+
+            const res = await request(app)
+                .post('/api/report/budget')
+                .send( bod )
+
+            expect(setUserBudgets.mock.calls.length).toBe(1);
+            expect(setUserBudgets.mock.calls[0][0]).toBe(bod.userId);
+        }
+    })
+
+    test('Should return a json object with the message', async ()=>{
         setUserBudgets.mockResolvedValue({
             message: "User budget set",
             weekly: 1,
@@ -96,14 +164,23 @@ describe('POST /report/budget', ()=>{
 
         const res = await request(app)
             .post('/api/report/budget')
-            .send({
-                userId: 1,
-                weeklyB: 1,
-                monthlyB: 2,
-            })
+            .send( {userId:1, weeklyB: 1, monthlyB:1} )
+        
+        expect(res.body.message).toEqual("User budget set");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        setUserBudgets.mockResolvedValue({
+            message: "User budget set",
+            weekly: 1,
+            monthly: 2,
+        });
+
+        const res = await request(app)
+            .post('/api/report/budget')
+            .send( {userId:1, weeklyB: 1, monthlyB:1} )
         
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("User budget set");
     })
 })
 
