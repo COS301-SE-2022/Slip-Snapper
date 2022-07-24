@@ -17,6 +17,7 @@ import AddEntry from '../pages/AddEntry';
 import { EditBudgets } from '../components/EditBudgets';
 import { Link, StaticRouter } from 'react-router-dom';
 import { getBudgetA } from '../../api/apiCall';
+import { Budgets } from 'aws-sdk';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -86,15 +87,6 @@ describe('Profile', () => {
     expect(Component.getByText('Personal Budget'));
   });
 
-  describe('getBudgetA', () => {
-    it('should load user budget data', () => {
-      return getBudgetA(1)
-      .then(data => {
-        expect(data).toBeDefined()
-      })
-    })
-  })
-
 
   test('Correctly renders user statitics', async () => {
     const Component = render(<Profile />);
@@ -119,6 +111,18 @@ describe('Profile', () => {
     expect(Component.getByTestId("storeName").getAttribute("value")).toBe("PEP")
     expect(Component.getByTestId("storeTotal").getAttribute("value")).toBe("R899.99")
   });
+  test('Test if Weekly Budget button fires correctly', async () => {
+    const Component = render(<Profile />);
+    const weekly_budget = await Component.findByTestId("weekly-budget-icon");
+    fireEvent.click(weekly_budget);
+  });
+
+  test('Test if Monthly Budget button fires correctly', async () => {
+    const Component = render(<Profile />);
+    const monthly_budget = await Component.findByTestId("monthly-budget-icon");
+    fireEvent.click(monthly_budget);
+  });
+
 
   test('Test if Add/Remove button fires correctly', async () => {
     const Component = render(<Profile />);
@@ -130,17 +134,6 @@ describe('Profile', () => {
     const Component = render(<Profile />);
     const more = await Component.findByText('More');
     fireEvent.click(more);
-  });
-
-  test("Link matches snapshot", () => {
-    const component = renderer.create(
-      <StaticRouter location="Receipts">
-        <Link to="/receipts" />
-      </StaticRouter>
-    );
-  
-    const tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
   });
 
   test('Test if Logout button fires correctly', async () => {
