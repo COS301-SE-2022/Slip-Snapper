@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "e2e": "nx e2e"
   },
   "private": true,
   "devDependencies": {
@@ -68,6 +69,5 @@
     "tslib": "^2.0.0"
   },
   "main": "index.js",
-  "repository": "https://github.com/COS301-SE-2022/Slip-Snapper.git",
-  "author": "Regan <u20556455@tuks.co.za>"
+  "repository": "https://github.com/COS301-SE-2022/Slip-Snapper.git"
 }

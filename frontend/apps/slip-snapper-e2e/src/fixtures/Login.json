@@ -1,0 +1,12 @@
+{ 
+  "message": "User logged in successfully",
+  "userData":{
+    "id": 26,
+    "username": "Regan",
+    "firstname": "Gabriel",
+    "lastname": "Grobbiezhao",
+    "weeklyBudget": 0,
+    "monthlyBudget": 0,
+    "password": "Password123"
+  }
+}
