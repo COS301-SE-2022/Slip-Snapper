@@ -958,26 +958,27 @@ async function getRecentReports(userid){
   }
 
   /**
- * Function to .
+ * Function to data statistics for the specific user.
  * @param {*} reportId (Integer) The record id.
  * @returns null
  */
-   async function reportSummary(userid){
-    const todaysReport= await prisma.slip.findMany({
+   async function deleteReportRecord(userid){
+    const userAverage = await prisma.slip.aggregate({
+ 
         where:{
-            usersId:userid
-        },
-        select:{
-            items:true,
-            total:true
+           usersId:userid,  
+         },
+         _avg:{
+          total:true
+         }       
+       })
+  
+       return {
+        userAverage,
         }
-    }) 
-    
-      for(var countItems of todaysReport)
-      {
-
-      }
+      
   }
+  
   
 module.exports = {
     getUser,

@@ -257,14 +257,37 @@ async function createReportRecord(userid: number){
     
 }
 
+async function test(userid:number)
+{
+  const date1= new Date()
+  const lastMonth=date1.setDate(date1.getDate()-4*7);
+  const date2= new Date()
+  const otherMonth=date2.setDate(date2.getDate()-8*7)
+   
+   const MonthlyExpenditure = await prisma.slip.aggregate({
+ 
+    where:{
+       usersId:userid,  
+     },
+     _count:{
+      total:true
+     }
+    
+   
+   })
+   console.log(MonthlyExpenditure)
+
+} 
+
   var userid=1
+  test(userid)
   //createReportRecord(userid)
-  getWeeklyReports(userid)
+  //getWeeklyReports(userid)
  // getAllUsers()
   //getfavouritestore(userid)
   //getMostExpensiveItem(userid)
   //getMostSpentATStore(userid)
-  getWeeklyExpenditure(userid)
+  //getWeeklyExpenditure(userid)
   //getMonthlyExpenditure(userid)
   //getAllReports(userid)  
     .catch((e) => {
