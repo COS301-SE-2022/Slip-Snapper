@@ -50,13 +50,11 @@ export const EditBudgets = () => {
 
   return (
     <IonItem color="primary">
-      <IonButton fill="solid" color="secondary" onClick={() => setIsOpen(true)}>
-        <IonLabel>Add/Remove</IonLabel>
-      </IonButton>
+      <IonButton fill="solid" slot="end" color="secondary" onClick={() => setIsOpen(true)}>Add/Remove</IonButton>
       <IonModal isOpen={isOpen} onDidDismiss={() => setIsOpen(false)}>
         <IonHeader>
           <IonToolbar color="primary">
-            <IonTitle>Add/Remove Budgets</IonTitle>
+            <IonTitle>Edit Budgets</IonTitle>
             <IonButtons slot="end">
               <IonButton onClick={() => {
                 setIsOpen(false);
