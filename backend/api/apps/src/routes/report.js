@@ -178,9 +178,9 @@ router.post('/budget', async (req,res)=>{
  * Uses the user Id
  */
 router.get('/statistics', async (req,res)=>{
-    let { userId } = req.body;
+    let { userId } = req.query;
 
-    const result = await req.app.get('db').getUserStats( userId );
+    const result = await req.app.get('db').getUserStats( Number(userId) );
 
     let status = 200;
     
@@ -286,15 +286,13 @@ router.delete('/pdf', async (req,res)=>{
     
     await req.app.get("db").deleteReportRecord(Number(reportID))
     
-    //TODO: find way to check if it deleted from bucket
     let status = 200;
 
-    console.log(result)
     //TODO error checking
+
     return res.status(status)
         .send({
-            //message: result.message,
-            message: "File has been deleted"
+            message: result.message,
         });
     
 });

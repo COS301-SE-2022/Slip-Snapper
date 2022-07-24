@@ -19,7 +19,7 @@ const app = makeApp({
 })
 
 /**
- * Test for the generate report query
+ * TODO Test for the generate report query
  */
 // describe('Get /report/generate', ()=>{
 
@@ -114,6 +114,86 @@ describe('GET /report/statistics', ()=>{
 
     //TODO expand
     test('Should get all user statistics', async ()=>{
+        const userId = [
+            1,
+            2,
+            3
+        ]
+        
+        for (const id of userId){
+            getUserStats.mockReset();
+            getUserStats.mockResolvedValue({
+                message: "User statistics retrieved",
+                storeDetails: {
+                        storeLocation:"location",
+                        total: 20
+                    },
+                expensiveItem: {
+                        dataItem:"item",
+                        expensiveItem: 20
+                    },
+                mostAtStore: {
+                        store: "location",
+                        mostspent: 20
+                    },
+                week: {
+                        recentWeek: 20,
+                        previousWeek: 20
+                    },
+                month: {
+                        recentMonth: 20,
+                        previousMonth: 20
+                    },
+                category: {
+                        category:"category",
+                        amount: 20
+                    },
+            });
+
+            const res = await request(app)
+                .get('/api/report/statistics?userId='+ id)
+            
+            expect(getUserStats.mock.calls.length).toBe(1);
+            expect(getUserStats.mock.calls[0][0]).toBe(id);
+        }
+    })
+
+    test('Should return a json object with the message', async ()=>{
+        getUserStats.mockResolvedValue({
+            message: "User statistics retrieved",
+            storeDetails: {
+                    storeLocation:"location",
+                    total: 20
+                },
+            expensiveItem: {
+                    dataItem:"item",
+                    expensiveItem: 20
+                },
+            mostAtStore: {
+                    store: "location",
+                    mostspent: 20
+                },
+            week: {
+                    recentWeek: 20,
+                    previousWeek: 20
+                },
+            month: {
+                    recentMonth: 20,
+                    previousMonth: 20
+                },
+            category: {
+                    category:"category",
+                    amount: 20
+                },
+        });
+
+        const res = await request(app)
+            .get('/api/report/statistics?userId=1')
+        
+        expect(res.body.message).toEqual("User statistics retrieved");
+    })
+
+    test('Should return a status code of 200', async ()=>{
         getUserStats.mockResolvedValue({
             message: "User statistics retrieved",
             storeDetails: {
@@ -146,7 +226,6 @@ describe('GET /report/statistics', ()=>{
             .get('/api/report/statistics?userId=1')
         
         expect(res.statusCode).toEqual(200);
-        expect(res.body.message).toEqual("User statistics retrieved");
     })
 })
 
@@ -267,3 +346,38 @@ describe('GET /report/user', ()=>{
         expect(res.statusCode).toEqual(200);
     })
 })
+
+/** 
+ * TODO TEST for delete from S3 bucket folder
+*/
+// describe('Delete /report/pdf', ()=>{
+
+//     beforeEach(()=>{
+//         getItemsReport.mockReset();
+//     })
+
+//     //TODO Expand
+
+//     test('Should Generate a report for the user', async ()=>{
+//         getItemsReport.mockResolvedValue({
+//             message:"All associated items retrieved",
+//             numItems: 1,
+//             itemList: [{
+//                 id: 0,
+//                 itemId: 1,
+//                 itemName: "name",
+//                 type: "type",
+//                 quantity: 1,
+//                 price: 111111,
+//                 location: "location",
+//                 date: "date"
+//             }]
+//         });
+        
+//         const res = await request(app)
+//             .get('/api/report/generate?user=1?period=week&userId=1')
+            
+//         expect(res.statusCode).toEqual(200);
+//         expect(res.body.message).toEqual("Report Generated");
+//     })
+// })

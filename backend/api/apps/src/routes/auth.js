@@ -9,7 +9,6 @@ router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
     let { firstname, lastname, username, password } = req.body;
     const result = await req.app.get('db').addUser(username, password, firstname, lastname);
-    console.log(username)
 
     const path = `${username}/`
     const bucket = new S3BucketFunctions
