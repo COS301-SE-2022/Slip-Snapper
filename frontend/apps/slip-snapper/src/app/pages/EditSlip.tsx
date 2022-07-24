@@ -8,7 +8,7 @@ import { addItemsA } from '../../api/apiCall';
 
 
 const EditSlip: React.FC = () => {
-    const data = JSON.parse(localStorage.getItem('value')!);
+    const data = JSON.parse(localStorage.getItem('scan-content')!);
     let photo;
     async function a() {
         photo = JSON.parse(localStorage.getItem('photo')!);

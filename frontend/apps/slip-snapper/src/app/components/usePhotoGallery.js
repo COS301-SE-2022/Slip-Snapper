@@ -1,7 +1,7 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { createWorker } from 'tesseract.js';
-import { doProcessing } from '../api/apiCall';
-import '../app/theme/toasts.css';
+import { doProcessing } from '../../api/apiCall';
+import '../theme/toasts.css';
 
 /**
  *
@@ -57,10 +57,10 @@ function ScanSlip(photo) {
       localStorage.setItem('photo', JSON.stringify(photo))
 
       await doProcessing(text)
-        .then((res) => res.json())
-        .then((json) => {
-          localStorage.removeItem('value')
-          localStorage.setItem('value', JSON.stringify(json))
+        .then((apiResponse) => apiResponse.data)
+        .then((data) => {
+          localStorage.removeItem('scan-content')
+          localStorage.setItem('scan-content', JSON.stringify(data))
         });
       
       await worker.terminate();
