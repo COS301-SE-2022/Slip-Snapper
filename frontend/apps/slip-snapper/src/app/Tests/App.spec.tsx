@@ -142,6 +142,10 @@ describe('Profile', () => {
     fireEvent.click(logout);
   });
 
+  jest.mock('../pages/Profile', () => ({withinWeeklyBudget: "test"}));
+
+  jest.mock('../pages/Profile', () => ({withinMonthlyBudget: "test"}))
+
 
 });
 
