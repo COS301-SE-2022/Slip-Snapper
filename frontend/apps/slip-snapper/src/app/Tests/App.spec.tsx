@@ -1,7 +1,8 @@
 import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
+import renderer from "react-test-renderer";
 import TakePictureButton from '../components/TakePictureButton';
-import { create } from 'react-test-renderer';
+import { act, create } from 'react-test-renderer';
 import App from '../App';
 import Profile from '../pages/Profile';
 import ViewReports from '../pages/ViewReports';
@@ -13,6 +14,8 @@ import ReportTotal from '../components/ReportTotal';
 import { mockTotals } from '../pages/ViewReports'
 import { UserStats } from '../components/UserStats';
 import AddEntry from '../pages/AddEntry';
+import { EditBudgets } from '../components/EditBudgets';
+import { Link, StaticRouter } from 'react-router-dom';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -104,6 +107,29 @@ describe('Profile', () => {
     expect(Component.getByTestId("categoryTotal").getAttribute("value")).toBe("R699.99")
     expect(Component.getByTestId("storeName").getAttribute("value")).toBe("PEP")
     expect(Component.getByTestId("storeTotal").getAttribute("value")).toBe("R899.99")
+  });
+
+  test('Test if Add/Remove button fires correctly', async () => {
+    const Component = render(<Profile />);
+    const add_remove = await Component.findByText('Add/Remove');
+    fireEvent.click(add_remove);
+  });
+
+  // test('Test if More button fires correctly', async () => {
+  //   const Component = render(<Profile />);
+  //   const more = await Component.findByText('More');
+  //   fireEvent.click(more);
+  // });
+
+  test("Link matches snapshot", () => {
+    const component = renderer.create(
+      <StaticRouter location="Receipts">
+        <Link to="/receipts" />
+      </StaticRouter>
+    );
+  
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   test('Test if Logout button fires correctly', async () => {
