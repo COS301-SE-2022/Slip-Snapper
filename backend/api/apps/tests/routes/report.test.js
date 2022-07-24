@@ -53,9 +53,27 @@ const app = makeApp({
 //     })
 // })
 
-//TODO test determine start period function call
+/**
+ * Test for determine period start function
+ */
+describe('determinePeriodStart', ()=>{
+    //TODO expand
+})
 
-//TODO test sort categories function call
+/**
+ * Test for sort item categories function
+ */
+describe('sortItemsIntoCategories', ()=>{
+    //TODO expand
+})
+
+/**
+ * Test createPDF function
+ */
+describe('createPDF', ()=>{
+    //TODO expand
+})
+
 
 /**
  * Test for the get budget
@@ -452,7 +470,7 @@ describe('GET /report/user', ()=>{
 //         });
         
 //         const res = await request(app)
-//             .get('/api/report/generate?user=1?period=week&userId=1')
+//             .delete('/api/report/generate?user=1?period=week&userId=1')
             
 //         expect(res.statusCode).toEqual(200);
 //         expect(res.body.message).toEqual("Report Generated");
