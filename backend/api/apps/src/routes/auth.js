@@ -9,7 +9,6 @@ router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
     let { firstname, lastname, username, password } = req.body;
     const result = await req.app.get('db').addUser(username, password, firstname, lastname);
-    console.log(username)
 
     const path = `${username}/`
     const bucket = new S3BucketFunctions
@@ -34,12 +33,7 @@ router.post('/login', async (req,res)=>{
     let { username, password } = req.body;
 
     const result = await req.app.get('db').getUser(username,password);
-
     let status = 200;
-
-    if(result.message == "Invalid Username" || result.message == "Invalid Password"){
-        status = 400;
-    }
 
     return res.status(status)
         .send({
