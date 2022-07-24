@@ -108,10 +108,10 @@ export async function signupA( username, first, last, password){
         headers: headers,
         method: 'post',
         url: 'http://localhost:55555/api/user/signup',
-        body: JSON.stringify({
+        data: JSON.stringify({
           firstname: first,
           lastname: last,
-          username: username,
+          user: username,
           password: password,
         })
     })

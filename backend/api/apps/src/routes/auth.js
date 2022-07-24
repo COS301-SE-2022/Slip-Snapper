@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { S3BucketFunctions } = require("./S3Bucket")
 
 /**
  * Add a user
@@ -6,13 +7,14 @@ const router = require("express").Router();
  */
 router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
-    
-    let { username, password, firstname, lastname } = req.body;
+    let { user, password, firstname, lastname } = req.body;
+    const result = await req.app.get('db').addUser(user, password, firstname, lastname);
 
-    const result = await req.app.get('db').addUser(username, password, firstname, lastname);
+    const path = `${user}/`
+    const bucket = new S3BucketFunctions
+    const resultPDF = bucket.createFolder(path)
 
     let status = 200;
-
     //TODO checking for errors
 
     return res.status(status)
