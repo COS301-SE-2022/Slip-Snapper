@@ -34,11 +34,11 @@ class FetchData extends React.Component {
     render() {
         const { DataisLoaded, items } = this.state;
         if (!DataisLoaded) return <div>
-            <h1> Items Loading.... </h1> </div> ;
+            <h1> Receipts Loading.... </h1> </div> ;
         return (
         <div className = "App">
             <IonItem>
-                <IonTitle>Receipts</IonTitle>
+                <IonTitle>All Receipts</IonTitle>
             </IonItem>
             
             <IonRow>

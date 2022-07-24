@@ -7,7 +7,7 @@ import { addItemsA } from '../../api/apiCall';
 
 
 
-const AddEntry: React.FC = () => {
+const EditSlip: React.FC = () => {
     const data = JSON.parse(localStorage.getItem('value')!);
     let photo;
     async function a() {
@@ -234,4 +234,4 @@ const AddEntry: React.FC = () => {
 
 }
 
-export default AddEntry;
+export default EditSlip;
