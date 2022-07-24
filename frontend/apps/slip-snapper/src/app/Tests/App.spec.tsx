@@ -16,6 +16,7 @@ import { UserStats } from '../components/UserStats';
 import AddEntry from '../pages/AddEntry';
 import { EditBudgets } from '../components/EditBudgets';
 import { Link, StaticRouter } from 'react-router-dom';
+import { getBudgetA } from '../../api/apiCall';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -85,6 +86,16 @@ describe('Profile', () => {
     expect(Component.getByText('Personal Budget'));
   });
 
+  describe('getBudgetA', () => {
+    it('should load user budget data', async () => {
+      return await getBudgetA(1)
+      .then(data => {
+        expect(data).toBeDefined()
+      })
+    })
+  })
+
+
   test('Correctly renders user statitics', async () => {
     const Component = render(<Profile />);
 
@@ -115,11 +126,11 @@ describe('Profile', () => {
     fireEvent.click(add_remove);
   });
 
-  // test('Test if More button fires correctly', async () => {
-  //   const Component = render(<Profile />);
-  //   const more = await Component.findByText('More');
-  //   fireEvent.click(more);
-  // });
+  test('Test if More button fires correctly', async () => {
+    const Component = render(<Profile />);
+    const more = await Component.findByText('More');
+    fireEvent.click(more);
+  });
 
   test("Link matches snapshot", () => {
     const component = renderer.create(
@@ -137,6 +148,8 @@ describe('Profile', () => {
     const logout = await Component.findByText('Logout');
     fireEvent.click(logout);
   });
+
+
 });
 
 /**
