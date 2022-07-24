@@ -84,9 +84,9 @@ async function generatePDF(name, types, today){
 
 /**
  * Generate the pdf report for a user
- * Uses the user id to get the items
+ * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
-router.post('/generate', async (req,res)=>{
+router.post('/pdf', async (req,res)=>{
     let { period, userId, userName } = req.body;
     var today = new Date();
     let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
@@ -116,6 +116,52 @@ router.post('/generate', async (req,res)=>{
             title: name,
             reportTotal: reportTotal
         });
+});
+
+/**
+ * Get a specific report from the S3 bucket
+ * Uses the report name and UserName
+ */
+ router.get('/pdf', async (req,res)=>{
+    let { userName, fileName } = req.query;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = await bucket.getFile(path)
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            report: result.data
+        });
+    
+});
+
+/**
+ * Delete a specific report from the S3 bucket
+ * Uses the report name and UserName and the reportID
+ */
+router.delete('/pdf', async (req,res)=>{
+    let { userName, fileName, reportID } = req.body;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = bucket.deleteFile(path)
+    
+    await req.app.get("db").deleteReportRecord(Number(reportID))
+    
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+        });
+    
 });
 
 /**
@@ -248,48 +294,6 @@ router.get('/recent', async (req,res)=>{
         .send({
             message: result.message,
             reports: result.reportsList
-        });
-    
-});
-
-/**
- * Get a specific report from the S3 bucket
- * Uses the report name and UserName
- */
-router.get('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.query;
-    
-    const path = `${userName}/${fileName}.pdf`
-    const bucket = new S3BucketFunctions
-    const result = await bucket.getFile(path)
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            report: result.data
-        });
-    
-});
-
-router.delete('/pdf', async (req,res)=>{
-    let { userName, fileName, reportID } = req.body;
-    
-    const path = `${userName}/${fileName}.pdf`
-    const bucket = new S3BucketFunctions
-    const result = bucket.deleteFile(path)
-    
-    await req.app.get("db").deleteReportRecord(Number(reportID))
-    
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
         });
     
 });

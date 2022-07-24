@@ -98,7 +98,7 @@ export async function generateReportA( userName, userId, period ){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'report/generate',
+        url: baseUrl + 'report/pdf',
         data: {
             userName: userName,
             userId: userId,
