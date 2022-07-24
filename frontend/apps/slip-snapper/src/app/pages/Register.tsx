@@ -43,6 +43,7 @@ const Register: React.FC = () => {
                 value={nameInput}
                 onIonChange={(e) => setNameInput(e.detail.value!)}
                 required
+                
               ></IonInput>
             </IonItem>
 
@@ -53,7 +54,7 @@ const Register: React.FC = () => {
                 type="text"
                 value={surnameInput}
                 onIonChange={(e) => setSurnameInput(e.detail.value!)}
-                required
+                clearOnEdit
               ></IonInput>
             </IonItem>
 
@@ -84,10 +85,11 @@ const Register: React.FC = () => {
                 class="LRButtons"
                 color="secondary"
                 size="large"
-                routerLink={'/home'}
+                onClick={() => { validateData() }}
               >
                 Register
               </IonButton>
+              <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
           </IonCard>
         </div>
@@ -136,10 +138,33 @@ const Register: React.FC = () => {
     </IonPage>
   );
 
-  function register( name: string, surname: string, user: string, password: string) {
-    signupA( user, name, surname, password)
+  function validateData() {
+
+    if (nameInput === undefined || nameInput === "" || nameInput === "*") {
+      setNameInput("*")
+    }
+    if (surnameInput === undefined || surnameInput === "" || surnameInput === "*") {
+      setSurnameInput("*")
+    }
+    if (userInput === undefined || userInput === "" || userInput === "*") {
+      setUserInput("*")
+    }
+    if (passwordInput === undefined || passwordInput === "" || passwordInput === "*") {
+      setPasswordInput("*")
+    }
+    else{
+      signupA(userInput, nameInput, surnameInput, passwordInput)
       .then(apiResponse => apiResponse.data);
+
+      const button = document.getElementById("successRedirect")
+      if (button) {
+        button.click();
+      }
+
+    }
   }
+
+
 
 };
 
