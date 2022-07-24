@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit');
 const router = require("express").Router();
 const {S3BucketFunctions} = require("./S3Bucket")
@@ -11,17 +12,17 @@ const {S3BucketFunctions} = require("./S3Bucket")
  async function determinePeriodStart(period, periodEnd){
     var date = new Date();
     switch (period) {
-        case "day":
+        case "Daily":
             return periodEnd;
-        case "week":
+        case "Weekly":
             date.setDate(date.getDate() - 7);
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "month":
+        case "Monthly":
             date.setMonth(date.getMonth() - 1);
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "year":
-            d.setFullYear(date.getFullYear() - 1);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+        // case "Yearly":
+        //     d.setFullYear(date.getFullYear() - 1);
+        //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
     }
 }
  
@@ -94,19 +95,29 @@ router.get('/generate', async (req,res)=>{
     const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
     let types = await sortItemsIntoCategories(result.itemList)
 
-    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
+    let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " " + period + ".pdf";
+    let dir = __dirname + '/report/'
+    let pdfName = dir + name
+    let reportTotal = await generatePDF(pdfName, types, today)
     
-    let reportTotal = await generatePDF(name, types, today)
-    
-    const path = `${userName}/${fileName}.pdf`
+    const path = `${userName}/${name}`
     const bucket = new S3BucketFunctions
-    const resultPDF = bucket.uploadFile(path, name)
+    const resultPDF = bucket.uploadFile(path, pdfName)
+
+    const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, reportTotal);
+
+    try {
+        await fsPromises.unlink(pdfName);
+        console.log('Successfully removed file!');
+    } catch (err) {
+        console.log(error)
+    }
 
     return res.status(200)
         .send({
             message: "Report Generated and uploaded",
             title: name,
-
+            reportTotal: reportTotal
         });
 });
 
@@ -261,19 +272,6 @@ router.get('/pdf', async (req,res)=>{
         .send({
             message: result.message,
             report: result.data
-        });
-    
-});
-
-router.post('/pdf', async (req,res)=>{
-    
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
         });
     
 });

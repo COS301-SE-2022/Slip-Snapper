@@ -930,16 +930,17 @@ async function getRecentReports(userid){
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
- async function createReportRecord(userid){
-    const date1= new Date()
-    
+ async function createReportRecord(userid,reportName, reportTotal){    
     const userReports = await prisma.reports.create({
         data:{
             usersId:userid,
-            reportName:"report_"+date1.toISOString()
+            reportName:reportName
         }
     })
-      
+    
+    return {
+        message: "Report added Successfully"
+    }
   }
 
   /**

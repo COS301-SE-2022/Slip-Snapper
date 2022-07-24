@@ -18,8 +18,7 @@ class S3BucketFunctions {
         const params = {
             Bucket: S3_BUCKET,
             Body: dir,
-            Key: path,          //needs to be in the form of user/name.pdf
-            contentType: 'application/pdf'
+            Key: path,  
         };
         myBucket.putObject(params, function (err, response) {
             if (err) {
