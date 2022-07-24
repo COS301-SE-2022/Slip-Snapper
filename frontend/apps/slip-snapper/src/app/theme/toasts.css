@@ -6,13 +6,6 @@
     --width: 15%;
 }
 
-#logout-alert{
-    --background: #5d6c83;
-    color: #ebebeb;
-    --height: 10%;
-    --width: 15%;
-}
-
 @media only screen and (max-width: 400px) {
     .loading {
         --min-width: 40%;

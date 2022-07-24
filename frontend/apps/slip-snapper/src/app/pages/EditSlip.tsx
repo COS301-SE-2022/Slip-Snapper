@@ -7,8 +7,8 @@ import { addItemsA } from '../../api/apiCall';
 
 
 
-const AddEntry: React.FC = () => {
-    const data = JSON.parse(localStorage.getItem('value')!);
+const EditSlip: React.FC = () => {
+    const data = JSON.parse(localStorage.getItem('scan-content')!);
     let photo;
     async function a() {
         photo = JSON.parse(localStorage.getItem('photo')!);
@@ -234,4 +234,4 @@ const AddEntry: React.FC = () => {
 
 }
 
-export default AddEntry;
+export default EditSlip;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput} from '@ionic/react';
+import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert} from '@ionic/react';
 import '../theme/register.css';
-import { loginA, signupA } from "../../api/apiCall"
+import { signupA } from "../../api/apiCall"
 
 
 const Register: React.FC = () => {
@@ -9,6 +9,8 @@ const Register: React.FC = () => {
   const [surnameInput, setSurnameInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
+  const [errorAlert, setAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
  
   return (
@@ -43,6 +45,7 @@ const Register: React.FC = () => {
                 value={nameInput}
                 onIonChange={(e) => setNameInput(e.detail.value!)}
                 required
+                
               ></IonInput>
             </IonItem>
 
@@ -53,7 +56,7 @@ const Register: React.FC = () => {
                 type="text"
                 value={surnameInput}
                 onIonChange={(e) => setSurnameInput(e.detail.value!)}
-                required
+                clearOnEdit
               ></IonInput>
             </IonItem>
 
@@ -84,11 +87,19 @@ const Register: React.FC = () => {
                 class="LRButtons"
                 color="secondary"
                 size="large"
-                routerLink={'/home'}
+                onClick={() => { register() }}
               >
                 Register
               </IonButton>
+              <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
+            <IonAlert
+              isOpen={errorAlert}
+              onDidDismiss={() => setAlert(false)}
+              header="Invalid Input"
+              subHeader={errorMessage}
+              buttons={['OK']}
+            />
           </IonCard>
         </div>
 
@@ -136,10 +147,37 @@ const Register: React.FC = () => {
     </IonPage>
   );
 
-  function register( name: string, surname: string, user: string, password: string) {
-    signupA( user, name, surname, password)
+  function register() {
+
+    if (nameInput === undefined || nameInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
+    }
+    if (surnameInput === undefined || surnameInput === "") {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
+    }
+    if (userInput === undefined || userInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
+    }
+    if (passwordInput === undefined || passwordInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
+    }
+    else{
+      signupA(userInput, nameInput, surnameInput, passwordInput)
       .then(apiResponse => apiResponse.data);
+
+      const button = document.getElementById("successRedirect")
+      if (button) {
+        button.click();
+      }
+
+    }
   }
+
+
 
 };
 

@@ -8,7 +8,7 @@ const EditItem: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Edit Item</IonTitle>
+          <IonTitle>Receipts</IonTitle>
           <IonButtons slot="end">
             <NavButtons/>
           </IonButtons>

@@ -85,27 +85,25 @@ describe('Profile', () => {
   test('Correctly renders user statitics', async () => {
     const Component = render(<Profile />);
 
-    Component.getByTitle('lastWeek').setAttribute("value", "R100");
-    Component.getByTitle('thisWeek').setAttribute("value", "R200");
-    Component.getByTitle('lastMonth').setAttribute("value", "R300");
-    Component.getByTitle('thisMonth').setAttribute("value", "R400");
-    Component.getByTitle("favoriteStore").setAttribute("value", "Woolworths");
-    Component.getByTitle("favoriteTotal").setAttribute("value", "R599.99");
-    Component.getByTitle("categoryName").setAttribute("value", "Food");
-    Component.getByTitle("categoryTotal").setAttribute("value", "R699.99");
-    Component.getByTitle("storeName").setAttribute("value", "PEP");
-    Component.getByTitle("storeTotal").setAttribute("value", "R899.99");
+    Component.getByTestId('lastWeek').setAttribute("value", "R100");
+    Component.getByTestId('thisWeek').setAttribute("value", "R200");
+    Component.getByTestId('lastMonth').setAttribute("value", "R300");
+    Component.getByTestId('thisMonth').setAttribute("value", "R400");
+    Component.getByTestId("favoriteStore").setAttribute("value", "Woolworths");
+    Component.getByTestId("categoryName").setAttribute("value", "Food");
+    Component.getByTestId("categoryTotal").setAttribute("value", "R699.99");
+    Component.getByTestId("storeName").setAttribute("value", "PEP");
+    Component.getByTestId("storeTotal").setAttribute("value", "R899.99");
 
-    expect(Component.getByTitle('lastWeek').getAttribute("value")).toBe("R100")
-    expect(Component.getByTitle('thisWeek').getAttribute("value")).toBe("R200")
-    expect(Component.getByTitle('lastMonth').getAttribute("value")).toBe("R300")
-    expect(Component.getByTitle('thisMonth').getAttribute("value")).toBe("R400")
-    expect(Component.getByTitle("favoriteStore").getAttribute("value")).toBe("Woolworths")
-    expect(Component.getByTitle("favoriteTotal").getAttribute("value")).toBe("R599.99")
-    expect(Component.getByTitle("categoryName").getAttribute("value")).toBe("Food")
-    expect(Component.getByTitle("categoryTotal").getAttribute("value")).toBe("R699.99")
-    expect(Component.getByTitle("storeName").getAttribute("value")).toBe("PEP")
-    expect(Component.getByTitle("storeTotal").getAttribute("value")).toBe("R899.99")
+    expect(Component.getByTestId('lastWeek').getAttribute("value")).toBe("R100")
+    expect(Component.getByTestId('thisWeek').getAttribute("value")).toBe("R200")
+    expect(Component.getByTestId('lastMonth').getAttribute("value")).toBe("R300")
+    expect(Component.getByTestId('thisMonth').getAttribute("value")).toBe("R400")
+    expect(Component.getByTestId("favoriteStore").getAttribute("value")).toBe("Woolworths")
+    expect(Component.getByTestId("categoryName").getAttribute("value")).toBe("Food")
+    expect(Component.getByTestId("categoryTotal").getAttribute("value")).toBe("R699.99")
+    expect(Component.getByTestId("storeName").getAttribute("value")).toBe("PEP")
+    expect(Component.getByTestId("storeTotal").getAttribute("value")).toBe("R899.99")
   });
 
   test('Test if Logout button fires correctly', async () => {

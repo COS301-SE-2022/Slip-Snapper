@@ -1,5 +1,5 @@
 import { receipt, camera, list } from 'ionicons/icons';
-import { usePhotoGallery } from '../../hooks/usePhotoGallery';
+import { usePhotoGallery } from './usePhotoGallery';
 import {
   IonContent,
   IonFab,

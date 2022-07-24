@@ -1,21 +1,25 @@
-import { IonButton, IonCard, IonInput, IonItem, IonLabel, IonPage} from '@ionic/react';
+import { IonAlert, IonButton, IonCard, IonInput, IonItem, IonLabel, IonPage } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/login.css';
 import { loginA } from "../../api/apiCall"
 
 const Login: React.FC = () => {
-  
+
   const [usernameInput, setUsernameInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
-  
-    return (
+  const [errorAlert, setAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+
+  return (
     <IonPage>
 
       <div className="header">
 
         <div className="inner-header flexbox">
 
-          <IonCard color = "tertiary" class="logincard">
+          <IonCard color="tertiary" class="logincard">
 
             <h1>Slip Snapper</h1>
             <svg className="logo" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 17 17" version="1.1">
@@ -24,30 +28,37 @@ const Login: React.FC = () => {
               1.875-1.495-1.87-1.036 1.268v-13.098h11v13.036zM10.997 4h-6v-1h6v1zM8.997 8h-4v-1h4v1zM11.978 6h-7v-1h7v1zM5 10h7v1h-7v-1z"/>
             </svg>
 
-            <IonItem  color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="loginitems">
               <IonLabel position="floating">Username</IonLabel>
-              <IonInput  title="usernameInput" type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
+              <IonInput title="usernameInput" type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
-            <IonItem   color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="loginitems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput title="passwordInput" type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
             <IonItem color="tertiary" text-align="center" class="loginitems">
-              <IonButton type="submit" class="LRButtons" color= "secondary" size="large" routerLink={"/home"}>Login</IonButton>
+              <IonButton type="submit" class="LRButtons" color="secondary" size="large" onClick={() => { login() }}>Login</IonButton>
             </IonItem>
 
             <IonItem color="tertiary" text-align="center" class="loginitems">
-              <IonButton class="LRButtons" color= "secondary" size="large" routerLink={"/register"}>Register</IonButton>
+              <IonButton class="LRButtons" color="secondary" size="large" routerLink={"/register"}>Register</IonButton>
             </IonItem>
+            <IonAlert
+              isOpen={errorAlert}
+              onDidDismiss={() => setAlert(false)}
+              header="Invalid Input"
+              subHeader={errorMessage}
+              buttons={['OK']}
+            />
 
-          </IonCard>  
+          </IonCard>
         </div>
 
         <div>
           <svg className="motionwaves" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
-          viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+            viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
             <defs>
               <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
             </defs>
@@ -61,17 +72,54 @@ const Login: React.FC = () => {
         </div>
 
       </div>
-
+      <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
       <div className="content flexbox">
       </div>
-      
+
     </IonPage>
   );
 
-    function login(user: string, password: string){
-      loginA(user, password)
-        .then(apiResponse => apiResponse.data)
+  function login() {
+
+    if (usernameInput === undefined || usernameInput === "" || usernameInput === "*") {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
     }
-  };
-  
-  export default Login;
+    else if (passwordInput === undefined || passwordInput === "" || passwordInput === "*") {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
+    }
+
+    /**
+    * Check if Login details are valid
+    */
+    else {
+      loginA(usernameInput, passwordInput)
+        .then(apiResponse => {
+          if (apiResponse.data.message === "Invalid Username") {
+            setErrorMessage("Username not found!")
+            setAlert(true)
+          }
+          else if (apiResponse.data.message === "Invalid Password") {
+            setErrorMessage("Incorrect Password!")
+            setAlert(true)
+          }
+          else {
+            const button = document.getElementById("successRedirect")
+            if (button) {
+              button.click();
+            }
+          }
+        })
+
+
+
+
+
+    }
+  }
+
+
+};
+
+export default Login;

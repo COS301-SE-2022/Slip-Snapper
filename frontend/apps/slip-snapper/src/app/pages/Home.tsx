@@ -23,9 +23,6 @@ import '../theme/home.css';
 import ViewReportItem from '../components/ViewReportItem';
 
 const Home: React.FC = () => {
-  // const mockReports = [{ reportNumber: "Report #8", date: "10/05/20" }, { reportNumber: "Report #9", date: "10/05/21" },
-  // { reportNumber: "Report #10", date: "10/05/22" }, { reportNumber: "Report #11", date: "10/05/23" }]
-
   const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
