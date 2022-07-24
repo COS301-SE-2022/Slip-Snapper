@@ -14,7 +14,27 @@ const myBucket = new AWS.S3({
 
 class S3BucketFunctions {
 
+    async createFolder(path) {
+
+        const params = {
+            Bucket: S3_BUCKET,
+            Key: path, 
+        };
+        myBucket.putObject(params, function (err, response) {
+            if (err) {
+                return {
+                    message: "Could not create User ."
+                }
+            } else {
+                return {
+                    message: "Successfully created User folder!"
+                }
+            }
+        });
+    }
+
     async uploadFile (path, dir){
+
         const params = {
             Bucket: S3_BUCKET,
             Body: dir,

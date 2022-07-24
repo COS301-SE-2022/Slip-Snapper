@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
+import { addItemsA } from '../../api/apiCall';
+
 
 
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
-    console.log(items)
 
 
     const handleCostsChange = (event: any) => {
@@ -47,7 +48,7 @@ const AddEntry: React.FC = () => {
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -134,10 +135,9 @@ const AddEntry: React.FC = () => {
                     </IonItem>
                     <IonItem color="primary">
                         <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                        <IonButton fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                        <IonButton id='cancelButton' fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
-                    <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
                 </IonCard>
             </IonContent>
             <IonFooter>
@@ -183,7 +183,7 @@ const AddEntry: React.FC = () => {
     }
 
     function validateData() {
-        let submitFlag = false
+        let submitFlag = true
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].item === "" || items[i].item === "*") {
@@ -191,7 +191,7 @@ const AddEntry: React.FC = () => {
                 temp[i].item = "*";
                 setItems(temp)
                 document.getElementById(i + "/item")?.setAttribute("color", "danger");
-                submitFlag = true
+                submitFlag = false
 
             }
             if (items[i].type === "" || items[i].type === "*") {
@@ -199,12 +199,15 @@ const AddEntry: React.FC = () => {
                 temp[i].type = "*";
                 setItems(temp)
                 document.getElementById(i + "/type")?.setAttribute("color", "danger");
-                submitFlag = true
+                submitFlag = false
 
             }
             if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity) !== 1) {
                 document.getElementById(i + "/quantity")?.setAttribute("color", "danger");
-                submitFlag = true
+                const temp = [...items];
+                temp[i].quantity = 0;
+                setItems(temp)
+                submitFlag = false
 
             }
             if (items[i].price === "") {
@@ -213,13 +216,20 @@ const AddEntry: React.FC = () => {
                 setItems(temp)
                 document.getElementById(i + "/type")?.setAttribute("color", "danger");
                 document.getElementById(i + "/price")?.setAttribute("color", "danger");
-                submitFlag = true
+                submitFlag = false
 
             }
         }
         if (submitFlag === true) {
-            //  addItemsA(1, data, items) 
-            const button = document.getElementById("successRedirect")
+            const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
+            const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+
+            const data = {
+                text: [date, storeName, "", "", getTotalCosts]
+            };
+
+            addItemsA(1, data, items) 
+            const button = document.getElementById("cancelButton")
             if (button) {
                 button.click();
             }
@@ -230,7 +240,6 @@ const AddEntry: React.FC = () => {
     function setNormalColour(i: string) {
         document.getElementById(i)?.setAttribute("color", "light");
     }
-
 }
 
 export default AddEntry;

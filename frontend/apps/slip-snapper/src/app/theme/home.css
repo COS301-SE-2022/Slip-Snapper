@@ -4,3 +4,6 @@
 .addEntry{
     left: 53%;
 }
+.successRedirect {
+    display: none;
+}
