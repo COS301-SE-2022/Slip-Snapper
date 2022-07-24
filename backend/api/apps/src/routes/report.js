@@ -228,6 +228,7 @@ router.get('/user', async (req,res)=>{
 
     return res.status(status)
         .send({
+            message: result.message,
             numReports: result.numReports,
             reports: result.reportsList
         });
@@ -248,7 +249,7 @@ router.get('/recent', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: "Recent Reports retrieved.",
+            message: result.message,
             reports: result.reportsList
         });
     

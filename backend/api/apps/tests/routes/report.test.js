@@ -5,12 +5,17 @@ const getItemsReport = jest.fn();
 const getUserBudgets = jest.fn();
 const setUserBudgets = jest.fn();
 const getUserStats = jest.fn();
+const getAllReports = jest.fn();
+const getRecentReports = jest.fn();
+
 
 const app = makeApp({
   getItemsReport,
   getUserBudgets,
   setUserBudgets,
-  getUserStats
+  getUserStats,
+  getAllReports,
+  getRecentReports
 })
 
 /**
@@ -105,10 +110,10 @@ describe('POST /report/budget', ()=>{
 /**
  * Test for the get user statistics query
  */
-describe('POST /report/statistics', ()=>{
+describe('GET /report/statistics', ()=>{
 
     //TODO expand
-    test('Should Generate a report for the user', async ()=>{
+    test('Should get all user statistics', async ()=>{
         getUserStats.mockResolvedValue({
             message: "User statistics retrieved",
             storeDetails: {
@@ -142,5 +147,64 @@ describe('POST /report/statistics', ()=>{
         
         expect(res.statusCode).toEqual(200);
         expect(res.body.message).toEqual("User statistics retrieved");
+    })
+})
+
+/**
+ * Test for the get user statistics query
+ */
+describe('GET /report/user', ()=>{
+
+    beforeEach(()=>{
+        getAllReports.mockReset();
+    })
+
+    //TODO expand
+    test('Should Get all the reports for a particular user', async ()=>{
+        const userId = [
+            1,
+            2,
+            3
+        ]
+        
+        for (const id of userId){
+            getAllReports.mockReset();
+            getAllReports.mockResolvedValue({
+                message: "All user reports Retrieved",
+                reports: []
+            });
+
+            const res = await request(app)
+                .get('/api/report/user?userId='+id)
+            
+            expect(getAllReports.mock.calls.length).toBe(1);
+            expect(getAllReports.mock.calls[0][0]).toBe(id);
+        }
+        
+        
+    })
+
+    test('Should return a json object with the message', async ()=>{
+        getAllReports.mockResolvedValue({
+            message: "All user reports Retrieved",
+            reports: []
+        });
+
+        const res = await request(app)
+            .get('/api/report/user?userId=1')
+        
+        expect(res.body.message).toEqual("All user reports Retrieved");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        getAllReports.mockResolvedValue({
+            message: "All user reports Retrieved",
+            reports: []
+        });
+
+        const res = await request(app)
+            .get('/api/report/user?userId=1')
+        
+        expect(res.statusCode).toEqual(200);
     })
 })

@@ -799,9 +799,10 @@ async function getDataItems(){
                 reportDate: report.generatedDate
             })
         }
-         return {
-        numReports,
-        reportsList
+        return {
+            message: "All user reports Retrieved",
+            numReports,
+            reportsList
         }
     }
 }
@@ -918,8 +919,9 @@ async function getRecentReports(userid){
                 reportDate: report.generatedDate
             })
         }
-         return {
-        reportsList
+        return {
+            message: "Recent Reports retrieved.",
+            reportsList
         }
     }
 }
