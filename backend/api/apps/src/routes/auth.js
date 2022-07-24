@@ -33,12 +33,7 @@ router.post('/login', async (req,res)=>{
     let { username, password } = req.body;
 
     const result = await req.app.get('db').getUser(username,password);
-
     let status = 200;
-
-    if(result.message == "Invalid Username" || result.message == "Invalid Password"){
-        status = 400;
-    }
 
     return res.status(status)
         .send({
