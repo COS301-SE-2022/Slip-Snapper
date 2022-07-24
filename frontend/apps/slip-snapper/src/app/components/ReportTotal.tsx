@@ -38,8 +38,9 @@ function ReportTotal({ reportData }: Props) {
 }
 export default ReportTotal;
 
-function generateReport(type: string) {
-    const url = 'http://localhost:55555/api/report/generate?userId=1&period=' + type + '&userName=1';
-    generateReportA(url)
+function generateReport(period: string) {
+    const userName = "1"
+    const userId = 1
+    generateReportA(userName, userId ,period)
         .then(apiResponse => apiResponse.data);
 }

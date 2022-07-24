@@ -86,8 +86,8 @@ async function generatePDF(name, types, today){
  * Generate the pdf report for a user
  * Uses the user id to get the items
  */
-router.get('/generate', async (req,res)=>{
-    let { period, userId, userName } = req.query;
+router.post('/generate', async (req,res)=>{
+    let { period, userId, userName } = req.body;
     var today = new Date();
     let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
     
@@ -108,10 +108,7 @@ router.get('/generate', async (req,res)=>{
 
     try {
         await fsPromises.unlink(pdfName);
-        console.log('Successfully removed file!');
-    } catch (err) {
-        console.log(error)
-    }
+    } catch (err) {}
 
     return res.status(200)
         .send({
