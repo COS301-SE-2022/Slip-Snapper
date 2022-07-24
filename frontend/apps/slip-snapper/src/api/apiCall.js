@@ -93,7 +93,7 @@ export async function loginA( username, password){
         headers: headers,
         method: 'post',
         url: 'http://localhost:55555/api/user/login',
-        body: JSON.stringify({
+        data: JSON.stringify({
             username: username,
             password: password
         })

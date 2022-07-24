@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput} from '@ionic/react';
+import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert} from '@ionic/react';
 import '../theme/register.css';
-import { loginA, signupA } from "../../api/apiCall"
+import { signupA } from "../../api/apiCall"
 
 
 const Register: React.FC = () => {
@@ -9,6 +9,8 @@ const Register: React.FC = () => {
   const [surnameInput, setSurnameInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
+  const [errorAlert, setAlert] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
  
   return (
@@ -85,12 +87,19 @@ const Register: React.FC = () => {
                 class="LRButtons"
                 color="secondary"
                 size="large"
-                onClick={() => { validateData() }}
+                onClick={() => { register() }}
               >
                 Register
               </IonButton>
               <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
+            <IonAlert
+              isOpen={errorAlert}
+              onDidDismiss={() => setAlert(false)}
+              header="Invalid Input"
+              subHeader={errorMessage}
+              buttons={['OK']}
+            />
           </IonCard>
         </div>
 
@@ -138,19 +147,23 @@ const Register: React.FC = () => {
     </IonPage>
   );
 
-  function validateData() {
+  function register() {
 
-    if (nameInput === undefined || nameInput === "" || nameInput === "*") {
-      setNameInput("*")
+    if (nameInput === undefined || nameInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
     }
-    if (surnameInput === undefined || surnameInput === "" || surnameInput === "*") {
-      setSurnameInput("*")
+    if (surnameInput === undefined || surnameInput === "") {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
     }
-    if (userInput === undefined || userInput === "" || userInput === "*") {
-      setUserInput("*")
+    if (userInput === undefined || userInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
     }
-    if (passwordInput === undefined || passwordInput === "" || passwordInput === "*") {
-      setPasswordInput("*")
+    if (passwordInput === undefined || passwordInput === "" ) {
+      setErrorMessage("Please fill in all fields!")
+      setAlert(true)
     }
     else{
       signupA(userInput, nameInput, surnameInput, passwordInput)
