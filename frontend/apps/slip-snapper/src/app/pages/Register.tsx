@@ -153,7 +153,7 @@ const Register: React.FC = () => {
       setPasswordInput("*")
     }
     else{
-      signupA(nameInput, surnameInput, userInput, passwordInput)
+      signupA(userInput, nameInput, surnameInput, passwordInput)
       .then(apiResponse => apiResponse.data);
 
       const button = document.getElementById("successRedirect")

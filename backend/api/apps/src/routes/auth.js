@@ -7,10 +7,11 @@ const { S3BucketFunctions } = require("./S3Bucket")
  */
 router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
-    let { user, password, firstname, lastname } = req.body;
-    const result = await req.app.get('db').addUser(user, password, firstname, lastname);
+    let { firstname, lastname, username, password } = req.body;
+    const result = await req.app.get('db').addUser(username, password, firstname, lastname);
+    console.log(username)
 
-    const path = `${user}/`
+    const path = `${username}/`
     const bucket = new S3BucketFunctions
     const resultPDF = bucket.createFolder(path)
 

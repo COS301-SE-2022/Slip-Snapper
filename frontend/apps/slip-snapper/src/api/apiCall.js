@@ -111,7 +111,7 @@ export async function signupA( username, first, last, password){
         data: JSON.stringify({
           firstname: first,
           lastname: last,
-          user: username,
+          username: username,
           password: password,
         })
     })
