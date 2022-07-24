@@ -1,152 +1,125 @@
 const axios = require('axios');
 
+const headers = {
+    "Content-Type": "application/json"
+}
+
+const baseUrl = 'http://localhost:55555/api/'
+
 /**
  * To process the text extracted by OCR
  * @param {*} ocr the extracted text
  * @returns the response as a promise
  */
 export async function doProcessing(ocr){
-    const headers = {
-        "Content-Type": "application/json"
-    }
     return axios({
         headers: headers,
         method: 'post',
-        url:'http://localhost:55555/api/ocr/process',
-        // data: {
-        //   text: ocr,
-        // }
+        url: baseUrl + 'api/ocr/process',
         data: JSON.stringify({
             text: ocr,
         })
     })
 }
 
-export async function updateItemA(_item,userid,_name,_location,_quantity,_price,_type){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function updateItemA( item, userId, name, location, quantity, price, type){
     return axios({
         headers: headers,
         method: 'post',
-        url:'http://localhost:55555/api/item/update',
+        url: baseUrl + 'item/update',
         data: JSON.stringify({
-            itemid: _item,
-            user: userid,
-            name : _name,
-            location : _location,
-            quantity : _quantity,
-            price : _price,
-            type : _type
+            itemid: item,
+            user: userId,
+            name : name,
+            location : location,
+            quantity : quantity,
+            price : price,
+            type : type
         })
     })
 }
 
-export async function getItemsA(userid){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function getItemsA(userId){
     return axios({
         headers: headers,
         method: 'get',
-        url:'http://localhost:55555/api/item/all?userId='+userid
+        url: baseUrl + 'item/all?userId=' + userId
     })
 }
 
-export async function setBudgetA( userid, weekly, monthly){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function setBudgetA( userId, weekly, monthly){
     return axios({
         headers: headers,
         method: 'post',
-        url: 'http://localhost:55555/api/report/budget',
-        // data: JSON.stringify({
-        //     userId: userid,
-        //     weekly: weekly,
-        //     monthly: monthly
-        // })
-        data: {
-            userId: userid,
+        url: baseUrl + 'report/budget',
+        data: JSON.stringify({
+            userId: userId,
             weekly: weekly,
             monthly: monthly
-        }
+        })
     })
 }
 
-export async function getBudgetA( userid ){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function getBudgetA( userId ){
     return axios({
         headers: headers,
         method: 'get',
-        url: 'http://localhost:55555/api/report/budget?userId=1',
+        url: baseUrl + 'report/budget?userId='+userId,
     })
 }
 
-export async function loginA( username, password){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function loginA( userName, password){
     return axios({
         headers: headers,
         method: 'post',
-        url: 'http://localhost:55555/api/user/login',
-        data: JSON.stringify({
-            username: username,
+        url: baseUrl + 'user/login',
+        body: JSON.stringify({
+            username: userName,
             password: password
         })
     })
 }
 
-export async function signupA( username, first, last, password){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function signupA( userName, first, last, password){
     return axios({
         headers: headers,
         method: 'post',
-        url: 'http://localhost:55555/api/user/signup',
+        url: baseUrl + 'user/signup',
         data: JSON.stringify({
           firstname: first,
           lastname: last,
-          username: username,
+          username: userName,
           password: password,
         })
     })
 }
 
-export async function generateReportA( url ){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function generateReportA( userName, userId, period ){
     return axios({
         headers: headers,
-        method: 'get',
-        url: url,
-      })
+        method: 'post',
+        url: baseUrl + 'report/pdf',
+        data: {
+            userName: userName,
+            userId: userId,
+            period: period
+        }
+    })
 }
 
 export async function getStatsA( userId ){
-    const headers = {
-        "Content-Type": "application/json"
-    }
     return axios({
         headers: headers,
         method: 'get',
-        url: 'http://localhost:55555/api/report/statistics?userId=1',
+        url: baseUrl + 'report/statistics?userId='+userId,
       })
 }
 
 export async function addItemsA( userId, data, text){
-    const headers = {
-        "Content-Type": "application/json"
-    }
     return axios({
         headers: headers,
         method: 'post',
-        url: 'http://localhost:55555/api/item/add',
+        url: baseUrl + 'item/add',
         body: JSON.stringify({
           userId: userId,
           location: data.text[1],
@@ -158,52 +131,38 @@ export async function addItemsA( userId, data, text){
 }
 
 export async function getAllUserReports(userId){
-    const headers = {
-        "Content-Type": "application/json"
-    }
     return axios({
         headers: headers,
         method: 'get',
-        url: 'http://localhost:55555/api/report/user?userId=1',
+        url: baseUrl + 'report/user?userId='+ userId,
       })
 }
 
 export async function getUserReport(userName, fileName){
-    const url = 'http://localhost:55555/api/report/pdf?userName=' + userName + '&fileName=' + fileName
-    const headers = {
-        "Content-Type": "application/json"
-    }
     return axios({
         headers: headers,
         method: 'get',
-        url: url,
+        url: baseUrl + 'report/pdf?userName=' + userName + '&fileName=' + fileName,
     })
 }
 
-export async function getRecentReports(userID){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function getRecentReports(userId){
     return axios({
         headers: headers,
         method: 'get',
-        url: 'http://localhost:55555/api/report/recent?userId=1',
+        url: baseUrl + 'report/recent?userId='+ userId,
       })
 }
 
-//Temporary
-export async function removeReport( userName, fileName , reportID){
-    const headers = {
-        "Content-Type": "application/json"
-    }
+export async function removeReport( userName, fileName , reportId){
     return axios({
         headers: headers,
         method: 'delete',
-        url: 'http://localhost:55555/api/report/pdf',
+        url: baseUrl + 'report/pdf',
         body: JSON.stringify({
           userName: userName,
           fileName: fileName,
-          reportID: reportID
+          reportID: reportId
         })
     })
 }
