@@ -139,7 +139,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Most Frequent Store</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText id='favoriteStore'></IonText>
+                <IonText data-testid='favoriteStore'></IonText>
               </IonItem>
             </IonCardHeader>
 
