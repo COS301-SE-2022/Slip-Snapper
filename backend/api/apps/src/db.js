@@ -799,9 +799,10 @@ async function getDataItems(){
                 reportDate: report.generatedDate
             })
         }
-         return {
-        numReports,
-        reportsList
+        return {
+            message: "All user reports Retrieved",
+            numReports,
+            reportsList
         }
     }
 }
@@ -918,8 +919,9 @@ async function getRecentReports(userid){
                 reportDate: report.generatedDate
             })
         }
-         return {
-        reportsList
+        return {
+            message: "Recent Reports retrieved.",
+            reportsList
         }
     }
 }
@@ -930,16 +932,17 @@ async function getRecentReports(userid){
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
- async function createReportRecord(userid){
-    const date1= new Date()
-    
+ async function createReportRecord(userid,reportName, reportTotal){    
     const userReports = await prisma.reports.create({
         data:{
             usersId:userid,
-            reportName:"report_"+date1.toISOString()
+            reportName:reportName
         }
     })
-      
+    
+    return {
+        message: "Report added Successfully"
+    }
   }
 
   /**
