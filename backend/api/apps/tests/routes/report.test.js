@@ -151,7 +151,7 @@ describe('GET /report/statistics', ()=>{
 })
 
 /**
- * Test for the get user statistics query
+ * Test for the get user reports query
  */
 describe('GET /report/user', ()=>{
 
@@ -204,6 +204,65 @@ describe('GET /report/user', ()=>{
 
         const res = await request(app)
             .get('/api/report/user?userId=1')
+        
+        expect(res.statusCode).toEqual(200);
+    })
+})
+
+/**
+ * Test for the get recent reports query
+ */
+ describe('GET /report/recent', ()=>{
+
+    beforeEach(()=>{
+        getRecentReports.mockReset();
+    })
+
+    //TODO expand
+    test('Should Get all the recent reports for a particular user', async ()=>{
+        const userId = [
+            1,
+            2,
+            3
+        ]
+        
+        for (const id of userId){
+            getRecentReports.mockReset();
+            getRecentReports.mockResolvedValue({
+                message: "Recent Reports retrieved.",
+                reports: []
+            });
+
+            const res = await request(app)
+                .get('/api/report/recent?userId='+id)
+            
+            expect(getRecentReports.mock.calls.length).toBe(1);
+            expect(getRecentReports.mock.calls[0][0]).toBe(id);
+        }
+        
+        
+    })
+
+    test('Should return a json object with the message', async ()=>{
+        getRecentReports.mockResolvedValue({
+            message: "Recent Reports retrieved.",
+            reports: []
+        });
+
+        const res = await request(app)
+            .get('/api/report/recent?userId=1')
+        
+        expect(res.body.message).toEqual("Recent Reports retrieved.");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        getRecentReports.mockResolvedValue({
+            message: "Recent Reports retrieved.",
+            reports: []
+        });
+
+        const res = await request(app)
+            .get('/api/report/recent?userId=1')
         
         expect(res.statusCode).toEqual(200);
     })
