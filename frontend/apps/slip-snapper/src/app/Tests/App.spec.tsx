@@ -87,8 +87,8 @@ describe('Profile', () => {
   });
 
   describe('getBudgetA', () => {
-    it('should load user budget data', async () => {
-      return await getBudgetA(1)
+    it('should load user budget data', () => {
+      return getBudgetA(1)
       .then(data => {
         expect(data).toBeDefined()
       })
