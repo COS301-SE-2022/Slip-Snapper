@@ -73,7 +73,7 @@ export async function loginA( userName, password){
         headers: headers,
         method: 'post',
         url: baseUrl + 'user/login',
-        body: JSON.stringify({
+        data: JSON.stringify({
             username: userName,
             password: password
         })
@@ -120,7 +120,7 @@ export async function addItemsA( userId, data, text){
         headers: headers,
         method: 'post',
         url: baseUrl + 'item/add',
-        body: JSON.stringify({
+        data: JSON.stringify({
           userId: userId,
           location: data.text[1],
           date: data.text[0],
@@ -159,7 +159,7 @@ export async function removeReport( userName, fileName , reportId){
         headers: headers,
         method: 'delete',
         url: baseUrl + 'report/pdf',
-        body: JSON.stringify({
+        data: JSON.stringify({
           userName: userName,
           fileName: fileName,
           reportID: reportId
