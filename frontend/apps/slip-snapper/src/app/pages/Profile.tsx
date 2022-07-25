@@ -95,6 +95,7 @@ const Profile: React.FC = () => {
             </IonCardHeader>
             <IonAlert
               isOpen={budgetAlert}
+              data-testid="budget-alert"
               onDidDismiss={() => setBudgetAlert(false)}
               header={'Change Budget'}
               inputs={[

@@ -1,12 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Profile Link matches snapshot 1`] = `
-<a
-  href="/receipts"
-  onClick={[Function]}
-/>
-`;
-
 exports[`TakePicture Button component Matches the snapshot of the TakePicture button 1`] = `
 <ion-content>
   <ion-fab

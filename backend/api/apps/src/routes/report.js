@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit');
 const router = require("express").Router();
 const {S3BucketFunctions} = require("./S3Bucket")
@@ -11,17 +12,17 @@ const {S3BucketFunctions} = require("./S3Bucket")
  async function determinePeriodStart(period, periodEnd){
     var date = new Date();
     switch (period) {
-        case "day":
+        case "Daily":
             return periodEnd;
-        case "week":
+        case "Weekly":
             date.setDate(date.getDate() - 7);
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "month":
+        case "Monthly":
             date.setMonth(date.getMonth() - 1);
             return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "year":
-            d.setFullYear(date.getFullYear() - 1);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+        // case "Yearly":
+        //     d.setFullYear(date.getFullYear() - 1);
+        //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
     }
 }
  
@@ -83,10 +84,10 @@ async function generatePDF(name, types, today){
 
 /**
  * Generate the pdf report for a user
- * Uses the user id to get the items
+ * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
-router.get('/generate', async (req,res)=>{
-    let { period, userId, userName } = req.query;
+router.post('/pdf', async (req,res)=>{
+    let { period, userId, userName } = req.body;
     var today = new Date();
     let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
     
@@ -94,20 +95,73 @@ router.get('/generate', async (req,res)=>{
     const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
     let types = await sortItemsIntoCategories(result.itemList)
 
-    let name = "report-" + today.getDate() + (today.getMonth()+1) + today.getFullYear() + "-" + today.getTime() + ".pdf";
+    let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " " + period + ".pdf";
+    let dir = __dirname + '/report/'
+    let pdfName = dir + name
+    let reportTotal = await generatePDF(pdfName, types, today)
     
-    let reportTotal = await generatePDF(name, types, today)
-    
-    const path = `${userName}/${fileName}.pdf`
+    const path = `${userName}/${name}`
     const bucket = new S3BucketFunctions
-    const resultPDF = bucket.uploadFile(path, name)
+    const resultPDF = bucket.uploadFile(path, pdfName)
+
+    const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, reportTotal);
+
+    try {
+        await fsPromises.unlink(pdfName);
+    } catch (err) {}
 
     return res.status(200)
         .send({
             message: "Report Generated and uploaded",
             title: name,
-
+            reportTotal: reportTotal
         });
+});
+
+/**
+ * Get a specific report from the S3 bucket
+ * Uses the report name and UserName
+ */
+ router.get('/pdf', async (req,res)=>{
+    let { userName, fileName } = req.query;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = await bucket.getFile(path)
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            report: result.data
+        });
+    
+});
+
+/**
+ * Delete a specific report from the S3 bucket
+ * Uses the report name and UserName and the reportID
+ */
+router.delete('/pdf', async (req,res)=>{
+    let { userName, fileName, reportID } = req.body;
+    
+    const path = `${userName}/${fileName}.pdf`
+    const bucket = new S3BucketFunctions
+    const result = bucket.deleteFile(path)
+    
+    await req.app.get("db").deleteReportRecord(Number(reportID))
+    
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+        });
+    
 });
 
 /**
@@ -167,9 +221,9 @@ router.post('/budget', async (req,res)=>{
  * Uses the user Id
  */
 router.get('/statistics', async (req,res)=>{
-    let { userId } = req.body;
+    let { userId } = req.query;
 
-    const result = await req.app.get('db').getUserStats( userId );
+    const result = await req.app.get('db').getUserStats( Number(userId) );
 
     let status = 200;
     
@@ -217,6 +271,7 @@ router.get('/user', async (req,res)=>{
 
     return res.status(status)
         .send({
+            message: result.message,
             numReports: result.numReports,
             reports: result.reportsList
         });
@@ -237,65 +292,8 @@ router.get('/recent', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: "Recent Reports retrieved.",
+            message: result.message,
             reports: result.reportsList
-        });
-    
-});
-
-/**
- * Get a specific report from the S3 bucket
- * Uses the report name and UserName
- */
-router.get('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.query;
-    
-    const path = `${userName}/${fileName}.pdf`
-    const bucket = new S3BucketFunctions
-    const result = await bucket.getFile(path)
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            report: result.data
-        });
-    
-});
-
-router.post('/pdf', async (req,res)=>{
-    
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-        });
-    
-});
-
-router.delete('/pdf', async (req,res)=>{
-    let { userName, fileName, reportID } = req.body;
-    
-    const path = `${userName}/${fileName}.pdf`
-    const bucket = new S3BucketFunctions
-    const result = bucket.deleteFile(path)
-    
-    await req.app.get("db").deleteReportRecord(Number(reportID))
-    
-    //TODO: find way to check if it deleted from bucket
-    let status = 200;
-
-    console.log(result)
-    //TODO error checking
-    return res.status(status)
-        .send({
-            //message: result.message,
-            message: "File has been deleted"
         });
     
 });

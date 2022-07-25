@@ -23,13 +23,13 @@ import {
 } from '../../api/apiCall';
 
 export const mockTotals = [
-  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'day' },
-  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: 'week' },
+  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
+  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: 'Weekly' },
   {
     timePeriod: 'Monthly',
     total: 'R1000.50',
     title: 'generateMR',
-    call: 'month',
+    call: 'Monthly',
   },
 ];
 

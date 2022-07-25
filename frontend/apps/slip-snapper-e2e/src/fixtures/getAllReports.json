@@ -1,0 +1,24 @@
+{
+    "message": "All user reports Retrieved",
+    "numReports": 3,
+    "reports": [
+        {
+        "reportId": "1",
+        "reportName":"Report1",
+        "reportDate": "2022-07-24T16:48:43.478Z"
+        },
+
+        {
+            "reportId": "2",
+            "reportName":"Report2",
+            "reportDate": "2022-07-24T16:48:44.478Z"
+        },
+
+        {
+            "reportId": "3",
+            "reportName":"Report3",
+            "reportDate": "2022-07-24T16:48:45.478Z"
+        }
+
+    ]  
+}

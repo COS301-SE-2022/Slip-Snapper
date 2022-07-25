@@ -31,7 +31,6 @@ function ReportItem({ reportData }: Props) {
 
 }
 function view(data: any) {
-    console.log(data)
     getUserReport(1, data)
         .then(apiResponse => {
             if (apiResponse.data.report.data !== undefined) {
