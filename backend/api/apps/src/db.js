@@ -958,6 +958,27 @@ async function getRecentReports(userid){
     })
       
   }
+  async function retrieveAllSlips(userid)
+  {
+    const allSlips = await prisma.item.findMany({
+      include:{
+        Slip:true,
+        data: true
+      },
+      where:{
+        Slip:{
+          usersId:userid
+        }
+      }
+    })
+  
+  }
+
+ 
+  
+  
+  
+  
 
 
 module.exports = {
