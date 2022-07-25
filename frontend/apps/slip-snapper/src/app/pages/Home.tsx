@@ -67,7 +67,7 @@ const Home: React.FC = () => {
               <IonItem color="tertiary">Items Bought: 12</IonItem>
               <IonItem color="tertiary">Total Expenditure: R899.99 </IonItem>
               <IonItem color="tertiary">
-                <IonButton color="success" fill="solid" slot="end">
+                <IonButton color="secondary" fill="solid" slot="end">
                   View
                 </IonButton>
               </IonItem>

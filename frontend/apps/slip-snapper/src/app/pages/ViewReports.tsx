@@ -85,7 +85,7 @@ const ViewReports: React.FC = () => {
                 {report.reportName}
                 <IonButton
                   onClick={() => view(report.reportName)}
-                  color="success"
+                  color="secondary"
                   slot="end"
                   class="viewButton"
                 >
@@ -95,7 +95,7 @@ const ViewReports: React.FC = () => {
                   onClick={() => deleteReport(1, report.reportName, report.reportId)}
                   fill="solid"
                   slot="end"
-                  color="secondary"
+                  color="medium"
                 >
                   Delete
                 </IonButton>
