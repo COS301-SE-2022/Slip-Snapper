@@ -15,6 +15,7 @@ class FetchData extends React.Component {
     }
    
     componentDidMount() {
+        const user = JSON.parse(localStorage.getItem('user'))
         getItemsA(1)
             .then(
                 apiResponse => {

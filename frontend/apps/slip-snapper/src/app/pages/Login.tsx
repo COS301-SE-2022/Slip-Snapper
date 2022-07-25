@@ -106,6 +106,8 @@ const Login: React.FC = () => {
           }
           else {
             const button = document.getElementById("successRedirect")
+            localStorage.removeItem('user')
+            localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
             if (button) {
               button.click();
             }

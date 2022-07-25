@@ -32,6 +32,7 @@ export const UserStats = () => {
     });
 
     useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user')!)
         getStatsA(1)
             .then(
                 apiResponse => {

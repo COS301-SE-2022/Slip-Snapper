@@ -167,7 +167,10 @@ const Register: React.FC = () => {
     }
     else{
       signupA(userInput, nameInput, surnameInput, passwordInput)
-      .then(apiResponse => apiResponse.data);
+        .then(apiResponse => {
+            localStorage.removeItem('user')
+            localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+        });
 
       const button = document.getElementById("successRedirect")
       if (button) {
