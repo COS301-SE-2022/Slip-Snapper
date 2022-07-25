@@ -27,7 +27,7 @@ export const UserStats = () => {
         },
         mostExpensive: {
             name: "",
-            amount: ""
+            amount: 0
         }
     });
 

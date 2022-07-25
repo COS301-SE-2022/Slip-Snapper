@@ -172,7 +172,7 @@ const Profile: React.FC = () => {
           </IonCard>
         </div>
         <UserStats />
-        <IonButton className="logout-button" onClick={() => setLogoutAlert(true)} expand="block" color='secondary'>Logout</IonButton>
+        <IonButton className="logout-button" onClick={() => setLogoutAlert(true)} expand="block" color='medium'>Logout</IonButton>
         <IonAlert
           isOpen={logoutAlert}
           onDidDismiss={() => setLogoutAlert(false)}

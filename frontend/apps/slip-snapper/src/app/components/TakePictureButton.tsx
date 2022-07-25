@@ -21,8 +21,8 @@ const TakePictureButton: React.FC = () => {
           <IonIcon icon={receipt}></IonIcon>
         </IonFabButton>
         <IonFabList side="top">
-            <IonFabButton>
-              <IonIcon icon={camera} onClick={usePhotoGallery}></IonIcon>
+            <IonFabButton onClick={usePhotoGallery}>
+              <IonIcon icon={camera}></IonIcon>
             </IonFabButton>
             <IonFabButton routerLink={"/addentry"}>
               <IonIcon icon={list}></IonIcon>
