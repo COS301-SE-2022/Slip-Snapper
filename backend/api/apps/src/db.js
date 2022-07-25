@@ -1026,5 +1026,6 @@ module.exports = {
     getAllReports,
     getRecentReports,
     deleteReportRecord,
-    createReportRecord
+    createReportRecord,
+    retrieveAllSlips
 }
