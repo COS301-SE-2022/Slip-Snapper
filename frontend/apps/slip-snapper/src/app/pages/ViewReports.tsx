@@ -128,7 +128,7 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    console.log(data);
+    const user = JSON.parse(localStorage.getItem('user')!)
     getUserReport(1, data)
       .then(apiResponse => {
         if (apiResponse.data.report.data !== undefined) {
@@ -140,12 +140,12 @@ const ViewReports: React.FC = () => {
       });
   }
  async function deleteReport(user: number, fileName: string, reportId: string) {
-    
-     await removeReport(user,fileName, reportId)
+    const userS = JSON.parse(localStorage.getItem('user')!)
+    await removeReport(user,fileName, reportId)
       .then(apiResponse => {
         console.log(apiResponse.data.message);
       });
-
+    
     getAllUserReports(1)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
