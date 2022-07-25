@@ -1,0 +1,24 @@
+{
+    "message" : "User statistics retrieved",
+    "favouriteStore": {
+        "name": "Woolworths",
+        "total": 1000,
+        "items": []
+    },
+    "category": {
+        "amount": 500,
+        "name": "Food"
+    },
+    "mostExpensive": {
+        "amount": 500,
+        "name": "Lipton ice tea"
+    },
+    "lastWeek":{
+        "current": 800,
+        "previous": 900
+    },
+    "lastMonth":{
+        "current": 800,
+        "previous": 900
+    }
+}
