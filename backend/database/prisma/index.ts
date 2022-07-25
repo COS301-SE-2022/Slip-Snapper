@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client'
+import { log } from 'console'
+import { userInfo } from 'os'
 
 const prisma = new PrismaClient()
 
@@ -259,28 +261,55 @@ async function createReportRecord(userid: number){
 
 async function test(userid:number)
 {
-  const date1= new Date()
-  const lastMonth=date1.setDate(date1.getDate()-4*7);
-  const date2= new Date()
-  const otherMonth=date2.setDate(date2.getDate()-8*7)
+
    
-   const MonthlyExpenditure = await prisma.slip.aggregate({
+  const userFrequency = await prisma.slip.findMany({
  
     where:{
        usersId:userid,  
      },
-     _count:{
-      total:true
-     }
-    
-   
    })
-   console.log(MonthlyExpenditure)
+   console.log(userFrequency)
 
 } 
+async function retrieveAllSlips(userid:number)
+{
+  const allSlips = await prisma.item.findMany({
+    include:{
+      Slip:true,
+      data: true
+    },
+    where:{
+      Slip:{
+        usersId:userid
+      }
+    }
+  })
+  var slipId: number []
+  var location: string []
+  var item: string []
+  var itemQuantity:number []
+  var itemPrice:number []
+  var itemType:string []
+  var total
+  const result = allSlips.map(userInfo => {
+
+  
+    
+      console.log( userInfo.Slip?.id,
+      userInfo.Slip?.location,
+      userInfo.data?.item,
+      userInfo.itemQuantity,
+      userInfo.itemPrice,
+      userInfo.data?.itemType,
+      userInfo.Slip?.total)
+    
+  })
+}
 
   var userid=1
-  test(userid)
+  var getting =retrieveAllSlips(userid)
+  //test(userid)
   //createReportRecord(userid)
   //getWeeklyReports(userid)
  // getAllUsers()
