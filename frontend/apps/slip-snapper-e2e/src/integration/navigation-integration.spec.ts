@@ -28,11 +28,43 @@ describe('Navigate from Home',()=>{
           },
           { fixture: '../fixtures/getAllReports.json' }
         )
+        cy.intercept(
+          {
+            method: 'GET',
+            url: '/api/report/budget*',
+          },
+          { fixture: '../fixtures/getBudget.json' }
+        )
+        cy.intercept(
+          {
+            method: 'GET',
+            url: '/api/report/statistics*',
+          },
+          { fixture: '../fixtures/getUserStats.json' }
+        )
+        cy.intercept(
+          {
+            method: 'GET',
+            url: '/api/item/all*',
+          },
+          { fixture: '../fixtures/getItems.json' }
+        )
     })
     
     it('naviagtes to report page', ()=>{
       cy.get('ion-button[router-link="/viewreports"]').click()
       cy.url().should('eq','http://localhost:4200/viewreports')
     })
+
+    it('naviagtes to profile page', ()=>{
+      cy.get('ion-button[router-link="/profile"]').click()
+      cy.url().should('eq','http://localhost:4200/profile')
+    })
+
+    it('naviagtes to receipts page', ()=>{
+      cy.get('ion-button[router-link="/receipts"]').click()
+      cy.url().should('eq','http://localhost:4200/receipts')
+    })
+  
   
   });
