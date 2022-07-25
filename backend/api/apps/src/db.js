@@ -801,10 +801,9 @@ async function getDataItems(){
                 reportDate: report.generatedDate
             })
         }
-        return {
-            message: "All user reports Retrieved",
-            numReports,
-            reportsList
+         return {
+        numReports,
+        reportsList
         }
     }
 }
@@ -920,9 +919,8 @@ async function getRecentReports(userid){
                 reportDate: report.generatedDate
             })
         }
-        return {
-            message: "Recent Reports retrieved.",
-            reportsList
+         return {
+        reportsList
         }
     }
 }
@@ -933,17 +931,16 @@ async function getRecentReports(userid){
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
- async function createReportRecord(userid,reportName, reportTotal){    
+ async function createReportRecord(userid){
+    const date1= new Date()
+    
     const userReports = await prisma.reports.create({
         data:{
             usersId:userid,
-            reportName:reportName
+            reportName:"report_"+date1.toISOString()
         }
     })
-    
-    return {
-        message: "Report added Successfully"
-    }
+      
   }
 
   /**
@@ -975,11 +972,60 @@ async function getRecentReports(userid){
           total:true
          }       
        })
+       const userFrequency = await prisma.slip.findMany({
+ 
+        where:{
+           usersId:userid,  
+         },
+             
+       }) 
   
        return {
-        userAverage,
+        userAverage
         }
       
+  }
+  async function retrieveAllSlips(userid)
+  {
+    const allSlips = await prisma.item.findMany({
+      include:{
+        Slip:true,
+        data: true
+      },
+      where:{
+        Slip:{
+          usersId:userid
+        }
+      }
+    })
+    let slipId=[]
+    let location=[]
+    let item=[]
+    let itemQuantity=[]
+    let itemType=[]
+    let itemPrice=[]
+    let total=[]
+
+    const result = allSlips.map(userInfo => {
+        for(var slips of allSlips){
+            slipId.push(userInfo.Slip?.id),
+            location.push(userInfo.Slip?.location),
+            item.push(userInfo.data?.item),
+            itemQuantity.push(userInfo.itemQuantity),
+            itemPrice.push(userInfo.itemPrice),
+            itemType.push(userInfo.data?.itemType),
+            total.push(userInfo.Slip?.total)
+        }     
+    })
+    return{
+        slipId,
+        location,
+        item,
+        itemQuantity,
+        itemType,
+        itemPrice,
+        total
+    }
   }
   
   
@@ -1001,5 +1047,6 @@ module.exports = {
     getAllReports,
     getRecentReports,
     deleteReportRecord,
-    createReportRecord
+    createReportRecord,
+    retrieveAllSlips
 }
