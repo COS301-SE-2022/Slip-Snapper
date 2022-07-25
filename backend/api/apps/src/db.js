@@ -8,22 +8,22 @@ const prisma = new PrismaClient()
  * @param {*} password (String) The users password
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function getUser(userName, password){
+async function getUser(userName, password) {
     const user = await prisma.user.findFirst({
         where: {
             username: userName
         }
     })
 
-    if( user == null ){
-        return { 
+    if (user == null) {
+        return {
             message: "Invalid Username",
             user: null
         };
     }
 
-    if(user.password != password){
-        return { 
+    if (user.password != password) {
+        return {
             message: "Invalid Password",
             user: null
         };
@@ -31,7 +31,7 @@ async function getUser(userName, password){
 
     //TODO return specific aspects of the user and not everything
 
-    return { 
+    return {
         message: "User logged in successfully",
         user: user
     };
@@ -45,9 +45,9 @@ async function getUser(userName, password){
  * @param {*} lastname (String) the lastname
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function addUser(username, password, firstname, lastname){
+async function addUser(username, password, firstname, lastname) {
     const user = await prisma.user.create({
-        data:{
+        data: {
             username: username,
             password: password,
             lastname: lastname,
@@ -59,8 +59,8 @@ async function addUser(username, password, firstname, lastname){
 
     //TODO validate user added correctly
 
-    if(user == null){
-        return { 
+    if (user == null) {
+        return {
             message: "User failed to be added",
             user: null
         };
@@ -68,7 +68,7 @@ async function addUser(username, password, firstname, lastname){
 
     //TODO return specific aspects of user and not all
 
-    return { 
+    return {
         message: "User added successfully",
         user: user
     };
@@ -79,7 +79,7 @@ async function addUser(username, password, firstname, lastname){
  * @param {*} userId (Integer) The users Id
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function deleteUser(userId){
+async function deleteUser(userId) {
     try {
         const user = await prisma.user.delete({
             where: {
@@ -88,19 +88,19 @@ async function deleteUser(userId){
         })
 
         //TODO validate user deleted correctly
-        if (user == null){
-            return { 
+        if (user == null) {
+            return {
                 message: "User could not be deleted",
                 user: null
             };
         }
-    
-        return { 
+
+        return {
             message: "User deleted successfully",
             user: user
         };
     } catch (error) {
-        return { 
+        return {
             message: error,
             user: null
         };
@@ -113,7 +113,7 @@ async function deleteUser(userId){
  * @param {*} data (JSON Object) The data that needs to be updated
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function updateUser(userId,data){
+async function updateUser(userId, data) {
     try {
         const user = await prisma.user.update({
             where: {
@@ -123,18 +123,18 @@ async function updateUser(userId,data){
         })
 
         let message = "User updated successfully"
-        if(user == null){
+        if (user == null) {
             message = "User could not be updated"
         }
-        
+
         //TODO return certain aspects of user data
 
-        return { 
+        return {
             message: message,
             user: user
         };
     } catch (error) {
-        return { 
+        return {
             message: error,
             user: null
         };
@@ -146,14 +146,14 @@ async function updateUser(userId,data){
  * @param {*} userId (Integer) The users id
  * @returns (JSON Object) Contains a message, the number of items and an array of Items
  */
-async function getItem(userId){
+async function getItem(userId) {
     const items = await prisma.slip.findMany({
         where: {
             usersId: userId
         },
         select: {
-            items : {
-                select:{
+            items: {
+                select: {
                     itemPrice: true,
                     itemQuantity: true,
                     data: true
@@ -165,8 +165,8 @@ async function getItem(userId){
         }
     })
 
-    if( items == null ){
-        return { 
+    if (items == null) {
+        return {
             message: "No items associated with the user",
             numItems: 0,
             items: []
@@ -175,8 +175,8 @@ async function getItem(userId){
 
     let itemList = [];
     var i = 1;
-    for(var slip of items){
-        for(var item of slip.items){
+    for (var slip of items) {
+        for (var item of slip.items) {
             itemList.push({
                 id: i++,
                 itemId: item.id,
@@ -190,7 +190,7 @@ async function getItem(userId){
         }
     }
 
-    return { 
+    return {
         message: "All associated items retrieved",
         numItems: i,
         itemList: itemList
@@ -204,7 +204,7 @@ async function getItem(userId){
  * @param {*} end The end of time frame
  * @returns items
  */
-async function getItemsReport(userid, start, end){
+async function getItemsReport(userid, start, end) {
     const items = await prisma.slip.findMany({
         where: {
             usersId: userid,
@@ -214,8 +214,8 @@ async function getItemsReport(userid, start, end){
             //   } 
         },
         select: {
-            items : {
-                select:{
+            items: {
+                select: {
                     itemPrice: true,
                     itemQuantity: true,
                     data: true
@@ -227,8 +227,8 @@ async function getItemsReport(userid, start, end){
         }
     })
 
-    if( items == null ){
-        return { 
+    if (items == null) {
+        return {
             message: "No items associated with the user",
             numItems: 0,
             items: []
@@ -237,11 +237,11 @@ async function getItemsReport(userid, start, end){
 
     let itemList = [];
     var i = 1;
-    for(var itemL of items){
+    for (var itemL of items) {
         let location = itemL.location;
         let date = itemL.transactionDate;
 
-        for(var it of itemL.items){
+        for (var it of itemL.items) {
             itemList.push({
                 itemName: it.data.item,
                 type: it.data.itemType,
@@ -254,7 +254,7 @@ async function getItemsReport(userid, start, end){
         }
     }
 
-    return { 
+    return {
         message: "All associated items retrieved",
         numItems: i,
         itemList: itemList
@@ -270,9 +270,9 @@ async function getItemsReport(userid, start, end){
  * @param {*} data the items to add
  * @returns 
  */
-async function addItem(userid, location, date, total, data){
+async function addItem(userid, location, date, total, data) {
     const slip = await prisma.slip.create({
-        data:{
+        data: {
             location: location,
             total: total,
             usersId: userid,
@@ -280,8 +280,8 @@ async function addItem(userid, location, date, total, data){
         }
     })
 
-    if( slip == null ){
-        return { 
+    if (slip == null) {
+        return {
             message: "Slip could not be created",
             numItems: 0,
             items: []
@@ -294,32 +294,32 @@ async function addItem(userid, location, date, total, data){
 
     let additions = []
 
-    for (let item of data){
+    for (let item of data) {
         item.slipId = slip.id;
         let matched = false
-        
-        for(var dataItem of dataItems){
-            if( item.item == dataItem.item){
+
+        for (var dataItem of dataItems) {
+            if (item.item == dataItem.item) {
                 item.dataId = dataItem.id;
                 matched = true;
             }
         }
 
-        if(!matched){
+        if (!matched) {
             const dat = await prisma.dataItem.create({
                 data: {
                     item: item.item,
                     itemType: item.itemType,
                 }
             })
-            item.dataId = dat.id; 
+            item.dataId = dat.id;
         }
 
         additions.push({
             slipId: slip.id,
             itemPrice: item.itemPrice,
             itemQuantity: item.itemQuantity,
-            dataId : item.dataId
+            dataId: item.dataId
         })
     }
 
@@ -327,14 +327,14 @@ async function addItem(userid, location, date, total, data){
         data: additions
     });
 
-    if( items == null ){
-        return { 
+    if (items == null) {
+        return {
             message: "Item/s could not be added",
             numItems: 0,
         };
     }
 
-    return { 
+    return {
         message: "Item/s has been added",
         numItems: items.count,
     };
@@ -345,14 +345,14 @@ async function addItem(userid, location, date, total, data){
  * @param {*} itemId The item id
  * @returns userid
  */
-async function deleteItem(itemId){
+async function deleteItem(itemId) {
     const item = await prisma.item.delete({
-        where:{
+        where: {
             id: itemId
         }
     });
 
-    return { 
+    return {
         message: "Item has been deleted",
         item: item,
     };
@@ -365,9 +365,9 @@ async function deleteItem(itemId){
  * @param {*} dataB the data to update
  * @returns 
  */
-async function updateItem(itemId, dataA, dataB){
+async function updateItem(itemId, dataA, dataB) {
     var item;
-    if(dataA != {}){
+    if (dataA != {}) {
         item = await prisma.item.update({
             where: {
                 id: itemId
@@ -376,7 +376,7 @@ async function updateItem(itemId, dataA, dataB){
         })
     }
 
-    if(dataB != {}){
+    if (dataB != {}) {
         let data = await prisma.item.findFirst({
             where: {
                 id: itemId
@@ -390,16 +390,16 @@ async function updateItem(itemId, dataA, dataB){
             data: dataB
         })
     }
-    
-    if( item == null ){
-        return { 
+
+    if (item == null) {
+        return {
             message: "No item associated with the user",
             numItems: 0,
             items: []
         };
     }
-    
-    return { 
+
+    return {
         message: "Item has been updated successfully",
         item: item
     };
@@ -410,7 +410,7 @@ async function updateItem(itemId, dataA, dataB){
  * @param {*} userId The users id
  * @returns user data
  */
-async function getUserBudgets(userId ){
+async function getUserBudgets(userId) {
     const user = await prisma.user.findFirst({
         where: {
             id: userId
@@ -427,9 +427,9 @@ async function getUserBudgets(userId ){
             //     lt:  end
             //   }
         },
-        select:{
-            items : {
-                select:{
+        select: {
+            items: {
+                select: {
                     itemPrice: true,
                     itemQuantity: true,
                     data: true
@@ -449,21 +449,21 @@ async function getUserBudgets(userId ){
     // date.setDate(date.getMonth() - 1);
     // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
 
-    for(var itemL of items){
+    for (var itemL of items) {
         //let tDate = transactionDate;
-        
-        for(var it of itemL.items){
+
+        for (var it of itemL.items) {
             //if(tDate > week){
-                weeklyTotal+= it.itemPrice;
+            weeklyTotal += it.itemPrice;
             //}
 
             //if(tDate > month){
-                monthlyTotal+= it.itemPrice;
+            monthlyTotal += it.itemPrice;
             //}
         }
     }
 
-    return { 
+    return {
         message: "User budget retrieved",
         weeklyTotal: weeklyTotal,
         weekly: user.weeklyBudget,
@@ -478,7 +478,7 @@ async function getUserBudgets(userId ){
  * @param {*} data the data to be added
  * @returns user data
  */
-async function setUserBudgets( userId, data ){
+async function setUserBudgets(userId, data) {
     const user = await prisma.user.update({
         where: {
             id: userId
@@ -486,7 +486,7 @@ async function setUserBudgets( userId, data ){
         data: data
     })
 
-    return { 
+    return {
         message: "User budget set",
         weekly: user.weeklyBudget,
         monthly: user.monthlyBudget
@@ -498,7 +498,7 @@ async function setUserBudgets( userId, data ){
  * @param {*} userId The users id
  * @returns user data
  */
-async function getUserStats( userId ){
+async function getUserStats(userId) {
     let store = await getFavouriteStore(userId);
     let expItem = await getMostExpensiveItem(userId);
     let mostStore = await getMostSpentATStore(userId);
@@ -506,7 +506,7 @@ async function getUserStats( userId ){
     let month = await getMonthlyExpenditure(userId);
     //let favouriteCategory = await getFavouriteCategory(userId);
 
-    return { 
+    return {
         message: "User statistics retrieved",
         storeDetails: store,
         expensiveItem: expItem,
@@ -527,9 +527,9 @@ async function getFavouriteCategory(userid) {
         where: {
             usersId: userid
         },
-        select:{
+        select: {
             items: {
-                select:{
+                select: {
                     itemPrice: true,
                     data: {
                         select: {
@@ -539,37 +539,37 @@ async function getFavouriteCategory(userid) {
                 }
             }
         },
-        
+
     })
 
     let types = {
         cat: [],
         catNums: [],
         catPrices: []
-    } 
-    for(var item of items){
-        for(var sub of item.items){
-            if(!types.cat.includes(sub.data.itemType)){
+    }
+    for (var item of items) {
+        for (var sub of item.items) {
+            if (!types.cat.includes(sub.data.itemType)) {
                 types.cat.push(sub.data.itemType)
-                types.catNums.push(0)  
-                types.catPrices.push(0)                                
+                types.catNums.push(0)
+                types.catPrices.push(0)
             }
             var pos = types.cat.indexOf(sub.data.itemType)
             types.catNums[pos]++;
             types.catPrices[pos] += sub.itemPrice;
-        }    
+        }
     }
 
     const max = Math.max(...types.catNums);
     const index = types.catNums.indexOf(max);
-    
+
     types.catPrices[index] = Math.round((types.catPrices[index] + Number.EPSILON) * 100) / 100
 
     return {
         category: types.cat[index],
         amount: types.catPrices[index]
     }
-} 
+}
 
 async function getFavouriteStore(userid) {
     const favouritestore = await prisma.slip.groupBy({
@@ -578,33 +578,33 @@ async function getFavouriteStore(userid) {
             usersId: userid
         },
         _count: {
-            location:true
+            location: true
         },
-        take:1,
-        orderBy:{
-            _count:{
-            location:'desc'
+        take: 1,
+        orderBy: {
+            _count: {
+                location: 'desc'
             }
         }
     })
 
-    let storeLocation=""
-    for(var store of favouritestore){
-      storeLocation = store.location
+    let storeLocation = ""
+    for (var store of favouritestore) {
+        storeLocation = store.location
     }
 
-    const amountSpent =await prisma.slip.findMany({
-        where:{
+    const amountSpent = await prisma.slip.findMany({
+        where: {
             usersId: userid,
             location: storeLocation
         },
-        select:{
-            total:true
+        select: {
+            total: true
         }
     })
 
-    let total=0;
-    for(var amount of amountSpent){
+    let total = 0;
+    for (var amount of amountSpent) {
         total += amount.total;
     }
 
@@ -612,41 +612,40 @@ async function getFavouriteStore(userid) {
         storeLocation,
         total
     }
-}   
+}
 
 async function getMostExpensiveItem(userid) {
     const mostExpensive = await prisma.slip.findMany({
-        where:{
-            usersId:{
-                in:userid
+        where: {
+            usersId: {
+                in: userid
             },
         },
-        select:{
-        transactionDate:true,
-            items:{
-                select:{
-                    itemPrice:true,
-                    data:{
-                    select:{
-                        item:true
-                    }
+        select: {
+            transactionDate: true,
+            items: {
+                select: {
+                    itemPrice: true,
+                    data: {
+                        select: {
+                            item: true
+                        }
                     }
                 },
-                orderBy:{
-                    itemPrice:"desc"
+                orderBy: {
+                    itemPrice: "desc"
                 },
             },
         },
     })
-    let expensiveItem=0;
+    let expensiveItem = 0;
     let dataItem = ""
-    for(var itemL of mostExpensive){
-        for(var it of itemL.items){
-            if(it.itemPrice>expensiveItem)
-            {
-                expensiveItem=it.itemPrice;
-                dataItem=it.data.item;
-            }     
+    for (var itemL of mostExpensive) {
+        for (var it of itemL.items) {
+            if (it.itemPrice > expensiveItem) {
+                expensiveItem = it.itemPrice;
+                dataItem = it.data.item;
+            }
         }
     }
 
@@ -658,20 +657,19 @@ async function getMostExpensiveItem(userid) {
 
 async function getMostSpentATStore(userid) {
     const mostExpensive = await prisma.slip.findMany({
-        where:{
-            usersId:userid
+        where: {
+            usersId: userid
         },
-        select:{
-            location:true,
-            total:true
+        select: {
+            location: true,
+            total: true
         }
     })
 
-    let mostspent=0;
+    let mostspent = 0;
     let store = "";
-    for(var itemL of mostExpensive){
-        if(itemL.total>mostspent)
-        {
+    for (var itemL of mostExpensive) {
+        if (itemL.total > mostspent) {
             mostspent = itemL.total;
             store = itemL.location;
         }
@@ -683,30 +681,29 @@ async function getMostSpentATStore(userid) {
     }
 }
 
-async function getWeeklyExpenditure(userid){   
-    const date1= new Date()
-    const lastweek=date1.setDate(date1.getDate()-7);
-    const date2= new Date()
-    const otherWeek=date2.setDate(date2.getDate()-14)
-    
+async function getWeeklyExpenditure(userid) {
+    const date1 = new Date()
+    const lastweek = date1.setDate(date1.getDate() - 7);
+    const date2 = new Date()
+    const otherWeek = date2.setDate(date2.getDate() - 14)
+
     const weeklyExpenditure = await prisma.slip.findMany({
-        where:{
-            usersId:userid,  
+        where: {
+            usersId: userid,
         },
-        select:{
-            transactionDate:true,
-            total:true
+        select: {
+            transactionDate: true,
+            total: true
         }
     })
-    
-    let recentWeek=0;
-    let previousWeek=0;
-    for(var weekly of weeklyExpenditure)
-    {
-        if(weekly.transactionDate.toISOString()>=date1.toISOString()){
+
+    let recentWeek = 0;
+    let previousWeek = 0;
+    for (var weekly of weeklyExpenditure) {
+        if (weekly.transactionDate.toISOString() >= date1.toISOString()) {
             recentWeek += weekly.total;
         }
-        else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
+        else if (weekly.transactionDate.toISOString() >= date2.toISOString()) {
             previousWeek += weekly.total;
         }
     }
@@ -715,32 +712,31 @@ async function getWeeklyExpenditure(userid){
         recentWeek,
         previousWeek
     }
-} 
+}
 
-async function getMonthlyExpenditure(userid){
-    const date1= new Date()
-    const lastMonth=date1.setDate(date1.getDate()-4*7);
-    const date2= new Date()
-    const otherMonth=date2.setDate(date2.getDate()-8*7)
-    
+async function getMonthlyExpenditure(userid) {
+    const date1 = new Date()
+    const lastMonth = date1.setDate(date1.getDate() - 4 * 7);
+    const date2 = new Date()
+    const otherMonth = date2.setDate(date2.getDate() - 8 * 7)
+
     const MonthlyExpenditure = await prisma.slip.findMany({
-        where:{
-            usersId:userid,  
+        where: {
+            usersId: userid,
         },
-        select:{
-            transactionDate:true,
-            total:true
+        select: {
+            transactionDate: true,
+            total: true
         }
     })
 
-    let recentMonth=0;
-    let previousMonth=0;
-    for(var weekly of MonthlyExpenditure)
-    {
-        if(weekly.transactionDate.toISOString()>=date1.toISOString()){
+    let recentMonth = 0;
+    let previousMonth = 0;
+    for (var weekly of MonthlyExpenditure) {
+        if (weekly.transactionDate.toISOString() >= date1.toISOString()) {
             recentMonth += weekly.total;
         }
-        else if(weekly.transactionDate.toISOString()>=date2.toISOString()){
+        else if (weekly.transactionDate.toISOString() >= date2.toISOString()) {
             previousMonth += weekly.total;
         }
     }
@@ -749,13 +745,13 @@ async function getMonthlyExpenditure(userid){
         recentMonth,
         previousMonth
     }
-} 
+}
 
 /**
  * Function to get the most spend on a single category
  * @returns The items in the database and their defined categories
  */
-async function getDataItems(){
+async function getDataItems() {
     const dataItems = await prisma.dataItem.findMany({})
 
     return {
@@ -769,33 +765,31 @@ async function getDataItems(){
  * @param {*} userId (Integer) The users id
  * @returns numreports which is the number of reports, reportsList which consists of the report id, report name and the date.
  */
- async function getAllReports(userid){
+async function getAllReports(userid) {
     const userReports = await prisma.reports.findMany({
-        where:{
-            usersId:userid
+        where: {
+            usersId: userid
         },
-        select:{
-            id:true,
-            reportName:true,
-            generatedDate:true  
+        select: {
+            id: true,
+            reportName: true,
+            generatedDate: true
         }
     })
-    let numReports=0
-    let reportsList=[]
-    if(userReports==null)
-    {
-        return{
+    let numReports = 0
+    let reportsList = []
+    if (userReports == null) {
+        return {
             numReports,
             reportsList
         }
     }
-    else{
-        for(var report of userReports)
-        {
+    else {
+        for (var report of userReports) {
             numReports++
             reportsList.push({
                 reportId: report.id,
-                reportName:report.reportName,
+                reportName: report.reportName,
                 reportDate: report.generatedDate
             })
         }
@@ -812,72 +806,70 @@ async function getDataItems(){
  * @param {*} userId (Integer) The users id
  * @returns daily/weekly/monthly ReportsList which consists of the report id, report name and the date, numReports which is the number of reports.
  */
- async function getDailyWeeklyMonthlyReports(userid){
-    const date1= new Date()
-    const daily=date1.setDate(date1.getDate()-1)
-    const date2= new Date()
-    const weekly=date2.setDate(date1.getDate()-7)
-    const date3= new Date()
-    const monthly=date3.setDate(date1.getDate()-30)
+async function getDailyWeeklyMonthlyReports(userid) {
+    const date1 = new Date()
+    const daily = date1.setDate(date1.getDate() - 1)
+    const date2 = new Date()
+    const weekly = date2.setDate(date1.getDate() - 7)
+    const date3 = new Date()
+    const monthly = date3.setDate(date1.getDate() - 30)
 
     const userReports = await prisma.reports.findMany({
-        where:{
-            userId:userid
+        where: {
+            userId: userid
         },
-        select:{
-            id:true,
-            reportName:true,
-            generatedDate:true  
+        select: {
+            id: true,
+            reportName: true,
+            generatedDate: true
         }
     })
-    let numReports=0
-    let dailyReportsList=[]
-    let weeklyReportsList=[]
-    let monthlyReportsList=[]
-    if(userReports=null)
-    {
-        return{
+    let numReports = 0
+    let dailyReportsList = []
+    let weeklyReportsList = []
+    let monthlyReportsList = []
+    if (userReports = null) {
+        return {
             numReports,
             dailyReportsList,
             weeklyReportsList,
             monthlyReportsList
         }
     }
-    else{
-        const date1= new Date()
-        for(var report of userReports)
-        {
-            if(report.generatedDate.toISOString()<date1.toISOString()){
+    else {
+        const date1 = new Date()
+        for (var report of userReports) {
+            if (report.generatedDate.toISOString() < date1.toISOString()) {
                 numReports++
                 dailyReportsList.push({
-                reportId: report.id,
-                reportName:report.reportName,
-                reportDate: report.generatedDate
-            }) 
+                    reportId: report.id,
+                    reportName: report.reportName,
+                    reportDate: report.generatedDate
+                })
             }
-            if(report.generatedDate.toISOString()<date2.toISOString()){
+            if (report.generatedDate.toISOString() < date2.toISOString()) {
                 numReports++
                 weeklyReportsList.push({
-                reportId: report.id,
-                reportName:report.reportName,
-                reportDate: report.generatedDate
-            }) 
+                    reportId: report.id,
+                    reportName: report.reportName,
+                    reportDate: report.generatedDate
+                })
             }
-            if(report.generatedDate.toISOString()<date3.toISOString()){
+            if (report.generatedDate.toISOString() < date3.toISOString()) {
                 numReports++
                 monthlyReportsList.push({
-                reportId: report.id,
-                reportName:report.reportName,
-                reportDate: report.generatedDate
-            }) 
+                    reportId: report.id,
+                    reportName: report.reportName,
+                    reportDate: report.generatedDate
+                })
             }
-         
+
         }
-         return {
-        numReports,
-        dailyReportsList,
-        weeklyReportsList,
-        monthlyReportsList
+        return {
+            numReports,
+            dailyReportsList,
+            weeklyReportsList,
+            monthlyReportsList
         }
     }
 }
@@ -888,34 +880,32 @@ async function getDataItems(){
  * @param {*} userId (Integer) The users id.
  * @returns reportsList which consists of the report id, report name and the date.
  */
-async function getRecentReports(userid){
+async function getRecentReports(userid) {
     const userReports = await prisma.Reports.findMany({
-        where:{
-            usersId:userid
-        }, 
-        select:{
-            id:true,
-            reportName:true,
-            generatedDate:true  
+        where: {
+            usersId: userid
         },
-        take:5,
-        orderBy:{
-            generatedDate:'desc'
+        select: {
+            id: true,
+            reportName: true,
+            generatedDate: true
+        },
+        take: 5,
+        orderBy: {
+            generatedDate: 'desc'
         }
     })
-    let reportsList=[]
-    if(userReports==null)
-    {
-        return{
+    let reportsList = []
+    if (userReports == null) {
+        return {
             reportsList
         }
     }
-    else{
-        for(var report of userReports)
-        {
+    else {
+        for (var report of userReports) {
             reportsList.push({
                 reportId: report.id,
-                reportName:report.reportName,
+                reportName: report.reportName,
                 reportDate: report.generatedDate
             })
         }
@@ -932,82 +922,53 @@ async function getRecentReports(userid){
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
- async function createReportRecord(userid,reportName, reportTotal){    
+async function createReportRecord(userid, reportName, reportTotal) {
     const userReports = await prisma.reports.create({
-        data:{
-            usersId:userid,
-            reportName:reportName
+        data: {
+            usersId: userid,
+            reportName: reportName
         }
     })
-    
+
     return {
         message: "Report added Successfully"
     }
-  }
+}
 
-  /**
- * Function to delete a report record in the Reports model.
- * @param {*} reportId (Integer) The record id.
- * @returns null
- */
- async function deleteReportRecord(reportid){
+/**
+* Function to delete a report record in the Reports model.
+* @param {*} reportId (Integer) The record id.
+* @returns null
+*/
+async function deleteReportRecord(reportid) {
     const userReports = await prisma.reports.delete({
-        where:{
-            id:reportid
+        where: {
+            id: reportid
         }
     })
-      
-  }
-  async function retrieveAllSlips(userid)
-  {
-    const allSlips = await prisma.item.findMany({
-      include:{
-        Slip:true,
-        data: true
-      },
-      where:{
-        Slip:{
-          usersId:userid
+
+}
+async function retrieveAllSlips(userid) {
+    const allSlips = await prisma.slip.findMany({
+        where: {
+            usersId: userid
+        },
+        include:{
+            items:true,
+            items: {
+                select: {
+                    itemPrice: true,
+                    itemQuantity: true,
+                    data: true
+                }
+            },
         }
-      }
     })
-    let slipId=[]
-    let location=[]
-    let item=[]
-    let itemQuantity=[]
-    let itemType=[]
-    let itemPrice=[]
-    let total=[]
-
-    
-        for(var slips of allSlips){
-            slipId.push(slips.Slip.id),
-            location.push(slips.Slip.location),
-            item.push(slips.data.item),
-            itemQuantity.push(slips.itemQuantity),
-            itemPrice.push(slips.itemPrice),
-            itemType.push(slips.data.itemType),
-            total.push(slips.Slip.total)
-        }     
-        return{
-            slipId,
-            location,
-            item,
-            itemQuantity,
-            itemType,
-            itemPrice,
-            total
-        }
-   
-  }
-
- 
-  
-  
-  
-  
-
-
+    return {
+        message: "All slips retrieved",
+        slips: allSlips
+    }
+}
 module.exports = {
     getUser,
     addUser,

@@ -115,4 +115,21 @@ router.post('/update', async (req,res)=>{
         });
 });
 
+router.get('/slip', async (req, res) => {
+    let { userId } = req.query;
+
+    const result = await req.app.get('db').retrieveAllSlips(Number(userId))
+
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            slips: result.slips,
+            // itemList: result.itemList
+        });
+});
+
 module.exports.router = router;
