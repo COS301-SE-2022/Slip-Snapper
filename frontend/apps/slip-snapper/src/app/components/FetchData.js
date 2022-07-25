@@ -1,7 +1,7 @@
 import React from "react";
 import { IonCol, IonRow, IonTitle, IonButton, IonCard, IonItem, } from '@ionic/react';
 import '../theme/FetchData.css';
-import { updateItemA, getItemsA } from "../../api/apiCall"
+import { updateItemA, getItemsA, getAllSlips } from "../../api/apiCall"
 
 class FetchData extends React.Component {
    
@@ -15,12 +15,13 @@ class FetchData extends React.Component {
     }
    
     componentDidMount() {
-        getItemsA(1)
+        getAllSlips(1)
             .then(
                 apiResponse => {
+                    console.log(apiResponse.data.slips)
                     const res = apiResponse.data
                     this.setState({
-                        items: res.itemList,
+                        items: res.slips,
                         DataisLoaded: true
                     });
             },
@@ -45,10 +46,13 @@ class FetchData extends React.Component {
                 {items.map((item) => ( 
                     <IonCol className="item-col">
                         <IonCard color="primary" className="items" id={item.id}>
-                            <IonItem color="primary"><IonItem color="tertiary" className="titles" slot="start">Receipt #{ item.id }</IonItem>{ new Date(item.date).toDateString() }</IonItem>
+                            <IonItem color="primary"><IonItem color="tertiary" className="titles" slot="start">Receipt #{item.id}</IonItem>{new Date(item.transactionDate).toDateString() }</IonItem>
                             <IonItem color="primary">
                                 Location: { item.location }
-                                <IonButton id={item.id+"b"} color="secondary" slot="end" onClick={()=>console.log("TODO: this should retrieve receipt image and open new EditItem page")}>Edit</IonButton>
+                            </IonItem>
+                            <IonItem color="primary">
+                                Total: R{item.total}
+                                <IonButton id={item.id + "b"} color="secondary" slot="end" onClick={() => console.log("TODO: this should retrieve receipt image and open new EditItem page")}>Edit</IonButton>
                             </IonItem>
                         </IonCard>
                     </IonCol>
