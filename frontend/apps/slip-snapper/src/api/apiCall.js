@@ -166,3 +166,11 @@ export async function removeReport( userName, fileName , reportId){
         })
     })
 }
+
+export async function getAllSlips(userId) {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'item/slip?userId=' + userId,
+    })
+}
