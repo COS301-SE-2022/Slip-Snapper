@@ -26,6 +26,8 @@ const Home: React.FC = () => {
   const mockThisWeeksReports = [{ dateTime: "27th May 2022 - 3:32pm" }, { dateTime: "27th May 2022 - 4:00pm" }, { dateTime: "27th May 2022 - 5:00pm" },]
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user')!)
+    //console.log(user.id)
     getRecentReports(1)
       .then(apiResponse => {
         setR(apiResponse.data.reports);

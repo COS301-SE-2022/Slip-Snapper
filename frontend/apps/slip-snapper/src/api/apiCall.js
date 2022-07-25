@@ -15,7 +15,7 @@ export async function doProcessing(ocr){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'api/ocr/process',
+        url: baseUrl + 'ocr/process',
         data: JSON.stringify({
             text: ocr,
         })

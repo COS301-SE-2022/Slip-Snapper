@@ -34,6 +34,7 @@ const Profile: React.FC = () => {
   let totalWeeklySpent = 300;
   let totalMonthlySpent = 500;
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user')!)
     getBudgetA(1)
       .then(
         apiResponse => {
