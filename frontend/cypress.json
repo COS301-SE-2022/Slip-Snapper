@@ -1,0 +1,12 @@
+{
+    "fileServerFolder": "./frontend/apps/slip-snapper-e2e",
+    "fixturesFolder": "./apps/slip-snapper-e2e/src/fixtures",
+    "integrationFolder": "./apps/slip-snapper-e2e/src/integration",
+    "modifyObstructiveCode": false,
+    "supportFile": "./apps/slip-snapper-e2e/src/support/index.ts",
+    "pluginsFile": false,
+    "video": true,
+    "videosFolder": "dist/cypress/apps/slip-snapper-e2e/videos",
+    "screenshotsFolder": "dist/cypress/apps/slip-snapper-e2e/screenshots",
+    "chromeWebSecurity": false
+  }
