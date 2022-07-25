@@ -27,8 +27,7 @@ const Home: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user')!)
-    //console.log(user.id)
-    getRecentReports(1)
+    getRecentReports(user.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });

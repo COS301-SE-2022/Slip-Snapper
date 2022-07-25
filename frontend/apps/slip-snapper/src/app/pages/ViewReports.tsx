@@ -112,7 +112,7 @@ const ViewReports: React.FC = () => {
                       text: 'Delete',
                       cssClass: 'toasts',
                       handler: () => {
-                        deleteReport(1, report.reportName, report.reportId);
+                        deleteReport( report.reportName, report.reportId);
                         setDeleteAlert(false);
                       }
                     },
@@ -129,7 +129,7 @@ const ViewReports: React.FC = () => {
 
   function view(data: any) {
     const user = JSON.parse(localStorage.getItem('user')!)
-    getUserReport(1, data)
+    getUserReport(user.id, data)
       .then(apiResponse => {
         if (apiResponse.data.report.data !== undefined) {
           const arr = new Uint8Array(apiResponse.data.report.data);
@@ -139,20 +139,20 @@ const ViewReports: React.FC = () => {
         }
       });
   }
- async function deleteReport(user: number, fileName: string, reportId: string) {
+
+  async function deleteReport(fileName: string, reportId: string) {
     const userS = JSON.parse(localStorage.getItem('user')!)
-    await removeReport(user,fileName, reportId)
+    await removeReport(userS.username,fileName, reportId)
       .then(apiResponse => {
         console.log(apiResponse.data.message);
       });
     
-    getAllUserReports(1)
+    getAllUserReports(userS.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
   }
 
-
- 
 };
+
 export default ViewReports;

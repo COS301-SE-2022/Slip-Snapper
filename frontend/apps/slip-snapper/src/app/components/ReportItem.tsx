@@ -32,7 +32,7 @@ function ReportItem({ reportData }: Props) {
 }
 function view(data: any) {
     const user = JSON.parse(localStorage.getItem('user')!)
-    getUserReport(1, data)
+    getUserReport(user.id, data)
         .then(apiResponse => {
             if (apiResponse.data.report.data !== undefined) {
                 const arr = new Uint8Array(apiResponse.data.report.data);
