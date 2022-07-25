@@ -971,7 +971,26 @@ async function getRecentReports(userid){
         }
       }
     })
-  
+    let slipId=[]
+    let location=[]
+    let item=[]
+    let itemQuantity=[]
+    let itemType=[]
+    let itemPrice=[]
+    let total=[]
+
+    
+        for(var slips of allSlips){
+            slipId.push(slips.Slip.id),
+            location.push(slips.Slip.location),
+            item.push(slips.data.item),
+            itemQuantity.push(slips.itemQuantity),
+            itemPrice.push(slips.itemPrice),
+            itemType.push(slips.data.itemType),
+            total.push(slips.Slip.total)
+        }     
+    
+   
   }
 
  
