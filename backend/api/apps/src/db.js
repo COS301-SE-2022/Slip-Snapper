@@ -958,6 +958,54 @@ async function getRecentReports(userid){
     })
       
   }
+  async function retrieveAllSlips(userid)
+  {
+    const allSlips = await prisma.item.findMany({
+      include:{
+        Slip:true,
+        data: true
+      },
+      where:{
+        Slip:{
+          usersId:userid
+        }
+      }
+    })
+    let slipId=[]
+    let location=[]
+    let item=[]
+    let itemQuantity=[]
+    let itemType=[]
+    let itemPrice=[]
+    let total=[]
+
+    
+        for(var slips of allSlips){
+            slipId.push(slips.Slip.id),
+            location.push(slips.Slip.location),
+            item.push(slips.data.item),
+            itemQuantity.push(slips.itemQuantity),
+            itemPrice.push(slips.itemPrice),
+            itemType.push(slips.data.itemType),
+            total.push(slips.Slip.total)
+        }     
+        return{
+            slipId,
+            location,
+            item,
+            itemQuantity,
+            itemType,
+            itemPrice,
+            total
+        }
+   
+  }
+
+ 
+  
+  
+  
+  
 
 
 module.exports = {
@@ -978,5 +1026,6 @@ module.exports = {
     getAllReports,
     getRecentReports,
     deleteReportRecord,
-    createReportRecord
+    createReportRecord,
+    retrieveAllSlips
 }
