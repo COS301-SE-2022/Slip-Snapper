@@ -954,7 +954,14 @@ async function retrieveAllSlips(userid) {
             usersId: userid
         },
         include:{
-            items:true
+            items:true,
+            items: {
+                select: {
+                    itemPrice: true,
+                    itemQuantity: true,
+                    data: true
+                }
+            },
         }
     })
     return {
