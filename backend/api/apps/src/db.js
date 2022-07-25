@@ -989,7 +989,15 @@ async function getRecentReports(userid){
             itemType.push(slips.data.itemType),
             total.push(slips.Slip.total)
         }     
-    
+        return{
+            slipId,
+            location,
+            item,
+            itemQuantity,
+            itemType,
+            itemPrice,
+            total
+        }
    
   }
 
