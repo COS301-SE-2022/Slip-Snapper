@@ -1006,17 +1006,17 @@ async function getRecentReports(userid){
     let itemPrice=[]
     let total=[]
 
-    const result = allSlips.map(userInfo => {
+    
         for(var slips of allSlips){
-            slipId.push(userInfo.Slip?.id),
-            location.push(userInfo.Slip?.location),
-            item.push(userInfo.data?.item),
-            itemQuantity.push(userInfo.itemQuantity),
-            itemPrice.push(userInfo.itemPrice),
-            itemType.push(userInfo.data?.itemType),
-            total.push(userInfo.Slip?.total)
+            slipId.push(slips.Slip.id),
+            location.push(slips.Slip.location),
+            item.push(slips.data.item),
+            itemQuantity.push(slips.itemQuantity),
+            itemPrice.push(slips.itemPrice),
+            itemType.push(slips.data.itemType),
+            total.push(slips.Slip.total)
         }     
-    })
+    
     return{
         slipId,
         location,
