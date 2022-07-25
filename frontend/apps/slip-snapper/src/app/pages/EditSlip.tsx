@@ -9,11 +9,7 @@ import { addItemsA } from '../../api/apiCall';
 
 const EditSlip: React.FC = () => {
     const data = JSON.parse(localStorage.getItem('scan-content')!);
-    let photo;
-    async function a() {
-        photo = JSON.parse(localStorage.getItem('photo')!);
-    }
-    a();
+    const photo = JSON.parse(localStorage.getItem('photo')!);
     const [items, setItems] = useState(data.text[2]);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -220,6 +216,7 @@ const EditSlip: React.FC = () => {
             }
         }
         if (submitFlag === true) {
+            const user = JSON.parse(localStorage.getItem('user')!)
             addItemsA(1, data, items)
             const button = document.getElementById("successRedirect")
             if (button) {

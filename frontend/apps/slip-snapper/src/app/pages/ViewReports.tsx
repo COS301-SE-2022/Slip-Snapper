@@ -11,6 +11,7 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonItem,
+  IonAlert,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -36,6 +37,7 @@ export const mockTotals = [
 // day week month
 const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
+  const [deleteAlert, setDeleteAlert] = useState(false);
   useEffect(() => {
     getAllUserReports(1)
       .then(apiResponse => {
@@ -92,13 +94,30 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => deleteReport(1, report.reportName, report.reportId)}
+                  onClick={() => setDeleteAlert(true)}
                   fill="solid"
                   slot="end"
                   color="medium"
                 >
                   Delete
                 </IonButton>
+                <IonAlert
+                  isOpen={deleteAlert}
+                  onDidDismiss={() => setDeleteAlert(false)}
+                  header="Confirm Delete"
+                  message="Are you sure you want to delete this report?"
+                  buttons={[
+                    'Cancel',
+                    {
+                      text: 'Delete',
+                      cssClass: 'toasts',
+                      handler: () => {
+                        deleteReport(1, report.reportName, report.reportId);
+                        setDeleteAlert(false);
+                      }
+                    },
+                  ]}
+                />
               </IonItem>
             );
           })}
@@ -109,7 +128,7 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    console.log(data);
+    const user = JSON.parse(localStorage.getItem('user')!)
     getUserReport(1, data)
       .then(apiResponse => {
         if (apiResponse.data.report.data !== undefined) {
@@ -121,12 +140,12 @@ const ViewReports: React.FC = () => {
       });
   }
  async function deleteReport(user: number, fileName: string, reportId: string) {
-    
-     await removeReport(user,fileName, reportId)
+    const userS = JSON.parse(localStorage.getItem('user')!)
+    await removeReport(user,fileName, reportId)
       .then(apiResponse => {
         console.log(apiResponse.data.message);
       });
-
+    
     getAllUserReports(1)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
