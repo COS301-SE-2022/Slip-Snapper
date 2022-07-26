@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
-import { addItemsA } from '../../api/apiCall';
 
 
 const EditReciept: React.FC = () => {
@@ -11,21 +10,7 @@ const EditReciept: React.FC = () => {
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editRecieptItems, setEditRecieptItems] = useState(slipContents.items);
     const [showAlert, setShowAlert] = useState(false);
-
-    const handleCostsChange = (event: any) => {
-
-        const _tempCosts = [...editRecieptItems];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setEditRecieptItems(_tempCosts);
-    };
-    const getTotalCosts = () => {
-        return editRecieptItems.reduce((total: number, item: { price: string; }) => {
-            return total + parseFloat(item.price);
-        }, 0);
-    };
+    const [alertMessage, setAlertMes] = useState("");
 
     return (
         <IonPage>
@@ -43,12 +28,12 @@ const EditReciept: React.FC = () => {
                     <IonCardHeader>
                         <IonCardTitle>Store Name/Location:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={slipContents.location} onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput value={slipContents.location} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={slipContents.transactionDate} onClick={() => setNormalColour("Store_Name")} id={"date"} contentEditable="true"></IonInput>
+                                <IonInput value={slipContents.transactionDate} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -90,27 +75,27 @@ const EditReciept: React.FC = () => {
 
                                     <IonCol>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.data.item}></IonInput>
+                                            <IonInput id={index + "/item"} value={item.data.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
+                                            <IonInput type='number'
                                                 id={index + "/quantity"} value={item.itemQuantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/price")} onIonChange={handleCostsChange}
+                                            <IonInput
                                                 id={index + "/price"} value={item.itemPrice} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.data.itemType} ></IonInput>
+                                            <IonInput  id={index + "/type"} value={item.data.itemType} ></IonInput>
                                         </IonItem>
                                     </IonCol>
                                     <IonCol >
@@ -119,8 +104,9 @@ const EditReciept: React.FC = () => {
                                             isOpen={showAlert}
                                             onDidDismiss={() => setShowAlert(false)}
                                             header="Oops..."
-                                            message="A receipt needs to have at least one item."
+                                            message={alertMessage}
                                             buttons={['Ok']}
+                                        
                                         />
                                     </IonCol>
                                 </IonRow>
@@ -130,7 +116,7 @@ const EditReciept: React.FC = () => {
                     <IonItem color="tertiary" className='slipTotal'>
                         <div className='totalHeader'>Total:</div>
                         <IonItem color="tertiary" className='total'>
-                            {getTotalCosts()}
+                            <IonInput id={"total"} value={slipContents.total} ></IonInput>
                         </IonItem>
                     </IonItem>
                     <IonItem color="primary">
@@ -149,12 +135,13 @@ const EditReciept: React.FC = () => {
 
     function addItem() {
         getData()
-        setEditRecieptItems([...editRecieptItems, { item: "", quantity: 1, price: "0.00", type: "" }])
+        setEditRecieptItems([...editRecieptItems, { data: { id: editRecieptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
     }
     function removeItem(index: number) {
         getData()
         const data = [...editRecieptItems];
         if (data.length === 1) {
+            setAlertMes("A receipt needs to have at least one item.")
             setShowAlert(true);
         }
         else {
@@ -171,80 +158,80 @@ const EditReciept: React.FC = () => {
             const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
 
             if (n !== undefined) {
-                editRecieptItems[i].item = n
+                editRecieptItems[i].data.item = n
             } if (q !== undefined) {
-                editRecieptItems[i].quantity = Number(q)
+                editRecieptItems[i].itemQuantity = Number(q)
             } if (p !== undefined) {
-                editRecieptItems[i].price = p
+                editRecieptItems[i].itemPrice = p
             } if (t !== undefined) {
-                editRecieptItems[i].type = t
-            } 
+                editRecieptItems[i].data.itemType = t
+            }
         }
     }
 
     function validateData() {
-        let submitFlag = true
+        if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Store Name is required!")
+            setShowAlert(true)
+            return
+        }
+        if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Slip date is required!")
+            setShowAlert(true)
+            return
+        }
 
         for (let i = 0; i < editRecieptItems.length; i++) {
-            if (editRecieptItems[i].item === "" || editRecieptItems[i].item === "*") {
-                const temp = [...editRecieptItems];
-                temp[i].item = "*";
-                setEditRecieptItems(temp)
-                document.getElementById(i + "/item")?.setAttribute("color", "danger");
-                submitFlag = false
+            if (editRecieptItems[i].data.item === "") {
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
 
             }
-            if (editRecieptItems[i].type === "" || editRecieptItems[i].type === "*") {
-                const temp = [...editRecieptItems];
-                temp[i].type = "*";
-                setEditRecieptItems(temp)
-                document.getElementById(i + "/type")?.setAttribute("color", "danger");
-                submitFlag = false
+            else if (editRecieptItems[i].data.itemType === "") {
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
+
 
             }
-            if (!Number.isInteger(editRecieptItems[i].quantity) || Math.sign(editRecieptItems[i].quantity) !== 1) {
-                document.getElementById(i + "/quantity")?.setAttribute("color", "danger");
-                const temp = [...editRecieptItems];
-                temp[i].quantity = 0;
-                setEditRecieptItems(temp)
-                submitFlag = false
+            else if (!Number.isInteger(editRecieptItems[i].itemQuantity) || Math.sign(editRecieptItems[i].itemQuantity) !== 1) {
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
+
 
             }
-            if (editRecieptItems[i].price === "") {
-                const temp = [...editRecieptItems];
-                temp[i].type = "0.00";
-                setEditRecieptItems(temp)
-                document.getElementById(i + "/type")?.setAttribute("color", "danger");
-                document.getElementById(i + "/price")?.setAttribute("color", "danger");
-                submitFlag = false
-
+            else if (editRecieptItems[i].price === "") {
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
             }
         }
-        if (submitFlag === true) {
-            // const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-            // const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
 
-            // const data = {
-            //     text: [date, storeName, "", "", getTotalCosts()]
-            // };
-            
-            // let user = JSON.parse(localStorage.getItem('user')!)
-            // if(user==null){
-            //     user = {id: 24}
-            // }
-            // addItemsA(user.id, data, items)
 
-            const button = document.getElementById("cancelButton")
-            if (button) {
-                button.click();
-            }
+    // const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
+    // const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
 
+    // const data = {
+    //     text: [date, storeName, "", "", getTotalCosts()]
+    // };
+
+    // let user = JSON.parse(localStorage.getItem('user')!)
+    // if(user==null){
+    //     user = {id: 24}
+    // }
+    // addItemsA(user.id, data, items)
+    
+        localStorage.removeItem('editSlip')
+        const button = document.getElementById("cancelButton")
+        if (button) {
+            button.click();
         }
-    }
 
-    function setNormalColour(i: string) {
-        document.getElementById(i)?.setAttribute("color", "light");
     }
 }
+
+
 
 export default EditReciept;

@@ -12,22 +12,7 @@ const EditSlip: React.FC = () => {
     const photo = JSON.parse(localStorage.getItem('photo')!);
     const [items, setItems] = useState(data.text[2]);
     const [showAlert, setShowAlert] = useState(false);
-
-    const handleCostsChange = (event: any) => {
-
-        const _tempCosts = [...items];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setItems(_tempCosts);
-    };
-    const getTotalCosts = () => {
-        return items.reduce((total: number, item: { price: string; }) => {
-            return total + parseFloat(item.price);
-        }, 0);
-    };
-
+    const [alertMessage, setAlertMes] = useState("");
     return (
         <IonPage>
             <IonHeader>
@@ -44,12 +29,12 @@ const EditSlip: React.FC = () => {
                     <IonCardHeader>
                         <IonCardTitle>Store Name/Location:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput value={data.text[1]} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput value={data.text[0]} id={"Store_Name"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -104,7 +89,7 @@ const EditSlip: React.FC = () => {
 
                                     <IonCol>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/price")} type='number' onIonChange={handleCostsChange}
+                                            <IonInput onClick={() => setNormalColour(index + "/price")} type='number'
                                                 id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
@@ -120,7 +105,7 @@ const EditSlip: React.FC = () => {
                                             isOpen={showAlert}
                                             onDidDismiss={() => setShowAlert(false)}
                                             header="Oops..."
-                                            message="A receipt needs to have at least one item."
+                                            message={alertMessage}
                                             buttons={['Ok']}
                                         />
                                     </IonCol>
@@ -131,7 +116,8 @@ const EditSlip: React.FC = () => {
                     <IonItem color="tertiary" className='slipTotal'>
                         <div className='totalHeader'>Total:</div>
                         <IonItem color="tertiary" className='total'>
-                            {getTotalCosts()}
+                            <IonInput id={"total"} value={data.text[4]} ></IonInput>
+
                         </IonItem>
                     </IonItem>
                     <IonItem color="primary">
@@ -157,6 +143,7 @@ const EditSlip: React.FC = () => {
         getData()
         const data = [...items];
         if (data.length === 1) {
+            setAlertMes("A receipt needs to have at least one item.")
             setShowAlert(true);
         }
         else {
@@ -184,48 +171,51 @@ const EditSlip: React.FC = () => {
     }
 
     function validateData() {
-        let submitFlag = true;
-
+        if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Store Name is required!")
+            setShowAlert(true)
+            return
+        }
+        if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Slip date is required!")
+            setShowAlert(true)
+            return
+        }
         for (let i = 0; i < items.length; i++) {
             if (items[i].item === "" || items[i].item === "*") {
-                const temp = [...items];
-                temp[i].item = "*";
-                setItems(temp)
-                document.getElementById(i + "/item")?.setAttribute("color", "danger");
-                submitFlag = false
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
             }
             if (items[i].type === "" || items[i].type === "*") {
-                const temp = [...items];
-                temp[i].type = "*";
-                setItems(temp)
-                document.getElementById(i + "/type")?.setAttribute("color", "danger");
-                submitFlag = false
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
 
             }
             if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity) !== 1) {
-                document.getElementById(i + "/quantity")?.setAttribute("color", "danger");
-                submitFlag = false
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
 
             }
             if (items[i].price === "") {
-                const temp = [...items];
-                temp[i].price = 0.00;
-                setItems(temp)
-                document.getElementById(i + "/price")?.setAttribute("color", "danger");
-                submitFlag = false
+                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+                setShowAlert(true)
+                return
             }
         }
-        if (submitFlag === true) {
-            let user = JSON.parse(localStorage.getItem('user')!)
-            if(user==null){
-                user = {id: 24}
-            }
-            addItemsA(user.id, data, items)
-            const button = document.getElementById("successRedirect")
-            if (button) {
-                button.click();
-            }
+
+        let user = JSON.parse(localStorage.getItem('user')!)
+        if (user == null) {
+            user = { id: 24 }
         }
+        addItemsA(user.id, data, items)
+        const button = document.getElementById("successRedirect")
+        if (button) {
+            button.click();
+        }
+
     }
 
     function setNormalColour(i: string) {
