@@ -504,7 +504,7 @@ async function getUserStats(userId) {
     let mostStore = await getMostSpentATStore(userId);
     let week = await getWeeklyExpenditure(userId);
     let month = await getMonthlyExpenditure(userId);
-    //let favouriteCategory = await getFavouriteCategory(userId);
+    let favouriteCategory = await getFavouriteCategory(userId);
 
     return {
         message: "User statistics retrieved",
@@ -513,7 +513,7 @@ async function getUserStats(userId) {
         mostAtStore: mostStore,
         week: week,
         month: month,
-        //category: favouriteCategory
+        category: favouriteCategory
     };
 }
 /**

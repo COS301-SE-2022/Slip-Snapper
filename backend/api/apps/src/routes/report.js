@@ -236,7 +236,6 @@ router.get('/statistics', async (req,res)=>{
     let { userId } = req.query;
 
     const result = await req.app.get('db').getUserStats( Number(userId) );
-
     let status = 200;
     
     return res.status(status)
@@ -248,10 +247,8 @@ router.get('/statistics', async (req,res)=>{
                 items: []
             },
             category: {
-                // amount: result.category.amount,
-                // name: result.category.category
-                amount: 0,
-                name: ''
+                amount: result.category.amount,
+                name: result.category.category
             },
             mostExpensive: {
                 amount: result.expensiveItem.expensiveItem,
