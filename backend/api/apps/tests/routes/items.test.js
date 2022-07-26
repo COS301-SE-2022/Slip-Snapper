@@ -5,12 +5,16 @@ const getItem = jest.fn();
 const addItem = jest.fn();
 const deleteItem = jest.fn();
 const updateItem = jest.fn();
+const retrieveAllSlips = jest.fn();
+const updateSlip = jest.fn();
 
 const app = makeApp({
   getItem,
   addItem,
   deleteItem,
-  updateItem
+  updateItem,
+  retrieveAllSlips,
+  updateSlip
 })
 
 /**
@@ -382,3 +386,139 @@ describe('Post /item/delete', ()=>{
         
     })
 })
+
+/**
+ * Test for the get slip for user query
+ */
+describe('Get /item/slip', ()=>{
+
+    beforeEach(()=>{
+        retrieveAllSlips.mockReset();
+    })
+
+    test('should returnall the items from the database for the user', async ()=>{
+        const querydata = [
+            1,
+            2,
+            3
+        ]
+
+        for (const query of querydata){
+            retrieveAllSlips.mockReset();
+            retrieveAllSlips.mockResolvedValue({
+                message:"All slips retrieved",
+                slips: [{}],
+            });
+
+            const res = await request(app)
+                .get('/api/item/slip?userId='+query)
+
+            expect(retrieveAllSlips.mock.calls.length).toBe(1);
+            expect(retrieveAllSlips.mock.calls[0][0]).toBe(query);
+        }
+        
+    })
+
+    test('should return a json object containing the itemid', async ()=>{
+        let data = [{}]
+
+        for (let i = 0; i < 10; i++){
+            retrieveAllSlips.mockReset();
+            retrieveAllSlips.mockResolvedValue({
+                message:"All slips retrieved",
+                slips: [{}],
+            });
+
+            const res = await request(app)
+                .get('/api/item/slip?userId=1')
+
+            expect(res.body.slips).toEqual(data);
+            expect(res.body.message).toEqual("All slips retrieved");
+        }
+    })
+
+    test('should return a status code of 200', async ()=>{
+        retrieveAllSlips.mockResolvedValue({
+            message:"All slips retrieved",
+            slips: [{}],
+        });
+        
+        const res = await request(app)
+            .get('/api/item/slip?userId=1')
+
+        expect(res.statusCode).toEqual(200);
+    })
+})
+
+/**
+ * Test for the get slip for user query
+ */
+//  describe('Post /item/slip', ()=>{
+
+//     beforeEach(()=>{
+//         updateSlip.mockReset();
+//     })
+
+//     test('should update all the items in the database', async ()=>{
+//         const bodyData = [
+//             {userId:1, updateItems:{}, removeItems:{}},
+//             {userId:2, updateItems:{}, removeItems:{}},
+//             {userId:3, updateItems:{}, removeItems:{}}
+//         ]
+
+//         for (const body of bodyData){
+//             updateSlip.mockReset();
+//             updateSlip.mockResolvedValue({
+//                 message:"Slip updated",
+//                 slip: {},
+//             });
+
+//             const res = await request(app)
+//                 .post('/api/item/slip')
+//                 .send(
+//                     body
+//                 )
+
+//             expect(updateSlip.mock.calls.length).toBe(1);
+//             expect(updateSlip.mock.calls[0][0]).toBe(body);
+
+//         }
+        
+//     })
+
+//     test('should return a json object containing the itemid', async ()=>{
+//         let data = {}
+
+//         for (let i = 0; i < 10; i++){
+//             updateSlip.mockReset();
+//             updateSlip.mockResolvedValue({
+//                 message:"Slip updated",
+//                 slip: {},
+//             });
+
+//             const res = await request(app)
+//                 .post('/api/item/slip')
+//                 .send(
+//                     {userId:1, updateItems:{}, removeItems:{}}
+//                 )
+
+//             expect(res.body.slip).toEqual(data);
+//             expect(res.body.message).toEqual("Slip updated");
+//         }
+//     })
+
+//     test('should return a status code of 200', async ()=>{
+//         updateSlip.mockResolvedValue({
+//             message:"Slip updated",
+//             slip: {},
+//         });
+        
+//         const res = await request(app)
+//             .post('/api/item/slip')
+//             .send(
+//                 {userId:1, updateItems:{}, removeItems:{}}
+//             )
+
+//         expect(res.statusCode).toEqual(200);
+//     })
+// })

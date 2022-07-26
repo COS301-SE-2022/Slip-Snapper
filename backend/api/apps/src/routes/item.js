@@ -115,6 +115,10 @@ router.post('/update', async (req,res)=>{
         });
 });
 
+/**
+ * Get all the slips and their related items
+ * Uses the userid
+ */
 router.get('/slip', async (req, res) => {
     let { userId } = req.query;
 
@@ -128,7 +132,28 @@ router.get('/slip', async (req, res) => {
         .send({
             message: result.message,
             slips: result.slips,
-            // itemList: result.itemList
+        });
+});
+
+/**
+ * Update a slip and its related items
+ * Uses the userid
+ */
+ router.get('/slip', async (req, res) => {
+    let { userId, updateItems, removeItems } = req.body;
+
+
+
+    //const result = await req.app.get('db').updateSlip(Number(userId))
+
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            slip: result.slip,
         });
 });
 
