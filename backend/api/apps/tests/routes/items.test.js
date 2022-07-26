@@ -5,12 +5,16 @@ const getItem = jest.fn();
 const addItem = jest.fn();
 const deleteItem = jest.fn();
 const updateItem = jest.fn();
+const retrieveAllSlips = jest.fn();
+const updateSlip = jest.fn();
 
 const app = makeApp({
   getItem,
   addItem,
   deleteItem,
-  updateItem
+  updateItem,
+  retrieveAllSlips,
+  updateSlip
 })
 
 /**
