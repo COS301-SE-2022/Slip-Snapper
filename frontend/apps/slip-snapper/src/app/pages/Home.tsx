@@ -18,12 +18,14 @@ import React, { useEffect, useState } from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import { generateReportA, getRecentReports, getThisWeeksReports } from "../../api/apiCall"
+import { getRecentReports, getThisWeeksReports, getTodayStats } from "../../api/apiCall"
 import '../theme/home.css';
 import ViewReportItem from '../components/ViewReportItem';
 
 const Home: React.FC = () => {
   const [thisWeeksReports,setThisWeeksReports] = useState([])
+  const [todayItems, setTodayItem] = useState(0)
+  const [todayTotal, setTodayTotal] = useState(0)
   const [r, setR] = useState<any[]>([]);
 
   useEffect(() => {
@@ -41,8 +43,15 @@ const Home: React.FC = () => {
         setThisWeeksReports(apiResponse.data.reports)
       });
 
+    getTodayStats(user.id)
+      .then(apiResponse => {
+        setTodayItem(apiResponse.data.totalItems)
+        setTodayTotal(apiResponse.data.totalSpent._sum.total)
+      });
+
 
   }, []);
+
   return (
     <IonPage>
       <IonHeader>
@@ -74,10 +83,10 @@ const Home: React.FC = () => {
           <IonCol>
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Todays Expenditure:</IonCardTitle>
+                <IonCardTitle>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
-              <IonItem color="tertiary">Items Bought: 12</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R899.99 </IonItem>
+              <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R{todayTotal} </IonItem>
               <IonItem color="tertiary">
                 <IonButton color="secondary" fill="solid" slot="end">
                   View
