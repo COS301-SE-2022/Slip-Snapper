@@ -79,7 +79,10 @@ async function generatePDF(name, types, today){
 
     pdf.end();
 
-    return pdfTotal;
+    return {
+        fileContent: pdf,
+        total: pdfTotal
+    };
 }
 
 /**
@@ -95,26 +98,35 @@ router.post('/pdf', async (req,res)=>{
     const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
     let types = await sortItemsIntoCategories(result.itemList)
 
-    let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " " + period + ".pdf";
+    let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
     let dir = __dirname + "/"
     let pdfName = dir + name
-    let reportTotal = await generatePDF(pdfName, types, today)
+    let report = await generatePDF(pdfName, types, today)
     
     const path = `${userName}/${name}`
     const bucket = new S3BucketFunctions
-    const resultPDF = bucket.uploadFile(path, pdfName)
+
+    if(report){
+        const resultPDF = bucket.uploadFile(path, report.fileContent)
     
-    const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, reportTotal);
+        const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, report.total);
+        try {
+            await fsPromises.unlink(pdfName);
+        } catch (err) {}
 
-    try {
-        await fsPromises.unlink(pdfName);
-    } catch (err) {}
+        return res.status(200)
+            .send({
+                message: "Report Generated and uploaded",
+                title: name,
+                reportTotal: report.total
+            });
+    }
 
-    return res.status(200)
+    return res.status(503)
         .send({
-            message: "Report Generated and uploaded",
-            title: name,
-            reportTotal: reportTotal
+            message: "Report unable to uploaded",
+            title: "",
+            reportTotal: 0
         });
 });
 
@@ -147,7 +159,7 @@ router.post('/pdf', async (req,res)=>{
 router.delete('/pdf', async (req,res)=>{
     let { userName, fileName, reportID } = req.body;
     
-    const path = `${userName}/${fileName}.pdf`
+    const path = `${userName}/${fileName}`
     const bucket = new S3BucketFunctions
     const result = bucket.deleteFile(path)
     

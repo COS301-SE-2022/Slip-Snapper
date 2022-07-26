@@ -138,10 +138,9 @@ const ViewReports: React.FC = () => {
     }
     getUserReport(user.username, data)
       .then(apiResponse => {
-        console.log(apiResponse.data.report)
         if (apiResponse.data.report.data !== undefined) {
-          const arr = new Uint8Array(apiResponse.data.report);
-          const blob = new Blob([apiResponse.data.report.data], { type: 'application/pdf' });
+          const arr = new Uint8Array(apiResponse.data.report.data);
+          const blob = new Blob([arr], { type: 'application/pdf' });
           const docUrl = URL.createObjectURL(blob);
           window.open(docUrl);
         }

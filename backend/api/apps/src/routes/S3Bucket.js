@@ -33,14 +33,16 @@ class S3BucketFunctions {
         });
     }
 
-    async uploadFile (path, dir){
+    async uploadFile (path, file){
 
         const params = {
             Bucket: S3_BUCKET,
-            Body: dir,
-            Key: path,  
+            Body: file,
+            Key: path,
+            ContentType: "application/pdf"  
         };
-        myBucket.putObject(params, function (err, response) {
+        
+        myBucket.upload(params, function (err, response) {
             if (err) {
                 return {
                     message: "Could not upload Report."
