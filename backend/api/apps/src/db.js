@@ -1002,7 +1002,7 @@ async function retrieveAllSlips(userid) {
 
 async function todaysReports(userid) {
     const date1 = new Date()
-    const lastweek = date1.setDate(date1.getDate() - 1);
+    const lastweek = date1.setDate(date1.getDate() - 1)
     const todaysReport = await prisma.slip.findMany({
 
         where: {
