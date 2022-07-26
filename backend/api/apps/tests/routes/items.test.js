@@ -386,3 +386,66 @@ describe('Post /item/delete', ()=>{
         
     })
 })
+
+/**
+ * Test for the get items for user query
+ */
+describe('Get /item/slip', ()=>{
+
+    beforeEach(()=>{
+        retrieveAllSlips.mockReset();
+    })
+
+    test('should returnall the items from the database for the user', async ()=>{
+        const querydata = [
+            1,
+            2,
+            3
+        ]
+
+        for (const query of querydata){
+            retrieveAllSlips.mockReset();
+            retrieveAllSlips.mockResolvedValue({
+                message:"All slips retrieved",
+                slips: [{}],
+            });
+
+            const res = await request(app)
+                .get('/api/item/slip?userId='+query)
+
+            expect(retrieveAllSlips.mock.calls.length).toBe(1);
+            expect(retrieveAllSlips.mock.calls[0][0]).toBe(query);
+        }
+        
+    })
+
+    test('should return a json object containing the itemid', async ()=>{
+        let data = [{}]
+
+        for (let i = 0; i < 10; i++){
+            retrieveAllSlips.mockReset();
+            retrieveAllSlips.mockResolvedValue({
+                message:"All slips retrieved",
+                slips: [{}],
+            });
+
+            const res = await request(app)
+                .get('/api/item/slip?userId=1')
+
+            expect(res.body.slips).toEqual(data);
+            expect(res.body.message).toEqual("All slips retrieved");
+        }
+    })
+
+    test('should return a status code of 200', async ()=>{
+        retrieveAllSlips.mockResolvedValue({
+            message:"All slips retrieved",
+            slips: [{}],
+        });
+        
+        const res = await request(app)
+            .get('/api/item/slip?userId=1')
+
+        expect(res.statusCode).toEqual(200);
+    })
+})
