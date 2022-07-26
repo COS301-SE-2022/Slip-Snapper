@@ -118,7 +118,7 @@ const AddEntry: React.FC = () => {
                     </IonItem>
                     <IonItem color="primary">
                         <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                        <IonButton id='cancelButton' fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                        <IonButton id='cancelButton' onClick={() => { clearData(); }} fill="solid" slot="end" color="medium" routerLink={'/home'}>Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
@@ -168,37 +168,29 @@ const AddEntry: React.FC = () => {
 
     function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Store Name is required!")
+            setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
             return
         }
         if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Slip date is required!")
+            setAlertMes("Please enter a Date to continue.")
+            setShowAlert(true)
+            return
+        }
+        if (document.getElementById("total")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Please enter a Total to continue.")
             setShowAlert(true)
             return
         }
 
         for (let i = 0; i < items.length; i++) {
-
-            if (items[i].item === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
-
-            }
-            if (items[i].type === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
-            }
-            if (!Number.isInteger(items[i].quantity) || Math.sign(items[i].quantity) !== 1) {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
-
-            }
-            if (items[i].price === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+            if (items[i].item === "" || 
+                items[i].type === "" ||
+                !Number.isInteger(items[i].quantity) || 
+                Math.sign(items[i].quantity) !== 1 ||
+                items[i].price === "") 
+                {
+                setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
             }
@@ -206,11 +198,11 @@ const AddEntry: React.FC = () => {
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
-        const temp = document.getElementById("total")?.getElementsByTagName("input")[0].value
-        let total
-        if (temp !==undefined)
+        const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        let total = 0.00;
+        if (tempTotal !==undefined)
         {
-             total = parseFloat(temp)
+            total = parseFloat(tempTotal)
         }
         const data = {
             text: [date, storeName, "", "", total]
@@ -221,11 +213,19 @@ const AddEntry: React.FC = () => {
             user = { id: 24 }
         }
         addItemsA(user.id, data, items)
+        clearData()
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
         }
 
+    }
+
+    function clearData() {
+        setItems([{ item: "", quantity: 1, price: "0.00", type: "" }]);
+        document.getElementById("Store_Name")!.getElementsByTagName("input")[0].value = "";
+        document.getElementById("date")!.getElementsByTagName("input")[0].value = "";
+        document.getElementById("total")!.getElementsByTagName("input")[0].value = "";
     }
 
     function setNormalColour(i: string) {
