@@ -174,3 +174,11 @@ export async function getAllSlips(userId) {
         url: baseUrl + 'item/slip?userId=' + userId,
     })
 }
+
+export async function getThisWeeksReports(userId) {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'report/thisweek?userId=' + userId,
+    })
+}

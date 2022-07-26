@@ -846,7 +846,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
 
     const userReports = await prisma.reports.findMany({
         where: {
-            userId: userid
+            usersId: userid
         },
         select: {
             id: true,
