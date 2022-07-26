@@ -122,7 +122,7 @@ const EditReciept: React.FC = () => {
                     </IonItem>
                     <IonItem color="primary">
                         <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                        <IonButton id='cancelButton' fill="solid" slot="end" color="secondary" routerLink={'/home'}>Cancel</IonButton>
+                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/receipts'}>Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
@@ -172,41 +172,31 @@ const EditReciept: React.FC = () => {
 
     function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Store Name is required!")
+            setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
             return
         }
         if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Slip date is required!")
+            setAlertMes("Please enter a Date to continue.")
+            setShowAlert(true)
+            return
+        }
+        if (document.getElementById("total")?.getElementsByTagName("input")[0].value === "") {
+            setAlertMes("Please enter a Total to continue.")
             setShowAlert(true)
             return
         }
 
         for (let i = 0; i < editRecieptItems.length; i++) {
-            if (editRecieptItems[i].data.item === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
+            if (editRecieptItems[i].data.item === "" ||
+                editRecieptItems[i].data.itemType === "" ||
+                !Number.isInteger(editRecieptItems[i].itemQuantity) || 
+                Math.sign(editRecieptItems[i].itemQuantity) !== 1 ||
+                editRecieptItems[i].price === "") {
+                setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
 
-            }
-            else if (editRecieptItems[i].data.itemType === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
-
-
-            }
-            else if (!Number.isInteger(editRecieptItems[i].itemQuantity) || Math.sign(editRecieptItems[i].itemQuantity) !== 1) {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
-
-
-            }
-            else if (editRecieptItems[i].price === "") {
-                setAlertMes("Item #" + (i + 1) + " was entered incorrectly!")
-                setShowAlert(true)
-                return
             }
         }
 
