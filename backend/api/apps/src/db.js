@@ -359,6 +359,23 @@ async function deleteItem(itemId) {
 }
 
 /**
+ * Funtion to delete multiple items from the database
+ * @param {*} itemId The item id array
+ * @returns 
+ */
+async function deleteManyItems(itemIdArray) {
+
+    const item = await prisma.item.deleteMany({
+        where: {
+            id: {
+                in: itemIdArray
+            }
+        }
+    });
+
+}
+
+/**
  * Function to update item in the database
  * @param {*} itemId the item id
  * @param {*} dataA the data to update
@@ -983,19 +1000,19 @@ async function retrieveAllSlips(userid) {
         where: {
             usersId: userid
         },
-        include:{
-            items:true, 
-            items: { 
-                select: { 
-                    id:true,
-                    itemPrice: true, 
-                    itemQuantity: true, 
-                    data: true 
-                } 
-            }, 
-        } 
-    }) 
-    return { 
+        include: {
+            items: true,
+            items: {
+                select: {
+                    id: true,
+                    itemPrice: true,
+                    itemQuantity: true,
+                    data: true
+                }
+            },
+        }
+    })
+    return {
         message: "All slips retrieved",
         slips: allSlips
     }
