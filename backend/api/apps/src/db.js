@@ -364,7 +364,17 @@ async function deleteItem(itemId) {
  * @returns 
  */
 async function deleteManyItems(itemIdArray) {
-
+    const check = await prisma.item.findMany({
+        where:{
+          id:{
+            in:itemIdArray
+          }
+        }
+      })
+      if(check.at(0) == null)
+      {
+        console.log(" the item does not exit")
+      }
     const item = await prisma.item.deleteMany({
         where: {
             id: {
