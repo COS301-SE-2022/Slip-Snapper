@@ -31,7 +31,10 @@ function ReportItem({ reportData }: Props) {
 
 }
 function view(data: any) {
-    const user = JSON.parse(localStorage.getItem('user')!)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24}
+    }
     getUserReport(user.id, data)
         .then(apiResponse => {
             if (apiResponse.data.report.data !== undefined) {

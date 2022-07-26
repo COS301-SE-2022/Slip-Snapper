@@ -39,7 +39,11 @@ const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   const [deleteAlert, setDeleteAlert] = useState(false);
   useEffect(() => {
-    getAllUserReports(1)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24}
+    }
+    getAllUserReports(user.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
@@ -128,12 +132,16 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    const user = JSON.parse(localStorage.getItem('user')!)
-    getUserReport(user.id, data)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {username: 'demoUser'}
+    }
+    getUserReport(user.username, data)
       .then(apiResponse => {
+        console.log(apiResponse.data.report)
         if (apiResponse.data.report.data !== undefined) {
-          const arr = new Uint8Array(apiResponse.data.report.data);
-          const blob = new Blob([arr], { type: 'application/pdf' });
+          const arr = new Uint8Array(apiResponse.data.report);
+          const blob = new Blob([apiResponse.data.report.data], { type: 'application/pdf' });
           const docUrl = URL.createObjectURL(blob);
           window.open(docUrl);
         }
@@ -141,7 +149,10 @@ const ViewReports: React.FC = () => {
   }
 
   async function deleteReport(fileName: string, reportId: string) {
-    const userS = JSON.parse(localStorage.getItem('user')!)
+    let userS = JSON.parse(localStorage.getItem('user')!)
+    if(userS == null){
+      userS = {username: "demoUser"}
+    }
     await removeReport(userS.username,fileName, reportId)
       .then(apiResponse => {
         console.log(apiResponse.data.message);

@@ -223,7 +223,10 @@ const AddEntry: React.FC = () => {
                 text: [date, storeName, "", "", getTotalCosts()]
             };
 
-            const user = JSON.parse(localStorage.getItem('user')!)
+            let user = JSON.parse(localStorage.getItem('user')!)
+            if(user==null){
+                user = {id: 24}
+            }
             addItemsA(user.id, data, items) 
             const button = document.getElementById("cancelButton")
             if (button) {

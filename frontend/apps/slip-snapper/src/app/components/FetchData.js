@@ -15,7 +15,10 @@ class FetchData extends React.Component {
     }
 
     componentDidMount() {
-        const user = JSON.parse(localStorage.getItem('user'))
+        let user = JSON.parse(localStorage.getItem('user'))
+        if(user==null){
+            user = {id: 24}
+        }
         getAllSlips(user.id)
             .then(
                 apiResponse => {

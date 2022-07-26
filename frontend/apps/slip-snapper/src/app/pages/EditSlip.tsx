@@ -216,8 +216,11 @@ const EditSlip: React.FC = () => {
             }
         }
         if (submitFlag === true) {
-            const user = JSON.parse(localStorage.getItem('user')!)
-            addItemsA(1, data, items)
+            let user = JSON.parse(localStorage.getItem('user')!)
+            if(user==null){
+                user = {id: 24}
+            }
+            addItemsA(user.id, data, items)
             const button = document.getElementById("successRedirect")
             if (button) {
                 button.click();
