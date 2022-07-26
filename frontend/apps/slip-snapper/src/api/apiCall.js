@@ -60,11 +60,11 @@ export async function setBudgetA( userId, weekly, monthly){
     })
 }
 
-export async function getBudgetA( userId ){
+export async function getProfileData( userId ){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/budget?userId='+userId,
+        url: baseUrl + 'report/profile?userId='+userId,
     })
 }
 

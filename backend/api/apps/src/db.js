@@ -1046,6 +1046,82 @@ async function todaysReports(userid) {
     }
 }
 
+
+async function getUserProfile(userId) {
+    let store = await getFavouriteStore(userId);
+    let budget = await getUserBudgets(userId);
+    let budgets = [];
+
+    return {
+        message: "User statistics retrieved",
+        storeDetails: store,
+        budget: budget,
+        budgets: budgets
+    };
+}
+
+async function getUserGeneralBudgets(userId) {
+    const budgets = await prisma.budgets.findFirst({
+        where: {
+            usersId: userId
+        }
+    })
+
+    //TODO change db query to work with the slip total and not item total
+
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userId
+            // transactionDate: {
+            //     gte: start,
+            //     lt:  end
+            //   }
+        },
+        select: {
+            items: {
+                select: {
+                    itemPrice: true,
+                    itemQuantity: true,
+                    data: true
+                }
+            },
+            transactionDate: true,
+        }
+    })
+
+    let weeklyTotal = 0;
+    let monthlyTotal = 0;
+    // var date = new Date();
+    // date.setDate(date.getDate() - 7);
+    // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    // date = new Date();
+    // date.setDate(date.getMonth() - 1);
+    // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    for (var itemL of items) {
+        //let tDate = transactionDate;
+
+        for (var it of itemL.items) {
+            //if(tDate > week){
+            weeklyTotal += it.itemPrice;
+            //}
+
+            //if(tDate > month){
+            monthlyTotal += it.itemPrice;
+            //}
+        }
+    }
+
+    return {
+        message: "User budget retrieved",
+        weeklyTotal: weeklyTotal,
+        weekly: user.weeklyBudget,
+        monthlyTotal: monthlyTotal,
+        monthly: user.monthlyBudget
+    };
+}
+
 module.exports = {
     getUser,
     addUser,
@@ -1066,5 +1142,6 @@ module.exports = {
     deleteReportRecord,
     createReportRecord,
     retrieveAllSlips,
-    todaysReports
+    todaysReports,
+    getUserProfile,
 }

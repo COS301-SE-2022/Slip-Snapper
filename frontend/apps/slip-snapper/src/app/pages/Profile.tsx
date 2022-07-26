@@ -21,7 +21,7 @@ import { NavButtons } from '../components/NavButtons';
 import { EditBudgets } from '../components/EditBudgets';
 import '../theme/profile.css';
 import '../theme/toasts.css';
-import { setBudgetA, getBudgetA} from "../../api/apiCall"
+import { setBudgetA, getProfileData } from "../../api/apiCall"
 import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
@@ -38,19 +38,22 @@ const Profile: React.FC = () => {
     if(user==null){
         user = {id: 24}
     }
-    getBudgetA(user.id)
+    getProfileData(user.id)
       .then(
         apiResponse => {
+          console.log(apiResponse.data)
           val.weekly = apiResponse.data.weekly;
           val.monthly = apiResponse.data.monthly;
           totalWeeklySpent = apiResponse.data.weeklyTotal;
           totalMonthlySpent = apiResponse.data.monthlyTotal;
           setWeeklyBudget(val.weekly)
           setMonthlyBudget(val.monthly)
+          setProfile(apiResponse.data)
         })
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
+  const [profile, setProfile] = useState({favouriteStore:{name:""}});
   let weeklyBudget: number, monthlyBudget: number
   return(
     <IonPage>
@@ -144,7 +147,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Most Frequent Store</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText data-testid='favoriteStore'></IonText>
+                <IonText data-testid='favoriteStore'>{profile.favouriteStore.name}</IonText>
               </IonItem>
             </IonCardHeader>
 
