@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
-
+import { addItemsA } from '../../api/apiCall';
 
 
 const EditReciept: React.FC = () => {
@@ -225,10 +225,15 @@ const EditReciept: React.FC = () => {
             // const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
 
             // const data = {
-            //     text: [date, storeName, "", "", getTotalCosts]
+            //     text: [date, storeName, "", "", getTotalCosts()]
             // };
+            
+            // let user = JSON.parse(localStorage.getItem('user')!)
+            // if(user==null){
+            //     user = {id: 24}
+            // }
+            // addItemsA(user.id, data, items)
 
-            // addItemsA(1, data, items)
             const button = document.getElementById("cancelButton")
             if (button) {
                 button.click();

@@ -10,8 +10,6 @@ const Login: React.FC = () => {
   const [errorAlert, setAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-
-
   return (
     <IonPage>
 
@@ -113,14 +111,8 @@ const Login: React.FC = () => {
             }
           }
         })
-
-
-
-
-
     }
   }
-
 
 };
 

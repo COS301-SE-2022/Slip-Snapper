@@ -57,10 +57,9 @@ function ScanSlip(photo) {
       localStorage.setItem('photo', JSON.stringify(photo))
 
       await doProcessing(text)
-        .then((apiResponse) => apiResponse.data)
-        .then((data) => {
+        .then(apiResponse => {
           localStorage.removeItem('scan-content')
-          localStorage.setItem('scan-content', JSON.stringify(data))
+          localStorage.setItem('scan-content', JSON.stringify(apiResponse.data))
         });
       
       await worker.terminate();

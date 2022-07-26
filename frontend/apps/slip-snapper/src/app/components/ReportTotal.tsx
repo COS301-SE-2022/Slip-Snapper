@@ -39,9 +39,11 @@ function ReportTotal({ reportData }: Props) {
 export default ReportTotal;
 
 function generateReport(period: string) {
-    const user = JSON.parse(localStorage.getItem('user')!)
-    const userName = "1"
-    const userId = 1
-    generateReportA(userName, userId ,period)
-        .then(apiResponse => apiResponse.data);
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24, username:'demoUser'}
+    }
+    
+    generateReportA(user.username, user.id ,period)
+        .then(apiResponse => console.log(apiResponse.data));
 }

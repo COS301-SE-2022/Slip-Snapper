@@ -96,14 +96,14 @@ router.post('/pdf', async (req,res)=>{
     let types = await sortItemsIntoCategories(result.itemList)
 
     let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + " " + period + ".pdf";
-    let dir = __dirname + '/report/'
+    let dir = __dirname + "/"
     let pdfName = dir + name
     let reportTotal = await generatePDF(pdfName, types, today)
     
     const path = `${userName}/${name}`
     const bucket = new S3BucketFunctions
     const resultPDF = bucket.uploadFile(path, pdfName)
-
+    
     const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, reportTotal);
 
     try {
@@ -125,7 +125,7 @@ router.post('/pdf', async (req,res)=>{
  router.get('/pdf', async (req,res)=>{
     let { userName, fileName } = req.query;
     
-    const path = `${userName}/${fileName}.pdf`
+    const path = `${userName}/${fileName}`
     const bucket = new S3BucketFunctions
     const result = await bucket.getFile(path)
     let status = 200;

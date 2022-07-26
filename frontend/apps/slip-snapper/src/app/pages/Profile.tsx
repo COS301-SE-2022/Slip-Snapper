@@ -34,8 +34,11 @@ const Profile: React.FC = () => {
   let totalWeeklySpent = 300;
   let totalMonthlySpent = 500;
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user')!)
-    getBudgetA(1)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24}
+    }
+    getBudgetA(user.id)
       .then(
         apiResponse => {
           val.weekly = apiResponse.data.weekly;
@@ -215,6 +218,10 @@ const Profile: React.FC = () => {
   }
 
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24}
+    }
     weeklyBudget = parseFloat(newWeeklyBudget)
     monthlyBudget = parseFloat(newMonthlyBudget)
     if (!isNaN(weeklyBudget)) {
@@ -224,7 +231,7 @@ const Profile: React.FC = () => {
       setMonthlyBudget(monthlyBudget)
     }
 
-    setBudgetA(1, weeklyBudget, monthlyBudget)
+    setBudgetA(user.id, weeklyBudget, monthlyBudget)
   }
 
   function isExceeded() {

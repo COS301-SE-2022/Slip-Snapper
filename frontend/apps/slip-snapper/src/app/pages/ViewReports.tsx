@@ -39,7 +39,11 @@ const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
   const [deleteAlert, setDeleteAlert] = useState(false);
   useEffect(() => {
-    getAllUserReports(1)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {id: 24}
+    }
+    getAllUserReports(user.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
@@ -112,7 +116,7 @@ const ViewReports: React.FC = () => {
                       text: 'Delete',
                       cssClass: 'toasts',
                       handler: () => {
-                        deleteReport(1, report.reportName, report.reportId);
+                        deleteReport( report.reportName, report.reportId);
                         setDeleteAlert(false);
                       }
                     },
@@ -128,31 +132,38 @@ const ViewReports: React.FC = () => {
   );
 
   function view(data: any) {
-    const user = JSON.parse(localStorage.getItem('user')!)
-    getUserReport(1, data)
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if(user==null){
+        user = {username: 'demoUser'}
+    }
+    getUserReport(user.username, data)
       .then(apiResponse => {
+        console.log(apiResponse.data.report)
         if (apiResponse.data.report.data !== undefined) {
-          const arr = new Uint8Array(apiResponse.data.report.data);
-          const blob = new Blob([arr], { type: 'application/pdf' });
+          const arr = new Uint8Array(apiResponse.data.report);
+          const blob = new Blob([apiResponse.data.report.data], { type: 'application/pdf' });
           const docUrl = URL.createObjectURL(blob);
           window.open(docUrl);
         }
       });
   }
- async function deleteReport(user: number, fileName: string, reportId: string) {
-    const userS = JSON.parse(localStorage.getItem('user')!)
-    await removeReport(user,fileName, reportId)
+
+  async function deleteReport(fileName: string, reportId: string) {
+    let userS = JSON.parse(localStorage.getItem('user')!)
+    if(userS == null){
+      userS = {username: "demoUser"}
+    }
+    await removeReport(userS.username,fileName, reportId)
       .then(apiResponse => {
         console.log(apiResponse.data.message);
       });
     
-    getAllUserReports(1)
+    getAllUserReports(userS.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
   }
 
-
- 
 };
+
 export default ViewReports;

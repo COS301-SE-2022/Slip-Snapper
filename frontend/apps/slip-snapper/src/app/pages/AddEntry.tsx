@@ -5,15 +5,11 @@ import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
 import { addItemsA } from '../../api/apiCall';
 
-
-
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
 
-
     const handleCostsChange = (event: any) => {
-
         const _tempCosts = [...items];
         let temp = event.target.id
         temp = temp.substring(0, 1)
@@ -223,18 +219,19 @@ const AddEntry: React.FC = () => {
         if (submitFlag === true) {
             const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
             const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
-
             const data = {
-                text: [date, storeName, "", "", getTotalCosts]
+                text: [date, storeName, "", "", getTotalCosts()]
             };
-            
-            const user = JSON.parse(localStorage.getItem('user')!)
-            addItemsA(1, data, items) 
+
+            let user = JSON.parse(localStorage.getItem('user')!)
+            if(user==null){
+                user = {id: 24}
+            }
+            addItemsA(user.id, data, items) 
             const button = document.getElementById("cancelButton")
             if (button) {
                 button.click();
             }
-
         }
     }
 

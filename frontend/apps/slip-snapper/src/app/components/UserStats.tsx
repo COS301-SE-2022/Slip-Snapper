@@ -1,11 +1,7 @@
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonText, IonTextarea } from "@ionic/react";
+import { IonCard, IonCardHeader, IonCardTitle, IonItem, IonText,} from "@ionic/react";
 import React, { useEffect, useState } from 'react';
 import {  getStatsA } from "../../api/apiCall"
 
-const favourite = { store: "N/A", total: 0 }
-const mostSpentCategory = { itemCategory: "N/A", total: 0 }
-const mostSpentStore = { store: "N/A", total: 0 }
-const weekMonthSpent = { lastWeek: 0, thisWeek: 0, lastMonth: 0, thisMonth: 0 }
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
         category: {
@@ -32,8 +28,11 @@ export const UserStats = () => {
     });
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user')!)
-        getStatsA(1)
+        let user = JSON.parse(localStorage.getItem('user')!)
+        if(user==null){
+            user = {id: 24}
+        }
+        getStatsA(user.id)
             .then(
                 apiResponse => {
                     setUserStats(apiResponse.data)
