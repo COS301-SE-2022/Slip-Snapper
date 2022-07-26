@@ -1,7 +1,7 @@
 import React from "react";
 import { IonCol, IonRow, IonTitle, IonButton, IonCard, IonItem, } from '@ionic/react';
 import '../theme/FetchData.css';
-import { updateItemA, getItemsA, getAllSlips } from "../../api/apiCall"
+import { getAllSlips } from "../../api/apiCall"
 
 class FetchData extends React.Component {
 
@@ -47,8 +47,8 @@ class FetchData extends React.Component {
                 </IonItem>
 
                 <IonRow>
-                    {items.map((item) => (
-                        <IonCol className="item-col">
+                    {items.map((item,index) => (
+                        <IonCol key={index} className="item-col">
                             <IonCard color="primary" className="items" id={item.id}>
                                 <IonItem color="primary"><IonItem color="tertiary" className="titles" slot="start">Receipt #{item.id}</IonItem>{new Date(item.transactionDate).toDateString()}</IonItem>
                                 <IonItem color="primary">
