@@ -28,7 +28,6 @@ function ReportItem({ reportData }: Props) {
             </IonCard>
         </IonCol>
     );
-
 }
 function view(data: any) {
     let user = JSON.parse(localStorage.getItem('user')!)

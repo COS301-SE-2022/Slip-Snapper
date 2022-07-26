@@ -298,4 +298,23 @@ router.get('/recent', async (req,res)=>{
     
 });
 
+/**
+ * Get this weeks reports
+ */
+router.get('/thisweek', async (req, res) => {
+    let { userId } = req.query;
+    const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(userId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            reports: result.weeklyReportsList
+        });
+
+});
+
 module.exports.router = router;
