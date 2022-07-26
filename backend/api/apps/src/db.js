@@ -516,6 +516,36 @@ async function getUserStats(userId) {
         //category: favouriteCategory
     };
 }
+/**
+ * Funtion to set the user budgets in the database
+ * @param {*} userId The users id
+ * @param {*} data the data to be added
+ * @returns user data
+ */
+
+ async function setUserSpecificBudgets(userid,data) {
+    const user = await prisma.budgets.update({
+        where: {
+            usersId:userid
+        },
+        data:{
+            weeklyFoodBudget: data[0],
+            weeklyFashionBudget: data[1],
+            weeklyHouseholdBudget: data[2],
+            weeklyElectronicsBudget: data[3],
+            weeklyOtherBudget: data[4],
+            monthlyFoodBudget: data[5],
+            monthlyFashionBudget: data[6],
+            monthlyHouseholdBudget: data[7],
+            monthlyElectronicsBudget: data[8],
+            monthlyOtherBudget: data[9]
+        }
+    })
+
+    return {
+        message: "User monthly budget set",
+    };
+}
 
 /**
  * Function to get the most spend on a single category
@@ -828,7 +858,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
     let dailyReportsList = []
     let weeklyReportsList = []
     let monthlyReportsList = []
-    if (userReports = null) {
+    if (userReports == null) {
         return {
             numReports,
             dailyReportsList,
@@ -839,7 +869,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
     else {
         const date1 = new Date()
         for (var report of userReports) {
-            if (report.generatedDate.toISOString() < date1.toISOString()) {
+            if (report.generatedDate.toISOString() >= date1.toISOString()) {
                 numReports++
                 dailyReportsList.push({
                     reportId: report.id,
@@ -847,7 +877,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
                     reportDate: report.generatedDate
                 })
             }
-            if (report.generatedDate.toISOString() < date2.toISOString()) {
+            if (report.generatedDate.toISOString() >= date2.toISOString()) {
                 numReports++
                 weeklyReportsList.push({
                     reportId: report.id,
@@ -855,7 +885,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
                     reportDate: report.generatedDate
                 })
             }
-            if (report.generatedDate.toISOString() < date3.toISOString()) {
+            if (report.generatedDate.toISOString() >= date3.toISOString()) {
                 numReports++
                 monthlyReportsList.push({
                     reportId: report.id,
@@ -881,37 +911,37 @@ async function getDailyWeeklyMonthlyReports(userid) {
  * @returns reportsList which consists of the report id, report name and the date.
  */
 async function getRecentReports(userid) {
-    const userReports = await prisma.Reports.findMany({
+    const userReports = await prisma.Reports.findMany({ 
         where: {
-            usersId: userid
+            usersId: userid 
         },
         select: {
-            id: true,
-            reportName: true,
-            generatedDate: true
+            id: true, 
+            reportName: true, 
+            generatedDate: true 
         },
-        take: 5,
+        take: 5, 
         orderBy: {
-            generatedDate: 'desc'
+            generatedDate: 'desc' 
         }
     })
     let reportsList = []
     if (userReports == null) {
         return {
-            reportsList
+            reportsList 
         }
     }
     else {
-        for (var report of userReports) {
-            reportsList.push({
-                reportId: report.id,
-                reportName: report.reportName,
-                reportDate: report.generatedDate
+        for (var report of userReports) { 
+            reportsList.push({ 
+                reportId: report.id, 
+                reportName: report.reportName, 
+                reportDate: report.generatedDate 
             })
         }
         return {
             message: "Recent Reports retrieved.",
-            reportsList
+            reportsList 
         }
     }
 }
@@ -922,11 +952,11 @@ async function getRecentReports(userid) {
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
-async function createReportRecord(userid, reportName, reportTotal) {
-    const userReports = await prisma.reports.create({
-        data: {
-            usersId: userid,
-            reportName: reportName
+async function createReportRecord(userid, reportName, reportTotal) { 
+    const userReports = await prisma.reports.create({ 
+        data: { 
+            usersId: userid, 
+            reportName: reportName 
         }
     })
 
@@ -941,34 +971,37 @@ async function createReportRecord(userid, reportName, reportTotal) {
 * @returns null
 */
 async function deleteReportRecord(reportid) {
-    const userReports = await prisma.reports.delete({
-        where: {
-            id: reportid
+    const userReports = await prisma.reports.delete({ 
+        where: { 
+            id: reportid 
         }
     })
-
 }
+
 async function retrieveAllSlips(userid) {
-    const allSlips = await prisma.slip.findMany({
-        where: {
-            usersId: userid
+    const allSlips = await prisma.slip.findMany({ 
+        where: { 
+            usersId: userid 
         },
         include:{
-            items:true,
-            items: {
-                select: {
-                    itemPrice: true,
-                    itemQuantity: true,
-                    data: true
-                }
-            },
-        }
-    })
-    return {
+            items:true, 
+            items: { 
+                select: { 
+                    itemPrice: true, 
+                    itemQuantity: true, 
+                    data: true 
+                } 
+            }, 
+        } 
+    }) 
+    return { 
         message: "All slips retrieved",
-        slips: allSlips
+        slips: allSlips 
     }
 }
+
+
+
 module.exports = {
     getUser,
     addUser,
