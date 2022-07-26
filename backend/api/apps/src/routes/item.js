@@ -140,9 +140,9 @@ router.get('/slip', async (req, res) => {
  * Uses the userid
  */
  router.get('/slip', async (req, res) => {
-    let { userId, updateItems, removeItems } = req.query;
+    let { userId, updateItems, removeItems } = req.body;
 
-    
+
 
     //const result = await req.app.get('db').updateSlip(Number(userId))
 
@@ -153,7 +153,7 @@ router.get('/slip', async (req, res) => {
     return res.status(status)
         .send({
             message: result.message,
-            slips: result.slips,
+            slip: result.slip,
         });
 });
 

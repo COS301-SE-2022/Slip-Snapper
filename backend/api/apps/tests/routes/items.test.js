@@ -388,7 +388,7 @@ describe('Post /item/delete', ()=>{
 })
 
 /**
- * Test for the get items for user query
+ * Test for the get slip for user query
  */
 describe('Get /item/slip', ()=>{
 
@@ -449,3 +449,76 @@ describe('Get /item/slip', ()=>{
         expect(res.statusCode).toEqual(200);
     })
 })
+
+/**
+ * Test for the get slip for user query
+ */
+//  describe('Post /item/slip', ()=>{
+
+//     beforeEach(()=>{
+//         updateSlip.mockReset();
+//     })
+
+//     test('should update all the items in the database', async ()=>{
+//         const bodyData = [
+//             {userId:1, updateItems:{}, removeItems:{}},
+//             {userId:2, updateItems:{}, removeItems:{}},
+//             {userId:3, updateItems:{}, removeItems:{}}
+//         ]
+
+//         for (const body of bodyData){
+//             updateSlip.mockReset();
+//             updateSlip.mockResolvedValue({
+//                 message:"Slip updated",
+//                 slip: {},
+//             });
+
+//             const res = await request(app)
+//                 .post('/api/item/slip')
+//                 .send(
+//                     body
+//                 )
+
+//             expect(updateSlip.mock.calls.length).toBe(1);
+//             expect(updateSlip.mock.calls[0][0]).toBe(body);
+
+//         }
+        
+//     })
+
+//     test('should return a json object containing the itemid', async ()=>{
+//         let data = {}
+
+//         for (let i = 0; i < 10; i++){
+//             updateSlip.mockReset();
+//             updateSlip.mockResolvedValue({
+//                 message:"Slip updated",
+//                 slip: {},
+//             });
+
+//             const res = await request(app)
+//                 .post('/api/item/slip')
+//                 .send(
+//                     {userId:1, updateItems:{}, removeItems:{}}
+//                 )
+
+//             expect(res.body.slip).toEqual(data);
+//             expect(res.body.message).toEqual("Slip updated");
+//         }
+//     })
+
+//     test('should return a status code of 200', async ()=>{
+//         updateSlip.mockResolvedValue({
+//             message:"Slip updated",
+//             slip: {},
+//         });
+        
+//         const res = await request(app)
+//             .post('/api/item/slip')
+//             .send(
+//                 {userId:1, updateItems:{}, removeItems:{}}
+//             )
+
+//         expect(res.statusCode).toEqual(200);
+//     })
+// })
