@@ -12,12 +12,14 @@ import {
   IonCardTitle,
   IonItem,
   IonAlert,
+  IonCardSubtitle,
+  IonCol,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
-import ReportTotal from '../components/ReportTotal';
 import '../theme/viewReports.css';
 import {
+  generateReportA,
   getAllUserReports,
   getUserReport,
   removeReport,
@@ -66,15 +68,25 @@ const ViewReports: React.FC = () => {
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
-              <ReportTotal
-                key={index}
-                reportData={[
-                  totals.timePeriod,
-                  totals.total,
-                  totals.title,
-                  totals.call,
-                ]}
-              />
+              <IonCol className='item-col'>
+            <IonCard color="primary">
+                <IonCardHeader>
+                    <IonCardTitle>{totals.timePeriod}</IonCardTitle>
+                    <IonCardSubtitle>{totals.total}</IonCardSubtitle>
+                </IonCardHeader>
+                <IonItem color="tertiary">
+                    <IonButton
+                        fill="solid"
+                        title= {totals.title}
+                        slot="end"
+                        color="secondary"
+                        onClick={() => {generateReport(totals.call)}}
+                    >
+                        Generate Report
+                    </IonButton>
+                </IonItem>
+            </IonCard>
+        </IonCol>
             );
           })}
         </IonRow>
@@ -162,6 +174,21 @@ const ViewReports: React.FC = () => {
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
+  }
+
+  async function generateReport(period: string) {
+    let userS = JSON.parse(localStorage.getItem('user')!)
+    if(userS==null){
+        userS = {id: 24, username:'demoUser'}
+    }
+    
+    await generateReportA(userS.username, userS.id ,period)
+        .then(apiResponse => console.log(apiResponse.data));
+        
+    getAllUserReports(userS.id)
+    .then(apiResponse => {
+      setR(apiResponse.data.reports);
+    });
   }
 
 };
