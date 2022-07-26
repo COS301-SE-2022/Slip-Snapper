@@ -523,12 +523,12 @@ async function getUserStats(userId) {
  * @returns user data
  */
 
- async function setUserSpecificBudgets(userid,data) {
+async function setUserSpecificBudgets(userid, data) {
     const user = await prisma.budgets.update({
         where: {
-            usersId:userid
+            usersId: userid
         },
-        data:{
+        data: {
             weeklyFoodBudget: data[0],
             weeklyFashionBudget: data[1],
             weeklyHouseholdBudget: data[2],
@@ -911,37 +911,37 @@ async function getDailyWeeklyMonthlyReports(userid) {
  * @returns reportsList which consists of the report id, report name and the date.
  */
 async function getRecentReports(userid) {
-    const userReports = await prisma.Reports.findMany({ 
+    const userReports = await prisma.Reports.findMany({
         where: {
-            usersId: userid 
+            usersId: userid
         },
         select: {
-            id: true, 
-            reportName: true, 
-            generatedDate: true 
+            id: true,
+            reportName: true,
+            generatedDate: true
         },
-        take: 5, 
+        take: 5,
         orderBy: {
-            generatedDate: 'desc' 
+            generatedDate: 'desc'
         }
     })
     let reportsList = []
     if (userReports == null) {
         return {
-            reportsList 
+            reportsList
         }
     }
     else {
-        for (var report of userReports) { 
-            reportsList.push({ 
-                reportId: report.id, 
-                reportName: report.reportName, 
-                reportDate: report.generatedDate 
+        for (var report of userReports) {
+            reportsList.push({
+                reportId: report.id,
+                reportName: report.reportName,
+                reportDate: report.generatedDate
             })
         }
         return {
             message: "Recent Reports retrieved.",
-            reportsList 
+            reportsList
         }
     }
 }
@@ -952,11 +952,11 @@ async function getRecentReports(userid) {
  * @param {*} userId (Integer) The users id.
  * @returns null
  */
-async function createReportRecord(userid, reportName, reportTotal) { 
-    const userReports = await prisma.reports.create({ 
-        data: { 
-            usersId: userid, 
-            reportName: reportName 
+async function createReportRecord(userid, reportName, reportTotal) {
+    const userReports = await prisma.reports.create({
+        data: {
+            usersId: userid,
+            reportName: reportName
         }
     })
 
@@ -971,17 +971,17 @@ async function createReportRecord(userid, reportName, reportTotal) {
 * @returns null
 */
 async function deleteReportRecord(reportid) {
-    const userReports = await prisma.reports.delete({ 
-        where: { 
-            id: reportid 
+    const userReports = await prisma.reports.delete({
+        where: {
+            id: reportid
         }
     })
 }
 
 async function retrieveAllSlips(userid) {
-    const allSlips = await prisma.slip.findMany({ 
-        where: { 
-            usersId: userid 
+    const allSlips = await prisma.slip.findMany({
+        where: {
+            usersId: userid
         },
         include:{
             items:true, 
@@ -997,11 +997,54 @@ async function retrieveAllSlips(userid) {
     }) 
     return { 
         message: "All slips retrieved",
-        slips: allSlips 
+        slips: allSlips
     }
 }
 
+async function todaysReports(userid) {
+    const date1 = new Date()
+    const lastweek = date1.setDate(date1.getDate() - 1)
+    const todaysReport = await prisma.slip.findMany({
 
+        where: {
+            usersId: userid,
+            transactionDate: {
+                gte: date1
+            }
+        },
+        select: {
+            _count: {
+                select: {
+                    items: true
+                }
+            }
+        }
+    })
+
+    var sum = 0
+    var counter = 0
+    for (var numItems in todaysReport) {
+        sum += todaysReport.at(counter)._count.items
+        counter++
+    }
+
+    const todaystotal = await prisma.slip.aggregate({
+        where: {
+            usersId: userid,
+            transactionDate: {
+                gte: date1
+            }
+        },
+        _sum: {
+            total: true,
+        },
+    })
+
+    return {
+        sum,
+        todaystotal
+    }
+}
 
 module.exports = {
     getUser,
@@ -1022,5 +1065,6 @@ module.exports = {
     getRecentReports,
     deleteReportRecord,
     createReportRecord,
-    retrieveAllSlips
+    retrieveAllSlips,
+    todaysReports
 }
