@@ -987,6 +987,7 @@ async function retrieveAllSlips(userid) {
             items:true, 
             items: { 
                 select: { 
+                    id:true,
                     itemPrice: true, 
                     itemQuantity: true, 
                     data: true 

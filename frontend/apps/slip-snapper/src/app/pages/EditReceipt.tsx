@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
-
+import { updateSlipA } from '../../api/apiCall';
 
 const EditReciept: React.FC = () => {
-
+    
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editRecieptItems, setEditRecieptItems] = useState(slipContents.items);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+    const originalItems = slipContents.items
 
     return (
         <IonPage>
@@ -209,21 +210,42 @@ const EditReciept: React.FC = () => {
             }
         }
 
+        const updateItems = editRecieptItems;
 
-    // const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-    // const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const removeItems: unknown[] = []
 
-    // const data = {
-    //     text: [date, storeName, "", "", getTotalCosts()]
-    // };
+        for (const rem of originalItems){
+            console.log(rem)
+            let flag = false
+            for(const item of editRecieptItems){
+                if(item.id === rem.id){
+                    flag = true
+                }
+            }
+            if(!flag){
+                removeItems.push(rem)
+            }
+        }
 
-    // let user = JSON.parse(localStorage.getItem('user')!)
-    // if(user==null){
-    //     user = {id: 24}
-    // }
-    // addItemsA(user.id, data, items)
+        const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const temp = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        let total
+        if (temp !==undefined)
+        {
+             total = parseFloat(temp)
+        }
+        const data = {
+            text: [date, storeName, "", "", total]
+        };
+
+        let user = JSON.parse(localStorage.getItem('user')!)
+        if(user==null){
+            user = {id: 24}
+        }
+        updateSlipA(user.id, data, updateItems, removeItems)
     
-        localStorage.removeItem('editSlip')
+        // localStorage.removeItem('editSlip')
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
