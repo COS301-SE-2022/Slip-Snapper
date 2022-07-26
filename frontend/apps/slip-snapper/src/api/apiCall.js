@@ -182,3 +182,17 @@ export async function getThisWeeksReports(userId) {
         url: baseUrl + 'report/thisweek?userId=' + userId,
     })
 }
+
+export async function updateSlipA( userId, updateSlip, updateItems, removeItems){
+    return axios({
+        headers: headers,
+        method: 'post',
+        url: baseUrl + 'item/slip',
+        data: JSON.stringify({
+            userId: userId,
+            updateSlip: updateSlip,
+            updateItems: updateItems, 
+            removeItems: removeItems
+        })
+    })
+}

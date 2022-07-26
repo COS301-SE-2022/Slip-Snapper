@@ -22,7 +22,6 @@ class FetchData extends React.Component {
         getAllSlips(user.id)
             .then(
                 apiResponse => {
-                    console.log(apiResponse.data.slips)
                     const res = apiResponse.data
                     this.setState({
                         items: res.slips,
