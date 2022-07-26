@@ -365,16 +365,17 @@ async function deleteItem(itemId) {
  */
 async function deleteManyItems(itemIdArray) {
     const check = await prisma.item.findMany({
-        where:{
-          id:{
-            in:itemIdArray
-          }
+        where: {
+            id: {
+                in: itemIdArray
+            }
         }
-      })
-      if(check.at(0) == null)
-      {
-        console.log(" the item does not exit")
-      }
+    })
+    if (check.at(0) == null) {
+        return {
+            message: "The item does not exist"
+        }
+    }
     const item = await prisma.item.deleteMany({
         where: {
             id: {
@@ -382,7 +383,10 @@ async function deleteManyItems(itemIdArray) {
             }
         }
     });
-
+    return {
+        message: "Items have been deleted",
+        itemIdArray: item
+    };
 }
 
 /**
