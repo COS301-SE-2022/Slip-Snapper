@@ -210,13 +210,13 @@ router.get('/profile', async (req,res)=>{
  */
 router.post('/budget', async (req,res)=>{
     let { userId, weekly, monthly } = req.body;
-
+    
     let data = {}
-    if(weekly != ""){
+    if(weekly != null){
         data.weeklyBudget = weekly
     }
 
-    if(monthly != ""){
+    if(monthly != null){
         data.monthlyBudget = monthly
     }
 
@@ -239,17 +239,20 @@ router.post('/budget', async (req,res)=>{
  router.post('/otherBudgets', async (req,res)=>{
     let { userId, budgets } = req.body;
 
-    let data = {}
-
-    const result = await req.app.get('db').setUserBudgets(userId, data);
+    for (var key in budgets) {
+        if (budgets.hasOwnProperty(key)) {
+            budgets[key] = parseFloat(budgets[key])
+        }
+    }
+    
+    const result = await req.app.get('db').setUserSpecificBudgets(userId, budgets);
 
     let status = 200;
 
     return res.status(status)
         .send({
-            message: result.message,
-            weekly: result.weekly,
-            monthly: result.monthly
+            // message: result.message,
+            // budgets: result.budgets,
         });
 });
 

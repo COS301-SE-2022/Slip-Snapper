@@ -343,8 +343,29 @@ async function addItem(userid, location, date, total, data) {
 async function insertAllItems(slipId,insertItems){
     let additions = []
 
-    //TODO check if data item has change
-    for(const item of insertItems){
+    const dataItems = await prisma.dataItem.findMany({})
+
+    for (let item of insertItems) {
+        let matched = false
+
+        for (const dataItem of dataItems) {
+            if (item.data.item == dataItem.item) {
+                item.data.id = dataItem.id;
+                matched = true;
+                break;
+            }
+        }
+
+        if (!matched) {
+            const dat = await prisma.dataItem.create({
+                data: {
+                    item: item.data.item,
+                    itemType: item.data.itemType,
+                }
+            })
+            item.data.id = dat.id;
+        }
+
         additions.push({
             slipId: slipId,
             itemPrice: parseFloat(item.itemPrice),
@@ -352,7 +373,7 @@ async function insertAllItems(slipId,insertItems){
             dataId: item.data.id
         })
     }
-
+    
     const items = await prisma.item.createMany({
         data: additions
     });
@@ -516,72 +537,7 @@ async function updateSlips(slipId, editLocation, editTotal, editDate) {
     }
 }
 
-/**
- * Funtion to get the user budgets from the database
- * @param {*} userId The users id
- * @returns user data
- */
-async function getUserBudgets(userId) {
-    const user = await prisma.user.findFirst({
-        where: {
-            id: userId
-        }
-    })
 
-    //TODO change db query to work with the slip total and not item total
-
-    const items = await prisma.slip.findMany({
-        where: {
-            usersId: userId
-            // transactionDate: {
-            //     gte: start,
-            //     lt:  end
-            //   }
-        },
-        select: {
-            items: {
-                select: {
-                    itemPrice: true,
-                    itemQuantity: true,
-                    data: true
-                }
-            },
-            transactionDate: true,
-        }
-    })
-
-    let weeklyTotal = 0;
-    let monthlyTotal = 0;
-    // var date = new Date();
-    // date.setDate(date.getDate() - 7);
-    // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
-    // date = new Date();
-    // date.setDate(date.getMonth() - 1);
-    // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
-    for (var itemL of items) {
-        //let tDate = transactionDate;
-
-        for (var it of itemL.items) {
-            //if(tDate > week){
-            weeklyTotal += it.itemPrice;
-            //}
-
-            //if(tDate > month){
-            monthlyTotal += it.itemPrice;
-            //}
-        }
-    }
-
-    return {
-        message: "User budget retrieved",
-        weeklyTotal: weeklyTotal,
-        weekly: user.weeklyBudget,
-        monthlyTotal: monthlyTotal,
-        monthly: user.monthlyBudget
-    };
-}
 
 /**
  * Funtion to set the user budgets in the database
@@ -639,18 +595,7 @@ async function setUserSpecificBudgets(userid, data) {
         where: {
             usersId: userid
         },
-        data: {
-            weeklyFoodBudget: data[0],
-            weeklyFashionBudget: data[1],
-            weeklyHouseholdBudget: data[2],
-            weeklyElectronicsBudget: data[3],
-            weeklyOtherBudget: data[4],
-            monthlyFoodBudget: data[5],
-            monthlyFashionBudget: data[6],
-            monthlyHouseholdBudget: data[7],
-            monthlyElectronicsBudget: data[8],
-            monthlyOtherBudget: data[9]
-        }
+        data: data
     })
 
     return {
@@ -1145,10 +1090,15 @@ async function todaysReports(userid) {
 
     return {
         sum,
-        todaystotal
+        todaystotal: todaystotal._sum.total
     }
 }
 
+/**
+ * Function to get all data for the user Profile top half
+ * @param {*} userId the users id
+ * @returns json object with all the relevant data
+ */
 async function getUserProfile(userId) {
     let store = await getFavouriteStore(userId);
     let budget = await getUserBudgets(userId);
@@ -1166,6 +1116,18 @@ async function getUserGeneralBudgets(userId, start, end) {
     const budgets = await prisma.budgets.findFirst({
         where: {
             usersId: userId
+        },
+        select:{
+            weeklyFoodBudget: true,
+            weeklyFashionBudget: true,
+            weeklyElectronicsBudget: true,
+            weeklyHouseholdBudget: true,
+            weeklyOtherBudget: true,
+            monthlyFoodBudget: true,
+            monthlyFashionBudget: true,
+            monthlyElectronicsBudget: true,
+            monthlyHouseholdBudget: true,
+            monthlyOtherBudget: true
         }
     })
 
@@ -1182,11 +1144,122 @@ async function getUserGeneralBudgets(userId, start, end) {
         };
     }
 
-    // TODO check if budgets has been exceded
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userId
+            // transactionDate: {
+            //     gte: start,
+            //     lt:  end
+            //   }
+        },
+        include: {
+            items: {
+                select: {
+                    id: true,
+                    itemPrice: true,
+                    itemQuantity: true,
+                    data: true
+                }
+            },
+        }
+    })
+
+    // var date = new Date();
+    // date.setDate(date.getDate() - 7);
+    // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    // date = new Date();
+    // date.setDate(date.getMonth() - 1);
+    // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+    let totals = {
+        Food:0,
+        Fashion:0,
+        Electronics:0,
+        houseHold:0,
+        Other:0,
+    }
+    for (var itemL of items) {
+        
+        for(it of itemL.items){
+            if(it.data.itemType === 'food'){
+                totals.Food += it.itemPrice
+            }
+
+            if(it.data.itemType === 'fashion'){
+                totals.Fashion += it.itemPrice
+            }
+
+            if(it.data.itemType === 'Electronics'){
+                totals.Electronics += it.itemPrice
+            }
+
+            if(it.data.itemType === 'household'){
+                totals.houseHold += it.itemPrice
+            }
+
+            if(it.data.itemType === 'other'){
+                totals.Other += it.itemPrice
+            }
+        }
+    }
 
     return {
         message: "User budgets retrieved",
-        budgets
+        budgets,
+        totals
+    };
+}
+
+/**
+ * Funtion to get the user budgets from the database
+ * @param {*} userId The users id
+ * @returns user data
+ */
+ async function getUserBudgets(userId) {
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userId
+        }
+    })
+
+    const items = await prisma.slip.findMany({
+        where: {
+            usersId: userId
+            // transactionDate: {
+            //     gte: start,
+            //     lt:  end
+            //   }
+        },
+    })
+    
+    let weeklyTotal = 0;
+    let monthlyTotal = 0;
+    // var date = new Date();
+    // date.setDate(date.getDate() - 7);
+    // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    // date = new Date();
+    // date.setDate(date.getMonth() - 1);
+    // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+
+    for (var itemL of items) {
+        //let tDate = transactionDate;
+
+        //if(tDate > week){
+        weeklyTotal += itemL.total;
+        //}
+
+        //if(tDate > month){
+        monthlyTotal += itemL.total;
+        //}
+    }
+
+    return {
+        message: "User budget retrieved",
+        weeklyTotal: weeklyTotal,
+        weekly: user.weeklyBudget,
+        monthlyTotal: monthlyTotal,
+        monthly: user.monthlyBudget
     };
 }
 
@@ -1213,4 +1286,5 @@ module.exports = {
     todaysReports,
     getUserProfile,
     updateSlip,
+    setUserSpecificBudgets,
 }
