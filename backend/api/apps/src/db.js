@@ -436,9 +436,17 @@ async function updateItem(itemId, dataA, dataB) {
     };
 }
 async function updateSlips(slipId, editLocation, editTotal, editDate) {
-  
-  
-  }
+    const updateSlip = await prisma.slip.update({
+        where: {
+            id: slipId
+        },
+        data: {
+            location: editLocation,
+            total: editTotal,
+            transactionDate: editDate
+        },
+    })
+}
 /**
  * Funtion to get the user budgets from the database
  * @param {*} userId The users id
