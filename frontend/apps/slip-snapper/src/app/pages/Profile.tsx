@@ -52,7 +52,7 @@ const Profile: React.FC = () => {
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
-  const [profile, setProfile] = useState({favouriteStore:{name:""}});
+  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]}});
   let weeklyBudget: number, monthlyBudget: number
   return(
     <IonPage>
@@ -154,18 +154,13 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>28 May 2022: R110.99</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>23 May 2022: R99.49</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>22 May 2022: R139.49</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>20 May 2022: R350.99</IonText>
-              </IonItem>
+              {profile.favouriteStore.receipts.map((item: any, index: number) => {
+                return(
+                  <IonItem key={index} className="center-items" color="tertiary">
+                    <IonText>Receipt #{item.id}: R{item.total}</IonText>
+                  </IonItem>
+                )
+              })}
             </IonCardHeader>
 
             

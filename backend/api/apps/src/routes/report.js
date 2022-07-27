@@ -198,8 +198,7 @@ router.get('/profile', async (req,res)=>{
             monthly: result.budget.monthly,
             favouriteStore: {
                 name: result.storeDetails.storeLocation,
-                total: result.storeDetails.total,
-                items: []
+                receipts: result.storeDetails.slips,
             },
             otherBudgets: result.budgets,
         });
