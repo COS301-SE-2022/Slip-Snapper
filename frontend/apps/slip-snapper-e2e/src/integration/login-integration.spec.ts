@@ -9,6 +9,27 @@ describe('Logging in', () => {
       },
       { fixture: '../fixtures/RecentReports.json' }
     );
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/report/thisweek*',
+      },
+      { fixture: '../fixtures/RecentReports.json' }
+    );
+   cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/report/today*',
+      },
+      { fixture: '../fixtures/TodayHomePage.json' }
+    );
+  });
+
+  it('base url leads to login', () => {
+    cy.url().should('eq', 'http://localhost:4200/login');
+  });
+  it('logs in with the correct email and password', () => {
     cy.intercept(
       {
         method: 'POST',
@@ -17,12 +38,6 @@ describe('Logging in', () => {
       },
       { fixture: '../fixtures/Login.json' }
     );
-  });
-
-  it('base url leads to login', () => {
-    cy.url().should('eq', 'http://localhost:4200/login');
-  });
-  it('logs in with the correct email and password', () => {
     cy.get('input[ title="usernameInput"]').type('Regan');
     cy.get('input[title="passwordInput"]').type('Password123');
     cy.get('ion-button[type="submit"]').click();
@@ -38,9 +53,11 @@ describe('Logging in', () => {
       },
       { fixture: '../fixtures/InvalidLogin.json' }
     );
+    
     cy.get('input[ title="usernameInput"]').type('NotRegan');
     cy.get('input[title="passwordInput"]').type('Password123');
     cy.get('ion-button[type="submit"]').click();
     cy.url().should('eq', 'http://localhost:4200/login');
+    cy.get('.alert-head').should('be.visible')
   });
 });
