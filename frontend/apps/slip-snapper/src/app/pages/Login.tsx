@@ -1,4 +1,4 @@
-import { IonAlert, IonButton, IonCard, IonInput, IonItem, IonLabel, IonPage } from '@ionic/react';
+import { IonAlert, IonButton, IonCard, IonInput, IonItem, IonLabel } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/login.css';
 import { loginA } from "../../api/apiCall"
@@ -11,7 +11,7 @@ const Login: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   return (
-    <IonPage>
+    <div>
 
       <div className="header">
 
@@ -71,10 +71,11 @@ const Login: React.FC = () => {
 
       </div>
       <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
-      <div className="content flexbox">
+      <div className='footer'>
+          COPYRIGHT © UNIVERSITY OF PRETORIA 2022. ALL RIGHTS RESERVED.
       </div>
 
-    </IonPage>
+    </div>
   );
 
   function login() {

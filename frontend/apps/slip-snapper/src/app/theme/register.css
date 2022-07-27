@@ -2,7 +2,7 @@
 
 /* Components */
 .registerCard {
-    width: 90%;
+    width: 60%;
     margin-top: 3.5%;
 }
 
@@ -22,7 +22,7 @@
 .LRButtons {
     margin: auto;
     padding: 8px;
-    width: 20%;
+    width: auto;
     font-size: 16px;
 }
 
@@ -64,7 +64,7 @@ p {
 }
 
 .inner-header {
-    height: 65vh;
+    height: 80vh;
     width: 100%;
     margin: 0;
     padding: 0;
@@ -80,26 +80,28 @@ p {
 .motionwaves {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 20vh;
     margin-bottom: -7px;
     min-height: 100px;
     max-height: 150px;
 }
-
-/* .motionwaves {
-    position: relative;
-    width: 100%;
-    height: 15vh;
-    margin-bottom: -7px;
-    min-height: 100px;
-    max-height: 150px;
-} */
 
 .content {
     position: relative;
     height: 20vh;
     text-align: center;
     background-color: #ebebeb;
+}
+
+.footer {
+    background-color: #ebebeb;
+    padding-top: 5vh;
+    color: black;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: small;
 }
 
 
@@ -143,6 +145,10 @@ p {
 /* Mobile */
 
 @media (max-width: 768px) {
+    .registerCard {
+        width: 90%;
+    }
+
     .motionwaves {
         height: 40px;
         min-height: 40px;

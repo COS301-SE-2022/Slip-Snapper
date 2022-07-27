@@ -18,7 +18,7 @@ const EditReciept: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <IonTitle>Add Entries</IonTitle>
+                    <IonTitle>Edit Reciept</IonTitle>
                     <IonButtons slot="end">
                         <NavButtons />
                     </IonButtons>
@@ -248,6 +248,7 @@ const EditReciept: React.FC = () => {
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
+            window.location.reload()
         }
 
     }

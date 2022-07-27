@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons } from '@ionic/react';
 import React from 'react';
 import { NavButtons } from '../components/NavButtons';
-import FetchData from '../components/FetchData';
+import SlipItems from '../components/SlipItems';
 
 const EditItem: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const EditItem: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <FetchData/>
+        <SlipItems />
       </IonContent>
     </IonPage>
   );
