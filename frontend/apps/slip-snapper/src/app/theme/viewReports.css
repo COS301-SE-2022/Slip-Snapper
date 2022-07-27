@@ -2,9 +2,17 @@
     max-width: 33%;
 }
 
+.all-reports{
+    max-width: 50%;
+}
+
 @media only screen and (max-width: 830px) {
     .item-col {
         min-width: 50%;
+    }
+
+    .all-reports{
+        max-width: 100%;
     }
 }
 
