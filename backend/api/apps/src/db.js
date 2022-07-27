@@ -1144,6 +1144,7 @@ async function todaysReports(userid) {
     })
 
     return {
+        message: "Today's Stats retrieved",
         sum,
         todaystotal
     }

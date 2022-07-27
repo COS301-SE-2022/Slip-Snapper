@@ -46,7 +46,7 @@ const Home: React.FC = () => {
     getTodayStats(user.id)
       .then(apiResponse => {
         setTodayItem(apiResponse.data.totalItems)
-        setTodayTotal(apiResponse.data.totalSpent._sum.total)
+        setTodayTotal(apiResponse.data.totalSpent)
       });
 
 

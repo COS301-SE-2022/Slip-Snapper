@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonCard, IonCol, IonItem, IonRow } from '@ionic/react';
+import { IonTitle, IonButton, IonCard, IonCol, IonItem, IonRow } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { getAllSlips } from '../../api/apiCall';
 import '../theme/FetchData.css';
