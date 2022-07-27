@@ -226,9 +226,9 @@ router.post('/budget', async (req,res)=>{
 
     return res.status(status)
         .send({
-            // message: result.message,
-            // weekly: result.weekly,
-            // monthly: result.monthly
+            message: result.message,
+            weekly: result.weekly,
+            monthly: result.monthly
         });
 });
 
