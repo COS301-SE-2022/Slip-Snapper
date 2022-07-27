@@ -340,6 +340,28 @@ async function addItem(userid, location, date, total, data) {
     };
 }
 
+async function insertAllItems(slipId,insertItems){
+    let additions = []
+
+    //TODO check if data item has change
+    for(const item of insertItems){
+        additions.push({
+            slipId: slipId,
+            itemPrice: parseFloat(item.itemPrice),
+            itemQuantity: item.itemQuantity,
+            dataId: item.data.id
+        })
+    }
+
+    const items = await prisma.item.createMany({
+        data: additions
+    });
+
+    return {
+        message: "All items added"
+    }
+}
+
 /**
  * Funtion to delete the item from the database
  * @param {*} itemId The item id
@@ -364,29 +386,26 @@ async function deleteItem(itemId) {
  * @returns 
  */
 async function deleteManyItems(itemIdArray) {
-    const check = await prisma.item.findMany({
-        where: {
-            id: {
-                in: itemIdArray
+    try{
+        const item = await prisma.item.deleteMany({
+            where: {
+                id: {
+                    in: itemIdArray
+                }
             }
-        }
-    })
-    if (check.at(0) == null) {
+        });
         return {
-            message: "The item does not exist"
-        }
+            message: "Items have been deleted",
+            itemIdArray: item
+        };
     }
-    const item = await prisma.item.deleteMany({
-        where: {
-            id: {
-                in: itemIdArray
-            }
-        }
-    });
-    return {
-        message: "Items have been deleted",
-        itemIdArray: item
-    };
+    catch(error){
+        return {
+            message: error,
+            itemIdArray: []
+        };
+    }
+    
 }
 
 /**
@@ -436,11 +455,64 @@ async function updateItem(itemId, dataA, dataB) {
     };
 }
 
-async function updateSlip(slipId){
-    //TODO
+//TODO improve this function
+async function updateAllItems(updateItems){
+    for(const item of updateItems){
+        if(item.id !== undefined){
+            let dataA = {}
+            let dataB = {}
+
+            dataA.itemPrice = parseFloat(item.itemPrice);
+            dataA.itemQuantity = item.itemQuantity;
+
+            dataB.item = item.data.item;
+            dataB.itemType = item.data.itemType;
+
+            await updateItem(item.id, dataA, dataB)
+        }
+    }
 
     return {
-        message: "Slip updated Successfully"
+        message: "All items updated"
+    }
+}
+
+/**
+ * Function to update the slip and all relevant items
+ */
+async function updateSlip(userId,slipData,insertItems,updateItems,removeItems){
+    const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
+    const update = await updateAllItems(updateItems)
+    const remove = await deleteManyItems(removeItems)
+    const insert = await insertAllItems(slipData[5],insertItems)
+
+    return {
+        message: slip.message
+    }
+}
+
+/**
+ * Function to update the slip in the database
+ * @param {*} slipId the slip id
+ * @param {*} editLocation the new location
+ * @param {*} editTotal the new total
+ * @param {*} editDate the new date
+ * @returns a success message
+ */
+async function updateSlips(slipId, editLocation, editTotal, editDate) {
+    const updateSlip = await prisma.slip.update({
+        where: {
+            id: slipId
+        },
+        data: {
+            location: editLocation,
+            total: editTotal,
+            // transactionDate: editDate
+        },
+    })
+
+    return {
+        message: "Slip succussfully updated"
     }
 }
 

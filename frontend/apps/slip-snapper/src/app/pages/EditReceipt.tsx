@@ -219,15 +219,11 @@ const EditReciept: React.FC = () => {
 
         const insertItems: unknown[] = []
         for (const item of editRecieptItems){
-            let flag = false
-            for(const ins of originalItems){
-                if(item.id === ins.id){
-                    flag = true
-                }
-            }
-            if(!flag){
+            
+            if(item.id === undefined){
                 insertItems.push(item)
             }
+
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
