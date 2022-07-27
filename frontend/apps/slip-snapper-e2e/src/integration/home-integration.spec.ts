@@ -45,7 +45,6 @@ describe('Home page integration', () => {
   });
 
   it('Should have Scan Slip button', () => {
-    cy.url().should('eq', 'http://localhost:4200/home');
     cy.get('.takePicture > .ion-color > .md').should('be.visible');
   });
 
