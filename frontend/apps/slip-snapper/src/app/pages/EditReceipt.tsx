@@ -9,10 +9,11 @@ const EditReciept: React.FC = () => {
     
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editRecieptItems, setEditRecieptItems] = useState(slipContents.items);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMes] = useState("");
     const originalItems = slipContents.items
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMes] = useState("");
+    
     return (
         <IonPage>
             <IonHeader>
@@ -199,38 +200,35 @@ const EditReciept: React.FC = () => {
 
             }
         }
-        console.log(originalItems)
-        console.log(editRecieptItems)
+
         const updateItems = editRecieptItems;
 
         const removeItems: unknown[] = []
         
         for (const rem of originalItems){
             let flag = false
-            console.log(rem)
             for(const item of editRecieptItems){
-                console.log(item)
                 if(item.id === rem.id){
                     flag = true
                 }
             }
             if(!flag){
-                removeItems.push(rem)
+                removeItems.push(rem.id)
             }
         }
-        const insertItems = {}
-        // const insertItems: unknown[] = []
-        // for (const item of editRecieptItems){
-        //     let flag = false
-        //     for(const ins of originalItems){
-        //         if(item.id === ins.id){
-        //             flag = true
-        //         }
-        //     }
-        //     if(!flag){
-        //         insertItems.push(item)
-        //     }
-        // }
+
+        const insertItems: unknown[] = []
+        for (const item of editRecieptItems){
+            let flag = false
+            for(const ins of originalItems){
+                if(item.id === ins.id){
+                    flag = true
+                }
+            }
+            if(!flag){
+                insertItems.push(item)
+            }
+        }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
@@ -241,7 +239,7 @@ const EditReciept: React.FC = () => {
              total = parseFloat(temp)
         }
         const data = {
-            text: [date, storeName, "", "", total]
+            text: [date, storeName, "", "", total, slipContents.id]
         };
 
         let user = JSON.parse(localStorage.getItem('user')!)
@@ -249,7 +247,7 @@ const EditReciept: React.FC = () => {
             user = {id: 24}
         }
         updateSlipA(user.id, data, insertItems, updateItems, removeItems)
-    
+        setEditRecieptItems([{ data: { id: editRecieptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
         // localStorage.removeItem('editSlip')
         const button = document.getElementById("cancelButton")
         if (button) {

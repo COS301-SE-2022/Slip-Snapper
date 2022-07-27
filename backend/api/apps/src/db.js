@@ -436,6 +436,14 @@ async function updateItem(itemId, dataA, dataB) {
     };
 }
 
+async function updateSlip(slipId){
+    //TODO
+
+    return {
+        message: "Slip updated Successfully"
+    }
+}
+
 /**
  * Funtion to get the user budgets from the database
  * @param {*} userId The users id
@@ -1077,7 +1085,6 @@ async function todaysReports(userid) {
     }
 }
 
-
 async function getUserProfile(userId) {
     let store = await getFavouriteStore(userId);
     let budget = await getUserBudgets(userId);
@@ -1175,4 +1182,5 @@ module.exports = {
     retrieveAllSlips,
     todaysReports,
     getUserProfile,
+    updateSlip,
 }
