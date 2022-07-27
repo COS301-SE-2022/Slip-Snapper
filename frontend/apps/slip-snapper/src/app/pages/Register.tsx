@@ -14,7 +14,7 @@ const Register: React.FC = () => {
 
  
   return (
-    <IonPage>
+    <div>
       <div className="header">
         <div className="inner-header flexbox">
           <IonCard color="tertiary" class="registerCard">
@@ -143,8 +143,10 @@ const Register: React.FC = () => {
         </div>
       </div>
 
-      <div className="content flexbox"></div>
-    </IonPage>
+      <div className='footer'>
+          COPYRIGHT © UNIVERSITY OF PRETORIA 2022. ALL RIGHTS RESERVED.
+      </div>
+    </div>
   );
 
   function register() {

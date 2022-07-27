@@ -10,7 +10,6 @@ import Login from '../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
 //ReportTotal Imports
-import ReportTotal from '../components/ReportTotal';
 import { mockTotals } from '../pages/ViewReports'
 import { UserStats } from '../components/UserStats';
 import AddEntry from '../pages/AddEntry';
@@ -141,11 +140,6 @@ describe('Profile', () => {
     const logout = await Component.findByText('Logout');
     fireEvent.click(logout);
   });
-
-  jest.mock('../pages/Profile', () => ({withinWeeklyBudget: "test"}));
-
-  jest.mock('../pages/Profile', () => ({withinMonthlyBudget: "test"}))
-
 
 });
 
