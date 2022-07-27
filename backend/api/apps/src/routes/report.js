@@ -180,22 +180,26 @@ router.delete('/pdf', async (req,res)=>{
  * Get the users budget
  * Uses the user id to get the items
  */
-router.get('/budget', async (req,res)=>{
+router.get('/profile', async (req,res)=>{
     let { userId } = req.query;
 
-    const result = await req.app.get('db').getUserBudgets(Number(userId));
+    const result = await req.app.get('db').getUserProfile(Number(userId));
 
     let status = 200;
-
     //TODO error checking
 
     return res.status(status)
         .send({
             message: result.message,
-            weeklyTotal: result.weeklyTotal,
-            weekly: result.weekly,
-            monthlyTotal: result.monthlyTotal,
-            monthly: result.monthly
+            weeklyTotal: result.budget.weeklyTotal,
+            weekly: result.budget.weekly,
+            monthlyTotal: result.budget.monthlyTotal,
+            monthly: result.budget.monthly,
+            favouriteStore: {
+                name: result.storeDetails.storeLocation,
+                receipts: result.storeDetails.slips,
+            },
+            otherBudgets: result.budgets,
         });
     
 });
@@ -229,6 +233,27 @@ router.post('/budget', async (req,res)=>{
 });
 
 /**
+ * Set the users budget
+ * Uses the user id to get the items
+ */
+ router.post('/otherBudgets', async (req,res)=>{
+    let { userId, budgets } = req.body;
+
+    let data = {}
+
+    const result = await req.app.get('db').setUserBudgets(userId, data);
+
+    let status = 200;
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            weekly: result.weekly,
+            monthly: result.monthly
+        });
+});
+
+/**
  * Get the user statistics
  * Uses the user Id
  */
@@ -237,15 +262,11 @@ router.get('/statistics', async (req,res)=>{
 
     const result = await req.app.get('db').getUserStats( Number(userId) );
     let status = 200;
-    
+
     return res.status(status)
         .send({
             message : result.message,
-            favouriteStore: {
-                name: result.storeDetails.storeLocation,
-                total: result.storeDetails.total,
-                items: []
-            },
+
             category: {
                 amount: result.category.amount,
                 name: result.category.category

@@ -340,6 +340,28 @@ async function addItem(userid, location, date, total, data) {
     };
 }
 
+async function insertAllItems(slipId,insertItems){
+    let additions = []
+
+    //TODO check if data item has change
+    for(const item of insertItems){
+        additions.push({
+            slipId: slipId,
+            itemPrice: parseFloat(item.itemPrice),
+            itemQuantity: item.itemQuantity,
+            dataId: item.data.id
+        })
+    }
+
+    const items = await prisma.item.createMany({
+        data: additions
+    });
+
+    return {
+        message: "All items added"
+    }
+}
+
 /**
  * Funtion to delete the item from the database
  * @param {*} itemId The item id
@@ -364,29 +386,26 @@ async function deleteItem(itemId) {
  * @returns 
  */
 async function deleteManyItems(itemIdArray) {
-    const check = await prisma.item.findMany({
-        where: {
-            id: {
-                in: itemIdArray
+    try{
+        const item = await prisma.item.deleteMany({
+            where: {
+                id: {
+                    in: itemIdArray
+                }
             }
-        }
-    })
-    if (check.at(0) == null) {
+        });
         return {
-            message: "The item does not exist"
-        }
+            message: "Items have been deleted",
+            itemIdArray: item
+        };
     }
-    const item = await prisma.item.deleteMany({
-        where: {
-            id: {
-                in: itemIdArray
-            }
-        }
-    });
-    return {
-        message: "Items have been deleted",
-        itemIdArray: item
-    };
+    catch(error){
+        return {
+            message: error,
+            itemIdArray: []
+        };
+    }
+    
 }
 
 /**
@@ -435,6 +454,43 @@ async function updateItem(itemId, dataA, dataB) {
         item: item
     };
 }
+
+//TODO improve this function
+async function updateAllItems(updateItems){
+    for(const item of updateItems){
+        if(item.id !== undefined){
+            let dataA = {}
+            let dataB = {}
+
+            dataA.itemPrice = parseFloat(item.itemPrice);
+            dataA.itemQuantity = item.itemQuantity;
+
+            dataB.item = item.data.item;
+            dataB.itemType = item.data.itemType;
+
+            await updateItem(item.id, dataA, dataB)
+        }
+    }
+
+    return {
+        message: "All items updated"
+    }
+}
+
+/**
+ * Function to update the slip and all relevant items
+ */
+async function updateSlip(userId,slipData,insertItems,updateItems,removeItems){
+    const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
+    const update = await updateAllItems(updateItems)
+    const remove = await deleteManyItems(removeItems)
+    const insert = await insertAllItems(slipData[5],insertItems)
+
+    return {
+        message: slip.message
+    }
+}
+
 /**
  * Function to update the slip in the database
  * @param {*} slipId the slip id
@@ -451,13 +507,15 @@ async function updateSlips(slipId, editLocation, editTotal, editDate) {
         data: {
             location: editLocation,
             total: editTotal,
-            transactionDate: editDate
+            // transactionDate: editDate
         },
     })
+
     return {
         message: "Slip succussfully updated"
     }
 }
+
 /**
  * Funtion to get the user budgets from the database
  * @param {*} userId The users id
@@ -672,28 +730,20 @@ async function getFavouriteStore(userid) {
     })
 
     let storeLocation = ""
-    for (var store of favouritestore) {
+    for (const store of favouritestore) {
         storeLocation = store.location
     }
 
-    const amountSpent = await prisma.slip.findMany({
+    const slips = await prisma.slip.findMany({
         where: {
             usersId: userid,
             location: storeLocation
-        },
-        select: {
-            total: true
         }
     })
 
-    let total = 0;
-    for (var amount of amountSpent) {
-        total += amount.total;
-    }
-
     return {
         storeLocation,
-        total
+        slips
     }
 }
 
@@ -1099,6 +1149,47 @@ async function todaysReports(userid) {
     }
 }
 
+async function getUserProfile(userId) {
+    let store = await getFavouriteStore(userId);
+    let budget = await getUserBudgets(userId);
+    let budgets = await getUserGeneralBudgets(userId);
+
+    return {
+        message: "User profile statistics retrieved",
+        storeDetails: store,
+        budget: budget,
+        budgets: budgets
+    };
+}
+
+async function getUserGeneralBudgets(userId, start, end) {
+    const budgets = await prisma.budgets.findFirst({
+        where: {
+            usersId: userId
+        }
+    })
+
+    if(budgets === null){
+        let budget = await prisma.budgets.create({
+            data: {
+                usersId: userId
+            }
+        })
+
+        return {
+            message: "User budgets retrieved",
+            budgets: budget
+        };
+    }
+
+    // TODO check if budgets has been exceded
+
+    return {
+        message: "User budgets retrieved",
+        budgets
+    };
+}
+
 module.exports = {
     getUser,
     addUser,
@@ -1119,5 +1210,7 @@ module.exports = {
     deleteReportRecord,
     createReportRecord,
     retrieveAllSlips,
-    todaysReports
+    todaysReports,
+    getUserProfile,
+    updateSlip,
 }

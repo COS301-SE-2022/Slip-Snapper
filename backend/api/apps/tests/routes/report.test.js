@@ -7,7 +7,7 @@ const setUserBudgets = jest.fn();
 const getUserStats = jest.fn();
 const getAllReports = jest.fn();
 const getRecentReports = jest.fn();
-
+const getUserProfile = jest.fn();
 
 const app = makeApp({
   getItemsReport,
@@ -15,7 +15,8 @@ const app = makeApp({
   setUserBudgets,
   getUserStats,
   getAllReports,
-  getRecentReports
+  getRecentReports,
+  getUserProfile,
 })
 
 /**
@@ -78,13 +79,13 @@ describe('createPDF', ()=>{
 /**
  * Test for the get budget
  */
-describe('Get /report/budget', ()=>{
+describe('Get /report/profile', ()=>{
 
     beforeEach(()=>{
-        getUserBudgets.mockReset();
+        getUserProfile.mockReset();
     })
 
-    test('Should Generate a report for the user', async ()=>{
+    test('Should get the user profile', async ()=>{
         const userId = [
             1,
             2,
@@ -92,51 +93,120 @@ describe('Get /report/budget', ()=>{
         ]
 
         for(const id of userId){
-            getUserBudgets.mockReset()
-            getUserBudgets.mockResolvedValue({
-                message: "User budget retrieved",
-                weeklyTotal: 1,
-                weekly: 2,
-                monthlyTotal: 3,
-                monthly: 4
+            getUserProfile.mockReset()
+            getUserProfile.mockResolvedValue({
+                message: "User profile statistics retrieved",
+                storeDetails: { 
+                    storeLocation: 'store', 
+                    slips: [ {} ] },
+                budget:{
+                    message: 'User budget retrieved',
+                    weeklyTotal: 1,
+                    weekly: 2,
+                    monthlyTotal: 3,
+                    monthly: 4
+                },
+                budgets:{
+                    message: 'User budgets retrieved',
+                    budgets: {
+                        id: 1,
+                        usersId: 1,
+                        weeklyFoodBudget: 0,
+                        weeklyFashionBudget: 0,
+                        weeklyElectronicsBudget: 0,
+                        weeklyHouseholdBudget: 0,
+                        weeklyOtherBudget: 0,
+                        monthlyFoodBudget: 0,
+                        monthlyFashionBudget: 0,
+                        monthlyElectronicsBudget: 0,
+                        monthlyHouseholdBudget: 0,
+                        monthlyOtherBudget: 0
+                    }
+                }
             });
         
             const res = await request(app)
-                .get('/api/report/budget?userId='+id)
+                .get('/api/report/profile?userId='+id)
             
-            expect(getUserBudgets.mock.calls.length).toBe(1);
-            expect(getUserBudgets.mock.calls[0][0]).toBe(id);
+            expect(getUserProfile.mock.calls.length).toBe(1);
+            expect(getUserProfile.mock.calls[0][0]).toBe(id);
         }
 
         
     })
 
     test('Should return a json object with the message', async ()=>{
-        getUserBudgets.mockResolvedValue({
-            message: "User budget retrieved",
-            weeklyTotal: 1,
-            weekly: 2,
-            monthlyTotal: 3,
-            monthly: 4
+        getUserProfile.mockResolvedValue({
+            message: "User profile statistics retrieved",
+            storeDetails: { 
+                storeLocation: 'store', 
+                slips: [ {} ] },
+            budget:{
+                message: 'User budget retrieved',
+                weeklyTotal: 1,
+                weekly: 2,
+                monthlyTotal: 3,
+                monthly: 4
+            },
+            budgets:{
+                message: 'User budgets retrieved',
+                budgets: {
+                    id: 1,
+                    usersId: 1,
+                    weeklyFoodBudget: 0,
+                    weeklyFashionBudget: 0,
+                    weeklyElectronicsBudget: 0,
+                    weeklyHouseholdBudget: 0,
+                    weeklyOtherBudget: 0,
+                    monthlyFoodBudget: 0,
+                    monthlyFashionBudget: 0,
+                    monthlyElectronicsBudget: 0,
+                    monthlyHouseholdBudget: 0,
+                    monthlyOtherBudget: 0
+                }
+            }
         });
 
         const res = await request(app)
-            .get('/api/report/budget?userId=1')
+            .get('/api/report/profile?userId=1')
         
-        expect(res.body.message).toEqual("User budget retrieved");
+        expect(res.body.message).toEqual("User profile statistics retrieved");
     })
 
     test('Should return a status code of 200', async ()=>{
-        getUserBudgets.mockResolvedValue({
-            message: "User budget retrieved",
-            weeklyTotal: 1,
-            weekly: 2,
-            monthlyTotal: 3,
-            monthly: 4
+        getUserProfile.mockResolvedValue({
+            message: "User profile statistics retrieved",
+            storeDetails: { 
+                storeLocation: 'store', 
+                slips: [ {} ] },
+            budget:{
+                message: 'User budget retrieved',
+                weeklyTotal: 1,
+                weekly: 2,
+                monthlyTotal: 3,
+                monthly: 4
+            },
+            budgets:{
+                message: 'User budgets retrieved',
+                budgets: {
+                    id: 1,
+                    usersId: 1,
+                    weeklyFoodBudget: 0,
+                    weeklyFashionBudget: 0,
+                    weeklyElectronicsBudget: 0,
+                    weeklyHouseholdBudget: 0,
+                    weeklyOtherBudget: 0,
+                    monthlyFoodBudget: 0,
+                    monthlyFashionBudget: 0,
+                    monthlyElectronicsBudget: 0,
+                    monthlyHouseholdBudget: 0,
+                    monthlyOtherBudget: 0
+                }
+            }
         });
 
         const res = await request(app)
-            .get('/api/report/budget?userId=1')
+            .get('/api/report/profile?userId=1')
         
         expect(res.statusCode).toEqual(200);
     })

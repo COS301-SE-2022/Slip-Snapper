@@ -20,7 +20,7 @@ import { NavButtons } from '../components/NavButtons';
 import { EditBudgets } from '../components/EditBudgets';
 import '../theme/profile.css';
 import '../theme/toasts.css';
-import { setBudgetA, getBudgetA} from "../../api/apiCall"
+import { setBudgetA, getProfileData } from "../../api/apiCall"
 import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
@@ -38,19 +38,22 @@ const Profile: React.FC = () => {
     if(user==null){
         user = {id: 24}
     }
-    getBudgetA(user.id)
+    getProfileData(user.id)
       .then(
         apiResponse => {
+          console.log(apiResponse.data)
           val.weekly = apiResponse.data.weekly;
           val.monthly = apiResponse.data.monthly;
           totalWeeklySpent = apiResponse.data.weeklyTotal;
           totalMonthlySpent = apiResponse.data.monthlyTotal;
           setWeeklyBudget(val.weekly)
           setMonthlyBudget(val.monthly)
+          setProfile(apiResponse.data)
         })
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
+  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]},weeklyTotal:0, monthlyTotal:0});
   let weeklyBudget: number, monthlyBudget: number
   return(
     <IonPage>
@@ -168,7 +171,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Most Frequent Store</IonCardTitle>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText data-testid='favoriteStore'></IonText>
+                <IonText data-testid='favoriteStore'>{profile.favouriteStore.name}</IonText>
               </IonItem>
             </IonCardHeader>
 
@@ -176,18 +179,13 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>28 May 2022: R110.99</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>23 May 2022: R99.49</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>22 May 2022: R139.49</IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>20 May 2022: R350.99</IonText>
-              </IonItem>
+              {profile.favouriteStore.receipts.map((item: any, index: number) => {
+                return(
+                  <IonItem key={index} className="center-items" color="tertiary">
+                    <IonText>Receipt #{item.id}: R{item.total}</IonText>
+                  </IonItem>
+                )
+              })}
             </IonCardHeader>
 
             
@@ -242,6 +240,8 @@ const Profile: React.FC = () => {
   }
 
   function isExceeded() {
+    totalWeeklySpent = profile.weeklyTotal;
+    totalMonthlySpent = profile.monthlyTotal;
     const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
     const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
 
