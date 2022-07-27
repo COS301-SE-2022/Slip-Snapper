@@ -3,5 +3,10 @@
     "weeklyTotal": 600,
     "weekly": 800,
     "monthlyTotal": 500,
-    "monthly": 900
+    "monthly": 900,
+    "favouriteStore": {
+        "name": "Mcdonalds",
+        "receipts": []
+    },
+    "otherBudgets": {}
 }
