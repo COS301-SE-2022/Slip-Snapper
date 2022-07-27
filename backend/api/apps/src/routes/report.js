@@ -212,11 +212,11 @@ router.post('/budget', async (req,res)=>{
     let { userId, weekly, monthly } = req.body;
 
     let data = {}
-    if(weekly != null){
+    if(weekly != ""){
         data.weeklyBudget = weekly
     }
 
-    if(monthly != null){
+    if(monthly != ""){
         data.monthlyBudget = monthly
     }
 

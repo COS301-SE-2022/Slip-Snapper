@@ -12,7 +12,6 @@ import {
   IonItem,
   IonAlert,
   IonProgressBar,
-  IonList,
   IonIcon,
   IonText,
 } from '@ionic/react';
@@ -28,7 +27,8 @@ import { create } from 'ionicons/icons';
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
-  const [budgetAlert, setBudgetAlert] = useState(false);
+  const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
+  const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
   const val = { weekly: 0, monthly: 0 };
 
   let totalWeeklySpent = 300;
@@ -90,43 +90,67 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
               <IonItem id="weekly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setBudgetAlert(true)}/>
+                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)}/>
                 <IonText>Weekly: R{weeklyBudgetValue}</IonText>
                 <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
               <IonItem id="monthly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setBudgetAlert(true)}/>
+                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)}/>
                 <IonText>Monthly: R{monthlyBudgetValue}</IonText>
                 <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
             </IonCardHeader>
+
+            {/* Weekly Budget */}
             <IonAlert
-              isOpen={budgetAlert}
-              data-testid="budget-alert"
-              onDidDismiss={() => setBudgetAlert(false)}
+              isOpen={weeklyBudgetAlert}
+              data-testid="weekly-budget-alert"
+              onDidDismiss={() => setWeeklyBudgetAlert(false)}
               header={'Change Budget'}
               inputs={[
                 {
                   name: 'weeklyBudget',
                   type: 'text',
                   placeholder: 'Insert Weekly Budget'
-                },
-                {
-                  id: "monthlyBudget",
-                  name: 'monthlyBudget',
-                  type: 'text',
-                  placeholder: 'Insert Monthly Budget'
-                },]}
+                }]}
 
               buttons={[
                 {
                   text: 'Cancel'
                 },
                 {
-                  role: 'applyBudget',
+                  role: 'applyWeeklyBudget',
                   text: 'Apply',
                   handler: (alertData) => {
-                    applyToBudget(alertData.weeklyBudget, alertData.monthlyBudget);
+                    applyToBudget(alertData.weeklyBudget, "");
+                    isExceeded()
+                  }
+                }
+              ]}></IonAlert>
+              
+              {/* Monthly Budget */}
+              <IonAlert
+              isOpen={monthlyBudgetAlert}
+              data-testid="monthly-budget-alert"
+              onDidDismiss={() => setMonthlyBudgetAlert(false)}
+              header={'Change Budget'}
+              inputs={[
+                {
+                  id: "monthlyBudget",
+                  name: 'monthlyBudget',
+                  type: 'text',
+                  placeholder: 'Insert Monthly Budget'
+                }]}
+
+              buttons={[
+                {
+                  text: 'Cancel'
+                },
+                {
+                  role: 'applyMonthlyBudget',
+                  text: 'Apply',
+                  handler: (alertData) => {
+                    applyToBudget(alertData.monthlyBudget, "");
                     isExceeded()
                   }
                 }
@@ -190,23 +214,6 @@ const Profile: React.FC = () => {
             },
           ]}
         />
-
-        {/* <IonAlert
-          id="logout-alert"
-          isOpen={logoutAlert}
-          onDidDismiss={() => setLogoutAlert(false)}
-          header={'Are you sure you want to logout?'}
-          buttons={[
-            'Cancel',
-            {
-              text: 'Logout',
-              cssClass: 'toasts',
-              handler: () => {
-                Logout();
-              }
-            },
-          ]}
-        /> */}
       </IonContent>
     </IonPage>
   );
