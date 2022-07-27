@@ -186,7 +186,6 @@ router.get('/profile', async (req,res)=>{
     const result = await req.app.get('db').getUserProfile(Number(userId));
 
     let status = 200;
-
     //TODO error checking
 
     return res.status(status)
