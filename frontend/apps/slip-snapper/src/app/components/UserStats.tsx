@@ -90,7 +90,7 @@ export const UserStats = () => {
                         <IonCardTitle>Most Expensive Recent Purchase</IonCardTitle>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='storeName'>Store: {userStats.mostExpensive.name}</IonText>
+                        <IonText data-testid='storeName'>Item: {userStats.mostExpensive.name}</IonText>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
                         <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount}</IonText>
