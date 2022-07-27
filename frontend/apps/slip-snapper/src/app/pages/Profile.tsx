@@ -41,6 +41,7 @@ const Profile: React.FC = () => {
     getProfileData(user.id)
       .then(
         apiResponse => {
+          console.log(apiResponse.data)
           val.weekly = apiResponse.data.weekly;
           val.monthly = apiResponse.data.monthly;
           totalWeeklySpent = apiResponse.data.weeklyTotal;
@@ -52,7 +53,7 @@ const Profile: React.FC = () => {
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
-  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]}});
+  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]},weeklyTotal:0, monthlyTotal:0});
   let weeklyBudget: number, monthlyBudget: number
   return(
     <IonPage>
@@ -232,6 +233,8 @@ const Profile: React.FC = () => {
   }
 
   function isExceeded() {
+    totalWeeklySpent = profile.weeklyTotal;
+    totalMonthlySpent = profile.monthlyTotal;
     const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
     const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
 

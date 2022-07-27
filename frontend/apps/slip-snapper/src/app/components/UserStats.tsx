@@ -35,6 +35,7 @@ export const UserStats = () => {
         getStatsA(user.id)
             .then(
                 apiResponse => {
+                    console.log(apiResponse.data)
                     setUserStats(apiResponse.data)
                 })
     }, []);
