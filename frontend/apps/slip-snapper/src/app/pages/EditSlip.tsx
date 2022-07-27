@@ -17,7 +17,7 @@ const EditSlip: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <IonTitle>Add Entries</IonTitle>
+                    <IonTitle>Edit Slip</IonTitle>
                     <IonButtons slot="end">
                         <NavButtons />
                     </IonButtons>
@@ -208,6 +208,7 @@ const EditSlip: React.FC = () => {
         const button = document.getElementById("successRedirect")
         if (button) {
             button.click();
+            window.location.reload()
         }
 
     }
