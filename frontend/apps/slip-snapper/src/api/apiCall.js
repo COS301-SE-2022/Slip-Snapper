@@ -4,7 +4,7 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-const baseUrl = 'http://localhost:55555/api/'
+const baseUrl = 'http://localhost:3000/api/'
 
 /**
  * To process the text extracted by OCR
@@ -183,7 +183,7 @@ export async function getThisWeeksReports(userId) {
     })
 }
 
-export async function updateSlipA( userId, updateSlip, updateItems, removeItems){
+export async function updateSlipA( userId, updateSlip, insertItems,updateItems, removeItems){
     return axios({
         headers: headers,
         method: 'post',
@@ -191,6 +191,7 @@ export async function updateSlipA( userId, updateSlip, updateItems, removeItems)
         data: JSON.stringify({
             userId: userId,
             updateSlip: updateSlip,
+            insertItems: insertItems,
             updateItems: updateItems, 
             removeItems: removeItems
         })

@@ -199,15 +199,17 @@ const EditReciept: React.FC = () => {
 
             }
         }
-
+        console.log(originalItems)
+        console.log(editRecieptItems)
         const updateItems = editRecieptItems;
 
         const removeItems: unknown[] = []
-
+        
         for (const rem of originalItems){
-            console.log(rem)
             let flag = false
+            console.log(rem)
             for(const item of editRecieptItems){
+                console.log(item)
                 if(item.id === rem.id){
                     flag = true
                 }
@@ -216,6 +218,19 @@ const EditReciept: React.FC = () => {
                 removeItems.push(rem)
             }
         }
+        const insertItems = {}
+        // const insertItems: unknown[] = []
+        // for (const item of editRecieptItems){
+        //     let flag = false
+        //     for(const ins of originalItems){
+        //         if(item.id === ins.id){
+        //             flag = true
+        //         }
+        //     }
+        //     if(!flag){
+        //         insertItems.push(item)
+        //     }
+        // }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
@@ -233,7 +248,7 @@ const EditReciept: React.FC = () => {
         if(user==null){
             user = {id: 24}
         }
-        updateSlipA(user.id, data, updateItems, removeItems)
+        updateSlipA(user.id, data, insertItems, updateItems, removeItems)
     
         // localStorage.removeItem('editSlip')
         const button = document.getElementById("cancelButton")

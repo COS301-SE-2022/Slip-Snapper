@@ -41,7 +41,6 @@ const Profile: React.FC = () => {
     getProfileData(user.id)
       .then(
         apiResponse => {
-          console.log(apiResponse.data)
           val.weekly = apiResponse.data.weekly;
           val.monthly = apiResponse.data.monthly;
           totalWeeklySpent = apiResponse.data.weeklyTotal;
