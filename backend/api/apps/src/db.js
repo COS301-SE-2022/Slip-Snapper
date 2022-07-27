@@ -441,7 +441,7 @@ async function updateItem(itemId, dataA, dataB) {
  * @param {*} editLocation the new location
  * @param {*} editTotal the new total
  * @param {*} editDate the new date
- * @returns 
+ * @returns a success message
  */
 async function updateSlips(slipId, editLocation, editTotal, editDate) {
     const updateSlip = await prisma.slip.update({
