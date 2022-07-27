@@ -184,12 +184,11 @@ const AddEntry: React.FC = () => {
         }
 
         for (let i = 0; i < items.length; i++) {
-            if (items[i].item === "" || 
+            if (items[i].item === "" ||
                 items[i].type === "" ||
-                !Number.isInteger(items[i].quantity) || 
+                !Number.isInteger(items[i].quantity) ||
                 Math.sign(items[i].quantity) !== 1 ||
-                items[i].price === "") 
-                {
+                items[i].price === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
@@ -200,8 +199,7 @@ const AddEntry: React.FC = () => {
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
         const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total = 0.00;
-        if (tempTotal !==undefined)
-        {
+        if (tempTotal !== undefined) {
             total = parseFloat(tempTotal)
         }
         const data = {
@@ -217,6 +215,7 @@ const AddEntry: React.FC = () => {
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
+            window.location.reload()
         }
 
     }
