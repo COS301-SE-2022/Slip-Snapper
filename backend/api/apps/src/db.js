@@ -435,7 +435,10 @@ async function updateItem(itemId, dataA, dataB) {
         item: item
     };
 }
-
+async function updateSlips(slipId, editLocation, editTotal, editDate) {
+  
+  
+  }
 /**
  * Funtion to get the user budgets from the database
  * @param {*} userId The users id
