@@ -206,3 +206,14 @@ export async function getTodayStats(userId) {
     })
 }
 
+export async function setGeneralBudget( userId, budgets){
+    return axios({
+        headers: headers,
+        method: 'post',
+        url: baseUrl + 'report/otherBudgets',
+        data: JSON.stringify({
+            userId: userId,
+            budgets: budgets,
+        })
+    })
+}

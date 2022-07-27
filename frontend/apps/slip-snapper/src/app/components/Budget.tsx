@@ -5,10 +5,10 @@ import {
     IonProgressBar,
     IonText
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../theme/profile.css';
 import { create } from 'ionicons/icons'
-
+import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
 function Budget() {
     const [food, setFood] = useState(false);
@@ -16,14 +16,44 @@ function Budget() {
     const [elec, setElec] = useState(false);
     const [houseHold, setHouseHold] = useState(false);
     const [other, setOther] = useState(false);
-    const [amounts, setAmounts] = useState<string[]>(["100", "200", "300", "400", "500"]);
+    const [budgetSpent, setBudgetSpent] = useState({
+        Food:0,
+        Fashion:0,
+        Electronics:0,
+        houseHold:0,
+        Other:0,
+    });
+    const [amounts, setAmounts] = useState({
+        monthlyElectronicsBudget: 0,
+        monthlyFashionBudget: 0,
+        monthlyFoodBudget: 0,
+        monthlyHouseholdBudget: 0,
+        monthlyOtherBudget: 0,
+        weeklyElectronicsBudget: 0,
+        weeklyFashionBudget: 0,
+        weeklyFoodBudget: 0,
+        weeklyHouseholdBudget: 0,
+        weeklyOtherBudget: 0,
+    });
     const totalSpent = 88;
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem('user')!)
+        if(user==null){
+            user = {id: 24}
+        }
+        getProfileData(user.id)
+            .then(
+                apiResponse => {
+                    setAmounts(apiResponse.data.otherBudgets.budgets)
+                    setBudgetSpent(apiResponse.data.otherBudgets.totals)
+                })
+      }, []);
 
     return (
         <div>
             <IonItem id="foodBudget" className="center-items" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setFood(true)}/>
-                <IonText>{"Food: R"+amounts[0]}</IonText>
+                <IonText>{"Food: R"+amounts.weeklyFoodBudget}</IonText>
                 <IonProgressBar id='foodBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -36,14 +66,16 @@ function Budget() {
                     {
                         text: 'Apply',
                         handler: (alertData) => {
-                            applyToBudget(alertData.food,0);
-                            isExceeded(parseFloat(alertData.food),"foodBar")
+                            amounts.weeklyFoodBudget = alertData.food
+                            setAmounts(amounts)
+                            isExceeded(parseFloat(alertData.food),"foodBar", budgetSpent.Food)
+                            applyToBudget()
                         }
                     }]}></IonAlert>
 
             <IonItem id="fashionBudget" className="center-items" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setFashion(true)}/>
-                <IonText>{"Fashion: R" + amounts[1]}</IonText>
+                <IonText>{"Fashion: R" + amounts.weeklyFoodBudget}</IonText>
                 <IonProgressBar id='fashionBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -56,14 +88,16 @@ function Budget() {
                     {
                         text: 'Apply',
                         handler: (alertData) => {
-                            applyToBudget(alertData.food, 1);
-                            isExceeded(parseFloat(alertData.food), "fashionBar")
+                            amounts.weeklyFashionBudget = alertData.food
+                            setAmounts(amounts)
+                            isExceeded(parseFloat(alertData.food), "fashionBar", budgetSpent.Fashion)
+                            applyToBudget()
                         }
                     }]}></IonAlert>
 
             <IonItem id="electronicsBudget" className="center-items" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setElec(true)}/>
-                <IonText>{"Electronics: R" + amounts[2]}</IonText>
+                <IonText>{"Electronics: R" + amounts.weeklyElectronicsBudget}</IonText>
                 <IonProgressBar id='elecBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -76,14 +110,16 @@ function Budget() {
                     {
                         text: 'Apply',
                         handler: (alertData) => {
-                            applyToBudget(alertData.food, 2);
-                            isExceeded(parseFloat(alertData.food), "elecBar")
+                            amounts.weeklyElectronicsBudget = alertData.food
+                            setAmounts(amounts)
+                            isExceeded(parseFloat(alertData.food), "elecBar", budgetSpent.Electronics)
+                            applyToBudget()
                         }
                     }]}></IonAlert>
 
             <IonItem id="houseBudget" className="center-items" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setHouseHold(true)}/>
-                <IonText>{"Household: R" + amounts[3]}</IonText>
+                <IonText>{"Household: R" + amounts.weeklyHouseholdBudget}</IonText>
                 <IonProgressBar id='houseBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -96,14 +132,16 @@ function Budget() {
                     {
                         text: 'Apply',
                         handler: (alertData) => {
-                            applyToBudget(alertData.food, 3);
-                            isExceeded(parseFloat(alertData.food), "houseBar")
+                            amounts.weeklyHouseholdBudget = alertData.food
+                            setAmounts(amounts)
+                            isExceeded(parseFloat(alertData.food), "houseBar", budgetSpent.houseHold)
+                            applyToBudget()
                         }
                     }]}></IonAlert>
 
             <IonItem id="otherBudget" className="center-items" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)}/> 
-                <IonText>{"Other: R" + amounts[4]}</IonText>
+                <IonText>{"Other: R" + amounts.weeklyOtherBudget}</IonText>
                 <IonProgressBar id='otherBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -116,31 +154,30 @@ function Budget() {
                     {
                         text: 'Apply',
                         handler: (alertData) => {
-                            applyToBudget(alertData.food, 4);
-                            isExceeded(parseFloat(alertData.food), "otherBar")
+                            amounts.weeklyOtherBudget = alertData.food
+                            setAmounts(amounts)
+                            isExceeded(parseFloat(alertData.food), "otherBar", budgetSpent.Other)
+                            applyToBudget()
                         }
                     }]}></IonAlert>
         </div>
     );
 
-    function applyToBudget(newValue: string ,pos:number) {
-        const val = parseFloat(newValue)
-
-        if (!isNaN(val)) {
-            amounts[pos]=val.toString()
-            setAmounts(amounts)
+    function applyToBudget() {
+        let user = JSON.parse(localStorage.getItem('user')!)
+        if(user==null){
+            user = {id: 24}
         }
+        setGeneralBudget(user.id,amounts)
     }
-
   
-    function isExceeded(budget:number,barID:string) {
-        
-        const withinBudget = totalSpent / budget
+    function isExceeded(budget:number,barID:string, total:number) {
+        const withinBudget = total / budget
 
-        if (totalSpent >= budget && !isNaN(budget)) {
+        if (total >= budget && !isNaN(budget)) {
             document.getElementById(barID)?.setAttribute("color", "danger")
         }
-        else if (totalSpent >= budget / 2 && !isNaN(budget)) {
+        else if (total >= budget / 2 && !isNaN(budget)) {
             document.getElementById(barID)?.setAttribute("color", "warning")
         }
         else if (!isNaN(budget)) {
@@ -154,7 +191,6 @@ function Budget() {
             document.getElementById(barID)?.setAttribute("color", "success")
         }
 
-      
     }
 }
 export default Budget;

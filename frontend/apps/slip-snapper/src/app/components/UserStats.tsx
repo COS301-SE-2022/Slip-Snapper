@@ -8,11 +8,6 @@ export const UserStats = () => {
             amount: 0,
             name: ""
         },
-        favouriteStore: {
-            name: "",
-            // receipts: []
-            total: 0
-        },
         lastMonth: {
             current: 0,
             previous: 0
@@ -35,7 +30,6 @@ export const UserStats = () => {
         getStatsA(user.id)
             .then(
                 apiResponse => {
-                    console.log(apiResponse.data)
                     setUserStats(apiResponse.data)
                 })
     }, []);
