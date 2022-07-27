@@ -1,7 +1,5 @@
 describe('Logging in', () => {
   beforeEach(() => {
-    cy.clearCookies();
-    cy.visit('http://localhost:4200');
     cy.intercept(
       {
         method: 'GET',
@@ -17,13 +15,15 @@ describe('Logging in', () => {
       },
       { fixture: '../fixtures/RecentReports.json' }
     );
-   cy.intercept(
+    cy.intercept(
       {
         method: 'GET',
         url: '/api/report/today*',
       },
       { fixture: '../fixtures/TodayHomePage.json' }
     );
+    cy.clearCookies();
+    cy.visit('http://localhost:4200');
   });
 
   it('base url leads to login', () => {
@@ -53,11 +53,11 @@ describe('Logging in', () => {
       },
       { fixture: '../fixtures/InvalidLogin.json' }
     );
-    
+
     cy.get('input[ title="usernameInput"]').type('NotRegan');
     cy.get('input[title="passwordInput"]').type('Password123');
     cy.get('ion-button[type="submit"]').click();
     cy.url().should('eq', 'http://localhost:4200/login');
-    cy.get('.alert-head').should('be.visible')
+    cy.get('.alert-head').should('be.visible');
   });
 });

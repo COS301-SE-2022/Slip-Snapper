@@ -1,12 +1,33 @@
 {
-    "message": "User budget retrieved",
-    "weeklyTotal": 600,
-    "weekly": 800,
-    "monthlyTotal": 500,
-    "monthly": 900,
-    "favouriteStore": {
-        "name": "Mcdonalds",
-        "receipts": []
+  "message": "User budget retrieved",
+  "weeklyTotal": 600,
+  "weekly": 800,
+  "monthlyTotal": 500,
+  "monthly": 900,
+  "favouriteStore": {
+    "name": "Mcdonalds",
+    "receipts": []
+  },
+  "otherBudgets": {
+    "budgets": {
+      "monthlyElectronicsBudget": 0,
+      "monthlyFashionBudget": 0,
+      "monthlyFoodBudget": 0,
+      "monthlyHouseholdBudget": 0,
+      "monthlyOtherBudget": 0,
+      "weeklyElectronicsBudget": 0,
+      "weeklyFashionBudget": 0,
+      "weeklyFoodBudget": 0,
+      "weeklyHouseholdBudget": 0,
+      "weeklyOtherBudget": 0
     },
-    "otherBudgets": {}
+    "totals":{
+        "Food": 0,
+        "Fashion": 0,
+        "Electronics": 0,
+        "houseHold": 0,
+        "Other": 0
+    }
+    
+  }
 }
