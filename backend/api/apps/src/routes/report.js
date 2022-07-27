@@ -328,4 +328,24 @@ router.get('/thisweek', async (req, res) => {
 
 });
 
+/**
+ * Get today's expenditure stats
+ */
+router.get('/today', async (req, res) => {
+    let { userId } = req.query;
+    const result = await req.app.get("db").todaysReports(Number(userId));
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            totalItems: result.sum,
+            totalSpent: result.todaystotal
+        });
+
+});
+
 module.exports.router = router;

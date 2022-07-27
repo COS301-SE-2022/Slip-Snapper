@@ -197,3 +197,12 @@ export async function updateSlipA( userId, updateSlip, insertItems,updateItems, 
         })
     })
 }
+
+export async function getTodayStats(userId) {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'report/today?userId=' + userId,
+    })
+}
+
