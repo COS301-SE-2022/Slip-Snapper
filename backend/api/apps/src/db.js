@@ -343,8 +343,29 @@ async function addItem(userid, location, date, total, data) {
 async function insertAllItems(slipId,insertItems){
     let additions = []
 
-    //TODO check if data item has change
-    for(const item of insertItems){
+    const dataItems = await prisma.dataItem.findMany({})
+
+    for (let item of insertItems) {
+        let matched = false
+
+        for (const dataItem of dataItems) {
+            if (item.data.item == dataItem.item) {
+                item.data.id = dataItem.id;
+                matched = true;
+                break;
+            }
+        }
+
+        if (!matched) {
+            const dat = await prisma.dataItem.create({
+                data: {
+                    item: item.data.item,
+                    itemType: item.data.itemType,
+                }
+            })
+            item.data.id = dat.id;
+        }
+
         additions.push({
             slipId: slipId,
             itemPrice: parseFloat(item.itemPrice),
@@ -352,7 +373,7 @@ async function insertAllItems(slipId,insertItems){
             dataId: item.data.id
         })
     }
-
+    
     const items = await prisma.item.createMany({
         data: additions
     });
