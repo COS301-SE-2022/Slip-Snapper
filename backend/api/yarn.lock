@@ -4501,7 +4501,14 @@ path-to-regexp@0.1.7:
   resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-0.1.7.tgz#df604178005f522f15eb4490e7247a1bfaa67f8c"
   integrity sha1-32BBeABfUi8V60SQ5yR6G/qmf4w=
 
-pdfkit@^0.13.0:
+pdfkit-table@^0.1.99:
+  version "0.1.99"
+  resolved "https://registry.yarnpkg.com/pdfkit-table/-/pdfkit-table-0.1.99.tgz#66854b91e7a811a4e89b800f26b134426d21a7a3"
+  integrity sha512-BaunFJ7cvKqIPONzX9FXUpeC/3iJeLo0v2nVNjCccAxdMXKvDMBjxyF4wZhKOYlmP+nYZcikf9ByVJeCzjNK6g==
+  dependencies:
+    pdfkit latest
+
+pdfkit@^0.13.0, pdfkit@latest:
   version "0.13.0"
   resolved "https://registry.yarnpkg.com/pdfkit/-/pdfkit-0.13.0.tgz#da4c2becd63a129e3aae448fdaed4ee7be790f8f"
   integrity sha512-AW79eHU5eLd2vgRDS9z3bSoi0FA+gYm+100LLosrQQMLUzOBGVOhG7ABcMFpJu7Bpg+MT74XYHi4k9EuU/9EZw==
