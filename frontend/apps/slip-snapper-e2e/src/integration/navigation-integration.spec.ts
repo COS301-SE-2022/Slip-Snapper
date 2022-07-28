@@ -73,17 +73,17 @@ describe('Navigate from Home', () => {
   });
 
   it('naviagtes to report page', () => {
-    cy.get('ion-button[router-link="/viewreports"]').click();
+    cy.get('.buttons-last-slot > div > :nth-child(2)').click();
     cy.url().should('eq', 'http://localhost:4200/viewreports');
   });
 
   it('naviagtes to profile page', () => {
-    cy.get('ion-button[router-link="/profile"]').click();
+    cy.get('.buttons-last-slot > div > :nth-child(3)').click();
     cy.url().should('eq', 'http://localhost:4200/profile');
   });
 
   it('naviagtes to receipts page', () => {
-    cy.get('ion-button[router-link="/receipts"]').click();
+    cy.get('.buttons-last-slot > div > :nth-child(4)').click();
     cy.url().should('eq', 'http://localhost:4200/receipts');
   });
 });
