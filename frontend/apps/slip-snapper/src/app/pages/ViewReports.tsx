@@ -114,7 +114,7 @@ const ViewReports: React.FC = () => {
           </IonCardHeader>
           {r.map((report, index) => {
             return (
-              <IonItem color="tertiary">
+              <IonItem key={index} color="tertiary">
                 {report.reportName}
                 <IonButton
                   onClick={() => view(report.reportName)}

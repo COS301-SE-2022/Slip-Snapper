@@ -24,8 +24,10 @@ const EditSlip: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
-
                 <IonCard color="primary">
+                    <div className='imageContainer'>
+                        <img className='image' src={photo} alt="Logo" />
+                    </div>
                     <IonCardHeader>
                         <IonCardTitle>Store Name/Location:
                             <IonItem className='addEntry' color="tertiary">
