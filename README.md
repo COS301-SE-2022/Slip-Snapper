@@ -59,7 +59,6 @@
 Architectural Structures are within the SRS Demo 2
 
 ## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
-<br>
 
 ## [SRS Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214324/COS301_SRS_Anoobis_Demo3.pdf)
 <br>
