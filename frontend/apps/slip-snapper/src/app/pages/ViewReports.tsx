@@ -14,6 +14,7 @@ import {
   IonAlert,
   IonCardSubtitle,
   IonCol,
+  useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -39,11 +40,13 @@ export const mockTotals = [
 // day week month
 const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
-  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState({ state: false, name: "", Id: 0 });
+  const [present, dismiss] = useIonToast();
+
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+      user = { id: 24 }
     }
     getAllUserReports(user.id)
       .then(apiResponse => {
@@ -69,24 +72,23 @@ const ViewReports: React.FC = () => {
           {mockTotals.map((totals, index) => {
             return (
               <IonCol className='item-col'>
-            <IonCard color="primary">
-                <IonCardHeader>
+                <IonCard color="primary">
+                  <IonCardHeader>
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>
-                    <IonCardSubtitle>{totals.total}</IonCardSubtitle>
-                </IonCardHeader>
-                <IonItem color="tertiary">
+                  </IonCardHeader>
+                  <IonItem color="tertiary">
                     <IonButton
-                        fill="solid"
-                        title= {totals.title}
-                        slot="end"
-                        color="secondary"
-                        onClick={() => {generateReport(totals.call)}}
+                      fill="solid"
+                      title={totals.title}
+                      slot="end"
+                      color="secondary"
+                      onClick={() => { ; generateReport(totals.call); }}
                     >
-                        Generate Report
+                      Generate Report
                     </IonButton>
-                </IonItem>
-            </IonCard>
-        </IonCol>
+                  </IonItem>
+                </IonCard>
+              </IonCol>
             );
           })}
         </IonRow>
@@ -95,7 +97,7 @@ const ViewReports: React.FC = () => {
         </IonItem>
         <IonCard color="primary" className='all-reports'>
           <IonCardHeader>
-            <IonCardTitle>Reports:</IonCardTitle>           
+            <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
           {r.map((report, index) => {
             return (
@@ -110,7 +112,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => setDeleteAlert(true)}
+                  onClick={() => setDeleteAlert({ state: true, name: report.reportName, Id: report.reportId })}
                   fill="solid"
                   slot="end"
                   color="medium"
@@ -118,8 +120,8 @@ const ViewReports: React.FC = () => {
                   Delete
                 </IonButton>
                 <IonAlert
-                  isOpen={deleteAlert}
-                  onDidDismiss={() => setDeleteAlert(false)}
+                  isOpen={deleteAlert.state}
+                  onDidDismiss={() => setDeleteAlert({ state: false, name: "", Id: 0 })}
                   header="Confirm Delete"
                   message="Are you sure you want to delete this report?"
                   buttons={[
@@ -128,8 +130,8 @@ const ViewReports: React.FC = () => {
                       text: 'Delete',
                       cssClass: 'toasts',
                       handler: () => {
-                        deleteReport( report.reportName, report.reportId);
-                        setDeleteAlert(false);
+                        deleteReport(deleteAlert.name, deleteAlert.Id.toString());
+                        setDeleteAlert({ state: false, name: "", Id: 0 });
                       }
                     },
                   ]}
@@ -138,15 +140,15 @@ const ViewReports: React.FC = () => {
             );
           })}
         </IonCard>
-      
+
       </IonContent>
     </IonPage>
   );
 
   function view(data: any) {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {username: 'demoUser'}
+    if (user == null) {
+      user = { username: 'demoUser' }
     }
     getUserReport(user.username, data)
       .then(apiResponse => {
@@ -161,14 +163,14 @@ const ViewReports: React.FC = () => {
 
   async function deleteReport(fileName: string, reportId: string) {
     let userS = JSON.parse(localStorage.getItem('user')!)
-    if(userS == null){
-      userS = {username: "demoUser"}
+    if (userS == null) {
+      userS = { username: "demoUser" }
     }
-    await removeReport(userS.username,fileName, reportId)
+    await removeReport(userS.username, fileName, reportId)
       .then(apiResponse => {
-        console.log(apiResponse.data.message);
+        present('Deleted ' + deleteAlert.name, 1200);
       });
-    
+
     getAllUserReports(userS.id)
       .then(apiResponse => {
         setR(apiResponse.data.reports);
@@ -177,17 +179,26 @@ const ViewReports: React.FC = () => {
 
   async function generateReport(period: string) {
     let userS = JSON.parse(localStorage.getItem('user')!)
-    if(userS==null){
-        userS = {id: 24, username:'demoUser'}
+    if (userS == null) {
+      userS = { id: 24, username: 'demoUser' }
     }
-    
-    await generateReportA(userS.username, userS.id ,period)
-        .then(apiResponse => console.log(apiResponse.data));
-        
+
+    await generateReportA(userS.username, userS.id, period)
+      .then(apiResponse => {
+        if (apiResponse.data.message ==="Report Generated and uploaded")
+        {
+          present('Generated ' + period + ' Report', 1200)
+        }
+        else{
+          present('Error generating report, Try again.', 1200)
+        }
+      }
+      );
+
     getAllUserReports(userS.id)
-    .then(apiResponse => {
-      setR(apiResponse.data.reports);
-    });
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
+      });
   }
 
 };
