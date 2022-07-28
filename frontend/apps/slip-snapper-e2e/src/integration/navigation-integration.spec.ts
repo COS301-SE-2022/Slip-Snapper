@@ -1,12 +1,5 @@
 describe('Navigate from Home', () => {
   beforeEach(() => {
-    cy.clearCookies();
-    cy.visit('http://localhost:4200');
-    cy.get('input[ title="usernameInput"]').clear();
-    cy.get('input[ title="usernameInput"]').type('Regan');
-    cy.get('input[title="passwordInput"]').clear();
-    cy.get('input[title="passwordInput"]').type('Password123');
-    cy.get('ion-button[type="submit"]').click();
     cy.intercept(
       {
         method: 'GET',
@@ -31,7 +24,7 @@ describe('Navigate from Home', () => {
     cy.intercept(
       {
         method: 'GET',
-        url: '/api/report/budget*',
+        url: '/api/report/profile*',
       },
       { fixture: '../fixtures/getBudget.json' }
     );
@@ -49,6 +42,34 @@ describe('Navigate from Home', () => {
       },
       { fixture: '../fixtures/getItems.json' }
     );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/report/thisweek*',
+      },
+      { fixture: '../fixtures/RecentReports.json' }
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/report/today*',
+      },
+      { fixture: '../fixtures/TodayHomePage.json' }
+    );
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/item/slip*',
+      },
+      { fixture: '../fixtures/getSlips.json' }
+    );
+    cy.clearCookies();
+    cy.visit('http://localhost:4200');
+    cy.get('input[ title="usernameInput"]').clear();
+    cy.get('input[ title="usernameInput"]').type('Regan');
+    cy.get('input[title="passwordInput"]').clear();
+    cy.get('input[title="passwordInput"]').type('Password123');
+    cy.get('ion-button[type="submit"]').click();
   });
 
   it('naviagtes to report page', () => {

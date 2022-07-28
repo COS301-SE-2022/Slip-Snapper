@@ -93,7 +93,7 @@ const ViewReports: React.FC = () => {
         <IonItem>
           <IonTitle>All Reports</IonTitle>
         </IonItem>
-        <IonCard color="primary">
+        <IonCard color="primary" className='all-reports'>
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>           
           </IonCardHeader>

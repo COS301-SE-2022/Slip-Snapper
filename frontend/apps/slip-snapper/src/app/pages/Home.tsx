@@ -26,7 +26,7 @@ const Home: React.FC = () => {
   const [thisWeeksReports,setThisWeeksReports] = useState([])
   const [todayItems, setTodayItem] = useState(0)
   const [todayTotal, setTodayTotal] = useState(0)
-  const [r, setR] = useState([{reportId:"0", reportName:"No reports Available"}]);
+  const [reports, setR] = useState([{reportId:"0", reportName:"No reports Available"}]);
 
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
@@ -68,7 +68,7 @@ const Home: React.FC = () => {
         </IonItem>
 
         <IonRow>
-          {r.map((reps, index) => {
+          {reports.map((reps, index) => {
             return (
               <ReportItem key={index} reportData={[reps.reportId, reps.reportName]} />
             )

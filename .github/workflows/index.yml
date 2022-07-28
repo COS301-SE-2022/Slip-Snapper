@@ -41,12 +41,12 @@ jobs:
       test: 'affected'
       testtype: 'unit'
 
-  #test-affected-e2e-frontend:
-  #  uses: ./.github/workflows/FrontendCItest.yml
-  #  if: ${{ github.event.inputs.testchoice == 'e2e' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
-  #  with:
-  #    test: 'affected'
-  #    testtype: 'e2e'
+  test-affected-e2e-frontend:
+    uses: ./.github/workflows/FrontendCItest.yml
+    if: ${{ github.event.inputs.testchoice == 'e2e' || github.event.inputs.testchoice == 'full'|| github.event.inputs.testchoice == ''}}
+    with:
+      test: 'affected'
+      testtype: 'e2e'
 
   test-all-frontend:
     uses: ./.github/workflows/FrontendCItest.yml
