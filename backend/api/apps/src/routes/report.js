@@ -1,6 +1,7 @@
 const fs = require('fs');
 const fsPromises = require("fs/promises");
-const PDFDocument = require('pdfkit');
+const doc = require('pdfkit');
+const PDFDocument = require('pdfkit-table');
 const router = require("express").Router();
 const {S3BucketFunctions} = require("./S3Bucket")
 
@@ -32,23 +33,56 @@ const {S3BucketFunctions} = require("./S3Bucket")
  * @returns JSON object of arrays with the items in them
  */
 async function sortItemsIntoCategories(itemList){
-    let types = { Food : [], Cleaning : [], Furniture : [], Other : [], }
-    for(var item of itemList){
+    let types = { Food : [], Electronics : [], Fashion : [], Household : [], Other : [], totals: { 
+        Other: ["", "", 0, 0 ],
+        Food : ["", "", 0, 0 ], 
+        Electronics : ["", "", 0, 0 ], 
+        Fashion : ["", "", 0, 0 ], 
+        Household : ["", "", 0, 0 ],
+    }}
+    let totals =  [{price:0, itemNum:0}]
+    for(const item of itemList){
+        totals[0].price += item.price
+        totals[0].itemNum += 1
+        item.price = parseFloat(item.price).toFixed(2)
         switch (item.type) {
             case "food": 
+                types.totals.Food[3] += parseFloat(item.price)
+                types.totals.Food[2] += 1
                 types.Food.push(item);
                 break
-            case "cleaning": 
-                types.Cleaning.push(item);
+            case "Electronics": 
+                types.totals.Electronics[3] += parseFloat(item.price)
+                types.totals.Electronics[2] += 1
+                types.Electronics.push(item);
                 break
-            case "furniture": 
-                types.Furniture.push(item);
+            case "fashion": 
+                types.totals.Fashion[3] += parseFloat(item.price)
+                types.totals.Fashion[2] += 1
+                types.Fashion.push(item);
+                break
+            case "household": 
+                types.totals.Household[3] += parseFloat(item.price)
+                types.totals.Household[2] += 1
+                types.Household.push(item);
                 break
             default: 
+                types.totals.Other[3] += parseFloat(item.price)
+                types.totals.Other[2] += 1
                 types.Other.push(item);
         }
     }
-    return types
+
+    for (const key in types.totals){
+        if(types.totals.hasOwnProperty(key) && types.totals[key].length > 0){
+            types.totals[key][3] = parseFloat(types.totals[key][3]).toFixed(2)
+        }
+    }
+
+    return { 
+        types,
+        totals
+    }
 }
 
 /**
@@ -58,22 +92,43 @@ async function sortItemsIntoCategories(itemList){
  * @param {*} today The date for today
  * @returns the total for the pdf
  */
-async function generatePDF(name, types, today){
+async function generatePDF(name, object, today, period){
     let pdf = new PDFDocument;
     pdf.pipe(fs.createWriteStream(name))
-    let temp = "Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
+    let temp = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
     pdf.fontSize(20).text(temp);
     let pdfTotal = 0
-    for (var key in types){
+
+    const types = object.types
+
+    const table = { 
+        title: `Report Statistics`,
+        headers: [
+            { "label":"Number of items on report", "property":"itemNum", "width":120 },
+            { "label":"Total Amount (R)", "property":"price", "width":120 },
+        ],
+        datas: object.totals,
+    }
+
+    pdf.table(table);
+
+    for (const key in types){
         if(types.hasOwnProperty(key) && types[key].length > 0){
-            pdf.fontSize(17).text(`${key} items`,110);
-            for(var item of types[key]){
-                pdf.fontSize(15).text("Item: " + item.itemName, 120);
-                pdf.fontSize(12).text("quantity: " + item.quantity, 150);
-                pdf.text("Price: R " + item.price);
-                pdf.text("Location: " + item.location);
-                pdfTotal+=item.price;
+            const table = { 
+                title: `${key} Items`,
+                headers: [
+                    { "label":"Location", "property":"location", "width":100 },
+                    { "label":"Name", "property":"itemName", "width":100 },
+                    { "label":"Quantity", "property":"quantity", "width":100 },
+                    { "label":"Price (R)", "property":"price", "width":100 },
+                ],
+                datas: types[key],
+                rows: [ 
+                    types.totals[key]
+                ],
             }
+        
+            pdf.table(table);
         }
     }
 
@@ -101,7 +156,7 @@ router.post('/pdf', async (req,res)=>{
     let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
     let dir = __dirname + "/"
     let pdfName = dir + name
-    let report = await generatePDF(pdfName, types, today)
+    let report = await generatePDF(pdfName, types, today, period)
     
     const path = `${userName}/${name}`
     const bucket = new S3BucketFunctions

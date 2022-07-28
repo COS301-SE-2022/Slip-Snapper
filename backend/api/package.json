@@ -14,6 +14,7 @@
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
     "pdfkit": "^0.13.0",
+    "pdfkit-table": "^0.1.99",
     "pg": "^8.7.3"
   },
   "devDependencies": {
