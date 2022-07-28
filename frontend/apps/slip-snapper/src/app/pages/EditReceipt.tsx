@@ -35,7 +35,7 @@ const EditReciept: React.FC = () => {
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={slipContents.transactionDate} id={"date"} contentEditable="true"></IonInput>
+                                <IonInput value={new Date(slipContents.transactionDate).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -244,7 +244,7 @@ const EditReciept: React.FC = () => {
         }
         updateSlipA(user.id, data, insertItems, updateItems, removeItems)
         setEditRecieptItems([{ data: { id: editRecieptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
-        // localStorage.removeItem('editSlip')
+        
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
