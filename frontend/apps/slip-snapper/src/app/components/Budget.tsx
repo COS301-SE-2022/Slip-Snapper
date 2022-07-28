@@ -44,8 +44,10 @@ function Budget() {
         getProfileData(user.id)
             .then(
                 apiResponse => {
-                    setAmounts(apiResponse.data.otherBudgets.budgets)
-                    setBudgetSpent(apiResponse.data.otherBudgets.totals)
+                    if(typeof(apiResponse.data) !== "string"){
+                        setAmounts(apiResponse.data.otherBudgets.budgets)
+                        setBudgetSpent(apiResponse.data.otherBudgets.totals)
+                    }  
                 })
       }, []);
 

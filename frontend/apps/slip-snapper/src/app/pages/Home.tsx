@@ -35,18 +35,24 @@ const Home: React.FC = () => {
     }
     getRecentReports(user.id)
       .then(apiResponse => {
-        setR(apiResponse.data.reports);
+        if(typeof(apiResponse.data) !== "string"){
+          setR(apiResponse.data.reports);
+        }
       });
 
     getThisWeeksReports(user.id)
       .then(apiResponse => {
-        setThisWeeksReports(apiResponse.data.reports)
+        if(typeof(apiResponse.data) !== "string"){
+          setThisWeeksReports(apiResponse.data.reports)
+        }
       });
 
     getTodayStats(user.id)
       .then(apiResponse => {
-        setTodayItem(apiResponse.data.totalItems)
-        setTodayTotal(apiResponse.data.totalSpent)
+        if(typeof(apiResponse.data) !== "string"){
+          setTodayItem(apiResponse.data.totalItems)
+          setTodayTotal(apiResponse.data.totalSpent)
+        }
       });
 
 
