@@ -502,13 +502,20 @@ async function updateAllItems(updateItems){
  * Function to update the slip and all relevant items
  */
 async function updateSlip(userId,slipData,insertItems,updateItems,removeItems){
-    const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
-    const update = await updateAllItems(updateItems)
-    const remove = await deleteManyItems(removeItems)
-    const insert = await insertAllItems(slipData[5],insertItems)
+    try{
+        const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
+        const update = await updateAllItems(updateItems)
+        const remove = await deleteManyItems(removeItems)
+        const insert = await insertAllItems(slipData[5],insertItems)
 
-    return {
-        message: slip.message
+        return {
+            message: slip.message
+        }
+    }
+    catch(error){
+        return {
+            message: error
+        }
     }
 }
 

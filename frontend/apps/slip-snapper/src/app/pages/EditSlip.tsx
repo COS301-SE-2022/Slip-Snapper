@@ -34,7 +34,7 @@ const EditSlip: React.FC = () => {
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={data.text[0]} id={"date"} contentEditable="true"></IonInput>
+                                <IonInput value={new Date(data.text[0]).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
