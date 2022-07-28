@@ -14,6 +14,7 @@ import {
   IonAlert,
   IonCardSubtitle,
   IonCol,
+  useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -39,7 +40,9 @@ export const mockTotals = [
 // day week month
 const ViewReports: React.FC = () => {
   const [r, setR] = useState<any[]>([]);
-  const [deleteAlert, setDeleteAlert] = useState(false);
+  const [deleteAlert, setDeleteAlert] = useState({state:false,name:"",Id:0});
+  const [present, dismiss] = useIonToast();
+
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if(user==null){
@@ -72,7 +75,6 @@ const ViewReports: React.FC = () => {
             <IonCard color="primary">
                 <IonCardHeader>
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>
-                    <IonCardSubtitle>{totals.total}</IonCardSubtitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
                     <IonButton
@@ -80,7 +82,7 @@ const ViewReports: React.FC = () => {
                         title= {totals.title}
                         slot="end"
                         color="secondary"
-                        onClick={() => {generateReport(totals.call)}}
+                      onClick={() => { present('Generated '+totals.timePeriod+' Report', 1200);generateReport(totals.call);}}
                     >
                         Generate Report
                     </IonButton>
@@ -110,7 +112,7 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => setDeleteAlert(true)}
+                  onClick={() => setDeleteAlert({ state: true, name: report.reportName, Id:report.reportId })}
                   fill="solid"
                   slot="end"
                   color="medium"
@@ -118,8 +120,8 @@ const ViewReports: React.FC = () => {
                   Delete
                 </IonButton>
                 <IonAlert
-                  isOpen={deleteAlert}
-                  onDidDismiss={() => setDeleteAlert(false)}
+                  isOpen={deleteAlert.state}
+                  onDidDismiss={() => setDeleteAlert({ state: false, name: "", Id: 0 })}
                   header="Confirm Delete"
                   message="Are you sure you want to delete this report?"
                   buttons={[
@@ -128,8 +130,9 @@ const ViewReports: React.FC = () => {
                       text: 'Delete',
                       cssClass: 'toasts',
                       handler: () => {
-                        deleteReport( report.reportName, report.reportId);
-                        setDeleteAlert(false);
+                        present('Deleted ' + deleteAlert.name, 1200);
+                        deleteReport(deleteAlert.name, deleteAlert.Id.toString());
+                        setDeleteAlert({ state: false, name: "", Id: 0 });
                       }
                     },
                   ]}

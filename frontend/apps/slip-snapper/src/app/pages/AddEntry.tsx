@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast } from '@ionic/react';
 import React, { useState } from 'react';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
@@ -9,6 +9,8 @@ const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+    const [present, dismiss] = useIonToast();
+
 
     return (
         <IonPage>
@@ -216,6 +218,7 @@ const AddEntry: React.FC = () => {
         if (button) {
             button.click();
             window.location.reload()
+            present('Deleted ' , 1200);
         }
 
     }
