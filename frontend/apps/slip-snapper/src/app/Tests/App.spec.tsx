@@ -15,7 +15,6 @@ import { UserStats } from '../components/UserStats';
 import AddEntry from '../pages/AddEntry';
 import { EditBudgets } from '../components/EditBudgets';
 import { Link, StaticRouter } from 'react-router-dom';
-import { getBudgetA } from '../../api/apiCall';
 import { Budgets } from 'aws-sdk';
 
 test('renders without crashing', () => {
@@ -127,12 +126,6 @@ describe('Profile', () => {
     const Component = render(<Profile />);
     const add_remove = await Component.findByText('Add/Remove');
     fireEvent.click(add_remove);
-  });
-
-  test('Test if More button fires correctly', async () => {
-    const Component = render(<Profile />);
-    const more = await Component.findByText('More');
-    fireEvent.click(more);
   });
 
   test('Test if Logout button fires correctly', async () => {
