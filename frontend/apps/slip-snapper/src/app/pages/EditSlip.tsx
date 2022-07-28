@@ -34,7 +34,7 @@ const EditSlip: React.FC = () => {
                         </IonCardTitle>
                         <IonCardTitle>Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={data.text[0]} id={"Store_Name"} contentEditable="true"></IonInput>
+                                <IonInput value={data.text[0]} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
 
@@ -204,6 +204,18 @@ const EditSlip: React.FC = () => {
         if (user == null) {
             user = { id: 24 }
         }
+
+        const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        let total = 0.00;
+        if (tempTotal !== undefined) {
+            total = parseFloat(tempTotal)
+        }
+        const data = {
+            text: [date, storeName, "", "", total]
+        };
+
         addItemsA(user.id, data, items)
         const button = document.getElementById("successRedirect")
         if (button) {
