@@ -214,7 +214,7 @@ const Profile: React.FC = () => {
   );
 
   function Logout() {
-    history.push("/")
+    history.push("/login")
     window.location.reload()
   }
 

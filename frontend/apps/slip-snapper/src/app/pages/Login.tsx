@@ -110,7 +110,7 @@ const Login: React.FC = () => {
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
 
             history.push("/home")
-            window.location.reload();
+            //window.location.reload();
           }
         })
     }

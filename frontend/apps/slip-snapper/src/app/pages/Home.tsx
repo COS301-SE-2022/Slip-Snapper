@@ -108,7 +108,7 @@ const Home: React.FC = () => {
                 return (
                   <IonItem key={index} color="tertiary">
                     {item.reportName}
-                    <IonButton onClick={() => { ;view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
+                    <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
                     <IonButton onClick={() => deleteReport(item.reportName, item.reportId.toString())} fill="solid" slot="end" color="medium">
