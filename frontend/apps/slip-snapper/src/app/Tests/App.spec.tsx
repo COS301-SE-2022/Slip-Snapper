@@ -143,7 +143,6 @@ describe('Login', () => {
   it('Correctly renders the login page', () => {
     const Component = render(<Login />);
 
-    expect(Component.getByText('Slip Snapper'));
     expect(Component.getByText('Username'));
     expect(Component.getByText('Password'));
     expect(Component.getByText('Login'));
@@ -170,7 +169,6 @@ describe('Register', () => {
   it('Correctly renders the register page', () => {
     const Component = render(<Register />);
 
-    expect(Component.getByText('Slip Snapper'));
     expect(Component.getByText('Name'));
     expect(Component.getByText('Surname'));
     expect(Component.getByText('Username'));
