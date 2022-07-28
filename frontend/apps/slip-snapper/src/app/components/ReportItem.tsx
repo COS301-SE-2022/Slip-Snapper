@@ -31,10 +31,10 @@ function ReportItem({ reportData }: Props) {
 }
 function view(data: any) {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+        user = { username: 'demoUser' }
     }
-    getUserReport(user.id, data)
+    getUserReport(user.username, data)
         .then(apiResponse => {
             if (apiResponse.data.report.data !== undefined) {
                 const arr = new Uint8Array(apiResponse.data.report.data);
