@@ -72,11 +72,8 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>User details</IonCardTitle>
               </IonItem>
-              <IonItem className="center-items" color="tertiary">
+              <IonItem className="center-items username" color="tertiary">
                 <IonText>Name: Christian Devraj </IonText>
-              </IonItem>
-              <IonItem className="center-items" color="tertiary">
-                <IonText>My Business: Isabella's Decor and Gifts</IonText>
               </IonItem>
               {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
               <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture" />
@@ -186,13 +183,6 @@ const Profile: React.FC = () => {
                 )
               })}
             </IonCardHeader>
-
-            
-            <IonItem color="primary">
-              <IonButton fill="solid" slot="end" color="secondary">
-                More
-              </IonButton>
-            </IonItem>
           </IonCard>
         </div>
         <UserStats />
