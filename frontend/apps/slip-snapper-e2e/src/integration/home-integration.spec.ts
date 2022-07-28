@@ -52,10 +52,10 @@ describe('Home page integration', () => {
     cy.get(
       '.ion-page > .header-md > .toolbar-title-default > .title-default'
     ).should('be.visible');
-    cy.get('div > [router-link="/home"]').should('be.visible');
-    cy.get('div > [router-link="/viewreports"]').should('be.visible');
-    cy.get('div > [router-link="/profile"]').should('be.visible');
-    cy.get('div > [router-link="/receipts"]').should('be.visible');
+    cy.get('.buttons-last-slot > div > :nth-child(1)').should('be.visible');
+    cy.get('.buttons-last-slot > div > :nth-child(2)').should('be.visible');
+    cy.get('.buttons-last-slot > div > :nth-child(3)').should('be.visible');
+    cy.get('.buttons-last-slot > div > :nth-child(4)').should('be.visible');
   });
 });
 

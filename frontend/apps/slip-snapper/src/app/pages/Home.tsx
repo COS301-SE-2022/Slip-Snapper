@@ -36,18 +36,24 @@ const Home: React.FC = () => {
     }
     getRecentReports(user.id)
       .then(apiResponse => {
-        setR(apiResponse.data.reports);
+        if(typeof(apiResponse.data) !== "string"){
+          setR(apiResponse.data.reports);
+        }
       });
 
     getThisWeeksReports(user.id)
       .then(apiResponse => {
-        setThisWeeksReports(apiResponse.data.reports)
+        if(typeof(apiResponse.data) !== "string"){
+          setThisWeeksReports(apiResponse.data.reports)
+        }
       });
 
     getTodayStats(user.id)
       .then(apiResponse => {
-        setTodayItem(apiResponse.data.totalItems)
-        setTodayTotal(apiResponse.data.totalSpent)
+        if(typeof(apiResponse.data) !== "string"){
+          setTodayItem(apiResponse.data.totalItems)
+          setTodayTotal(apiResponse.data.totalSpent)
+        }
       });
 
 
@@ -102,7 +108,7 @@ const Home: React.FC = () => {
                 return (
                   <IonItem key={index} color="tertiary">
                     {item.reportName}
-                    <IonButton onClick={() => { ;view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
+                    <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
                     <IonButton onClick={() => deleteReport(item.reportName, item.reportId.toString())} fill="solid" slot="end" color="medium">

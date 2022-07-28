@@ -2,6 +2,7 @@ import { IonAlert, IonButton, IonCard, IonInput, IonItem, IonLabel } from '@ioni
 import React, { useState } from 'react';
 import '../theme/login.css';
 import { loginA } from "../../api/apiCall"
+import { useHistory } from 'react-router-dom';
 
 const Login: React.FC = () => {
 
@@ -9,6 +10,7 @@ const Login: React.FC = () => {
   const [passwordInput, setPasswordInput] = useState<string>();
   const [errorAlert, setAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const history = useHistory()
 
   return (
     <div>
@@ -104,12 +106,11 @@ const Login: React.FC = () => {
             setAlert(true)
           }
           else {
-            const button = document.getElementById("successRedirect")
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-            if (button) {
-              button.click();
-            }
+
+            history.push("/home")
+            //window.location.reload();
           }
         })
     }

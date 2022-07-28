@@ -28,7 +28,12 @@ import {
 
 export const mockTotals = [
   { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
-  { timePeriod: 'Weekly', total: 'R800.02', title: 'generateWR', call: 'Weekly' },
+  {
+    timePeriod: 'Weekly',
+    total: 'R800.02',
+    title: 'generateWR',
+    call: 'Weekly',
+  },
   {
     timePeriod: 'Monthly',
     total: 'R1000.50',
@@ -39,19 +44,25 @@ export const mockTotals = [
 
 // day week month
 const ViewReports: React.FC = () => {
-  const [r, setR] = useState<any[]>([]);
-  const [deleteAlert, setDeleteAlert] = useState({ state: false, name: "", Id: 0 });
+  const [r, setR] = useState<any[]>([{}]);
+  const [deleteAlert, setDeleteAlert] = useState({
+    state: false,
+    name: '',
+    Id: 0,
+  });
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user')!)
+    let user = JSON.parse(localStorage.getItem('user')!);
     if (user == null) {
-      user = { id: 24 }
+      user = { id: 24 };
     }
-    getAllUserReports(user.id)
-      .then(apiResponse => {
+    getAllUserReports(user.id).then((apiResponse) => {
+      console.log(typeof apiResponse.data);
+      if (typeof apiResponse.data !== 'string') {
         setR(apiResponse.data.reports);
-      });
+      }
+    });
   }, []);
 
   return (
@@ -71,7 +82,7 @@ const ViewReports: React.FC = () => {
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
-              <IonCol className='item-col'>
+              <IonCol className="item-col" key={index}>
                 <IonCard color="primary">
                   <IonCardHeader>
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>
@@ -82,7 +93,9 @@ const ViewReports: React.FC = () => {
                       title={totals.title}
                       slot="end"
                       color="secondary"
-                      onClick={() => { ; generateReport(totals.call); }}
+                      onClick={() => {
+                        generateReport(totals.call);
+                      }}
                     >
                       Generate Report
                     </IonButton>
@@ -95,7 +108,7 @@ const ViewReports: React.FC = () => {
         <IonItem>
           <IonTitle>All Reports</IonTitle>
         </IonItem>
-        <IonCard color="primary" className='all-reports'>
+        <IonCard color="primary" className="all-reports">
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
@@ -112,7 +125,13 @@ const ViewReports: React.FC = () => {
                   View
                 </IonButton>
                 <IonButton
-                  onClick={() => setDeleteAlert({ state: true, name: report.reportName, Id: report.reportId })}
+                  onClick={() =>
+                    setDeleteAlert({
+                      state: true,
+                      name: report.reportName,
+                      Id: report.reportId,
+                    })
+                  }
                   fill="solid"
                   slot="end"
                   color="medium"
@@ -121,7 +140,9 @@ const ViewReports: React.FC = () => {
                 </IonButton>
                 <IonAlert
                   isOpen={deleteAlert.state}
-                  onDidDismiss={() => setDeleteAlert({ state: false, name: "", Id: 0 })}
+                  onDidDismiss={() =>
+                    setDeleteAlert({ state: false, name: '', Id: 0 })
+                  }
                   header="Confirm Delete"
                   message="Are you sure you want to delete this report?"
                   buttons={[
@@ -130,9 +151,12 @@ const ViewReports: React.FC = () => {
                       text: 'Delete',
                       cssClass: 'toasts',
                       handler: () => {
-                        deleteReport(deleteAlert.name, deleteAlert.Id.toString());
-                        setDeleteAlert({ state: false, name: "", Id: 0 });
-                      }
+                        deleteReport(
+                          deleteAlert.name,
+                          deleteAlert.Id.toString()
+                        );
+                        setDeleteAlert({ state: false, name: '', Id: 0 });
+                      },
                     },
                   ]}
                 />
@@ -140,67 +164,61 @@ const ViewReports: React.FC = () => {
             );
           })}
         </IonCard>
-
       </IonContent>
     </IonPage>
   );
 
   function view(data: any) {
-    let user = JSON.parse(localStorage.getItem('user')!)
+    let user = JSON.parse(localStorage.getItem('user')!);
     if (user == null) {
-      user = { username: 'demoUser' }
+      user = { username: 'demoUser' };
     }
-    getUserReport(user.username, data)
-      .then(apiResponse => {
-        if (apiResponse.data.report.data !== undefined) {
-          const arr = new Uint8Array(apiResponse.data.report.data);
-          const blob = new Blob([arr], { type: 'application/pdf' });
-          const docUrl = URL.createObjectURL(blob);
-          window.open(docUrl);
-        }
-      });
+    getUserReport(user.username, data).then((apiResponse) => {
+      if (apiResponse.data.report.data !== undefined) {
+        const arr = new Uint8Array(apiResponse.data.report.data);
+        const blob = new Blob([arr], { type: 'application/pdf' });
+        const docUrl = URL.createObjectURL(blob);
+        window.open(docUrl);
+      }
+    });
   }
 
   async function deleteReport(fileName: string, reportId: string) {
-    let userS = JSON.parse(localStorage.getItem('user')!)
+    let userS = JSON.parse(localStorage.getItem('user')!);
     if (userS == null) {
-      userS = { username: "demoUser" }
+      userS = { username: 'demoUser' };
     }
-    await removeReport(userS.username, fileName, reportId)
-      .then(apiResponse => {
+    await removeReport(userS.username, fileName, reportId).then(
+      (apiResponse) => {
         present('Deleted ' + deleteAlert.name, 1200);
-      });
+      }
+    );
 
-    getAllUserReports(userS.id)
-      .then(apiResponse => {
-        setR(apiResponse.data.reports);
-      });
+    getAllUserReports(userS.id).then((apiResponse) => {
+      setR(apiResponse.data.reports);
+    });
   }
 
   async function generateReport(period: string) {
-    let userS = JSON.parse(localStorage.getItem('user')!)
+    let userS = JSON.parse(localStorage.getItem('user')!);
     if (userS == null) {
-      userS = { id: 24, username: 'demoUser' }
+      userS = { id: 24, username: 'demoUser' };
     }
 
-    await generateReportA(userS.username, userS.id, period)
-      .then(apiResponse => {
-        if (apiResponse.data.message ==="Report Generated and uploaded")
-        {
-          present('Generated ' + period + ' Report', 1200)
-        }
-        else{
-          present('Error generating report, Try again.', 1200)
+    await generateReportA(userS.username, userS.id, period).then(
+      (apiResponse) => {
+        if (apiResponse.data.message === 'Report Generated and uploaded') {
+          present('Generated ' + period + ' Report', 1200);
+        } else {
+          present('Error generating report, Try again.', 1200);
         }
       }
-      );
+    );
 
-    getAllUserReports(userS.id)
-      .then(apiResponse => {
-        setR(apiResponse.data.reports);
-      });
+    getAllUserReports(userS.id).then((apiResponse) => {
+      setR(apiResponse.data.reports);
+    });
   }
-
 };
 
 export default ViewReports;
