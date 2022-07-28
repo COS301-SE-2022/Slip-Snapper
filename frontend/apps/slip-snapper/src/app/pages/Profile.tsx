@@ -30,6 +30,7 @@ const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
+  const [userDetails, setUserDetails] = useState({firstname: "", lastname: ""});
   const val = { weekly: 0, monthly: 0 };
   const history = useHistory();
 
@@ -40,6 +41,7 @@ const Profile: React.FC = () => {
     if(user==null){
         user = {id: 24}
     }
+    setUserDetails(user)
     getProfileData(user.id)
       .then(
         apiResponse => {
@@ -77,7 +79,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>User details</IonCardTitle>
               </IonItem>
               <IonItem className="center-items username" color="tertiary">
-                <IonText>Name: Christian Devraj </IonText>
+                <IonText>Name: {userDetails.firstname} {userDetails.lastname}</IonText>
               </IonItem>
               {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
               <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture" />
