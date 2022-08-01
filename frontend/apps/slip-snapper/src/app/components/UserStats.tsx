@@ -30,7 +30,9 @@ export const UserStats = () => {
         getStatsA(user.id)
             .then(
                 apiResponse => {
-                    setUserStats(apiResponse.data)
+                    if(typeof(apiResponse.data) !== "string"){
+                        setUserStats(apiResponse.data)
+                    }  
                 })
     }, []);
     return(

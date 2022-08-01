@@ -4,7 +4,7 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-const baseUrl = 'http://localhost:3000/api/'
+const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
 
 /**
  * To process the text extracted by OCR

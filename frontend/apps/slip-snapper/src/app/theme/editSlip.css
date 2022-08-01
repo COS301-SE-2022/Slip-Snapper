@@ -17,3 +17,11 @@
 .successRedirect{
     display: none;
 }
+.image{
+    width: 25%;
+    height: 25%;
+}
+.imageContainer{
+    text-align: center;
+    padding-top: 10px;
+}

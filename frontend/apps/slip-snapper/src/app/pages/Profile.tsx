@@ -24,6 +24,7 @@ import { setBudgetA, getProfileData } from "../../api/apiCall"
 import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -31,6 +32,7 @@ const Profile: React.FC = () => {
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
   const [userDetails, setUserDetails] = useState({firstname: "", lastname: ""});
   const val = { weekly: 0, monthly: 0 };
+  const history = useHistory();
 
   let totalWeeklySpent = 300;
   let totalMonthlySpent = 500;
@@ -43,13 +45,15 @@ const Profile: React.FC = () => {
     getProfileData(user.id)
       .then(
         apiResponse => {
-          val.weekly = apiResponse.data.weekly;
-          val.monthly = apiResponse.data.monthly;
-          totalWeeklySpent = apiResponse.data.weeklyTotal;
-          totalMonthlySpent = apiResponse.data.monthlyTotal;
-          setWeeklyBudget(val.weekly)
-          setMonthlyBudget(val.monthly)
-          setProfile(apiResponse.data)
+          if(typeof(apiResponse.data) !== "string"){
+            val.weekly = apiResponse.data.weekly;
+            val.monthly = apiResponse.data.monthly;
+            totalWeeklySpent = apiResponse.data.weeklyTotal;
+            totalMonthlySpent = apiResponse.data.monthlyTotal;
+            setWeeklyBudget(val.weekly)
+            setMonthlyBudget(val.monthly)
+            setProfile(apiResponse.data)
+          }
         })
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
@@ -210,7 +214,8 @@ const Profile: React.FC = () => {
   );
 
   function Logout() {
-    throw new Error('Function not implemented.');
+    history.push("/login")
+    window.location.reload()
   }
 
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {

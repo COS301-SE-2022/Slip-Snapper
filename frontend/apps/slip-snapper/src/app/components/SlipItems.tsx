@@ -14,7 +14,9 @@ import '../theme/FetchData.css';
         getAllSlips(user.id)
             .then(
                 apiResponse => {
-                    setSlipItems(apiResponse.data.slips)
+                    if(typeof(apiResponse.data) !== "string"){
+                        setSlipItems(apiResponse.data.slips)
+                    }
                 })
     }, []);
 
