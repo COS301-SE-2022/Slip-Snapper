@@ -340,6 +340,12 @@ async function addItem(userid, location, date, total, data) {
     };
 }
 
+/**
+ * Function to insert items that have been added to a slip
+ * @param {*} slipId The slip ID
+ * @param {*} insertItems The items that need to be inserted
+ * @returns json object with a message 
+ */
 async function insertAllItems(slipId,insertItems){
     let additions = []
 
@@ -544,8 +550,6 @@ async function updateSlips(slipId, editLocation, editTotal, editDate) {
     }
 }
 
-
-
 /**
  * Funtion to set the user budgets in the database
  * @param {*} userId The users id
@@ -590,13 +594,13 @@ async function getUserStats(userId) {
         category: favouriteCategory
     };
 }
+
 /**
  * Funtion to set the user budgets in the database
  * @param {*} userId The users id
  * @param {*} data the data to be added
  * @returns user data
  */
-
 async function setUserSpecificBudgets(userid, data) {
     const user = await prisma.budgets.update({
         where: {
@@ -664,8 +668,13 @@ async function getFavouriteCategory(userid) {
     }
 }
 
+/**
+ * Function to get the most frequent store for a user
+ * @param {*} userid The users Id
+ * @returns json object with the user favourite store
+ */
 async function getFavouriteStore(userid) {
-    const favouritestore = await prisma.slip.groupBy({
+    const favouriteStore = await prisma.slip.groupBy({
         by: ['location'],
         where: {
             usersId: userid
@@ -682,7 +691,7 @@ async function getFavouriteStore(userid) {
     })
 
     let storeLocation = ""
-    for (const store of favouritestore) {
+    for (const store of favouriteStore) {
         storeLocation = store.location
     }
 
@@ -699,6 +708,11 @@ async function getFavouriteStore(userid) {
     }
 }
 
+/**
+ * Function to get the most expensivve item for a user
+ * @param {*} userid The users Id
+ * @returns json object with the user most expensive item
+ */
 async function getMostExpensiveItem(userid) {
     const mostExpensive = await prisma.slip.findMany({
         where: {
@@ -740,6 +754,11 @@ async function getMostExpensiveItem(userid) {
     }
 }
 
+/**
+ * Function to get the most spent at a store for a user
+ * @param {*} userid The users Id
+ * @returns json object with the user most spent at store
+ */
 async function getMostSpentATStore(userid) {
     const mostExpensive = await prisma.slip.findMany({
         where: {
@@ -766,6 +785,11 @@ async function getMostSpentATStore(userid) {
     }
 }
 
+/**
+ * Function to get the weekly expenditure for a user
+ * @param {*} userid The users Id
+ * @returns json object with the user weekly expenditure
+ */
 async function getWeeklyExpenditure(userid) {
     const date1 = new Date()
     const lastweek = date1.setDate(date1.getDate() - 7);
@@ -799,6 +823,11 @@ async function getWeeklyExpenditure(userid) {
     }
 }
 
+/**
+ * Function to get the monthly expenditure for a user
+ * @param {*} userid The users Id
+ * @returns json object with the user monthly expenditure
+ */
 async function getMonthlyExpenditure(userid) {
     const date1 = new Date()
     const lastMonth = date1.setDate(date1.getDate() - 4 * 7);
@@ -843,7 +872,6 @@ async function getDataItems() {
         items: dataItems
     }
 }
-
 
 /**
  * Function to get the reports
@@ -959,7 +987,6 @@ async function getDailyWeeklyMonthlyReports(userid) {
     }
 }
 
-
 /**
  * Function to get the most recent reports.
  * @param {*} userId (Integer) The users id.
@@ -1001,7 +1028,6 @@ async function getRecentReports(userid) {
     }
 }
 
-
 /**
  * Function to create a report record in the Reports model.
  * @param {*} userId (Integer) The users id.
@@ -1033,6 +1059,11 @@ async function deleteReportRecord(reportid) {
     })
 }
 
+/**
+ * Function to return all the slips for a user
+ * @param {*} userid The users Id
+ * @returns json object with all the slips
+ */
 async function retrieveAllSlips(userid) {
     const allSlips = await prisma.slip.findMany({
         where: {
@@ -1056,6 +1087,11 @@ async function retrieveAllSlips(userid) {
     }
 }
 
+/**
+ * Function to get all the statistics for home for today
+ * @param {*} userid The user Id
+ * @returns json object with the users statistics from today
+ */
 async function todaysReports(userid) {
     const date1 = new Date()
     const lastweek = date1.setDate(date1.getDate() - 1)
@@ -1120,6 +1156,13 @@ async function getUserProfile(userId) {
     };
 }
 
+/**
+ * Get all the budgets for the various categories
+ * @param {*} userId The users Id
+ * @param {*} start the start date for the period
+ * @param {*} end the end date for the period
+ * @returns json object with the user budgets
+ */
 async function getUserGeneralBudgets(userId, start, end) {
     const budgets = await prisma.budgets.findFirst({
         where: {
@@ -1221,7 +1264,7 @@ async function getUserGeneralBudgets(userId, start, end) {
 /**
  * Funtion to get the user budgets from the database
  * @param {*} userId The users id
- * @returns user data
+ * @returns the user weekly or monthly budgets
  */
  async function getUserBudgets(userId) {
     const user = await prisma.user.findFirst({
