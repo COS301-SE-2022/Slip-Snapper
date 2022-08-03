@@ -1589,6 +1589,22 @@ async function getUserGeneralBudgets(userId, start, end) {
     }
     
 }
+/**
+ * Discriptve statistics measures of center: 
+ */
+ async function getUserAverage(userId) {
+    
+
+ }
+
+ async function getUserMedian(userId) {
+    
+
+}
+
+async function getUserMode(userId){
+
+}
 
 module.exports = {
     getUser,
