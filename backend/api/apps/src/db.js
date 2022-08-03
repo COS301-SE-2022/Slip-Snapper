@@ -1592,9 +1592,23 @@ async function getUserGeneralBudgets(userId, start, end) {
 /**
  * Discriptve statistics measures of center: 
  */
- async function getUserAverage(userId) {
-    
+ async function getUserAverageSpent(userId) {
+    //average spent per week
 
+try{
+    const userAverage= await prisma.slip.aggregate({
+        where:{
+            usersId:userId
+        },
+        select:{
+
+        }
+    })
+
+}
+catch{
+
+}
  }
 
  async function getUserMedian(userId) {
