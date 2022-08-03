@@ -1593,38 +1593,41 @@ async function getUserBudgets(userId) {
  * Discriptve statistics measures of center: 
  */
 
- async function getUserAverageSpent(userId) {
-  
+async function getUserAverageSpent(userId) {
+
     //modify to average spent per week once the date is fixed
-  
+
     try {
         const userAverage = await prisma.slip.aggregate({
             where: {
                 usersId: userId
             },
-          _avg:{
-            total:true
-          }
+            _avg: {
+                total: true
+            }
         })
-        const average=userAverage._avg.total.toFixed(2)
-        return{ 
-        average
+        const average = userAverage._avg.total.toFixed(2)
+        return {
+            average
         }
     }
     catch {
-        const average= 0.00
-        return{
-             message:"Error retrieving average spent",
-             average
+        const average = 0
+        average=average.toFixed(2)
+        return {
+            message: "Error retrieving average spent",
+            average
         }
-       
-        
     }
-  }
+}
 
 async function getUserMedian(userId) {
+    try {
 
 
+    } catch {
+
+    }
 }
 
 async function getUserMode(userId) {
