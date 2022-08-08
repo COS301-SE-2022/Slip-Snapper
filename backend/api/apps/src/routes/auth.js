@@ -1,5 +1,7 @@
-const router = require("express").Router();
+const jwt = require('jsonwebtoken')
 const { S3BucketFunctions } = require("./S3Bucket")
+
+const router = require("express").Router();
 
 /**
  * Add a user
@@ -9,6 +11,8 @@ router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
     let { firstname, lastname, username, password } = req.body;
     const result = await req.app.get('db').addUser(username, password, firstname, lastname);
+
+    const token = await req.app.get('token').generateToken(result.user)
 
     const path = `${username}/`
     const bucket = new S3BucketFunctions
@@ -20,7 +24,8 @@ router.post('/signup', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
+            token: token,
         });
 });
 
@@ -28,39 +33,41 @@ router.post('/signup', async (req,res)=>{
  * Log a user in
  * Logs the user in with their password and username
  */
-router.post('/login', async (req,res)=>{
+router.post('/login', async (req, res)=>{
     //TODO add input checking and password hashing
     let { username, password } = req.body;
 
     const result = await req.app.get('db').getUser(username,password);
     let status = 200;
+    //TODO checking for errors
+    
+    const token = await req.app.get('token').generateToken(result.user)
 
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
+            token: token,
         });
 });
 
 /**
  * Delete a user
- * Uses the user id delete the user
+ * Uses the user ID to delete the user
  */
-router.post('/delete', async (req,res)=>{
-    //TODO add input checking and password hashing
+router.delete('', async (req,res)=>{
+    const token = req.headers.authorization.split(' ')[1];
 
-    let { userId } = req.body;
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').deleteUser(userId);
+    const result = await req.app.get('db').deleteUser(tokenVerified.user.id);
 
     let status = 200;
-
     //TODO checking for errors
 
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
         });
 });
 
@@ -68,9 +75,10 @@ router.post('/delete', async (req,res)=>{
  * Update a user
  * Uses the user id to update the user
  */
- router.post('/update', async (req,res)=>{
-    let { userId, username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
-
+ router.patch('', async (req,res)=>{
+    let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    
     let data = {}
     if(username != undefined){
         data.username = username;
@@ -96,7 +104,9 @@ router.post('/delete', async (req,res)=>{
         data.monthlyBudget = monthlyBudget;
     }
     
-    const result = await req.app.get('db').updateUser(userId, data);
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    const result = await req.app.get('db').updateUser(tokenVerified.user.id, data);
 
     let status = 200;
 
@@ -105,7 +115,7 @@ router.post('/delete', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
         });
 });
  
