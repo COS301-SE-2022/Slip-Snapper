@@ -8,6 +8,7 @@ const getUserStats = jest.fn();
 const getAllReports = jest.fn();
 const getRecentReports = jest.fn();
 const getUserProfile = jest.fn();
+const verifyToken = jest.fn()
 
 const app = makeApp({
   getItemsReport,
@@ -17,6 +18,8 @@ const app = makeApp({
   getAllReports,
   getRecentReports,
   getUserProfile,
+},{},{
+    verifyToken,
 })
 
 /**

@@ -5,21 +5,32 @@ const getUser = jest.fn();
 const addUser = jest.fn();
 const deleteUser = jest.fn();
 const updateUser = jest.fn();
+const verifyToken = jest.fn()
+const generateToken = jest.fn()
+const createFolder = jest.fn()
 
 const app = makeApp({
   getUser,
   addUser,
   deleteUser,
   updateUser
+},{},{
+    verifyToken,
+    generateToken,
+},{
+    createFolder
 })
 
 /**
  * Test for the signup query
  */
 describe('Post /user/signup', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         addUser.mockReset();
+        generateToken.mockReset();
+        createFolder.mockReset();
     })
 
     test('should save the username and password to the database', async ()=>{
@@ -44,11 +55,22 @@ describe('Post /user/signup', ()=>{
                   }
             });
 
+            generateToken.mockReset();
+            generateToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
+            createFolder.mockReset();
+            createFolder.mockResolvedValue();
+
             const res = await request(app)
                 .post('/api/user/signup')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(addUser.mock.calls.length).toBe(1);
             expect(addUser.mock.calls[0][0]).toBe(body.username);
@@ -69,8 +91,6 @@ describe('Post /user/signup', ()=>{
           }
         
         for (let i = 0; i < 10; i++){
-            
-            
             addUser.mockReset();
             addUser.mockResolvedValue({
                 message:"User added succesfully",
@@ -85,11 +105,22 @@ describe('Post /user/signup', ()=>{
                   }
             });
 
+            generateToken.mockReset();
+            generateToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
+            createFolder.mockReset();
+            createFolder.mockResolvedValue();
+
             const res = await request(app)
                 .post('/api/user/signup')
                 .send(
                     { username: "username1", password: "password1"}
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.userData).toEqual(data);
             expect(res.body.message).toEqual("User added succesfully")
@@ -109,6 +140,14 @@ describe('Post /user/signup', ()=>{
                 isBusiness: false
               }
         });
+
+        generateToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
+        createFolder.mockResolvedValue();
         
         const res = await request(app)
             .post('/api/user/signup')
@@ -124,8 +163,11 @@ describe('Post /user/signup', ()=>{
  * Test for login query
  */
 describe('Post /user/login', ()=>{
+    const token = ""
+
     beforeEach(()=>{
         getUser.mockReset();
+        generateToken.mockReset();
     })
 
     test('should check the username and password are in the database', async ()=>{
@@ -150,11 +192,19 @@ describe('Post /user/login', ()=>{
                   }
             });
 
+            generateToken.mockReset();
+            generateToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
                 .post('/api/user/login')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(getUser.mock.calls.length).toBe(1);
             expect(getUser.mock.calls[0][0]).toBe(body.username);
@@ -190,11 +240,19 @@ describe('Post /user/login', ()=>{
                   }
             });
 
+            generateToken.mockReset();
+            generateToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
             .post('/api/user/login')
             .send(
                 { username: "username1", password: "password1"}
             )
+            .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.userData).toEqual(data);
             expect(res.body.message).toEqual("User logged in succesfully");
@@ -214,12 +272,19 @@ describe('Post /user/login', ()=>{
                 isBusiness: false
               }
         });
+
+        generateToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
             .post('/api/user/login')
             .send(
                 { username: "username1", password: "password1"}
             )
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
@@ -229,9 +294,12 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the update user query
  */
-describe('Post /user/update', ()=>{
+describe('Patch /user', ()=>{
+    const token = ""
+
     beforeEach(()=>{
         updateUser.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should update the username and password in the database', async ()=>{
@@ -256,11 +324,19 @@ describe('Post /user/update', ()=>{
                   }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: body.userId
+                }
+            });
+
             const res = await request(app)
-                .post('/api/user/update')
+                .patch('/api/user')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(updateUser.mock.calls.length).toBe(1);
             expect(updateUser.mock.calls[0][0]).toBe(body.userId);
@@ -295,13 +371,21 @@ describe('Post /user/update', ()=>{
                   }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/user/update')
+                .patch('/api/user')
                 .send(
                     { username: "username1", password: "password1"}
                 )
+                .set({ "Authorization": "Bearer " + token })
 
-            expect(res.body.userData).toEqual(body);
+            //expect(res.body.userData).toEqual(body);
             expect(res.body.message).toEqual("User updated succesfully");
         }
     })
@@ -319,12 +403,19 @@ describe('Post /user/update', ()=>{
                 isBusiness: false
               }
         });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
-            .post('/api/user/update')
+            .patch('/api/user')
             .send(
                 { username: "username1", password: "password1"}
             )
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
@@ -333,16 +424,19 @@ describe('Post /user/update', ()=>{
 /**
  * Test for the delete user query
  */
-describe('Post /user/delete', ()=>{
+describe('Delete /user', ()=>{
+    const token = ""
+
     beforeEach(()=>{
         deleteUser.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should delete the username and password from the database', async ()=>{
         const bodydata = [
-            { username: "username1", password: "password1"},
-            { username: "username2", password: "password2"},
-            { username: "username3", password: "password3"}
+            1,
+            2,
+            3,
         ]
 
         for (const body of bodydata){
@@ -360,14 +454,20 @@ describe('Post /user/delete', ()=>{
                   }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: body
+                }
+            });
+
             const res = await request(app)
-                .post('/api/user/delete')
-                .send(
-                    body
-                )
+                .delete('/api/user')
+                .send({})
+                .set({ "Authorization": "Bearer " + token })
 
             expect(deleteUser.mock.calls.length).toBe(1);
-            expect(deleteUser.mock.calls[0][0]).toBe(body.userId);
+            expect(deleteUser.mock.calls[0][0]).toBe(body);
         }
         
     })
@@ -398,13 +498,19 @@ describe('Post /user/delete', ()=>{
                   }
             });
 
-            const res = await request(app)
-                .post('/api/user/delete')
-                .send(
-                    { username: "username1", password: "password1"}
-                )
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
 
-            expect(res.body.userData).toEqual(data);
+            const res = await request(app)
+                .delete('/api/user')
+                .send({})
+                .set({ "Authorization": "Bearer " + token })
+
+            //expect(res.body.userData).toEqual(data);
             expect(res.body.message).toEqual("User deleted succesfully");
         }
     })
@@ -422,14 +528,18 @@ describe('Post /user/delete', ()=>{
                 isBusiness: false
               }
         });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
-            .post('/api/user/delete')
-            .send(
-                { username: "username1", password: "password1"}
-            )
+            .delete('/api/user')
+            .send({})
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
 })
-
