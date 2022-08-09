@@ -4,7 +4,8 @@ const headers = {
     "Content-Type": "application/json"
 }
 
-const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
+//const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
+const baseUrl = 'http://localhost:3000/api/'
 
 /**
  * To process the text extracted by OCR
@@ -22,6 +23,17 @@ export async function doProcessing(ocr){
     })
 }
 
+/**
+ * Update an item in the database
+ * @param {*} item the item id
+ * @param {*} userId the user id
+ * @param {*} name the name of the item
+ * @param {*} location the location of the item
+ * @param {*} quantity the quantity of the item
+ * @param {*} price the price of the item
+ * @param {*} type the type of the item
+ * @returns response from server
+ */
 export async function updateItemA( item, userId, name, location, quantity, price, type){
     return axios({
         headers: headers,
@@ -68,6 +80,12 @@ export async function getProfileData( userId ){
     })
 }
 
+/**
+ * To log a user in to the system
+ * @param {*} userName the users username
+ * @param {*} password the users password
+ * @returns response ffrom the server
+ */
 export async function loginA( userName, password){
     return axios({
         headers: headers,
@@ -80,6 +98,14 @@ export async function loginA( userName, password){
     })
 }
 
+/**
+ * To sign a user up
+ * @param {*} userName the users username
+ * @param {*} first the users first name
+ * @param {*} last the user last name
+ * @param {*} password the users password
+ * @returns response from the server
+ */
 export async function signupA( userName, first, last, password){
     return axios({
         headers: headers,
