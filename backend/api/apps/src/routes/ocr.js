@@ -5,6 +5,8 @@ const router = require("express").Router();
  */
 router.post('/process', async (req,res)=>{
     let { text } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
     let lines = text.split('\n')
 

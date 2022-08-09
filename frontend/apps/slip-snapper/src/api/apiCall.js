@@ -194,6 +194,11 @@ export async function removeReport( userName, fileName , reportId){
     })
 }
 
+/**
+ * To get all the slips for a user
+ * @param {*} userId the users id
+ * @returns response from the server
+ */
 export async function getAllSlips(userId) {
     return axios({
         headers: headers,

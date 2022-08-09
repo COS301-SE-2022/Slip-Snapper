@@ -4,7 +4,7 @@ const router = require("express").Router();
  * Get all items for a user
  * Uses the user id to get the items
  */
-router.get('/all', async (req,res)=>{
+router.get('', async (req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -26,7 +26,7 @@ router.get('/all', async (req,res)=>{
  * Add an item
  * Uses the user id to add the item\s
  */
-router.post('/add', async (req,res)=>{
+router.post('', async (req,res)=>{
     let { location, date, total, data } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
@@ -85,7 +85,7 @@ router.delete('', async (req,res)=>{
  * Update an item
  * Uses the user id and itemId to update the item
  */
-router.patch('/update', async (req,res)=>{
+router.patch('', async (req,res)=>{
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
@@ -147,7 +147,7 @@ router.get('/slip', async (req, res) => {
  * Update a slip and its related items
  * Uses the userid
  */
- router.post('/slip', async (req, res) => {
+ router.patch('/slip', async (req, res) => {
     let { updateSlip, insertItems, updateItems, removeItems } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
