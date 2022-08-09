@@ -83,9 +83,11 @@ describe('createPDF', ()=>{
  * Test for the get budget
  */
 describe('Get /report/profile', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         getUserProfile.mockReset();
+        verifyToken.mockReset();
     })
 
     test('Should get the user profile', async ()=>{
@@ -127,9 +129,17 @@ describe('Get /report/profile', ()=>{
                     }
                 }
             });
+
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: id
+                }
+            });
         
             const res = await request(app)
-                .get('/api/report/profile?userId='+id)
+                .get('/api/report/profile')
+                .set({ "Authorization": "Bearer " + token })
             
             expect(getUserProfile.mock.calls.length).toBe(1);
             expect(getUserProfile.mock.calls[0][0]).toBe(id);
@@ -170,8 +180,15 @@ describe('Get /report/profile', ()=>{
             }
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
             .get('/api/report/profile?userId=1')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("User profile statistics retrieved");
     })
@@ -208,8 +225,15 @@ describe('Get /report/profile', ()=>{
             }
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
             .get('/api/report/profile?userId=1')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
     })
@@ -220,6 +244,13 @@ describe('Get /report/profile', ()=>{
  * Test for the update budget query
  */
 describe('POST /report/budget', ()=>{
+    const token = ""
+
+    beforeEach(()=>{
+        setUserBudgets.mockReset();
+        verifyToken.mockReset();
+    })
+
     test('Should Generate a report for the user', async ()=>{
         const body = [
             {userId:1, weeklyB: 1, monthlyB:1},
@@ -227,7 +258,7 @@ describe('POST /report/budget', ()=>{
             {userId:3, weeklyB: 3, monthlyB:3}
         ]
 
-        data = {}
+        const data = {}
 
         for (const bod of body){
             setUserBudgets.mockReset();
@@ -237,9 +268,17 @@ describe('POST /report/budget', ()=>{
                 monthly: 2,
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: bod.userId
+                }
+            });
+
             const res = await request(app)
                 .post('/api/report/budget')
                 .send( bod )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(setUserBudgets.mock.calls.length).toBe(1);
             expect(setUserBudgets.mock.calls[0][0]).toBe(bod.userId);
@@ -253,9 +292,16 @@ describe('POST /report/budget', ()=>{
             monthly: 2,
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
             .post('/api/report/budget')
             .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("User budget set");
     })
@@ -267,9 +313,16 @@ describe('POST /report/budget', ()=>{
             monthly: 2,
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
             .post('/api/report/budget')
             .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
     })
@@ -279,6 +332,12 @@ describe('POST /report/budget', ()=>{
  * Test for the get user statistics query
  */
 describe('GET /report/statistics', ()=>{
+    const token = ""
+
+    beforeEach(()=>{
+        getUserStats.mockReset();
+        verifyToken.mockReset();
+    })
 
     //TODO expand
     test('Should get all user statistics', async ()=>{
@@ -318,8 +377,16 @@ describe('GET /report/statistics', ()=>{
                     },
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: id
+                }
+            });
+
             const res = await request(app)
-                .get('/api/report/statistics?userId='+ id)
+                .get('/api/report/statistics')
+                .set({ "Authorization": "Bearer " + token })
             
             expect(getUserStats.mock.calls.length).toBe(1);
             expect(getUserStats.mock.calls[0][0]).toBe(id);
@@ -355,8 +422,15 @@ describe('GET /report/statistics', ()=>{
                 },
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .get('/api/report/statistics?userId=1')
+            .get('/api/report/statistics')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("User statistics retrieved");
     })
@@ -390,8 +464,15 @@ describe('GET /report/statistics', ()=>{
                 },
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .get('/api/report/statistics?userId=1')
+            .get('/api/report/statistics')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
     })
@@ -401,9 +482,11 @@ describe('GET /report/statistics', ()=>{
  * Test for the get user reports query
  */
 describe('GET /report/user', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         getAllReports.mockReset();
+        verifyToken.mockReset();
     })
 
     //TODO expand
@@ -421,8 +504,16 @@ describe('GET /report/user', ()=>{
                 reports: []
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: id
+                }
+            });
+
             const res = await request(app)
-                .get('/api/report/user?userId='+id)
+                .get('/api/report/user')
+                .set({ "Authorization": "Bearer " + token })
             
             expect(getAllReports.mock.calls.length).toBe(1);
             expect(getAllReports.mock.calls[0][0]).toBe(id);
@@ -437,8 +528,15 @@ describe('GET /report/user', ()=>{
             reports: []
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .get('/api/report/user?userId=1')
+            .get('/api/report/user')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("All user reports Retrieved");
     })
@@ -449,8 +547,15 @@ describe('GET /report/user', ()=>{
             reports: []
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
             .get('/api/report/user?userId=1')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
     })
@@ -460,9 +565,11 @@ describe('GET /report/user', ()=>{
  * Test for the get recent reports query
  */
  describe('GET /report/recent', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         getRecentReports.mockReset();
+        verifyToken.mockReset();
     })
 
     //TODO expand
@@ -480,8 +587,16 @@ describe('GET /report/user', ()=>{
                 reports: []
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: id
+                }
+            });
+
             const res = await request(app)
-                .get('/api/report/recent?userId='+id)
+                .get('/api/report/recent')
+                .set({ "Authorization": "Bearer " + token })
             
             expect(getRecentReports.mock.calls.length).toBe(1);
             expect(getRecentReports.mock.calls[0][0]).toBe(id);
@@ -496,8 +611,15 @@ describe('GET /report/user', ()=>{
             reports: []
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .get('/api/report/recent?userId=1')
+            .get('/api/report/recent')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("Recent Reports retrieved.");
     })
@@ -508,8 +630,15 @@ describe('GET /report/user', ()=>{
             reports: []
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .get('/api/report/recent?userId=1')
+            .get('/api/report/recent')
+            .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
     })
