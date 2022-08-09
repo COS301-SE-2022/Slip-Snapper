@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken')
  * Class that handles the JWT tokens
  */
 class TokenFunctions{
-    //TODO Better handling of errors
     /**
      * Function to generate the JWT
      * @param {*} data The user data to be stored in the token 
@@ -21,11 +20,10 @@ class TokenFunctions{
             );
         } catch (error) {
             console.log(error);
-            return new Error("Error! Something went wrong when generating token.");
+            return "Error";
         }
     }
 
-    //TODO Better handling of errors
     /**
      * Function to verify the JWT
      * @param {*} token The encoded JWT
@@ -41,7 +39,7 @@ class TokenFunctions{
         }
         catch(error){
             console.log(error)
-            return new Error("Error! Something went wrong when validating token.");
+            return "Error";
         }
     }
 }

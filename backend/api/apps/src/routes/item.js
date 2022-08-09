@@ -8,6 +8,15 @@ router.get('', async (req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                numItems: 0,
+                itemList: []
+            });
+    }
+
     const result = await req.app.get('db').getItem(Number(tokenVerified.user.id));
 
     let status = 200;
@@ -30,6 +39,14 @@ router.post('', async (req,res)=>{
     let { location, date, total, data } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                numItems: 0,
+            });
+    }
 
     //TODO make use actual date
 
@@ -68,6 +85,14 @@ router.delete('', async (req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                item: {},
+            });
+    }
+
     const result = await req.app.get('db').deleteItem(itemId);
 
     let status = 200;
@@ -89,6 +114,14 @@ router.patch('', async (req,res)=>{
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                item: {},
+            });
+    }
 
     let dataA = {}
     let dataB = {}
@@ -130,6 +163,14 @@ router.get('/slip', async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                slips: [],
+            });
+    }
+
     const result = await req.app.get('db').retrieveAllSlips(Number(tokenVerified.user.id))
 
     let status = 200;
@@ -152,6 +193,13 @@ router.get('/slip', async (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
    
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
     const result = await req.app.get('db').updateSlip(Number(tokenVerified.user.id),updateSlip.text,insertItems,updateItems,removeItems)
 
     let status = 200;

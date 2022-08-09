@@ -53,8 +53,14 @@ router.post('/login', async (req, res)=>{
  */
 router.delete('', async (req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
-
     const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
 
     const result = await req.app.get('db').deleteUser(Number(tokenVerified.user.id));
 
@@ -74,7 +80,16 @@ router.delete('', async (req,res)=>{
  router.patch('', async (req,res)=>{
     let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
     const token = req.headers.authorization.split(' ')[1];
-    
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                userData: {},
+            });
+    }
+
     let data = {}
     // if(username != undefined){
     //     data.username = username;
@@ -99,8 +114,6 @@ router.delete('', async (req,res)=>{
     if(monthlyBudget != undefined){
         data.monthlyBudget = monthlyBudget;
     }
-    
-    const tokenVerified = await req.app.get('token').verifyToken(token);
 
     const result = await req.app.get('db').updateUser(Number(tokenVerified.user.id), data);
 
