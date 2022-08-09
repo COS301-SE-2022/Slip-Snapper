@@ -1,6 +1,3 @@
-const jwt = require('jsonwebtoken')
-const { S3BucketFunctions } = require("./S3Bucket")
-
 const router = require("express").Router();
 
 /**
@@ -15,8 +12,7 @@ router.post('/signup', async (req,res)=>{
     const token = await req.app.get('token').generateToken(result.user)
 
     const path = `${username}/`
-    const bucket = new S3BucketFunctions
-    const resultPDF = bucket.createFolder(path)
+    const bucket = await req.app.get('bucket').createFolder(path)
 
     let status = 200;
     //TODO checking for errors
@@ -80,9 +76,9 @@ router.delete('', async (req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
     
     let data = {}
-    if(username != undefined){
-        data.username = username;
-    }
+    // if(username != undefined){
+    //     data.username = username;
+    // }
 
     if(password != undefined){
         data.password = password;

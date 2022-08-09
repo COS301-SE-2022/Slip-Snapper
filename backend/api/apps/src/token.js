@@ -40,6 +40,7 @@ class TokenFunctions{
             return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
         }
         catch(error){
+            console.log(error)
             return new Error("Error! Something went wrong when validating token.");
         }
     }

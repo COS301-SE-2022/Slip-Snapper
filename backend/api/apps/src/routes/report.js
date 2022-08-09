@@ -3,7 +3,7 @@ const fsPromises = require("fs/promises");
 const doc = require('pdfkit');
 const PDFDocument = require('pdfkit-table');
 const router = require("express").Router();
-const {S3BucketFunctions} = require("./S3Bucket")
+const {S3BucketFunctions} = require("../S3Bucket")
 
 /**
  * Determines the start date to search from

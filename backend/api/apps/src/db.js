@@ -43,6 +43,7 @@ async function getUser(userName, password) {
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error validating user Details",
             user: null
@@ -87,6 +88,7 @@ async function addUser(username, password, firstname, lastname) {
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error Creating User",
             user: null
@@ -120,6 +122,7 @@ async function deleteUser(userId) {
             user: user
         };
     } catch (error) {
+        console.log(error)
         return {
             message: "Error removing user",
             user: null
@@ -154,6 +157,7 @@ async function updateUser(userId, data) {
             user: user
         };
     } catch (error) {
+        console.log(error)
         return {
             message: "Error updating User",
             user: null
