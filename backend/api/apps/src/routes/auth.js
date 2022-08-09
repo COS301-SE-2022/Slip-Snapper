@@ -56,7 +56,7 @@ router.delete('', async (req,res)=>{
 
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').deleteUser(tokenVerified.user.id);
+    const result = await req.app.get('db').deleteUser(Number(tokenVerified.user.id));
 
     let status = 200;
     //TODO checking for errors
@@ -102,7 +102,7 @@ router.delete('', async (req,res)=>{
     
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').updateUser(tokenVerified.user.id, data);
+    const result = await req.app.get('db').updateUser(Number(tokenVerified.user.id), data);
 
     let status = 200;
 

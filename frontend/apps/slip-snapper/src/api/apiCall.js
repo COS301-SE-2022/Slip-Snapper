@@ -1,7 +1,8 @@
 const axios = require('axios');
 
 const headers = {
-    "Content-Type": "application/json"
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
 }
 
 //const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
