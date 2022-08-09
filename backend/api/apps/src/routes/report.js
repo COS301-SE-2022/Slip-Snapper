@@ -145,12 +145,15 @@ async function generatePDF(name, object, today, period){
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
 router.post('/pdf', async (req,res)=>{
-    let { period, userId, userName } = req.body;
+    let { period, userName } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
     var today = new Date();
     let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
     
     var periodStart = await determinePeriodStart(period, periodEnd);
-    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
+    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
     let types = await sortItemsIntoCategories(result.itemList)
 
     let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
@@ -164,7 +167,7 @@ router.post('/pdf', async (req,res)=>{
     if(report){
         const resultPDF = bucket.uploadFile(path, report.fileContent)
     
-        const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, report.total);
+        const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
         try {
             await fsPromises.unlink(pdfName);
         } catch (err) {}
@@ -191,6 +194,8 @@ router.post('/pdf', async (req,res)=>{
  */
  router.get('/pdf', async (req,res)=>{
     let { userName, fileName } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
     const path = `${userName}/${fileName}`
     const bucket = new S3BucketFunctions
@@ -213,6 +218,8 @@ router.post('/pdf', async (req,res)=>{
  */
 router.delete('/pdf', async (req,res)=>{
     let { userName, fileName, reportID } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
     const path = `${userName}/${fileName}`
     const bucket = new S3BucketFunctions
@@ -236,9 +243,10 @@ router.delete('/pdf', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.get('/profile', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').getUserProfile(Number(userId));
+    const result = await req.app.get('db').getUserProfile(Number(tokenVerified.user.id));
 
     let status = 200;
     //TODO error checking
@@ -264,7 +272,9 @@ router.get('/profile', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    let { userId, weekly, monthly } = req.body;
+    let { weekly, monthly } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
     let data = {}
     if(weekly != null){
@@ -275,7 +285,7 @@ router.post('/budget', async (req,res)=>{
         data.monthlyBudget = monthly
     }
 
-    const result = await req.app.get('db').setUserBudgets(userId, data);
+    const result = await req.app.get('db').setUserBudgets( Number(tokenVerified.user.id), data);
 
     let status = 200;
 
@@ -292,15 +302,17 @@ router.post('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
  router.post('/otherBudgets', async (req,res)=>{
-    let { userId, budgets } = req.body;
+    let { budgets } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    for (var key in budgets) {
+    for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
             budgets[key] = parseFloat(budgets[key])
         }
     }
     
-    const result = await req.app.get('db').setUserSpecificBudgets(userId, budgets);
+    const result = await req.app.get('db').setUserSpecificBudgets( Number(tokenVerified.user.id), budgets);
 
     let status = 200;
 
@@ -316,9 +328,10 @@ router.post('/budget', async (req,res)=>{
  * Uses the user Id
  */
 router.get('/statistics', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').getUserStats( Number(userId) );
+    const result = await req.app.get('db').getUserStats( Number(tokenVerified.user.id) );
     let status = 200;
 
     return res.status(status)
@@ -349,9 +362,10 @@ router.get('/statistics', async (req,res)=>{
  * Uses the user id to get all linked reports
  */
 router.get('/user', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
-    const result = await req.app.get("db").getAllReports(Number(userId));
+    const result = await req.app.get("db").getAllReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -371,8 +385,10 @@ router.get('/user', async (req,res)=>{
  * Uses the usersId
  */
 router.get('/recent', async (req,res)=>{
-    let { userId } = req.query;
-    const result = await req.app.get("db").getRecentReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    const result = await req.app.get("db").getRecentReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -390,8 +406,10 @@ router.get('/recent', async (req,res)=>{
  * Get this weeks reports
  */
 router.get('/thisweek', async (req, res) => {
-    let { userId } = req.query;
-    const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -409,8 +427,10 @@ router.get('/thisweek', async (req, res) => {
  * Get today's expenditure stats
  */
 router.get('/today', async (req, res) => {
-    let { userId } = req.query;
-    const result = await req.app.get("db").todaysReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    const result = await req.app.get("db").todaysReports(Number(tokenVerified.user.id));
 
     let status = 200;
 

@@ -52,11 +52,16 @@ export async function updateItemA( item, userId, name, location, quantity, price
     })
 }
 
+/**
+ * Get all the items from the server
+ * @param {*} userId the users id
+ * @returns the reposnse from the server
+ */
 export async function getItemsA(userId){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'item/all?userId=' + userId
+        url: baseUrl + 'item'
     })
 }
 
@@ -142,11 +147,18 @@ export async function getStatsA( userId ){
       })
 }
 
+/**
+ * To add an item
+ * @param {*} userId the users id
+ * @param {*} data the data of the item
+ * @param {*} text the slip data of the item
+ * @returns the response from the server
+ */
 export async function addItemsA( userId, data, text){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'item/add',
+        url: baseUrl + 'item',
         data: JSON.stringify({
           userId: userId,
           location: data.text[1],
@@ -215,6 +227,15 @@ export async function getThisWeeksReports(userId) {
     })
 }
 
+/**
+ * To update a slip and its related items
+ * @param {*} userId the users id
+ * @param {*} updateSlip slip contents to update
+ * @param {*} insertItems the items to be added
+ * @param {*} updateItems the items to be updated
+ * @param {*} removeItems the items to be removed
+ * @returns the response from the server
+ */
 export async function updateSlipA( userId, updateSlip, insertItems,updateItems, removeItems){
     return axios({
         headers: headers,
