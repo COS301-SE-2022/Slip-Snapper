@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { S3BucketFunctions } = require("./S3Bucket")
 
 /**
  * Add a user
@@ -10,9 +9,10 @@ router.post('/signup', async (req,res)=>{
     let { firstname, lastname, username, password } = req.body;
     const result = await req.app.get('db').addUser(username, password, firstname, lastname);
 
+    const token = await req.app.get('token').generateToken(result.user)
+
     const path = `${username}/`
-    const bucket = new S3BucketFunctions
-    const resultPDF = bucket.createFolder(path)
+    const bucket = await req.app.get('bucket').createFolder(path)
 
     let status = 200;
     //TODO checking for errors
@@ -20,7 +20,8 @@ router.post('/signup', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
+            token: token,
         });
 });
 
@@ -28,39 +29,47 @@ router.post('/signup', async (req,res)=>{
  * Log a user in
  * Logs the user in with their password and username
  */
-router.post('/login', async (req,res)=>{
+router.post('/login', async (req, res)=>{
     //TODO add input checking and password hashing
     let { username, password } = req.body;
 
     const result = await req.app.get('db').getUser(username,password);
     let status = 200;
+    //TODO checking for errors
+    
+    const token = await req.app.get('token').generateToken(result.user)
 
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
+            token: token,
         });
 });
 
 /**
  * Delete a user
- * Uses the user id delete the user
+ * Uses the user ID to delete the user
  */
-router.post('/delete', async (req,res)=>{
-    //TODO add input checking and password hashing
+router.delete('', async (req,res)=>{
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    let { userId } = req.body;
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
 
-    const result = await req.app.get('db').deleteUser(userId);
+    const result = await req.app.get('db').deleteUser(Number(tokenVerified.user.id));
 
     let status = 200;
-
     //TODO checking for errors
 
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
         });
 });
 
@@ -68,13 +77,23 @@ router.post('/delete', async (req,res)=>{
  * Update a user
  * Uses the user id to update the user
  */
- router.post('/update', async (req,res)=>{
-    let { userId, username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
+ router.patch('', async (req,res)=>{
+    let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                userData: {},
+            });
+    }
 
     let data = {}
-    if(username != undefined){
-        data.username = username;
-    }
+    // if(username != undefined){
+    //     data.username = username;
+    // }
 
     if(password != undefined){
         data.password = password;
@@ -95,8 +114,8 @@ router.post('/delete', async (req,res)=>{
     if(monthlyBudget != undefined){
         data.monthlyBudget = monthlyBudget;
     }
-    
-    const result = await req.app.get('db').updateUser(userId, data);
+
+    const result = await req.app.get('db').updateUser(Number(tokenVerified.user.id), data);
 
     let status = 200;
 
@@ -105,7 +124,7 @@ router.post('/delete', async (req,res)=>{
     return res.status(status)
         .send({
             message: result.message,
-            userData: result.user
+            userData: result.user,
         });
 });
  

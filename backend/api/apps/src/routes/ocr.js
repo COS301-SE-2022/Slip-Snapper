@@ -5,6 +5,16 @@ const router = require("express").Router();
  */
 router.post('/process', async (req,res)=>{
     let { text } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                text : []
+            });
+    }
 
     let lines = text.split('\n')
 

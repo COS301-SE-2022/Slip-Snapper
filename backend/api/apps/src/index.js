@@ -1,6 +1,6 @@
 const express = require('express');
 
-function makeApp( database, parser = {}){
+function makeApp( database, parser = {}, token = {}, bucket = {}){
     const app = express();
     const bodyParser = require('body-parser');
     app.use(bodyParser.json());
@@ -9,6 +9,8 @@ function makeApp( database, parser = {}){
 
     app.set( 'db', database )
     app.set( 'parser', parser )
+    app.set( 'token', token )
+    app.set( 'bucket', bucket )
 
     app.get('/api/ping', async (req,res)=>{
         return res.status(200)

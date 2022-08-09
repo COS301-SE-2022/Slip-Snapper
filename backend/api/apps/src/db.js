@@ -30,14 +30,20 @@ async function getUser(userName, password) {
             };
         }
 
-        //TODO return specific aspects of the user and not everything
-
         return {
             message: "User logged in successfully",
-            user: user
+            user: {
+                id: user.id,
+                username: user.username,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                weeklyBudget: user.weeklyBudget,
+                monthlyBudget: user.monthlyBudget,
+            }
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error validating user Details",
             user: null
@@ -82,6 +88,7 @@ async function addUser(username, password, firstname, lastname) {
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error Creating User",
             user: null
@@ -115,6 +122,7 @@ async function deleteUser(userId) {
             user: user
         };
     } catch (error) {
+        console.log(error)
         return {
             message: "Error removing user",
             user: null
@@ -149,6 +157,7 @@ async function updateUser(userId, data) {
             user: user
         };
     } catch (error) {
+        console.log(error)
         return {
             message: "Error updating User",
             user: null
@@ -1589,10 +1598,16 @@ async function getUserBudgets(userId) {
     }
 
 }
+
 /**
  * Discriptve statistics measures of center: 
  */
 
+/**
+ * Function to get the users average spent
+ * @param {*} userId The users ID 
+ * @returns the user average
+ */
 async function getUserAverageSpent(userId) {
 
     //modify to average spent per week once the date is fixed
@@ -1608,15 +1623,14 @@ async function getUserAverageSpent(userId) {
         })
         const average = userAverage._avg.total.toFixed(2)
         return {
-            average
+            message: "Error retrieving average spent",
+            average: average
         }
     }
-    catch {
-        const average = 0
-        average=average.toFixed(2)
+    catch (error) {
         return {
             message: "Error retrieving average spent",
-            average
+            average: "0.00"
         }
     }
 }

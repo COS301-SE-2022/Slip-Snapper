@@ -3,7 +3,7 @@ const fsPromises = require("fs/promises");
 const doc = require('pdfkit');
 const PDFDocument = require('pdfkit-table');
 const router = require("express").Router();
-const {S3BucketFunctions} = require("./S3Bucket")
+const {S3BucketFunctions} = require("../S3Bucket")
 
 /**
  * Determines the start date to search from
@@ -145,26 +145,36 @@ async function generatePDF(name, object, today, period){
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
 router.post('/pdf', async (req,res)=>{
-    let { period, userId, userName } = req.body;
-    var today = new Date();
-    let periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
-    
-    var periodStart = await determinePeriodStart(period, periodEnd);
-    const result = await req.app.get('db').getItemsReport(Number(userId), periodStart, periodEnd);
-    let types = await sortItemsIntoCategories(result.itemList)
+    let { period, userName } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    let name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
-    let dir = __dirname + "/"
-    let pdfName = dir + name
-    let report = await generatePDF(pdfName, types, today, period)
-    
-    const path = `${userName}/${name}`
-    const bucket = new S3BucketFunctions
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                title: "",
+                reportTotal: 0
+            });
+    }
 
+    const today = new Date();
+    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    
+    const periodStart = await determinePeriodStart(period, periodEnd);
+    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    const types = await sortItemsIntoCategories(result.itemList)
+
+    const name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
+    const dir = __dirname + "/"
+    const pdfName = dir + name
+    const report = await generatePDF(pdfName, types, today, period)
+    
     if(report){
-        const resultPDF = bucket.uploadFile(path, report.fileContent)
+        const path = `${userName}/${name}`
+        const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
     
-        const resultDB = await req.app.get('db').createReportRecord(Number(userId), name, report.total);
+        const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
         try {
             await fsPromises.unlink(pdfName);
         } catch (err) {}
@@ -191,10 +201,20 @@ router.post('/pdf', async (req,res)=>{
  */
  router.get('/pdf', async (req,res)=>{
     let { userName, fileName } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                report: ""
+            });
+    }
+
     const path = `${userName}/${fileName}`
-    const bucket = new S3BucketFunctions
-    const result = await bucket.getFile(path)
+    const bucket = await req.app.get('bucket').getFile(path)
+    
     let status = 200;
 
     //TODO error checking
@@ -213,10 +233,18 @@ router.post('/pdf', async (req,res)=>{
  */
 router.delete('/pdf', async (req,res)=>{
     let { userName, fileName, reportID } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
     const path = `${userName}/${fileName}`
-    const bucket = new S3BucketFunctions
-    const result = bucket.deleteFile(path)
+    const bucket = await req.app.get('bucket').deleteFile(path)
     
     await req.app.get("db").deleteReportRecord(Number(reportID))
     
@@ -226,7 +254,7 @@ router.delete('/pdf', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: result.message,
+            message: bucket.message,
         });
     
 });
@@ -236,9 +264,26 @@ router.delete('/pdf', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.get('/profile', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').getUserProfile(Number(userId));
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                weeklyTotal: 0,
+                weekly: 0,
+                monthlyTotal: 0,
+                monthly: 0,
+                favouriteStore: {
+                    name: "",
+                    receipts: [],
+                },
+                otherBudgets: {},
+            });
+    }
+    
+    const result = await req.app.get('db').getUserProfile(Number(tokenVerified.user.id));
 
     let status = 200;
     //TODO error checking
@@ -264,8 +309,19 @@ router.get('/profile', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    let { userId, weekly, monthly } = req.body;
+    let { weekly, monthly } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
     
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                weekly: 0,
+                monthly: 0,
+            });
+    }
+
     let data = {}
     if(weekly != null){
         data.weeklyBudget = weekly
@@ -275,7 +331,7 @@ router.post('/budget', async (req,res)=>{
         data.monthlyBudget = monthly
     }
 
-    const result = await req.app.get('db').setUserBudgets(userId, data);
+    const result = await req.app.get('db').setUserBudgets( Number(tokenVerified.user.id), data);
 
     let status = 200;
 
@@ -283,7 +339,7 @@ router.post('/budget', async (req,res)=>{
         .send({
             message: result.message,
             weekly: result.weekly,
-            monthly: result.monthly
+            monthly: result.monthly,
         });
 });
 
@@ -291,23 +347,33 @@ router.post('/budget', async (req,res)=>{
  * Set the users budget
  * Uses the user id to get the items
  */
- router.post('/otherBudgets', async (req,res)=>{
-    let { userId, budgets } = req.body;
+router.post('/otherBudgets', async (req,res)=>{
+    let { budgets } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    for (var key in budgets) {
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                budgets: {},
+            });
+    }
+
+    for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
             budgets[key] = parseFloat(budgets[key])
         }
     }
     
-    const result = await req.app.get('db').setUserSpecificBudgets(userId, budgets);
+    const result = await req.app.get('db').setUserSpecificBudgets( Number(tokenVerified.user.id), budgets);
 
     let status = 200;
 
     return res.status(status)
         .send({
-            // message: result.message,
-            // budgets: result.budgets,
+            message: result.message,
+            budgets: result.budgets,
         });
 });
 
@@ -316,9 +382,34 @@ router.post('/budget', async (req,res)=>{
  * Uses the user Id
  */
 router.get('/statistics', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').getUserStats( Number(userId) );
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+
+                category: {
+                    amount: 0,
+                    name: ""
+                },
+                mostExpensive: {
+                    amount: 0,
+                    name: ""
+                },
+                lastWeek:{
+                    current: 0,
+                    previous: 0
+                },
+                lastMonth:{
+                    current: 0,
+                    previous: 0
+                }
+            });
+    }
+
+    const result = await req.app.get('db').getUserStats( Number(tokenVerified.user.id) );
     let status = 200;
 
     return res.status(status)
@@ -349,9 +440,19 @@ router.get('/statistics', async (req,res)=>{
  * Uses the user id to get all linked reports
  */
 router.get('/user', async (req,res)=>{
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                numReports: 0,
+                reports: []
+            });
+    }
     
-    const result = await req.app.get("db").getAllReports(Number(userId));
+    const result = await req.app.get("db").getAllReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -371,8 +472,18 @@ router.get('/user', async (req,res)=>{
  * Uses the usersId
  */
 router.get('/recent', async (req,res)=>{
-    let { userId } = req.query;
-    const result = await req.app.get("db").getRecentReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+    
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                reports: []
+            });
+    }
+
+    const result = await req.app.get("db").getRecentReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -390,8 +501,18 @@ router.get('/recent', async (req,res)=>{
  * Get this weeks reports
  */
 router.get('/thisweek', async (req, res) => {
-    let { userId } = req.query;
-    const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                reports: []
+            });
+    }
+
+    const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -409,8 +530,19 @@ router.get('/thisweek', async (req, res) => {
  * Get today's expenditure stats
  */
 router.get('/today', async (req, res) => {
-    let { userId } = req.query;
-    const result = await req.app.get("db").todaysReports(Number(userId));
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                totalItems: 0,
+                totalSpent: 0
+            });
+    }
+
+    const result = await req.app.get("db").todaysReports(Number(tokenVerified.user.id));
 
     let status = 200;
 

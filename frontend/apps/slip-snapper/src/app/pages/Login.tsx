@@ -101,8 +101,11 @@ const Login: React.FC = () => {
             setAlert(true)
           }
           else {
+            //Change user local storage item
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+            localStorage.removeItem('token')
+            localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
             history.push("/home")
             //window.location.reload();

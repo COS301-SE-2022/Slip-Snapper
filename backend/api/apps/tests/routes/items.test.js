@@ -7,6 +7,7 @@ const deleteItem = jest.fn();
 const updateItem = jest.fn();
 const retrieveAllSlips = jest.fn();
 const updateSlip = jest.fn();
+const verifyToken = jest.fn()
 
 const app = makeApp({
   getItem,
@@ -15,15 +16,19 @@ const app = makeApp({
   updateItem,
   retrieveAllSlips,
   updateSlip
+},{},{
+    verifyToken
 })
 
 /**
  * Test for the get items for user query
  */
-describe('Get /item/all', ()=>{
+describe('Get /item', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         getItem.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should returnall the items from the database for the user', async ()=>{
@@ -50,8 +55,16 @@ describe('Get /item/all', ()=>{
                   }]
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: query
+                }
+            });
+
             const res = await request(app)
-                .get('/api/item/all?userId='+query)
+                .get('/api/item')
+                .set({ "Authorization": "Bearer " + token })
 
             expect(getItem.mock.calls.length).toBe(1);
             expect(getItem.mock.calls[0][0]).toBe(query);
@@ -88,8 +101,16 @@ describe('Get /item/all', ()=>{
                   }]
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .get('/api/item/all?userId=1')
+                .get('/api/item')
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.itemList).toEqual(data);
             expect(res.body.numItems).toEqual(1);
@@ -112,9 +133,16 @@ describe('Get /item/all', ()=>{
                 date: "date"
               }]
         });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
-            .get('/api/item/all?userId=1')
+            .get('/api/item')
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
@@ -123,8 +151,9 @@ describe('Get /item/all', ()=>{
 /**
  * Test for the add user query
  */
-describe('Post /item/add', ()=>{
-    
+describe('Post /item', ()=>{
+    const token = ""
+
     beforeEach(()=>{
         addItem.mockReset();
     })
@@ -143,11 +172,19 @@ describe('Post /item/add', ()=>{
                 numItems: 1,
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: body.userId
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/add')
+                .post('/api/item')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
             
             expect(addItem.mock.calls.length).toBe(1);
             expect(addItem.mock.calls[0][0]).toBe(body.userId);
@@ -166,11 +203,19 @@ describe('Post /item/add', ()=>{
                 numItems: 1,
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/add')
+                .post('/api/item')
                 .send(
-                    { userId: 3, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
+                    { userId: 1, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.numItems).toEqual(1);
             expect(res.body.message).toEqual("Item/s has been added");
@@ -183,11 +228,18 @@ describe('Post /item/add', ()=>{
             numItems: 1,
         });
 
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .post('/api/item/add')
+            .post('/api/item')
             .send(
-                { userId: 3, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
+                { userId: 1, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
             )
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
@@ -196,10 +248,12 @@ describe('Post /item/add', ()=>{
 /**
  * Test for the update item query
  */
-describe('Post /item/update', ()=>{
-    
+describe('Patch /item', ()=>{
+    const token = ""
+
     beforeEach(()=>{
         updateItem.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should save the item to the database', async ()=>{
@@ -224,11 +278,19 @@ describe('Post /item/update', ()=>{
                 }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/update')
+                .patch('/api/item')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
             
             expect(updateItem.mock.calls.length).toBe(1);
             expect(updateItem.mock.calls[0][0]).toBe(body.itemId);
@@ -257,11 +319,19 @@ describe('Post /item/update', ()=>{
                 }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/update')
+                .patch('/api/item')
                 .send(
                     { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.item).toEqual(data);
             expect(res.body.message).toEqual("Item has been updated successfully")
@@ -279,12 +349,19 @@ describe('Post /item/update', ()=>{
                 price: 111111,
             }
         });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
-            .post('/api/item/update')
+            .patch('/api/item')
             .send(
                 { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
             )
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
         
@@ -294,10 +371,12 @@ describe('Post /item/update', ()=>{
 /**
  * Test for the delete item query
  */
-describe('Post /item/delete', ()=>{
+describe('Delete /item', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         deleteItem.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should delete the item from the database', async ()=>{
@@ -320,11 +399,19 @@ describe('Post /item/delete', ()=>{
                 }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/delete')
+                .delete('/api/item')
                 .send(
                     body
                 )
+                .set({ "Authorization": "Bearer " + token })
             
             expect(deleteItem.mock.calls.length).toBe(1);
             expect(deleteItem.mock.calls[0][0]).toBe(body.itemId);
@@ -353,11 +440,19 @@ describe('Post /item/delete', ()=>{
                 }
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .post('/api/item/delete')
+                .delete('/api/item')
                 .send(
                     { itemId: 1 }
                 )
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.item).toEqual(data);
             expect(res.body.message).toEqual("Item has been deleted");
@@ -376,11 +471,18 @@ describe('Post /item/delete', ()=>{
             }
         });
         
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
         const res = await request(app)
-            .post('/api/item/delete')
+            .delete('/api/item')
             .send(
                 { itemId: 1 }
             )
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
         
@@ -391,9 +493,11 @@ describe('Post /item/delete', ()=>{
  * Test for the get slip for user query
  */
 describe('Get /item/slip', ()=>{
+    const token = ""
 
     beforeEach(()=>{
         retrieveAllSlips.mockReset();
+        verifyToken.mockReset();
     })
 
     test('should returnall the items from the database for the user', async ()=>{
@@ -410,8 +514,16 @@ describe('Get /item/slip', ()=>{
                 slips: [{}],
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: query
+                }
+            });
+
             const res = await request(app)
-                .get('/api/item/slip?userId='+query)
+                .get('/api/item/slip')
+                .set({ "Authorization": "Bearer " + token })
 
             expect(retrieveAllSlips.mock.calls.length).toBe(1);
             expect(retrieveAllSlips.mock.calls[0][0]).toBe(query);
@@ -429,8 +541,16 @@ describe('Get /item/slip', ()=>{
                 slips: [{}],
             });
 
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
+
             const res = await request(app)
-                .get('/api/item/slip?userId=1')
+                .get('/api/item/slip')
+                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.slips).toEqual(data);
             expect(res.body.message).toEqual("All slips retrieved");
@@ -442,9 +562,16 @@ describe('Get /item/slip', ()=>{
             message:"All slips retrieved",
             slips: [{}],
         });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
         
         const res = await request(app)
-            .get('/api/item/slip?userId=1')
+            .get('/api/item/slip')
+            .set({ "Authorization": "Bearer " + token })
 
         expect(res.statusCode).toEqual(200);
     })
@@ -453,72 +580,97 @@ describe('Get /item/slip', ()=>{
 /**
  * Test for the get slip for user query
  */
-//  describe('Post /item/slip', ()=>{
+describe('Post /item/slip', ()=>{
+    const token = ""
 
-//     beforeEach(()=>{
-//         updateSlip.mockReset();
-//     })
+    beforeEach(()=>{
+        updateSlip.mockReset();
+        verifyToken.mockReset();
+    })
 
-//     test('should update all the items in the database', async ()=>{
-//         const bodyData = [
-//             {userId:1, updateItems:{}, removeItems:{}},
-//             {userId:2, updateItems:{}, removeItems:{}},
-//             {userId:3, updateItems:{}, removeItems:{}}
-//         ]
+    test('should update all the items in the database', async ()=>{
+        const bodyData = [
+            {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}},
+            {userId:2, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}},
+            {userId:3, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+        ]
 
-//         for (const body of bodyData){
-//             updateSlip.mockReset();
-//             updateSlip.mockResolvedValue({
-//                 message:"Slip updated",
-//                 slip: {},
-//             });
+        for (const body of bodyData){
+            updateSlip.mockReset();
+            updateSlip.mockResolvedValue({
+                message:"Slip updated",
+                slip: {},
+            });
 
-//             const res = await request(app)
-//                 .post('/api/item/slip')
-//                 .send(
-//                     body
-//                 )
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: body.userId
+                }
+            });
 
-//             expect(updateSlip.mock.calls.length).toBe(1);
-//             expect(updateSlip.mock.calls[0][0]).toBe(body);
+            const res = await request(app)
+                .patch('/api/item/slip')
+                .send(
+                    body
+                )
+                .set({ "Authorization": "Bearer " + token })
 
-//         }
+            expect(updateSlip.mock.calls.length).toBe(1);
+            //expect(updateSlip.mock.calls[0][0]).toBe(body);
+
+        }
         
-//     })
+    })
 
-//     test('should return a json object containing the itemid', async ()=>{
-//         let data = {}
+    test('should return a json object containing the itemid', async ()=>{
+        let data = {}
 
-//         for (let i = 0; i < 10; i++){
-//             updateSlip.mockReset();
-//             updateSlip.mockResolvedValue({
-//                 message:"Slip updated",
-//                 slip: {},
-//             });
+        for (let i = 0; i < 10; i++){
+            updateSlip.mockReset();
+            updateSlip.mockResolvedValue({
+                message:"Slip updated",
+                slip: {},
+            });
 
-//             const res = await request(app)
-//                 .post('/api/item/slip')
-//                 .send(
-//                     {userId:1, updateItems:{}, removeItems:{}}
-//                 )
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: 1
+                }
+            });
 
-//             expect(res.body.slip).toEqual(data);
-//             expect(res.body.message).toEqual("Slip updated");
-//         }
-//     })
+            const res = await request(app)
+                .patch('/api/item/slip')
+                .send(
+                    {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+                )
+                .set({ "Authorization": "Bearer " + token })
 
-//     test('should return a status code of 200', async ()=>{
-//         updateSlip.mockResolvedValue({
-//             message:"Slip updated",
-//             slip: {},
-//         });
+            //expect(res.body.slip).toEqual(data);
+            expect(res.body.message).toEqual("Slip updated");
+        }
+    })
+
+    test('should return a status code of 200', async ()=>{
+        updateSlip.mockResolvedValue({
+            message:"Slip updated",
+            slip: {},
+        });
         
-//         const res = await request(app)
-//             .post('/api/item/slip')
-//             .send(
-//                 {userId:1, updateItems:{}, removeItems:{}}
-//             )
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
 
-//         expect(res.statusCode).toEqual(200);
-//     })
-// })
+        const res = await request(app)
+            .patch('/api/item/slip')
+            .send(
+                {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+            )
+            .set({ "Authorization": "Bearer " + token })
+
+        expect(res.statusCode).toEqual(200);
+    })
+})

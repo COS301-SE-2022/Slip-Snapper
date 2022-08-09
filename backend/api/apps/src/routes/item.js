@@ -4,10 +4,20 @@ const router = require("express").Router();
  * Get all items for a user
  * Uses the user id to get the items
  */
-router.get('/all', async (req,res)=>{
-    let { userId } = req.query;
+router.get('', async (req,res)=>{
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').getItem(Number(userId));
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                numItems: 0,
+                itemList: []
+            });
+    }
+
+    const result = await req.app.get('db').getItem(Number(tokenVerified.user.id));
 
     let status = 200;
 
@@ -25,8 +35,18 @@ router.get('/all', async (req,res)=>{
  * Add an item
  * Uses the user id to add the item\s
  */
-router.post('/add', async (req,res)=>{
-    let { userId, location, date, total, data } = req.body;
+router.post('', async (req,res)=>{
+    let { location, date, total, data } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                numItems: 0,
+            });
+    }
 
     //TODO make use actual date
 
@@ -43,7 +63,7 @@ router.post('/add', async (req,res)=>{
 
     let date1 = new Date().toISOString()
 
-    const result = await req.app.get('db').addItem(userId, location, date1, total, values);
+    const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date1, total, values);
 
     let status = 200;
 
@@ -60,8 +80,18 @@ router.post('/add', async (req,res)=>{
  * Delete an item
  * Uses the user id and itemId to delete the item
  */
-router.post('/delete', async (req,res)=>{
+router.delete('', async (req,res)=>{
     let { itemId } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                item: {},
+            });
+    }
 
     const result = await req.app.get('db').deleteItem(itemId);
 
@@ -80,8 +110,18 @@ router.post('/delete', async (req,res)=>{
  * Update an item
  * Uses the user id and itemId to update the item
  */
-router.post('/update', async (req,res)=>{
+router.patch('', async (req,res)=>{
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                item: {},
+            });
+    }
 
     let dataA = {}
     let dataB = {}
@@ -120,9 +160,18 @@ router.post('/update', async (req,res)=>{
  * Uses the userid
  */
 router.get('/slip', async (req, res) => {
-    let { userId } = req.query;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    const result = await req.app.get('db').retrieveAllSlips(Number(userId))
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                slips: [],
+            });
+    }
+
+    const result = await req.app.get('db').retrieveAllSlips(Number(tokenVerified.user.id))
 
     let status = 200;
 
@@ -139,10 +188,19 @@ router.get('/slip', async (req, res) => {
  * Update a slip and its related items
  * Uses the userid
  */
- router.post('/slip', async (req, res) => {
-    let { userId, updateSlip,insertItems, updateItems, removeItems } = req.body;
+ router.patch('/slip', async (req, res) => {
+    let { updateSlip, insertItems, updateItems, removeItems } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
    
-    const result = await req.app.get('db').updateSlip(Number(userId),updateSlip.text,insertItems,updateItems,removeItems)
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
+    const result = await req.app.get('db').updateSlip(Number(tokenVerified.user.id),updateSlip.text,insertItems,updateItems,removeItems)
 
     let status = 200;
 

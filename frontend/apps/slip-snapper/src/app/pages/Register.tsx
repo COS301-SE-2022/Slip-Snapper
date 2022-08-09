@@ -154,6 +154,8 @@ const Register: React.FC = () => {
         .then(apiResponse => {
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+            localStorage.removeItem('token')
+            localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
         });
 
       const button = document.getElementById("successRedirect")
