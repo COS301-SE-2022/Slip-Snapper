@@ -11,65 +11,65 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  username   String @unique
-  firstname  String
-  lastname   String
-  weeklyBudget Float @default(0)
-  monthlyBudget Float @default(0)
-  password   String     @db.VarChar(255)
-  slips      Slip[]
-  budgets    Json? @db.Json
-  reports    Reports[]
+  id            Int       @id @default(autoincrement())
+  username      String    @unique
+  firstname     String
+  lastname      String
+  weeklyBudget  Float     @default(0)
+  monthlyBudget Float     @default(0)
+  password      String    @db.VarChar(255)
+  slips         Slip[]
+  budgets       Json?     
+  reports       Reports[]
 }
 
 model Slip {
-  id              Int      @id  @default(autoincrement())
+  id              Int         @id @default(autoincrement())
+  slipNumber      Int         @default(1)
   location        String?
-  transactionDate DateTime @default(now()) @db.Date
-  items           Item[]
+  transactionDate DateTime    @default(now()) @db.Date()
+  items           Slip_Item[]
   total           Float
-  User    User?     @relation(fields: [usersId], references: [id])
-  usersId  Int?
+  User            User?       @relation(fields: [usersId], references: [id])
+  usersId         Int?
 }
 
 model Item {
-  id             Int     @id @default(autoincrement())
-  data dataItem? @relation(fields:[dataId],references:[id])
-  dataId Int?
+  id           Int             @id @default(autoincrement())
+  data         Item_DataItem[]
   itemQuantity Int
-  itemPrice     Float
-  Slip   Slip? @relation(fields: [slipId], references: [id])
-  slipId Int?
+  itemPrice    Float
+  Slip         Slip_Item[]
 }
 
-model dataItem{
-  id             Int     @id @default(autoincrement())
-  item           String
-  itemType       String
-  items Item[]
+model Slip_Item {
+  id     Int  @id @default(autoincrement())
+  slipId Int
+  itemId Int
+  slip   Slip @relation(fields: [slipId], references: [id])
+  item   Item @relation(fields: [itemId], references: [id])
 }
 
-// model Budgets{
-//   id  Int   @id @default(autoincrement())
-//   user    User?    @relation(fields: [usersId], references: [id]) 
-//   usersId  Int? @unique
-//   weeklyFoodBudget Float @default(0)
-//   weeklyFashionBudget Float @default(0)
-//   weeklyElectronicsBudget Float @default(0)
-//   weeklyHouseholdBudget Float @default(0)
-//   weeklyOtherBudget Float @default(0)
-//   monthlyFoodBudget Float @default(0)
-//   monthlyFashionBudget Float @default(0)
-//   monthlyElectronicsBudget Float @default(0)
-//   monthlyHouseholdBudget Float @default(0)
-//   monthlyOtherBudget Float @default(0)
-// }
+model dataItem {
+  id       Int             @id @default(autoincrement())
+  item     String
+  itemType String
+  items    Item_DataItem[]
+}
 
-model Reports{
-    id  Int   @id @default(autoincrement())
-    user    User?    @relation(fields: [usersId], references: [id]) 
-    usersId  Int? 
-    reportName String @db.VarChar(255)
-    generatedDate DateTime @default(now())
+model Item_DataItem {
+  id         Int      @id @default(autoincrement())
+  dataItemId Int
+  itemId     Int
+  dataItem   dataItem @relation(fields: [dataItemId], references: [id])
+  item       Item     @relation(fields: [itemId], references: [id])
+}
+
+model Reports {
+  id            Int      @id @default(autoincrement())
+  user          User?    @relation(fields: [usersId], references: [id])
+  usersId       Int?
+  reportName    String   @db.VarChar(255)
+  reportNumber  Int      @default(1)
+  generatedDate DateTime @default(now()) @db.Date()
 }
