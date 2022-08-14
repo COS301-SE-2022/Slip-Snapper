@@ -25,6 +25,7 @@ model User {
 
 model Slip {
   id              Int         @id @default(autoincrement())
+  slipNumber      Int
   location        String?
   transactionDate DateTime    @default(now()) @db.Date
   items           Slip_Item[]
