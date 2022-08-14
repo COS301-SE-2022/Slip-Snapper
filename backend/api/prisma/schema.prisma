@@ -25,9 +25,9 @@ model User {
 
 model Slip {
   id              Int         @id @default(autoincrement())
-  slipNumber      Int
+  slipNumber      Int         @default(1)
   location        String?
-  transactionDate DateTime    @default(now()) @db.Date
+  transactionDate DateTime    @default(now()) @db.Date()
   items           Slip_Item[]
   total           Float
   User            User?       @relation(fields: [usersId], references: [id])
@@ -70,6 +70,6 @@ model Reports {
   user          User?    @relation(fields: [usersId], references: [id])
   usersId       Int?
   reportName    String   @db.VarChar(255)
-  reportNumber  Int
-  generatedDate DateTime @default(now())
+  reportNumber  Int      @default(1)
+  generatedDate DateTime @default(now()) @db.Date()
 }
