@@ -26,7 +26,7 @@ model User {
 model Slip {
   id              Int      @id  @default(autoincrement())
   location        String?
-  transactionDate DateTime @default(now())
+  transactionDate DateTime @default(now()) @db.Date
   items           Item[]
   total           Float
   User    User?     @relation(fields: [usersId], references: [id])
