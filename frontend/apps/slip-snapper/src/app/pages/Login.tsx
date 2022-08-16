@@ -1,6 +1,6 @@
 import { IonAlert, IonButton, IonCard, IonInput, IonItem, IonLabel } from '@ionic/react';
 import React, { useState } from 'react';
-import '../theme/login.css';
+import '../theme/login-register.css';
 import { loginA } from "../../api/apiCall"
 import { useHistory } from 'react-router-dom';
 

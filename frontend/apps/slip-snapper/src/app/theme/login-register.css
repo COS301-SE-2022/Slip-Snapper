@@ -52,7 +52,7 @@ p {
 .header {
     position: relative;
     text-align: center;
-    background: linear-gradient(60deg, rgba(51, 60, 74, 1) 0%, rgba(93, 108, 131, 1) 100%);
+    background: linear-gradient(60deg, rgba(37, 43, 54, 1) 0%, rgba(67, 78, 96, 1) 100%);
     color: white;
 }
 
@@ -145,7 +145,7 @@ p {
 
 /* Screen size scaling */
 
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 1100px) {
     .LRCard {
         width: 60%;
     }
