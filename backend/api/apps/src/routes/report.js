@@ -1,9 +1,7 @@
 const fs = require('fs');
 const fsPromises = require("fs/promises");
-const doc = require('pdfkit');
 const PDFDocument = require('pdfkit-table');
 const router = require("express").Router();
-const {S3BucketFunctions} = require("../S3Bucket")
 
 /**
  * Determines the start date to search from
@@ -95,12 +93,13 @@ async function sortItemsIntoCategories(itemList){
 async function generatePDF(name, object, today, period){
     let pdf = new PDFDocument;
     pdf.pipe(fs.createWriteStream(name))
-    let temp = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
-    pdf.fontSize(20).text(temp);
-    let pdfTotal = 0
+    const xcoord = pdf.x
+    pdf.image(__dirname + '/assets/maskable_icon.png', 240, 50, {fit:[150,150], align:'center'})
+    const pdfTitle = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
+    pdf.fontSize(20).text(pdfTitle,xcoord,210,{align:'center'}); 
+    pdf.y= 240;
 
     const types = object.types
-
     const table = { 
         title: `Report Statistics`,
         headers: [
@@ -109,12 +108,12 @@ async function generatePDF(name, object, today, period){
         ],
         datas: object.totals,
     }
-
     pdf.table(table);
 
+    let pdfTotal = 0
     for (const key in types){
         if(types.hasOwnProperty(key) && types[key].length > 0){
-            const table = { 
+            const subTable = { 
                 title: `${key} Items`,
                 headers: [
                     { "label":"Location", "property":"location", "width":100 },
@@ -128,7 +127,7 @@ async function generatePDF(name, object, today, period){
                 ],
             }
         
-            pdf.table(table);
+            pdf.table(subTable);
         }
     }
 
@@ -146,23 +145,24 @@ async function generatePDF(name, object, today, period){
  */
 router.post('/pdf', async (req,res)=>{
     let { period, userName } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
+    // const token = req.headers.authorization.split(' ')[1];
+    // const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-                title: "",
-                reportTotal: 0
-            });
-    }
+    // if(tokenVerified === "Error"){
+    //     return res.status(200)
+    //         .send({
+    //             message: "Token has expired Login again to continue using the application",
+    //             title: "",
+    //             reportTotal: 0
+    //         });
+    // }
 
     const today = new Date();
     const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
-    
+    period = "Weekly"
     const periodStart = await determinePeriodStart(period, periodEnd);
-    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    const result = await req.app.get('db').getItemsReport(1, periodStart, periodEnd);
     const types = await sortItemsIntoCategories(result.itemList)
 
     const name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
@@ -170,22 +170,22 @@ router.post('/pdf', async (req,res)=>{
     const pdfName = dir + name
     const report = await generatePDF(pdfName, types, today, period)
     
-    if(report){
-        const path = `${userName}/${name}`
-        const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
+    // if(report){
+    //     const path = `${userName}/${name}`
+    //     const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
     
-        const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
-        try {
-            await fsPromises.unlink(pdfName);
-        } catch (err) {}
+    //     const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
+    //     try {
+    //         await fsPromises.unlink(pdfName);
+    //     } catch (err) {}
 
-        return res.status(200)
-            .send({
-                message: "Report Generated and uploaded",
-                title: name,
-                reportTotal: report.total
-            });
-    }
+    //     return res.status(200)
+    //         .send({
+    //             message: "Report Generated and uploaded",
+    //             title: name,
+    //             reportTotal: report.total
+    //         });
+    // }
 
     return res.status(503)
         .send({
