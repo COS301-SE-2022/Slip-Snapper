@@ -19,27 +19,25 @@ const Login: React.FC = () => {
 
         <div className="inner-header flexbox">
 
-          <IonCard color="tertiary" class="logincard">
+          <IonCard color="tertiary" class="LRCard">
 
             <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Username</IonLabel>
               <IonInput title="usernameInput" type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="loginitems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput title="passwordInput" type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" text-align="center" class="loginitems">
+            <IonItem color="tertiary" text-align="center" class="LRItems">
               <IonButton type="submit" class="LRButtons" color="secondary" size="large" onClick={() => { login() }}>Login</IonButton>
-            </IonItem>
-
-            <IonItem color="tertiary" text-align="center" class="loginitems">
               <IonButton class="LRButtons" color="secondary" size="large" routerLink={"/register"}>Register</IonButton>
             </IonItem>
+
             <IonAlert
               isOpen={errorAlert}
               onDidDismiss={() => setAlert(false)}

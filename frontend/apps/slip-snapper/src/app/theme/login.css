@@ -1,8 +1,8 @@
 @import url(//fonts.googleapis.com/css?family=Lato:300:400);
 
 /* Components */
-.logincard {
-    width: 60%;
+.LRCard {
+    width: 35%;
 }
 
 .logoimg {
@@ -11,7 +11,7 @@
     margin-left: 20%;
 }
 
-.loginitems {
+.LRItems {
     padding: 1%;
     font-size: 16px;
     text-align: center;
@@ -143,29 +143,22 @@ p {
 }
 
 
-/* Mobile */
+/* Screen size scaling */
 
-@media (max-width: 768px) {
-    .logincard {
-        width: 90%;
+@media only screen and (max-width: 1000px) {
+    .LRCard {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 620px) {
+    .LRCard {
+        width: 85%;
     }
 
     .motionwaves {
-        height: 40px;
-        min-height: 40px;
-    }
-
-    .content {
-        height: 30vh;
-    }
-
-    h1 {
-        font-size: 24px;
+        height: 60px;
+        min-height: 60px;
     }
 }
 
-@media only screen and (max-width: 400px) {
-    .LRButtons {
-        min-width: 50%;
-    }
-}
