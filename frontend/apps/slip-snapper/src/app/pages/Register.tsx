@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert} from '@ionic/react';
-import '../theme/register.css';
+import '../theme/login-register.css';
 import { signupA } from "../../api/apiCall"
 
 
@@ -17,10 +17,10 @@ const Register: React.FC = () => {
     <div>
       <div className="header">
         <div className="inner-header flexbox">
-          <IonCard color="tertiary" class="registerCard">
+          <IonCard color="tertiary" class="LRCard">
           <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
 
-            <IonItem color="tertiary" class="registerItems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Name</IonLabel>
               <IonInput
                 title="name_Input"
@@ -31,7 +31,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="registerItems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Surname</IonLabel>
               <IonInput
                 title="surname_Input"
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="registerItems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Username</IonLabel>
               <IonInput
                 title="username_Input"
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="registerItems">
+            <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 title="password_Input"
@@ -64,7 +64,7 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" text-align="center" class="registerItems">
+            <IonItem color="tertiary" text-align="center" class="LRItems">
               <IonButton
                 class="LRButtons"
                 color="secondary"

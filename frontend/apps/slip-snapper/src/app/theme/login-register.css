@@ -1,17 +1,11 @@
 @import url(//fonts.googleapis.com/css?family=Lato:300:400);
 
 /* Components */
-.logincard {
-    width: 60%;
+.LRCard {
+    width: 35%;
 }
 
-.logoimg {
-    padding: 3%;
-    width: 60%;
-    margin-left: 20%;
-}
-
-.loginitems {
+.LRItems {
     padding: 1%;
     font-size: 16px;
     text-align: center;
@@ -24,6 +18,7 @@
     width: auto;
     font-size: 16px;
 }
+
 .successRedirect {
     display: none;
 }
@@ -31,37 +26,11 @@
 
 /* Background */
 
-body {
-    margin: 0;
-}
-
-h1 {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    letter-spacing: 2px;
-    font-size: 48px;
-}
-
-p {
-    font-family: 'Lato', sans-serif;
-    letter-spacing: 1px;
-    font-size: 14px;
-    color: black;
-}
-
 .header {
     position: relative;
     text-align: center;
-    background: linear-gradient(60deg, rgba(51, 60, 74, 1) 0%, rgba(93, 108, 131, 1) 100%);
+    background: linear-gradient(60deg, rgba(37, 43, 54, 1) 0%, rgba(67, 78, 96, 1) 100%);
     color: white;
-}
-
-.logo {
-    width: 50px;
-    fill: white;
-    padding-right: 15px;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .inner-header {
@@ -85,13 +54,6 @@ p {
     margin-bottom: -7px;
     min-height: 100px;
     max-height: 150px;
-}
-
-.content {
-    position: relative;
-    height: 20vh;
-    text-align: center;
-    background-color: #ebebeb;
 }
 
 .footer {
@@ -143,29 +105,22 @@ p {
 }
 
 
-/* Mobile */
+/* Screen size scaling */
 
-@media (max-width: 768px) {
-    .logincard {
-        width: 90%;
+@media only screen and (max-width: 1100px) {
+    .LRCard {
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 620px) {
+    .LRCard {
+        width: 85%;
     }
 
     .motionwaves {
-        height: 40px;
-        min-height: 40px;
-    }
-
-    .content {
-        height: 30vh;
-    }
-
-    h1 {
-        font-size: 24px;
+        height: 60px;
+        min-height: 60px;
     }
 }
 
-@media only screen and (max-width: 400px) {
-    .LRButtons {
-        min-width: 50%;
-    }
-}
