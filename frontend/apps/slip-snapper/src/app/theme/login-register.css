@@ -5,12 +5,6 @@
     width: 35%;
 }
 
-.logoimg {
-    padding: 3%;
-    width: 60%;
-    margin-left: 20%;
-}
-
 .LRItems {
     padding: 1%;
     font-size: 16px;
@@ -24,6 +18,7 @@
     width: auto;
     font-size: 16px;
 }
+
 .successRedirect {
     display: none;
 }
@@ -31,37 +26,11 @@
 
 /* Background */
 
-body {
-    margin: 0;
-}
-
-h1 {
-    font-family: 'Lato', sans-serif;
-    font-weight: 300;
-    letter-spacing: 2px;
-    font-size: 48px;
-}
-
-p {
-    font-family: 'Lato', sans-serif;
-    letter-spacing: 1px;
-    font-size: 14px;
-    color: black;
-}
-
 .header {
     position: relative;
     text-align: center;
     background: linear-gradient(60deg, rgba(37, 43, 54, 1) 0%, rgba(67, 78, 96, 1) 100%);
     color: white;
-}
-
-.logo {
-    width: 50px;
-    fill: white;
-    padding-right: 15px;
-    display: inline-block;
-    vertical-align: middle;
 }
 
 .inner-header {
@@ -85,13 +54,6 @@ p {
     margin-bottom: -7px;
     min-height: 100px;
     max-height: 150px;
-}
-
-.content {
-    position: relative;
-    height: 20vh;
-    text-align: center;
-    background-color: #ebebeb;
 }
 
 .footer {
