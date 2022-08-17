@@ -25,6 +25,7 @@ import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { float } from 'aws-sdk/clients/lightsail';
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -34,8 +35,7 @@ const Profile: React.FC = () => {
   const val = { weekly: 0, monthly: 0 };
   const history = useHistory();
 
-  let totalWeeklySpent = 300;
-  let totalMonthlySpent = 500;
+  let totalWeeklySpent: number, totalMonthlySpent: number
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if(user==null){
@@ -46,10 +46,17 @@ const Profile: React.FC = () => {
       .then(
         apiResponse => {
           if(typeof(apiResponse.data) !== "string"){
+            //Budget amounts
             val.weekly = apiResponse.data.weekly;
             val.monthly = apiResponse.data.monthly;
+
+            //Expenditures
             totalWeeklySpent = apiResponse.data.weeklyTotal;
             totalMonthlySpent = apiResponse.data.monthlyTotal;
+            console.log(totalWeeklySpent)
+
+            isExceeded(val.weekly,val.monthly);
+
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
@@ -125,7 +132,8 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget(alertData.weeklyBudget, "");
-                    isExceeded()
+                    isExceeded(weeklyBudget, monthlyBudget)
+                    
                   }
                 }
               ]}></IonAlert>
@@ -153,7 +161,8 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget("", alertData.monthlyBudget);
-                    isExceeded()
+                    console.log(monthlyBudgetValue)
+                    isExceeded(weeklyBudget, monthlyBudget)
                   }
                 }
               ]}></IonAlert>
@@ -227,49 +236,56 @@ const Profile: React.FC = () => {
     monthlyBudget = parseFloat(newMonthlyBudget)
     if (!isNaN(weeklyBudget)) {
       setWeeklyBudget(weeklyBudget)
+
     }
     if (!isNaN(monthlyBudget)) {
       setMonthlyBudget(monthlyBudget)
     }
 
     setBudgetA(user.id, weeklyBudget, monthlyBudget)
+    
   }
 
-  function isExceeded() {
-    totalWeeklySpent = profile.weeklyTotal;
-    totalMonthlySpent = profile.monthlyTotal;
-    const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
-    const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
+  function isExceeded(wB:float,mB:float) {
+    const withinWeeklyBudget = totalWeeklySpent / wB
+    const withinMonthlyBudget = totalMonthlySpent / mB
 
-    if (totalWeeklySpent >= weeklyBudget && !isNaN(weeklyBudget)) {
+    console.log("WSpent = " + totalWeeklySpent)
+    console.log("MSpent = "+totalMonthlySpent)
+    console.log("WBudget = " + wB)
+    console.log("MBudget = " + mB)
+
+
+
+    if (totalWeeklySpent >= wB && !isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalWeeklySpent >= weeklyBudget / 2 && !isNaN(weeklyBudget)) {
+    else if (totalWeeklySpent >= wB / 2 && !isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(weeklyBudget)) {
+    else if (!isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (totalMonthlySpent >= monthlyBudget && !isNaN(monthlyBudget)) {
+    if (totalMonthlySpent >= mB && !isNaN(mB)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalMonthlySpent >= monthlyBudget / 2 && !isNaN(monthlyBudget)) {
+    else if (totalMonthlySpent >= mB / 2 && !isNaN(mB)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(monthlyBudget)) {
+    else if (!isNaN(mB)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
 
     document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
     document.getElementById("monthlyProgressBar")?.setAttribute("value", withinMonthlyBudget.toString())
 
-    if (weeklyBudget === 0) {
+    if (wB === 0) {
       document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (monthlyBudget === 0) {
+    if (mB === 0) {
       document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
