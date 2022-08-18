@@ -62,6 +62,14 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
+        let b = Prisma.JsonObject = {
+            "weeklyFoodBudget": 0,
+            "weeklyFashionBudget": 0,
+            "weeklyElectronicsBudget": 0,
+            "weeklyHouseholdBudget": 0,
+            "weeklyOtherBudget": 0
+        }
+        let c = JSON.stringify(b)
         const user = await prisma.user.create({
             data: {
                 username: username,
@@ -69,7 +77,10 @@ async function addUser(username, password, firstname, lastname) {
                 lastname: lastname,
                 firstname: firstname,
                 weeklyBudget: 0,
-                monthlyBudget: 0
+                monthlyBudget: 0,
+                budgets: {
+
+                }
             }
         })
 
@@ -1635,14 +1646,7 @@ async function getUserAverageSpent(userId) {
     }
 }
 
-async function getUserMedian(userId) {
-    try {
 
-
-    } catch {
-
-    }
-}
 
 async function getUserMode(userId) {
 
