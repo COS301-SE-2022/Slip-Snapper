@@ -72,4 +72,5 @@ model Reports {
   reportName    String   @db.VarChar(255)
   reportNumber  Int      @default(1)
   generatedDate DateTime @default(now()) @db.Date()
+  reportTotal   Float @default(0)
 }
