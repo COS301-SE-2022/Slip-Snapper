@@ -63,11 +63,11 @@ async function getUser(userName, password) {
 async function addUser(username, password, firstname, lastname) {
     try {
         let b = Prisma.JsonObject = {
-            "weeklyFoodBudget": 0,
-            "weeklyFashionBudget": 0,
-            "weeklyElectronicsBudget": 0,
-            "weeklyHouseholdBudget": 0,
-            "weeklyOtherBudget": 0
+            "monthlyFoodBudget": 0,
+            "monthlyFashionBudget": 0,
+            "monthlyElectronicsBudget": 0,
+            "monthlyHouseholdBudget": 0,
+            "monthlyOtherBudget": 0
         }
         let c = JSON.stringify(b)
         const user = await prisma.user.create({
