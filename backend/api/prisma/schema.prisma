@@ -19,7 +19,7 @@ model User {
   monthlyBudget Float     @default(0)
   password      String    @db.VarChar(255)
   slips         Slip[]
-  budgets       Json?     
+  budgets       Json?     @db.Json
   reports       Reports[]
 }
 
