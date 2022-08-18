@@ -62,12 +62,14 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
-        let b = Prisma.JsonObject = {
+
+        let b =
+        {
             "weeklyFoodBudget": 0,
-        "weeklyFashionBudget": 0,
-        "weeklyElectronicsBudget": 0,
-        "weeklyHouseholdBudget": 0,
-        "weeklyOtherBudget": 0,
+            "weeklyFashionBudget": 0,
+            "weeklyElectronicsBudget": 0,
+            "weeklyHouseholdBudget": 0,
+            "weeklyOtherBudget": 0,
             "monthlyFoodBudget": 0,
             "monthlyFashionBudget": 0,
             "monthlyElectronicsBudget": 0,
@@ -83,9 +85,7 @@ async function addUser(username, password, firstname, lastname) {
                 firstname: firstname,
                 weeklyBudget: 0,
                 monthlyBudget: 0,
-                budgets: {
-
-                }
+                budgets: JSON.parse(c)
             }
         })
 
