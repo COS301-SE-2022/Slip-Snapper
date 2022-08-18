@@ -39,6 +39,7 @@ async function getUser(userName, password) {
                 lastname: user.lastname,
                 weeklyBudget: user.weeklyBudget,
                 monthlyBudget: user.monthlyBudget,
+                budgets: user.budgets
             }
         };
     }
