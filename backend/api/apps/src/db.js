@@ -39,6 +39,7 @@ async function getUser(userName, password) {
                 lastname: user.lastname,
                 weeklyBudget: user.weeklyBudget,
                 monthlyBudget: user.monthlyBudget,
+                budgets: user.budgets
             }
         };
     }
@@ -62,6 +63,21 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
+
+        let budgetObject =
+        {
+            "weeklyFoodBudget": 0,
+            "weeklyFashionBudget": 0,
+            "weeklyElectronicsBudget": 0,
+            "weeklyHouseholdBudget": 0,
+            "weeklyOtherBudget": 0,
+            "monthlyFoodBudget": 0,
+            "monthlyFashionBudget": 0,
+            "monthlyElectronicsBudget": 0,
+            "monthlyHouseholdBudget": 0,
+            "monthlyOtherBudget": 0
+        }
+        let budgetObjectString = JSON.stringify(budgetObject)
         const user = await prisma.user.create({
             data: {
                 username: username,
@@ -69,7 +85,8 @@ async function addUser(username, password, firstname, lastname) {
                 lastname: lastname,
                 firstname: firstname,
                 weeklyBudget: 0,
-                monthlyBudget: 0
+                monthlyBudget: 0,
+                budgets: JSON.parse(budgetObjectString)
             }
         })
 
@@ -1635,14 +1652,7 @@ async function getUserAverageSpent(userId) {
     }
 }
 
-async function getUserMedian(userId) {
-    try {
 
-
-    } catch {
-
-    }
-}
 
 async function getUserMode(userId) {
 
