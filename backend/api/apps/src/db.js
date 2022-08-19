@@ -64,7 +64,7 @@ async function getUser(userName, password) {
 async function addUser(username, password, firstname, lastname) {
     try {
 
-        let b =
+        let budgetObject =
         {
             "weeklyFoodBudget": 0,
             "weeklyFashionBudget": 0,
@@ -77,7 +77,7 @@ async function addUser(username, password, firstname, lastname) {
             "monthlyHouseholdBudget": 0,
             "monthlyOtherBudget": 0
         }
-        let c = JSON.stringify(b)
+        let budgetObjectString = JSON.stringify(budgetObject)
         const user = await prisma.user.create({
             data: {
                 username: username,
@@ -86,7 +86,7 @@ async function addUser(username, password, firstname, lastname) {
                 firstname: firstname,
                 weeklyBudget: 0,
                 monthlyBudget: 0,
-                budgets: JSON.parse(c)
+                budgets: JSON.parse(budgetObjectString)
             }
         })
 
