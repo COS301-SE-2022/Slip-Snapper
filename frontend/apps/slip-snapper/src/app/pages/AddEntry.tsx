@@ -114,7 +114,7 @@ const AddEntry: React.FC = () => {
 
                     <IonItem color="primary">
                         <IonButton id='cancelButton' onClick={() => { clearData(); }} fill="solid" slot="end" color="medium" routerLink={'/home'}>Cancel</IonButton>
-                        <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
+                        <IonButton id='submitButton' onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
             </IonContent>
