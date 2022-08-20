@@ -86,3 +86,15 @@
         display:none;
     }
   }
+
+  @media screen and (max-width: 780px) {
+    #desktop-fab {
+        display:none;
+    }
+  }
+
+  @media screen and (min-width: 780px) {
+    #mobi-fab {
+        display:none;
+    }
+  }

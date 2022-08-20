@@ -4,7 +4,6 @@ import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
-import { add } from 'ionicons/icons';
 import { updateSlipA } from '../../api/apiCall';
 
 const EditReciept: React.FC = () => {
