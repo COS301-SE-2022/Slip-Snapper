@@ -66,6 +66,16 @@ async function addUser(username, password, firstname, lastname) {
 
         let budgetObject =
         {
+            "weeklyFoodBudgetState":false,
+            "weeklyFashionBudgetState":false,
+            "weeklyElectronicsBudgetState":false,
+            "weeklyHouseholdBudgetState":false,
+            "weeklyOtherBudgetState":false,
+            "monthlyFoodBudgetState": false,
+            "monthlyFashionBudgetState": false,
+            "monthlyElectronicsBudgetState": false,
+            "monthlyHouseholdBudgetState": false,
+            "monthlyOtherBudgetState": false,
             "weeklyFoodBudget": 0,
             "weeklyFashionBudget": 0,
             "weeklyElectronicsBudget": 0,
@@ -187,6 +197,9 @@ async function updateUser(userId, data) {
  * @param {*} userId (Integer) The users id
  * @returns (JSON Object) Contains a message, the number of items and an array of Items
  */
+//****************************************************************** */
+//Start changing from here
+//******************************************************************** */
 async function getItem(userId) {
     try {
         const items = await prisma.slip.findMany({
