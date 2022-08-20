@@ -124,7 +124,7 @@ describe('Edit Page integration from Home', () => {
     cy.get('ion-fab-button[color="secondary"]').should('have.length', 1);
     cy.get('ion-fab-button[color="secondary"]').click();
     cy.get('ion-fab-button[router-link="/addentry"]').click();
-    cy.get(".ion-color-primary > [fill='solid'][color='secondary']").click();
+    cy.get("#submitButton").click();
     cy.get('.alert-head').should('be.be.visible');
   });
 });

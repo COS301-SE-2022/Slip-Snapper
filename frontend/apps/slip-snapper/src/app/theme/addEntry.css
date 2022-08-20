@@ -1,26 +1,88 @@
 .addEntry{
-    width: 20%;
     position: relative;
     left: 0%;
     margin-top: 5px;
     --border-radius: 5px;
+    min-width: 20%;
 }
-.slipTotal{
-    width: 15.7%;
-    position: relative;
-    left: 83%;
-    border-radius: 5px;
-    margin-top: 5px;
+
+.big-chip{
+    max-width: fit-content;
+    margin-top: 40px;
+}
+
+.center-chip{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wrapper{
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.elem{
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.labels{
+    padding-bottom: 5px;
+}
+
+.store{
+    flex:1
+}
+
+.date{
+    flex:1
+}
+
+.items{
+    border-radius: 10px;
+    display: flex;
+    flex:1
 }
 
 .inputs{
     --border-radius: 5px;
+    text-align: center;
 }
 
-.itemlabels{
-    left: 2%;
+.item-col{
     margin-top: 10px;
+    min-width: 20%;
 }
+
 .successRedirect {
     display: none;
 }
+
+@media screen and (min-width: 380px) {
+    .wrapper {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 16rem));
+    }
+  
+    .elem {
+      flex-direction: column;
+      text-align: center;
+      min-width: 16rem;
+    }
+  }
+
+  @media screen and (max-width: 1205px) {
+    .big-chip {
+        display:none;
+    }
+  }
+
+  @media screen and (min-width: 1205px) {
+    .small-chip {
+        display:none;
+    }
+  }
