@@ -1,5 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
 import React, { useState } from 'react';
+import { Chip } from '@mui/material';
+import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { add } from 'ionicons/icons';
@@ -27,102 +29,95 @@ const EditReciept: React.FC = () => {
             <IonContent fullscreen>
 
                 <IonCard color="primary">
-                    <IonCardHeader>
-                        <IonCardTitle>Store Name/Location:
-                            <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={slipContents.location} id={"Store_Name"} contentEditable="true"></IonInput>
-                            </IonItem>
-                        </IonCardTitle>
-                        <IonCardTitle>Date:
+                    <IonCardHeader className='wrapper'>
+                        <div color="primary">
+                            <IonCardTitle className="store elem">Location:
+                                <IonItem className='addEntry' color="tertiary">
+                                    <IonInput value={slipContents.location} id={"Store_Name"} contentEditable="true"></IonInput>
+                                </IonItem>
+                            </IonCardTitle>
+                        </div>
+                        <div color="primary">
+                        <IonCardTitle className="date elem">Date:
                             <IonItem className='addEntry' color="tertiary">
                                 <IonInput value={new Date(slipContents.transactionDate).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
                             </IonItem>
                         </IonCardTitle>
-
+                        </div>
                     </IonCardHeader>
-                    <IonCardHeader>
+
+                    <IonCardHeader className="wrapper">
                         <IonCardTitle>Edit Details</IonCardTitle>
                     </IonCardHeader>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol></IonCol>
-
-                            <IonCol>
-                                <IonLabel>Item Name</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Quantity</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Price</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Type</IonLabel>
-                            </IonCol>
-                            <IonCol>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
 
                     {editRecieptItems.map((item: any, index: number) => {
                         return (
                             <IonGrid key={index} >
-                                <IonRow>
-                                    <IonCol className='itemlabels'>
-                                        <IonLabel>Item #{index + 1}</IonLabel>
+                                <div className='wrapper small-chip'>
+                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                </div>
+                                <div className='wrapper'>
+                                    <IonCol className='big-chip'>
+                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput id={index + "/item"} value={item.data.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number'
                                                 id={index + "/quantity"} value={item.itemQuantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput
                                                 id={index + "/price"} value={item.itemPrice} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput  id={index + "/type"} value={item.data.itemType} ></IonInput>
                                         </IonItem>
                                     </IonCol>
-                                    <IonCol >
-                                        <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
-                                        <IonAlert
-                                            isOpen={showAlert}
-                                            onDidDismiss={() => setShowAlert(false)}
-                                            header="Oops..."
-                                            message={alertMessage}
-                                            buttons={['Ok']}
-                                        
-                                        />
-                                    </IonCol>
-                                </IonRow>
+
+                                    <IonAlert
+                                        isOpen={showAlert}
+                                        onDidDismiss={() => setShowAlert(false)}
+                                        header="Oops..."
+                                        message={alertMessage}
+                                        buttons={['Ok']}
+                                    />
+                                </div>
                             </IonGrid>
                         )
                     })}
-                    <IonItem color="tertiary" className='slipTotal'>
-                        <div className='totalHeader'>Total:</div>
-                        <IonItem color="tertiary" className='total'>
-                            <IonInput id={"total"} value={slipContents.total} ></IonInput>
+
+                    <div className='wrapper'>
+                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary"/>
+                    </div>
+
+                    <IonCardHeader className="wrapper">
+                        <IonCardTitle>Total Amount:</IonCardTitle>
+                    </IonCardHeader>
+
+                    <IonCardHeader className="wrapper">
+                        <IonItem className='addEntry' color="tertiary">
+                            <IonInput id={"total"} value={slipContents.total}></IonInput>
                         </IonItem>
-                    </IonItem>
+                    </IonCardHeader>
+
                     <IonItem color="primary">
-                        <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
                         <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/receipts'}>Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
