@@ -14,6 +14,7 @@ import {
   IonProgressBar,
   IonIcon,
   IonText,
+  useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -25,31 +26,41 @@ import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import { float } from 'aws-sdk/clients/lightsail';
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
-  const [userDetails, setUserDetails] = useState({firstname: "", lastname: ""});
+
+  const [userDetails, setUserDetails] = useState({ firstname: "", lastname: "" });
+  const [expenditure, setExpenditure] = useState({ weekly: 0, monthly: 0 });
   const val = { weekly: 0, monthly: 0 };
   const history = useHistory();
+  
+  const [present, dismiss] = useIonToast();
 
-  let totalWeeklySpent = 300;
-  let totalMonthlySpent = 500;
+  // let totalWeeklySpent: number, totalMonthlySpent: number
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+      user = { id: 24 }
     }
     setUserDetails(user)
     getProfileData(user.id)
       .then(
         apiResponse => {
-          if(typeof(apiResponse.data) !== "string"){
+          if (typeof (apiResponse.data) !== "string") {
+            //Budget amounts
             val.weekly = apiResponse.data.weekly;
             val.monthly = apiResponse.data.monthly;
-            totalWeeklySpent = apiResponse.data.weeklyTotal;
-            totalMonthlySpent = apiResponse.data.monthlyTotal;
+
+            //Expenditures
+            expenditure.weekly = apiResponse.data.weeklyTotal;
+            expenditure.monthly = apiResponse.data.monthlyTotal;
+
+            isExceeded(val.weekly, val.monthly);
+
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
@@ -58,9 +69,9 @@ const Profile: React.FC = () => {
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
-  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]},weeklyTotal:0, monthlyTotal:0});
+  const [profile, setProfile] = useState({ favouriteStore: { name: "", receipts: [{ id: 0, total: 0 }] }, weeklyTotal: 0, monthlyTotal: 0 });
   let weeklyBudget: number, monthlyBudget: number
-  return(
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
@@ -92,12 +103,12 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
               <IonItem id="weekly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)}/>
+                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
                 <IonText>Weekly: R{weeklyBudgetValue}</IonText>
                 <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
               <IonItem id="monthly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)}/>
+                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
                 <IonText>Monthly: R{monthlyBudgetValue}</IonText>
                 <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
@@ -125,13 +136,12 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget(alertData.weeklyBudget, "");
-                    isExceeded()
                   }
                 }
               ]}></IonAlert>
-              
-              {/* Monthly Budget */}
-              <IonAlert
+
+            {/* Monthly Budget */}
+            <IonAlert
               isOpen={monthlyBudgetAlert}
               data-testid="monthly-budget-alert"
               onDidDismiss={() => setMonthlyBudgetAlert(false)}
@@ -153,7 +163,6 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget("", alertData.monthlyBudget);
-                    isExceeded()
                   }
                 }
               ]}></IonAlert>
@@ -166,7 +175,7 @@ const Profile: React.FC = () => {
               <EditBudgets />
             </IonCardHeader>
           </IonCard>
-          
+
           <IonCard className="card favourite" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
@@ -182,7 +191,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
               {profile.favouriteStore.receipts.map((item: any, index: number) => {
-                return(
+                return (
                   <IonItem key={index} className="center-items" color="tertiary">
                     <IonText>Receipt #{item.id}: R{item.total}</IonText>
                   </IonItem>
@@ -220,56 +229,73 @@ const Profile: React.FC = () => {
 
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+      user = { id: 24 }
     }
     weeklyBudget = parseFloat(newWeeklyBudget)
     monthlyBudget = parseFloat(newMonthlyBudget)
-    if (!isNaN(weeklyBudget)) {
-      setWeeklyBudget(weeklyBudget)
-    }
-    if (!isNaN(monthlyBudget)) {
-      setMonthlyBudget(monthlyBudget)
+
+    if (isNaN(weeklyBudget) || weeklyBudget < 0)
+    {
+      present("Invalid weekly budget set", 1200)
     }
 
-    setBudgetA(user.id, weeklyBudget, monthlyBudget)
+    else {
+      setWeeklyBudget(weeklyBudget)
+      isExceeded(weeklyBudget, monthlyBudget)
+      present("New weekly budget applied",1200)
+
+      setBudgetA(user.id, weeklyBudget, monthlyBudget)
+
+    }
+
+    if (isNaN(monthlyBudget) || monthlyBudget < 0) {
+      present("Invalid weekly budget set", 1200)
+    }
+
+    else {
+      setMonthlyBudget(monthlyBudget)
+      isExceeded(weeklyBudget, monthlyBudget)
+      present("New monthly budget applied", 1200)
+
+      setBudgetA(user.id, weeklyBudget, monthlyBudget)
+
+    }
   }
 
-  function isExceeded() {
-    totalWeeklySpent = profile.weeklyTotal;
-    totalMonthlySpent = profile.monthlyTotal;
-    const withinWeeklyBudget = totalWeeklySpent / weeklyBudget
-    const withinMonthlyBudget = totalMonthlySpent / monthlyBudget
+  function isExceeded(weekly_Budget: float, monthly_Budget: float) {
+    const withinWeeklyBudget = expenditure.weekly / weekly_Budget
+    const withinMonthlyBudget = expenditure.monthly / monthly_Budget
 
-    if (totalWeeklySpent >= weeklyBudget && !isNaN(weeklyBudget)) {
+    if (expenditure.weekly >= weekly_Budget && !isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalWeeklySpent >= weeklyBudget / 2 && !isNaN(weeklyBudget)) {
+    else if (expenditure.weekly >= weekly_Budget / 2 && !isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(weeklyBudget)) {
+    else if (!isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (totalMonthlySpent >= monthlyBudget && !isNaN(monthlyBudget)) {
+    if (expenditure.monthly >= monthly_Budget && !isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalMonthlySpent >= monthlyBudget / 2 && !isNaN(monthlyBudget)) {
+    else if (expenditure.monthly >= monthly_Budget / 2 && !isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(monthlyBudget)) {
+    else if (!isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
 
     document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
     document.getElementById("monthlyProgressBar")?.setAttribute("value", withinMonthlyBudget.toString())
 
-    if (weeklyBudget === 0) {
+    if (monthly_Budget <= 0) {
       document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (monthlyBudget === 0) {
+    if (monthly_Budget <= 0) {
       document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }

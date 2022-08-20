@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Reports" ADD COLUMN     "reportTotal" DOUBLE PRECISION NOT NULL DEFAULT 0;

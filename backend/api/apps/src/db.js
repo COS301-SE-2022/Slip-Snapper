@@ -39,6 +39,7 @@ async function getUser(userName, password) {
                 lastname: user.lastname,
                 weeklyBudget: user.weeklyBudget,
                 monthlyBudget: user.monthlyBudget,
+                budgets: user.budgets
             }
         };
     }
@@ -62,6 +63,31 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
+
+        let budgetObject =
+        {
+            "weeklyFoodBudgetState":false,
+            "weeklyFashionBudgetState":false,
+            "weeklyElectronicsBudgetState":false,
+            "weeklyHouseholdBudgetState":false,
+            "weeklyOtherBudgetState":false,
+            "monthlyFoodBudgetState": false,
+            "monthlyFashionBudgetState": false,
+            "monthlyElectronicsBudgetState": false,
+            "monthlyHouseholdBudgetState": false,
+            "monthlyOtherBudgetState": false,
+            "weeklyFoodBudget": 0,
+            "weeklyFashionBudget": 0,
+            "weeklyElectronicsBudget": 0,
+            "weeklyHouseholdBudget": 0,
+            "weeklyOtherBudget": 0,
+            "monthlyFoodBudget": 0,
+            "monthlyFashionBudget": 0,
+            "monthlyElectronicsBudget": 0,
+            "monthlyHouseholdBudget": 0,
+            "monthlyOtherBudget": 0
+        }
+        let budgetObjectString = JSON.stringify(budgetObject)
         const user = await prisma.user.create({
             data: {
                 username: username,
@@ -69,7 +95,8 @@ async function addUser(username, password, firstname, lastname) {
                 lastname: lastname,
                 firstname: firstname,
                 weeklyBudget: 0,
-                monthlyBudget: 0
+                monthlyBudget: 0,
+                budgets: JSON.parse(budgetObjectString)
             }
         })
 
@@ -170,6 +197,9 @@ async function updateUser(userId, data) {
  * @param {*} userId (Integer) The users id
  * @returns (JSON Object) Contains a message, the number of items and an array of Items
  */
+//****************************************************************** */
+//Start changing from here
+//******************************************************************** */
 async function getItem(userId) {
     try {
         const items = await prisma.slip.findMany({
@@ -1635,14 +1665,7 @@ async function getUserAverageSpent(userId) {
     }
 }
 
-async function getUserMedian(userId) {
-    try {
 
-
-    } catch {
-
-    }
-}
 
 async function getUserMode(userId) {
 
