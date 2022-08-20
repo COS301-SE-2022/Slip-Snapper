@@ -228,7 +228,8 @@ router.get('/slip', async (req, res) => {
             });
     }
 
-    const result = await req.app.get('db').deleteSlip(Number(slipId))
+    //const result = await req.app.get('db').deleteSlip(Number(slipId))
+    const result = {message: "Recepit has been deleted"}
 
     let status = 200;
 

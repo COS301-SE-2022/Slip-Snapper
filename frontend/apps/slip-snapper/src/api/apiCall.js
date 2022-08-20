@@ -270,3 +270,19 @@ export async function setGeneralBudget( userId, budgets){
         })
     })
 }
+
+/**
+ * To delete a slip from the db
+ * @param {*} slipId the slipId
+ * @returns the response from the server
+ */
+export async function deleteSlip( slipId ){
+    return axios({
+        headers: headers,
+        method: 'delete',
+        url: baseUrl + 'item/slip',
+        data: JSON.stringify({
+          slipId: slipId,
+        })
+    })
+}
