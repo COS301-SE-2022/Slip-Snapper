@@ -68,7 +68,7 @@ async function addUser(username, password, firstname, lastname) {
         {
             "weeklyFoodBudgetState":false,
             "weeklyFashionBudgetState":false,
-            "weeklyElectronicBudgetState":false,
+            "weeklyElectronicsBudgetState":false,
             "weeklyHouseholdBudgetState":false,
             "weeklyOtherBudgetState":false,
             "monthlyFoodBudgetState": false,
