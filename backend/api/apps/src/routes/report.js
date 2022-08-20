@@ -145,24 +145,23 @@ async function generatePDF(name, object, today, period){
  */
 router.post('/pdf', async (req,res)=>{
     let { period, userName } = req.body;
-    // const token = req.headers.authorization.split(' ')[1];
-    // const tokenVerified = await req.app.get('token').verifyToken(token);
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    // if(tokenVerified === "Error"){
-    //     return res.status(200)
-    //         .send({
-    //             message: "Token has expired Login again to continue using the application",
-    //             title: "",
-    //             reportTotal: 0
-    //         });
-    // }
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                title: "",
+                reportTotal: 0
+            });
+    }
 
     const today = new Date();
     const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
-    period = "Weekly"
     const periodStart = await determinePeriodStart(period, periodEnd);
-    // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
-    const result = await req.app.get('db').getItemsReport(1, periodStart, periodEnd);
+    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+
     const types = await sortItemsIntoCategories(result.itemList)
 
     const name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
@@ -170,22 +169,23 @@ router.post('/pdf', async (req,res)=>{
     const pdfName = dir + name
     const report = await generatePDF(pdfName, types, today, period)
     
-    // if(report){
-    //     const path = `${userName}/${name}`
-    //     const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
+    if(report){
+        const path = `${userName}/${name}`
+        const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
     
-    //     const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
-    //     try {
-    //         await fsPromises.unlink(pdfName);
-    //     } catch (err) {}
+        const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
-    //     return res.status(200)
-    //         .send({
-    //             message: "Report Generated and uploaded",
-    //             title: name,
-    //             reportTotal: report.total
-    //         });
-    // }
+        try {
+            await fsPromises.unlink(pdfName);
+        } catch (err) {}
+
+        return res.status(200)
+            .send({
+                message: "Report Generated and uploaded",
+                title: name,
+                reportTotal: report.total
+            });
+    }
 
     return res.status(503)
         .send({
@@ -194,7 +194,7 @@ router.post('/pdf', async (req,res)=>{
             reportTotal: 0
         });
 });
-
+ 
 /**
  * Get a specific report from the S3 bucket
  * Uses the report name and UserName

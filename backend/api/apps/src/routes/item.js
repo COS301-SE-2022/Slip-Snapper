@@ -212,4 +212,32 @@ router.get('/slip', async (req, res) => {
         });
 });
 
+/**
+ * Delete a slip and its related items
+ * Uses the slipId
+ */
+ router.delete('/slip', async (req, res) => {
+    let { slipId } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+   
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
+    const result = await req.app.get('db').deleteSlip(Number(slipId))
+
+    let status = 200;
+
+    //TODO checking for errors
+
+    return res.status(status)
+        .send({
+            message: result.message,
+        });
+});
+
 module.exports.router = router;
