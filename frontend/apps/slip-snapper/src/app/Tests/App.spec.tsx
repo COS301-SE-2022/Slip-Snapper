@@ -1,8 +1,6 @@
-import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
-import renderer from "react-test-renderer";
 import TakePictureButton from '../components/TakePictureButton';
-import { act, create } from 'react-test-renderer';
+import { create } from 'react-test-renderer';
 import App from '../App';
 import Profile from '../pages/Profile';
 import ViewReports from '../pages/ViewReports';
@@ -10,12 +8,7 @@ import Login from '../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
 //ReportTotal Imports
-import { mockTotals } from '../pages/ViewReports'
-import { UserStats } from '../components/UserStats';
 import AddEntry from '../pages/AddEntry';
-import { EditBudgets } from '../components/EditBudgets';
-import { Link, StaticRouter } from 'react-router-dom';
-import { Budgets } from 'aws-sdk';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -222,12 +215,13 @@ describe('AddEntry', () => {
     const Component = render(<AddEntry />);
 
     expect(Component.getByText('Add Entries'));
-    expect(Component.getByText('Store Name/Location:'));
+    expect(Component.getByText('Location:'));
+    expect(Component.getByText('Date:'));
     expect(Component.getByText('Edit Details'));
-    expect(Component.getByText('Item Name'));
+    expect(Component.getByText('Description'));
     expect(Component.getByText('Quantity'));
     expect(Component.getByText('Price'));
     expect(Component.getByText('Type'));
-    expect(Component.getByText('Total:'));
+    expect(Component.getByText('Total Amount:'));
   });
 });
