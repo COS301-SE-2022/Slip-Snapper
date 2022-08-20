@@ -1,8 +1,10 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton } from '@ionic/react';
 import React, { useState } from 'react';
-import '../theme/editSlip.css';
+import { Chip } from '@mui/material';
+import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import { imageOutline } from 'ionicons/icons';
+import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
-import { add } from 'ionicons/icons';
 import { addItemsA } from '../../api/apiCall';
 
 
@@ -13,6 +15,7 @@ const EditSlip: React.FC = () => {
     const [items, setItems] = useState(data.text[2]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+    const [showImage, setShowImage] = useState(false);
     return (
         <IonPage>
             <IonHeader>
@@ -24,113 +27,123 @@ const EditSlip: React.FC = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
-                <IonCard color="primary">
-                    <div className='imageContainer'>
-                        <img className='image' src={photo} alt="Logo" />
-                    </div>
-                    <IonCardHeader>
-                        <IonCardTitle>Store Name/Location:
-                            <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={data.text[1]} id={"Store_Name"} contentEditable="true"></IonInput>
-                            </IonItem>
-                        </IonCardTitle>
-                        <IonCardTitle>Date:
-                            <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={new Date(data.text[0]).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
-                            </IonItem>
-                        </IonCardTitle>
 
+                <IonCard color="primary">
+                    <IonCardHeader className="wrapper">
+                        <div>
+                            <IonFab id="desktop-fab" title="Receipt" horizontal='start' vertical='top'>
+                                <IonFabButton color='secondary' onClick={() => { setShowImage(true) }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
+                            </IonFab>
+                        </div>
+                        <div color="primary">
+                            <IonCardTitle className="store elem">Location:
+                                <IonItem className='addEntry' color="tertiary">
+                                    <IonInput value={data.text[1]} id={"Store_Name"} contentEditable="true"></IonInput>
+                                </IonItem>
+                            </IonCardTitle>
+                        </div>
+                        <div color="primary">
+                            <IonCardTitle className="date elem">Date:
+                                <IonItem className='addEntry' color="tertiary">
+                                    <IonInput value={new Date(data.text[0]).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
+                                </IonItem>
+                            </IonCardTitle>
+                        </div>    
                     </IonCardHeader>
-                    <IonCardHeader>
+
+                    <IonCardHeader className="wrapper">
                         <IonCardTitle>Edit Details</IonCardTitle>
                     </IonCardHeader>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol></IonCol>
-
-                            <IonCol>
-                                <IonLabel>Item Name</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Quantity</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Price</IonLabel>
-                            </IonCol>
-
-                            <IonCol>
-                                <IonLabel>Type</IonLabel>
-                            </IonCol>
-                            <IonCol>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
 
                     {items.map((item: any, index: number) => {
                         return (
                             <IonGrid key={index} >
-                                <IonRow>
-                                    <IonCol className='itemlabels'>
-                                        <IonLabel>Item #{index + 1}</IonLabel>
+                                <div className='wrapper small-chip'>
+                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                </div>
+                                <div className='wrapper'>
+                                    <IonCol className='big-chip'>
+                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/price")} type='number'
                                                 id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol>
+                                    <IonCol className='item-col elem'>
+                                        <IonLabel className='labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.type} ></IonInput>
                                         </IonItem>
                                     </IonCol>
-                                    <IonCol >
-                                        <IonButton size='small' fill="outline" color="secondary" onClick={() => removeItem(index)}>Remove</IonButton>
-                                        <IonAlert
-                                            isOpen={showAlert}
-                                            onDidDismiss={() => setShowAlert(false)}
-                                            header="Oops..."
-                                            message={alertMessage}
-                                            buttons={['Ok']}
-                                        />
-                                    </IonCol>
-                                </IonRow>
+                                    <IonAlert
+                                        isOpen={showAlert}
+                                        onDidDismiss={() => setShowAlert(false)}
+                                        header="Oops..."
+                                        message={alertMessage}
+                                        buttons={['Ok']}
+                                    />
+                                    <IonModal isOpen={showImage} onDidDismiss={() => setShowImage(false)}>
+                                        <IonHeader>
+                                            <IonToolbar color="primary">
+                                            <IonTitle>Current Receipt</IonTitle>
+                                            <IonButtons slot="end">
+                                                <IonButton onClick={() => { setShowImage(false) }}>Close</IonButton>
+                                            </IonButtons>
+                                            </IonToolbar>
+                                        </IonHeader>
+                                        <IonContent>
+                                            <img src={photo} alt="receipt" />
+                                        </IonContent>
+                                    </IonModal>
+                                </div>
                             </IonGrid>
                         )
                     })}
-                    <IonItem color="tertiary" className='slipTotal'>
-                        <div className='totalHeader'>Total:</div>
-                        <IonItem color="tertiary" className='total'>
-                            <IonInput id={"total"} value={data.text[4]} ></IonInput>
+                    <div className='wrapper'>
+                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary"/>
+                    </div>
 
+                    <IonCardHeader className="wrapper">
+                        <IonCardTitle>Total Amount:</IonCardTitle>
+                    </IonCardHeader>
+
+                    <IonCardHeader className="wrapper">
+                        <IonItem className='addEntry' color="tertiary">
+                            <IonInput id={"total"} value={data.text[4]}></IonInput>
                         </IonItem>
-                    </IonItem>
+                    </IonCardHeader>
+
                     <IonItem color="primary">
-                        <IonButton onClick={addItem} slot="start" color="secondary"><IonIcon src={add}></IonIcon></IonButton>
-                        <IonButton fill="solid" slot="end" color="medium" routerLink={'/home'}>Cancel</IonButton>
-                        <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
+                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/home'}>Cancel</IonButton>
+                        <IonButton id='submitButton' onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
             </IonContent>
             <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             <IonFooter>
+                    <IonFab id="mobi-fab" horizontal='start' vertical='top' edge>
+                            <IonFabButton color='secondary' onClick={() => { setShowImage(true) }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
+                    </IonFab>
                 <IonToolbar color="primary">
                 </IonToolbar>
             </IonFooter>
