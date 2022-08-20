@@ -1497,36 +1497,15 @@ async function getUserProfile(userId) {
  */
 async function getUserGeneralBudgets(userId, start, end) {
     try {
-        const budgets = await prisma.budgets.findFirst({
+        const budgets = await prisma.user.findFirst({
             where: {
-                usersId: userId
+                id: userId
             },
             select: {
-                weeklyFoodBudget: true,
-                weeklyFashionBudget: true,
-                weeklyElectronicsBudget: true,
-                weeklyHouseholdBudget: true,
-                weeklyOtherBudget: true,
-                monthlyFoodBudget: true,
-                monthlyFashionBudget: true,
-                monthlyElectronicsBudget: true,
-                monthlyHouseholdBudget: true,
-                monthlyOtherBudget: true
+                budgets: true
             }
         })
 
-        if (budgets === null) {
-            let budget = await prisma.budgets.create({
-                data: {
-                    usersId: userId
-                }
-            })
-
-            return {
-                message: "User budgets retrieved",
-                budgets: budget
-            };
-        }
 
         const items = await prisma.slip.findMany({
             where: {
