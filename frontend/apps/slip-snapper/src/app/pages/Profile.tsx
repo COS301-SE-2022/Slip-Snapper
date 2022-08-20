@@ -136,7 +136,6 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget(alertData.weeklyBudget, "");
-                    isExceeded(weeklyBudget, monthlyBudget)
                   }
                 }
               ]}></IonAlert>
@@ -164,7 +163,6 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget("", alertData.monthlyBudget);
-                    isExceeded(weeklyBudget, monthlyBudget)
                   }
                 }
               ]}></IonAlert>
@@ -237,51 +235,67 @@ const Profile: React.FC = () => {
     weeklyBudget = parseFloat(newWeeklyBudget)
     monthlyBudget = parseFloat(newMonthlyBudget)
 
-    if (!isNaN(weeklyBudget)) {
+    if (isNaN(weeklyBudget) || weeklyBudget < 0)
+    {
+      present("Invalid weekly budget set", 1200)
+    }
+
+    else {
       setWeeklyBudget(weeklyBudget)
+      isExceeded(weeklyBudget, monthlyBudget)
+      present("New weekly budget applied",1200)
+
+      setBudgetA(user.id, weeklyBudget, monthlyBudget)
 
     }
-    if (!isNaN(monthlyBudget)) {
+
+    if (isNaN(monthlyBudget) || monthlyBudget < 0) {
+      present("Invalid weekly budget set", 1200)
+    }
+
+    else {
       setMonthlyBudget(monthlyBudget)
+      isExceeded(weeklyBudget, monthlyBudget)
+      present("New monthly budget applied", 1200)
+
+      setBudgetA(user.id, weeklyBudget, monthlyBudget)
+
     }
-
-    setBudgetA(user.id, weeklyBudget, monthlyBudget)
-
   }
 
-  function isExceeded(wB: float, mB: float) {
-    const withinWeeklyBudget = expenditure.weekly / wB
-    const withinMonthlyBudget = expenditure.monthly / mB
+  function isExceeded(weekly_Budget: float, monthly_Budget: float) {
+    const withinWeeklyBudget = expenditure.weekly / weekly_Budget
+    const withinMonthlyBudget = expenditure.monthly / monthly_Budget
 
-    if (expenditure.weekly >= wB && !isNaN(wB)) {
+    if (expenditure.weekly >= weekly_Budget && !isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (expenditure.weekly >= wB / 2 && !isNaN(wB)) {
+    else if (expenditure.weekly >= weekly_Budget / 2 && !isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(wB)) {
+    else if (!isNaN(weekly_Budget)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (expenditure.monthly >= mB && !isNaN(mB)) {
+    if (expenditure.monthly >= monthly_Budget && !isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (expenditure.monthly >= mB / 2 && !isNaN(mB)) {
+    else if (expenditure.monthly >= monthly_Budget / 2 && !isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
     }
-    else if (!isNaN(mB)) {
+    else if (!isNaN(monthly_Budget)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
 
     document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
     document.getElementById("monthlyProgressBar")?.setAttribute("value", withinMonthlyBudget.toString())
 
-    if (wB <= 0) {
+    if (monthly_Budget <= 0) {
       document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (mB <= 0) {
+    if (monthly_Budget <= 0) {
       document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
