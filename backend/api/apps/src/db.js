@@ -64,7 +64,7 @@ async function getUser(userName, password) {
 async function addUser(username, password, firstname, lastname) {
     try {
 
-        let budgetObject ={
+        let budgetObject = {
             FoodBudget: {
                 active: false,
                 timeFrame: false,
@@ -736,6 +736,34 @@ async function updateWeeklyMonthlyCategoryBudgets(userId, data) {
         };
     }
 
+}
+
+/**
+ * Funtion to get the user weekly and monthly category budgets from the database
+ * @param {*} userId The users id
+ * @returns budget json object
+ */
+async function getWeeklyMonthlyCategoryBudgets(userId) {
+    try {
+        const budgetObject = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                budgets: true
+            }
+        })
+
+        return {
+            message: "User budget/s retrieved",
+            budgets: budgetObject
+        };
+    }
+    catch (error) {
+        return {
+            message: "Error retrieving the budget/s",
+        };
+    }
 }
 
 /**
@@ -1706,4 +1734,5 @@ module.exports = {
     getUserProfile,
     updateSlip,
     updateWeeklyMonthlyCategoryBudgets,
+    getWeeklyMonthlyCategoryBudgets,
 }
