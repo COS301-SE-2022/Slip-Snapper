@@ -66,11 +66,11 @@ async function addUser(username, password, firstname, lastname) {
 
         let budgetObject =
         {
-            "weeklyFoodBudgetState":false,
-            "weeklyFashionBudgetState":false,
-            "weeklyElectronicsBudgetState":false,
-            "weeklyHouseholdBudgetState":false,
-            "weeklyOtherBudgetState":false,
+            "weeklyFoodBudgetState": false,
+            "weeklyFashionBudgetState": false,
+            "weeklyElectronicsBudgetState": false,
+            "weeklyHouseholdBudgetState": false,
+            "weeklyOtherBudgetState": false,
             "monthlyFoodBudgetState": false,
             "monthlyFashionBudgetState": false,
             "monthlyElectronicsBudgetState": false,
@@ -701,18 +701,20 @@ async function setUserBudgets(userId, data) {
 }
 
 /**
- * Funtion to set the user budgets in the database
+ * Funtion to set the user weekly and monthly category budgets in the database
  * @param {*} userId The users id
  * @param {*} data the data to be added
  * @returns user data
  */
-async function setUserSpecificBudgets(userid, data) {
+async function updateWeeklyMonthlyCategoryBudgets(userId, data) {
     try {
-        const user = await prisma.budgets.update({
+        const user = await prisma.user.update({
             where: {
-                usersId: userid
+                id: userId
             },
-            data: data
+            data: {
+                budgets: data
+            }
         })
 
         return {
@@ -1694,5 +1696,5 @@ module.exports = {
     todaysReports,
     getUserProfile,
     updateSlip,
-    setUserSpecificBudgets,
+    updateWeeklyMonthlyCategoryBudgets,
 }
