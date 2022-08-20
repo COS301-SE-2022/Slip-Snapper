@@ -14,6 +14,7 @@ import {
   IonProgressBar,
   IonIcon,
   IonText,
+  useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -31,31 +32,34 @@ const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
   const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
-  const [userDetails, setUserDetails] = useState({firstname: "", lastname: ""});
+
+  const [userDetails, setUserDetails] = useState({ firstname: "", lastname: "" });
+  const [expenditure, setExpenditure] = useState({ weekly: 0, monthly: 0 });
   const val = { weekly: 0, monthly: 0 };
   const history = useHistory();
+  
+  const [present, dismiss] = useIonToast();
 
-  let totalWeeklySpent: number, totalMonthlySpent: number
+  // let totalWeeklySpent: number, totalMonthlySpent: number
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+      user = { id: 24 }
     }
     setUserDetails(user)
     getProfileData(user.id)
       .then(
         apiResponse => {
-          if(typeof(apiResponse.data) !== "string"){
+          if (typeof (apiResponse.data) !== "string") {
             //Budget amounts
             val.weekly = apiResponse.data.weekly;
             val.monthly = apiResponse.data.monthly;
 
             //Expenditures
-            totalWeeklySpent = apiResponse.data.weeklyTotal;
-            totalMonthlySpent = apiResponse.data.monthlyTotal;
-            console.log(totalWeeklySpent)
+            expenditure.weekly = apiResponse.data.weeklyTotal;
+            expenditure.monthly = apiResponse.data.monthlyTotal;
 
-            isExceeded(val.weekly,val.monthly);
+            isExceeded(val.weekly, val.monthly);
 
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
@@ -65,9 +69,9 @@ const Profile: React.FC = () => {
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
-  const [profile, setProfile] = useState({favouriteStore:{name:"",receipts:[{id:0,total:0}]},weeklyTotal:0, monthlyTotal:0});
+  const [profile, setProfile] = useState({ favouriteStore: { name: "", receipts: [{ id: 0, total: 0 }] }, weeklyTotal: 0, monthlyTotal: 0 });
   let weeklyBudget: number, monthlyBudget: number
-  return(
+  return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
@@ -99,12 +103,12 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
               <IonItem id="weekly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)}/>
+                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
                 <IonText>Weekly: R{weeklyBudgetValue}</IonText>
                 <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
               <IonItem id="monthly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)}/>
+                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
                 <IonText>Monthly: R{monthlyBudgetValue}</IonText>
                 <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
@@ -133,13 +137,12 @@ const Profile: React.FC = () => {
                   handler: (alertData) => {
                     applyToBudget(alertData.weeklyBudget, "");
                     isExceeded(weeklyBudget, monthlyBudget)
-                    
                   }
                 }
               ]}></IonAlert>
-              
-              {/* Monthly Budget */}
-              <IonAlert
+
+            {/* Monthly Budget */}
+            <IonAlert
               isOpen={monthlyBudgetAlert}
               data-testid="monthly-budget-alert"
               onDidDismiss={() => setMonthlyBudgetAlert(false)}
@@ -161,7 +164,6 @@ const Profile: React.FC = () => {
                   text: 'Apply',
                   handler: (alertData) => {
                     applyToBudget("", alertData.monthlyBudget);
-                    console.log(monthlyBudgetValue)
                     isExceeded(weeklyBudget, monthlyBudget)
                   }
                 }
@@ -175,7 +177,7 @@ const Profile: React.FC = () => {
               <EditBudgets />
             </IonCardHeader>
           </IonCard>
-          
+
           <IonCard className="card favourite" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
@@ -191,7 +193,7 @@ const Profile: React.FC = () => {
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
               {profile.favouriteStore.receipts.map((item: any, index: number) => {
-                return(
+                return (
                   <IonItem key={index} className="center-items" color="tertiary">
                     <IonText>Receipt #{item.id}: R{item.total}</IonText>
                   </IonItem>
@@ -229,11 +231,12 @@ const Profile: React.FC = () => {
 
   function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
     let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
+    if (user == null) {
+      user = { id: 24 }
     }
     weeklyBudget = parseFloat(newWeeklyBudget)
     monthlyBudget = parseFloat(newMonthlyBudget)
+
     if (!isNaN(weeklyBudget)) {
       setWeeklyBudget(weeklyBudget)
 
@@ -243,34 +246,27 @@ const Profile: React.FC = () => {
     }
 
     setBudgetA(user.id, weeklyBudget, monthlyBudget)
-    
+
   }
 
-  function isExceeded(wB:float,mB:float) {
-    const withinWeeklyBudget = totalWeeklySpent / wB
-    const withinMonthlyBudget = totalMonthlySpent / mB
+  function isExceeded(wB: float, mB: float) {
+    const withinWeeklyBudget = expenditure.weekly / wB
+    const withinMonthlyBudget = expenditure.monthly / mB
 
-    console.log("WSpent = " + totalWeeklySpent)
-    console.log("MSpent = "+totalMonthlySpent)
-    console.log("WBudget = " + wB)
-    console.log("MBudget = " + mB)
-
-
-
-    if (totalWeeklySpent >= wB && !isNaN(wB)) {
+    if (expenditure.weekly >= wB && !isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalWeeklySpent >= wB / 2 && !isNaN(wB)) {
+    else if (expenditure.weekly >= wB / 2 && !isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "warning")
     }
     else if (!isNaN(wB)) {
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (totalMonthlySpent >= mB && !isNaN(mB)) {
+    if (expenditure.monthly >= mB && !isNaN(mB)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "danger")
     }
-    else if (totalMonthlySpent >= mB / 2 && !isNaN(mB)) {
+    else if (expenditure.monthly >= mB / 2 && !isNaN(mB)) {
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "warning")
     }
     else if (!isNaN(mB)) {
@@ -280,12 +276,12 @@ const Profile: React.FC = () => {
     document.getElementById("weeklyProgressBar")?.setAttribute("value", withinWeeklyBudget.toString())
     document.getElementById("monthlyProgressBar")?.setAttribute("value", withinMonthlyBudget.toString())
 
-    if (wB === 0) {
+    if (wB <= 0) {
       document.getElementById("weeklyProgressBar")?.setAttribute("value", "0")
       document.getElementById("weeklyProgressBar")?.setAttribute("color", "success")
     }
 
-    if (mB === 0) {
+    if (mB <= 0) {
       document.getElementById("monthlyProgressBar")?.setAttribute("value", "0")
       document.getElementById("monthlyProgressBar")?.setAttribute("color", "success")
     }
