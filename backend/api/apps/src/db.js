@@ -1369,27 +1369,19 @@ async function deleteReportRecord(reportid) {
  * @param {*} userid The users Id
  * @returns json object with all the slips
  */
-async function retrieveAllSlips(userid) {
+ async function retrieveAllSlips(userid) {
     try {
         const allSlips = await prisma.slip.findMany({
             where: {
                 usersId: userid
             },
             include: {
-                items: true,
-                items: {
-                    include: {
-                        item: {
-                            select: {
-                                id: true,
-                                itemPrice: true,
-                                itemQuantity: true,
-                                data: true
-                            }
-                        }
-                    }
-
-                },
+               items:{
+                include:{
+                  data:true
+  
+                }
+               }
             }
         })
         return {
@@ -1403,9 +1395,8 @@ async function retrieveAllSlips(userid) {
             slips: []
         }
     }
-
-}
-
+  
+  }
 /**
  * Function to get all the statistics for home for today
  * @param {*} userid The user Id
@@ -1559,16 +1550,13 @@ async function getUserGeneralBudgets(userId, start, end) {
             houseHold: 0,
             Other: 0,
         }
-        const item = items.map((slip) => {
-            return { ...slip, items: slip.items.map((item) => item.item) }
-        })
+  
 
         for (var itemL of item) {
 
             for (it of itemL.items) {
 
                 if (it.data.at(0).dataItem.itemType === 'food') {
-
                     totals.Food += it.itemPrice
                 }
 
