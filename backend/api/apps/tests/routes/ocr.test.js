@@ -19,6 +19,7 @@ describe('POST /ocr', ()=>{
     beforeEach(()=>{
         parse.mockReset();
         verifyToken.mockReset();
+        jest. setTimeout(8000)
     })
 
     test('Should Generate a report for the user', async ()=>{
