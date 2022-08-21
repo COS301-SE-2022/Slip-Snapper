@@ -8,31 +8,41 @@ const csvParser = require('csv-parse')
 const groceriesResults = [];
 const priceResults = [];
 const shopResults = [];
-const skroutzResults = []
-
+const skroutzResults = [];
 
 async function findUniquesGroceries(){
-    let uniques = { total : 0}
-
+    let uniques = [];
+    let count = { total: 0 };
+    
     for( const element of groceriesResults ) {
-        element["category"] = "Food";
-        if(!uniques[element.itemDescription]){
-            uniques[element.itemDescription] = {count: 1, element: element};
-            uniques.total++;
+        
+        if( !count[element.itemDescription] ){
+            count[element.itemDescription] = 1;
+            count.total++;
+            let pos = Math.floor(Math.random() * stores.length);
+
+            const newElement = {
+                Date: element.Date,
+                Item: element.itemDescription,
+                Location: stores[pos],
+                Quantity: 1,
+                Price: 0.0,
+                Category: "Food"
+            }
+            uniques.push(newElement);
             continue;
         }
 
-        uniques[element.itemDescription].count = uniques[element.itemDescription].count + 1
-        uniques[element.itemDescription].element = element;
+        count[element.itemDescription] = count[element.itemDescription] + 1;
     }
 
-    return uniques
+    // console.log(count.total);
+    return uniques;
 }
 
 async function cleanGroceries(){
-    const groceries = fs.createReadStream('./dataSets/Groceries_dataset.csv')
-
-    groceries.pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+    fs.createReadStream('./dataSets/Groceries_dataset.csv')
+        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
         .on("data", function (row) {
             groceriesResults.push(row)
         })
@@ -40,33 +50,42 @@ async function cleanGroceries(){
             console.log(error.message);
         })
         .on("end", async function () {
-            console.log("finished");
             let uniques = await findUniquesGroceries();
-            console.log(uniques);
+            //console.table(uniques);
+            console.log("Finished gathering Uniques From Groceries");
         });
 }
 
 async function findUniquesPrice(){
-    let uniques = { total : 0}
+    let uniques = [];
+    let count = { total: 0 };
 
     for( const element of priceResults ) {
-        if(!uniques[element.Cluster]){
-            uniques[element.Cluster] = {count: 1, element: element};
-            uniques.total++;
+        if(!count[element.Cluster]){
+            count[element.Cluster] = 1;
+            count.total++;
+
+            const newElement = {
+                Date: '',
+                Item: element.Cluster,
+                Location: '',
+                Quantity: 1,
+                Price: 0.0,
+                Category: element.Category
+            }
+            uniques.push(newElement);
             continue;
         }
 
-        uniques[element.Cluster].count = uniques[element.Cluster].count + 1
-        uniques[element.Cluster].element = element;
+        count[element.Cluster] = count[element.Cluster] + 1
     }
 
     return uniques
 }
 
 async function cleanPrice(){
-    const price = fs.createReadStream('./dataSets/pricerunner_aggregate.csv')
-
-    price.pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+    fs.createReadStream('./dataSets/pricerunner_aggregate.csv')
+        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
         .on('headers', (headers) => {
             console.log(headers)
         })
@@ -77,16 +96,42 @@ async function cleanPrice(){
             console.log(error.message);
         })
         .on("end", async function () {
-            console.log("finished");
             let uniques = await findUniquesPrice();
-            console.log(uniques);
+            //console.table(uniques);
+            console.log("Finished gathering Uniques From PriceRunner");
         });
 }
 
+async function findUniquesShop(){
+    let uniques = [];
+    let count = { total: 0 };
+
+    for( const element of shopResults ) {
+        if(!count[element.ProductTitle]){
+            count[element.ProductTitle] = 1;
+            count.total++;
+
+            const newElement = {
+                Date: '',
+                Item: element.ProductTitle,
+                Location: '',
+                Quantity: 1,
+                Price: 0.0,
+                Category: element.Category
+            }
+            uniques.push(newElement);
+            continue;
+        }
+
+        count[element.ProductTitle] = count[element.ProductTitle] + 1
+    }
+
+    return uniques
+}
+
 async function cleanShop(){
-    const shop = fs.createReadStream('./dataSets/shopmania.csv')
-    
-    shop.pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+    fs.createReadStream('./dataSets/shopmania.csv')
+        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
         .on('headers', (headers) => {
             console.log(headers)
         })
@@ -96,31 +141,57 @@ async function cleanShop(){
         .on("error", function (error) {
             console.log(error.message);
         })
-        .on("end", function () {
-            console.log("finished");
-            console.log(shopResults[0])
-            let uniques = await findUniquesPrice();
+        .on("end", async function () {
+            let uniques = await findUniquesShop();
             //console.table(uniques)
+            console.log("Finished gathering Uniques From ShopMania");
         });
 }
 
+async function findUniquesSkrout(){
+    let uniques = [];
+    let count = { total: 0 };
+
+    for( const element of skroutzResults ) {
+        if(!count[element.Cluster]){
+            count[element.Cluster] = 1;
+            count.total++;
+
+            const newElement = {
+                Date: '',
+                Item: element.Cluster,
+                Location: '',
+                Quantity: 1,
+                Price: 0.0,
+                Category: element.Category
+            }
+            uniques.push(newElement);
+            continue;
+        }
+
+        count[element.Cluster] = count[element.Cluster] + 1
+    }
+
+    return uniques
+}
+
 async function cleanSkroutz(){
-    const skroutz = fs.createReadStream('./dataSets/skroutz_aggregate.csv')
-    
-    skroutz.pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
-    .on('headers', (headers) => {
-        console.log(headers)
-    })
-    .on("data", function (row) {
-        skroutzResults.push(row)
-    })
-    .on("error", function (error) {
-        console.log(error.message);
-    })
-    .on("end", function () {
-        console.log("finished");
-        console.table(skroutzResults)
-    });
+    fs.createReadStream('./dataSets/skroutz_aggregate.csv')
+        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+        .on('headers', (headers) => {
+            console.log(headers)
+        })
+        .on("data", function (row) {
+            skroutzResults.push(row)
+        })
+        .on("error", function (error) {
+            console.log(error.message);
+        })
+        .on("end", async function () {
+            let uniques = await findUniquesSkrout();
+            console.table(uniques)
+            console.log("Finished gathering Uniques From Skroutz");
+        });
 }
 
 async function createDataSet(){
@@ -129,7 +200,10 @@ async function createDataSet(){
 
 async function main(){
     // await cleanGroceries();
-    await cleanPrice();
+    // await cleanPrice();
+    // await cleanShop();
+    await cleanSkroutz();
+    console.log("Finished Cleaning All")
 }
 
 main();
