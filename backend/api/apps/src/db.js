@@ -44,7 +44,6 @@ async function getUser(userName, password) {
         };
     }
     catch (error) {
-        console.log(error)
         return {
             message: "Error validating user Details",
             user: null
@@ -124,7 +123,6 @@ async function addUser(username, password, firstname, lastname) {
         };
     }
     catch (error) {
-        console.log(error)
         return {
             message: "Error Creating User",
             user: null
@@ -158,7 +156,6 @@ async function deleteUser(userId) {
             user: user
         };
     } catch (error) {
-        console.log(error)
         return {
             message: "Error removing user",
             user: null
@@ -193,7 +190,6 @@ async function updateUser(userId, data) {
             user: user
         };
     } catch (error) {
-        console.log(error)
         return {
             message: "Error updating User",
             user: null
@@ -213,25 +209,30 @@ async function getItem(userId) {
     try {
         const items = await prisma.slip.findMany({
             where: {
-              usersId: userId
+                usersId: userId
             },
             select: {
-              items: {
-                include: {
-                  item: {
-                    select:{
-                      itemPrice: true,
-                      itemQuantity: true,
-                      data: true
+                items: {
+                    include: {
+                        item: {
+                            select: {
+                                id: true,
+                                itemPrice: true,
+                                itemQuantity: true,
+                                data: {
+                                    include: {
+                                        dataItem: true
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
-                }
-              },
-              location: true,
-              transactionDate: true,
-              total: true
+                },
+                location: true,
+                transactionDate: true,
+                total: true
             }
-          })
+        })
         if (items == null) {
             return {
                 message: "No items associated with the user",
@@ -246,17 +247,16 @@ async function getItem(userId) {
             for (const item of slip.items) {
                 itemList.push({
                     id: i++,
-                    itemId: item.id,
-                    itemName: item.data.item,
-                    type: item.data.itemType,
-                    quantity: item.itemQuantity,
-                    price: item.itemPrice,
+                    itemId: item.item.id,
+                    itemName: item.item.data.at(0).dataItem.item,
+                    type: item.item.data.at(0).dataItem.itemType,
+                    quantity: item.item.itemQuantity,
+                    price: item.item.itemPrice,
                     location: slip.location,
                     date: slip.transactionDate
                 })
             }
         }
-
         return {
             message: "All associated items retrieved",
             numItems: i,
