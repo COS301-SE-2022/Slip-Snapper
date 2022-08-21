@@ -1378,12 +1378,17 @@ async function retrieveAllSlips(userid) {
             include: {
                 items: true,
                 items: {
-                    select: {
-                        id: true,
-                        itemPrice: true,
-                        itemQuantity: true,
-                        data: true
+                    include: {
+                        item: {
+                            select: {
+                                id: true,
+                                itemPrice: true,
+                                itemQuantity: true,
+                                data: true
+                            }
+                        }
                     }
+
                 },
             }
         })
