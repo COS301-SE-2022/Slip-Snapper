@@ -213,22 +213,25 @@ async function getItem(userId) {
     try {
         const items = await prisma.slip.findMany({
             where: {
-                usersId: userId
+              usersId: userId
             },
             select: {
-                items: {
-                    select: {
-                        itemPrice: true,
-                        itemQuantity: true,
-                        data: true
+              items: {
+                include: {
+                  item: {
+                    select:{
+                      itemPrice: true,
+                      itemQuantity: true,
+                      data: true
                     }
-                },
-                location: true,
-                transactionDate: true,
-                total: true
+                  }
+                }
+              },
+              location: true,
+              transactionDate: true,
+              total: true
             }
-        })
-
+          })
         if (items == null) {
             return {
                 message: "No items associated with the user",
