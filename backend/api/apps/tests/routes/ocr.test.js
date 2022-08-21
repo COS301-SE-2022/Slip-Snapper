@@ -3,7 +3,7 @@ const { makeApp } = require('../../src/index.js');
 
 const parse = jest.fn()
 const verifyToken = jest.fn()
-jest.setTimeout(8000)
+jest.setTimeout(20000)
 
 const app = makeApp({}, {
     parse
