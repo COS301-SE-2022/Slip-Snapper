@@ -1376,20 +1376,12 @@ async function retrieveAllSlips(userid) {
                 usersId: userid
             },
             include: {
-                items: true,
                 items: {
                     include: {
-                        item: {
-                            select: {
-                                id: true,
-                                itemPrice: true,
-                                itemQuantity: true,
-                                data: true
-                            }
-                        }
-                    }
+                        data: true
 
-                },
+                    }
+                }
             }
         })
         return {
@@ -1405,7 +1397,6 @@ async function retrieveAllSlips(userid) {
     }
 
 }
-
 /**
  * Function to get all the statistics for home for today
  * @param {*} userid The user Id
@@ -1504,6 +1495,7 @@ async function getUserProfile(userId) {
  * @returns json object with the user budgets
  */
 async function getUserGeneralBudgets(userId, start, end) {
+
     try {
         const budgets = await prisma.user.findFirst({
             where: {
@@ -1518,22 +1510,20 @@ async function getUserGeneralBudgets(userId, start, end) {
         const items = await prisma.slip.findMany({
             where: {
                 usersId: userId
-                // transactionDate: {
-                //     gte: start,
-                //     lt:  end
-                //   }
             },
-            include: {
+            select: {
                 items: {
-                    select: {
-                        id: true,
-                        itemPrice: true,
-                        itemQuantity: true,
+                    include: {
                         data: true
                     }
                 },
+                location: true,
+                transactionDate: true,
+                total: true
             }
         })
+
+        //console.log(items)
 
         // var date = new Date();
         // date.setDate(date.getDate() - 7);
@@ -1549,31 +1539,35 @@ async function getUserGeneralBudgets(userId, start, end) {
             houseHold: 0,
             Other: 0,
         }
+
+
         for (var itemL of items) {
 
             for (it of itemL.items) {
-                if (it.data.itemType === 'food') {
+                console.log(it.data[0].itemType)
+
+                if (it.data[0].itemType === 'food') {
+
                     totals.Food += it.itemPrice
                 }
 
-                if (it.data.itemType === 'fashion') {
+                if (it.data[0].itemType === 'fashion') {
                     totals.Fashion += it.itemPrice
                 }
 
-                if (it.data.itemType === 'Electronics') {
+                if (it.data[0].itemType === 'Electronics') {
                     totals.Electronics += it.itemPrice
                 }
 
-                if (it.data.itemType === 'household') {
+                if (it.data[0].itemType === 'household') {
                     totals.houseHold += it.itemPrice
                 }
 
-                if (it.data.itemType === 'other') {
+                if (it.data[0].itemType === 'other') {
                     totals.Other += it.itemPrice
                 }
             }
         }
-
         return {
             message: "User budgets retrieved",
             budgets: budgets,
