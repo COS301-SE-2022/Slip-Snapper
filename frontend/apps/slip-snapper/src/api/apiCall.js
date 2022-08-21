@@ -14,13 +14,15 @@ const baseUrl = 'http://localhost:3000/api/'
  * @returns the response as a promise
  */
 export async function doProcessing(ocr){
+    console.log(ocr)
     return axios({
-        headers: headers,
+        headers:  {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        },
         method: 'post',
         url: baseUrl + 'ocr/process',
-        data: JSON.stringify({
-            text: ocr,
-        })
+        data: JSON.stringify({image: ocr})
     })
 }
 

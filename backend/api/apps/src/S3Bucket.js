@@ -87,20 +87,18 @@ class S3BucketFunctions {
             Key: path,
         };
 
-        myBucket.deleteObject(params, function (err, data) {
-            if (err) {
-                return{
-                    message: err,
-                    deleted: false
-                };
+        
+        try {
+            const deleteObject = await myBucket.deleteObject(params).promise()
+            return {
+                message: "Report deleted Succesfully",
             }
-            else {
-                return{
-                    message:"File has been deleted successfully",
-                    deleted: true
-                };
+        }
+        catch (err) {
+            return {
+                message: err,
             }
-        });
+        }
     }
 
 }

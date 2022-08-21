@@ -106,7 +106,7 @@ const Login: React.FC = () => {
             localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
             history.push("/home")
-            //window.location.reload();
+            window.location.reload();
           }
         })
     }

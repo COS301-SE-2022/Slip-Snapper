@@ -8,5 +8,7 @@
     "weeklyBudget": 0,
     "monthlyBudget": 0,
     "password": "Password123"
-  }
+  },
+  "token": "123456789"
+
 }
