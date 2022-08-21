@@ -347,12 +347,12 @@ router.post('/budget', async (req,res)=>{
  * Set the users budget
  * Uses the user id to get the items
  */
-router.post('/otherBudgets', async (req,res)=>{
+router.post('/otherBudgets', async (req, res) => {
     let { budgets } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    if(tokenVerified === "Error"){
+    if (tokenVerified === "Error") {
         return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
@@ -362,12 +362,12 @@ router.post('/otherBudgets', async (req,res)=>{
 
     for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
-            budgets[key] = parseFloat(budgets[key])
+            budgets[key].weeklyValue = parseFloat(budgets[key].weeklyValue)
+            budgets[key].monthlyValue = parseFloat(budgets[key].monthlyValue)
         }
     }
-    
-    const result = await req.app.get('db').setUserSpecificBudgets( Number(tokenVerified.user.id), budgets);
 
+    const result = await req.app.get('db').updateWeeklyMonthlyCategoryBudgets(Number(tokenVerified.user.id), budgets);
     let status = 200;
 
     return res.status(status)
@@ -376,6 +376,7 @@ router.post('/otherBudgets', async (req,res)=>{
             budgets: result.budgets,
         });
 });
+
 
 /**
  * Get the user statistics

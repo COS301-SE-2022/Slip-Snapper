@@ -1544,7 +1544,6 @@ async function getUserGeneralBudgets(userId, start, end) {
         for (var itemL of items) {
 
             for (it of itemL.items) {
-                console.log(it.data[0].itemType)
 
                 if (it.data[0].itemType === 'food') {
 
