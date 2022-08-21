@@ -26,22 +26,47 @@ function Budget() {
         Food: 0,
         Fashion: 0,
         Electronics: 0,
-        Household: 0,
+        household: 0,
         Other: 0,
     });
 
     //User Expenditure
     const [categoryBudgets, setCategoryBudgets] = useState({
-        monthlyElectronicsBudget: 0,
-        monthlyFashionBudget: 0,
-        monthlyFoodBudget: 0,
-        monthlyHouseholdBudget: 0,
-        monthlyOtherBudget: 0,
-        weeklyElectronicsBudget: 0,
-        weeklyFashionBudget: 0,
-        weeklyFoodBudget: 0,
-        weeklyHouseholdBudget: 0,
-        weeklyOtherBudget: 0,
+        FoodBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        FashionBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        ElectronicsBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        HouseholdBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        OtherBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
     });
 
     useEffect(() => {
@@ -53,34 +78,9 @@ function Budget() {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
-
-                        const mockSpent = {
-                            Food: 10000,
-                            Fashion: 20000,
-                            Electronics: 10000,
-                            Household: 40000,
-                            Other: 50000,
-                        }
-
-                        const mockBudgets = {
-                            monthlyElectronicsBudget: 0,
-                            monthlyFashionBudget: 0,
-                            monthlyFoodBudget: 20000,
-                            monthlyHouseholdBudget: 0,
-                            monthlyOtherBudget: 0,
-                            weeklyElectronicsBudget: 21000,
-                            weeklyFashionBudget: 18999,
-                            weeklyFoodBudget: 14000,
-                            weeklyHouseholdBudget: 28000,
-                            weeklyOtherBudget: 89000,
-                        }
-
-                        // setCategoryBudgets(apiResponse.data.otherBudgets.budgets)
-                        // setBudgetSpent(apiResponse.data.otherBudgets.totals)
-                        setCategoryBudgets(mockBudgets)
-                        setCategorySpent(mockSpent)
-
-                        setProgressBars(mockBudgets, mockSpent)
+                        setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
+                        setCategorySpent(apiResponse.data.otherBudgets.totals)
+                        setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.totals)
 
 
                     }
@@ -89,9 +89,9 @@ function Budget() {
 
     return (
         <div>
-            <IonItem id="foodBudget" className="center-items" color="tertiary">
+            <IonItem id="foodBudget" className="categoryBudgets" color="tertiary" >
                 <IonIcon className="edit-budget" src={create} onClick={() => setFood(true)} />
-                <IonText>{"Food: R" + categoryBudgets.weeklyFoodBudget}</IonText>
+                <IonText>{"Food: R" + categoryBudgets.FoodBudget.weeklyValue}</IonText>
                 <IonProgressBar id='foodBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -108,9 +108,9 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem id="fashionBudget" className="center-items" color="tertiary">
+            <IonItem id="fashionBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setFashion(true)} />
-                <IonText>{"Fashion: R" + categoryBudgets.weeklyFashionBudget}</IonText>
+                <IonText>{"Fashion: R" + categoryBudgets.FashionBudget.weeklyValue}</IonText>
                 <IonProgressBar id='fashionBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -127,9 +127,9 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem id="electronicsBudget" className="center-items" color="tertiary">
+            <IonItem id="electronicsBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setElec(true)} />
-                <IonText>{"Electronics: R" + categoryBudgets.weeklyElectronicsBudget}</IonText>
+                <IonText>{"Electronics: R" + categoryBudgets.ElectronicsBudget.weeklyValue}</IonText>
                 <IonProgressBar id='elecBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -146,9 +146,9 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem id="houseBudget" className="center-items" color="tertiary">
+            <IonItem id="houseBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setHouseHold(true)} />
-                <IonText>{"Household: R" + categoryBudgets.weeklyHouseholdBudget}</IonText>
+                <IonText>{"Household: R" + categoryBudgets.HouseholdBudget.weeklyValue}</IonText>
                 <IonProgressBar id='houseBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -165,9 +165,9 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
-            <IonItem id="otherBudget" className="center-items" color="tertiary">
+            <IonItem id="otherBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)} />
-                <IonText>{"Other: R" + categoryBudgets.weeklyOtherBudget}</IonText>
+                <IonText>{"Other: R" + categoryBudgets.OtherBudget.weeklyValue}</IonText>
                 <IonProgressBar id='otherBar' class='progressBar' slot="end"></IonProgressBar><br />
             </IonItem>
             <IonAlert
@@ -199,7 +199,7 @@ function Budget() {
             }
 
             else {
-                categoryBudgets.weeklyFoodBudget = newBudget
+                categoryBudgets.FoodBudget.weeklyValue = newBudget
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "foodBar", categorySpent.Food)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -214,7 +214,7 @@ function Budget() {
             }
 
             else {
-                categoryBudgets.weeklyFashionBudget = newBudget
+                categoryBudgets.FashionBudget.weeklyValue = newBudget
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "fashionBar", categorySpent.Fashion)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -229,7 +229,7 @@ function Budget() {
             }
 
             else {
-                categoryBudgets.weeklyElectronicsBudget = newBudget
+                categoryBudgets.ElectronicsBudget.weeklyValue = newBudget
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "elecBar", categorySpent.Electronics)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -244,14 +244,13 @@ function Budget() {
             }
 
             else {
-                categoryBudgets.weeklyHouseholdBudget = newBudget
+                categoryBudgets.HouseholdBudget.weeklyValue = newBudget
                 setCategoryBudgets(categoryBudgets)
-                isExceeded(newBudget, "houseBar", categorySpent.Household)
+                isExceeded(newBudget, "houseBar", categorySpent.household)
                 setGeneralBudget(user.id, categoryBudgets)
                 present("New Household budget set", 1200)
             }
         }
-
         if (categoryBudgetType === "other") {
 
             if (isNaN(newBudget) || newBudget < 0) {
@@ -259,7 +258,7 @@ function Budget() {
             }
 
             else {
-                categoryBudgets.weeklyOtherBudget = newBudget
+                categoryBudgets.OtherBudget.weeklyValue = newBudget
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "otherBar", categorySpent.Other)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -270,11 +269,6 @@ function Budget() {
 
     function isExceeded(budget: number, barID: string, total: number) {
         const withinBudget = total / budget
-
-        console.log(budget)
-        console.log(barID)
-        console.log(total)
-
 
         if (total >= budget && !isNaN(budget)) {
             document.getElementById(barID)?.setAttribute("color", "danger")
@@ -294,12 +288,17 @@ function Budget() {
         }
     }
 
-    function setProgressBars(budgets:any , totals:any) {
-        isExceeded(budgets.weeklyElectronicsBudget, "elecBar", totals.Electronics);
-        isExceeded(budgets.weeklyFashionBudget, "fashionBar", totals.Fashion);
-        isExceeded(budgets.weeklyFoodBudget, "foodBar", totals.Food);
-        isExceeded(budgets.weeklyHouseholdBudget, "houseBar", totals.Household);
-        isExceeded(budgets.weeklyOtherBudget, "otherBar", totals.Other);
+    function setProgressBars(budgets: any, totals: any) {
+        isExceeded(budgets.FoodBudget.weeklyValue, "elecBar", totals.Electronics);
+        isExceeded(budgets.FashionBudget.weeklyValue, "fashionBar", totals.Fashion);
+        isExceeded(budgets.ElectronicsBudget.weeklyValue, "foodBar", totals.Food);
+        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.household);
+        isExceeded(budgets.OtherBudget.weeklyValue, "otherBar", totals.Other);
     }
+}
+
+export function test() {
+
+    console.log()
 }
 export default Budget;

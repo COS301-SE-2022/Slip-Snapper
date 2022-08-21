@@ -12,7 +12,10 @@ import {
   IonList,
   IonToggle
 } from "@ionic/react";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getProfileData, setGeneralBudget } from '../../api/apiCall';
+import { test } from './Budget';
+
 
 export const EditBudgets = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,13 +27,12 @@ export const EditBudgets = () => {
   const [other, setOther] = useState(false);
 
   const categoryStates = [
-    { name: 'Food', isChecked: food, id: "foodBudget" },
-    { name: 'Fashion', isChecked: fashion, id: "fashionBudget" },
-    { name: 'Electronics', isChecked: electronics, id: "electronicsBudget" },
-    { name: 'Household', isChecked: household, id: "houseBudget" },
-    { name: 'Other', isChecked: other, id: "otherBudget" }
+    { name: 'Food', isActive: food, id: "foodBudget" },
+    { name: 'Fashion', isActive: fashion, id: "fashionBudget" },
+    { name: 'Electronics', isActive: electronics, id: "electronicsBudget" },
+    { name: 'Household', isActive: household, id: "houseBudget" },
+    { name: 'Other', isActive: other, id: "otherBudget" }
   ];
-  hideData(categoryStates)
 
   const [foodInterval, setFoodInterval] = useState(false);
   const [fashionInterval, setFashionInterval] = useState(false);
@@ -41,17 +43,36 @@ export const EditBudgets = () => {
   //true for weekly
   //false for monthly
   const budgetIntervals = [
-    { name: 'Food', isChecked: foodInterval, id: "foodInterval" },
-    { name: 'Fashion', isChecked: fashionInterval, id: "fashionInterval" },
-    { name: 'Electronics', isChecked: electronicsInterval, id: "electronicsInterval" },
-    { name: 'Household', isChecked: householdInterval, id: "houseInterval" },
-    { name: 'Other', isChecked: otherInterval, id: "otherInterval" }
+    { name: 'Food', weekly: foodInterval, id: "foodInterval" },
+    { name: 'Fashion', weekly: fashionInterval, id: "fashionInterval" },
+    { name: 'Electronics', weekly: electronicsInterval, id: "electronicsInterval" },
+    { name: 'Household', weekly: householdInterval, id: "houseInterval" },
+    { name: 'Other', weekly: otherInterval, id: "otherInterval" }
   ];
+
+  const [budgetObject, setBudgetObject] = useState<any>([])
+
+  useEffect(() => {
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if (user == null) {
+      user = { id: 24 }
+    }
+    getProfileData(user.id)
+      .then(
+        apiResponse => {
+          if (typeof (apiResponse.data) !== "string") {
+            setBudgetObject(apiResponse.data.otherBudgets.budgets.budgets)
+            initializeStates(apiResponse.data.otherBudgets.budgets.budgets, categoryStates)
+            hideData(categoryStates)
+          }
+        })
+  }, []);
+
 
   return (
     <IonItem color="primary">
       <IonButton fill="solid" slot="end" color="secondary" onClick={() => setIsOpen(true)}>Add/Remove</IonButton>
-      <IonModal isOpen={isOpen} onDidDismiss={() => setIsOpen(false)}>
+      <IonModal isOpen={isOpen} onDidDismiss={() => { setStates(budgetIntervals, categoryStates); hideData(categoryStates); setIsOpen(false) }}>
         <IonHeader>
           <IonToolbar color="primary">
             <IonTitle>Edit Budgets</IonTitle>
@@ -114,23 +135,68 @@ export const EditBudgets = () => {
       </IonModal>
     </IonItem>
   );
-};
 
+  function hideData(categoryStates: any) {
+    for (let i = 0; i < categoryStates.length; i++) {
+      const temp = document.getElementById(categoryStates[i].id)
+      if (categoryStates[i].isActive === true) {
 
-export function hideData(categoryStates:any) {
-  for (let i = 0; i < categoryStates.length; i++) {
-    const temp = document.getElementById(categoryStates[i].id)
-    if (categoryStates[i].isChecked === true) {
-
-      if (temp !== null)
-        temp.style.display = ""
+        if (temp !== null)
+          temp.style.display = "block"
+      }
+      else {
+        if (temp !== null)
+          temp.style.display = "none"
+      }
     }
-    else {
-      if (temp !== null)
-        temp.style.display = "none"
-    }
+  }
+
+  function initializeStates(budgets: any, categoryStates: any) {
+
+    categoryStates[0].isActive = budgets.FoodBudget.active
+    categoryStates[1].isActive = budgets.FashionBudget.active
+    categoryStates[2].isActive = budgets.ElectronicsBudget.active
+    categoryStates[3].isActive = budgets.HouseholdBudget.active
+    categoryStates[4].isActive = budgets.OtherBudget.active
+
+    setFood(budgets.FoodBudget.active)
+    setFashion(budgets.FashionBudget.active)
+    setElectronics(budgets.ElectronicsBudget.active)
+    setHousehold(budgets.HouseholdBudget.active)
+    setOther(budgets.OtherBudget.active)
+
+    setFoodInterval(budgets.FoodBudget.timeFrame)
+    setFashionInterval(budgets.FashionBudget.timeFrame)
+    setElectronicsInterval(budgets.ElectronicsBudget.timeFrame)
+    setHouseholdInterval(budgets.HouseholdBudget.timeFrame)
+    setOtherInterval(budgets.OtherBudget.timeFrame)
 
   }
-}
+
+  function setStates(budgetIntervals: any, categoryStates: any) {
 
 
+    if (budgetObject!==undefined)
+    {
+      budgetObject.FoodBudget.active = categoryStates[0].isActive
+      budgetObject.FashionBudget.active = categoryStates[1].isActive
+      budgetObject.ElectronicsBudget.active = categoryStates[2].isActive
+      budgetObject.HouseholdBudget.active = categoryStates[3].isActive
+      budgetObject.OtherBudget.active = categoryStates[4].isActive
+
+      budgetObject.FoodBudget.timeFrame = budgetIntervals[0].weekly
+      budgetObject.FashionBudget.timeFrame = budgetIntervals[1].weekly
+      budgetObject.ElectronicsBudget.timeFrame = budgetIntervals[2].weekly
+      budgetObject.HouseholdBudget.timeFrame = budgetIntervals[3].weekly
+      budgetObject.OtherBudget.timeFrame = budgetIntervals[4].weekly
+    }
+
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if (user == null) {
+      user = { id: 24 }
+    }
+    setGeneralBudget(user.id,budgetObject)
+  }
+
+
+};
