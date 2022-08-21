@@ -221,8 +221,8 @@ router.post('/pdf', async (req,res)=>{
 
     return res.status(status)
         .send({
-            message: result.message,
-            report: result.data
+            message: bucket.message,
+            report: bucket.data
         });
     
 });
@@ -245,7 +245,7 @@ router.delete('/pdf', async (req,res)=>{
 
     const path = `${userName}/${fileName}`
     const bucket = await req.app.get('bucket').deleteFile(path)
-    
+
     await req.app.get("db").deleteReportRecord(Number(reportID))
     
     let status = 200;
