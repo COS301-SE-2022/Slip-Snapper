@@ -1369,19 +1369,19 @@ async function deleteReportRecord(reportid) {
  * @param {*} userid The users Id
  * @returns json object with all the slips
  */
- async function retrieveAllSlips(userid) {
+async function retrieveAllSlips(userid) {
     try {
         const allSlips = await prisma.slip.findMany({
             where: {
                 usersId: userid
             },
             include: {
-               items:{
-                include:{
-                  data:true
-  
+                items: {
+                    include: {
+                        data: true
+
+                    }
                 }
-               }
             }
         })
         return {
@@ -1395,8 +1395,8 @@ async function deleteReportRecord(reportid) {
             slips: []
         }
     }
-  
-  }
+
+}
 /**
  * Function to get all the statistics for home for today
  * @param {*} userid The user Id
@@ -1514,18 +1514,7 @@ async function getUserGeneralBudgets(userId, start, end) {
             select: {
                 items: {
                     include: {
-                        item: {
-                            select: {
-                                id: true,
-                                itemPrice: true,
-                                itemQuantity: true,
-                                data: {
-                                    include: {
-                                        dataItem: true
-                                    }
-                                }
-                            }
-                        }
+                        data: true
                     }
                 },
                 location: true,
@@ -1550,34 +1539,35 @@ async function getUserGeneralBudgets(userId, start, end) {
             houseHold: 0,
             Other: 0,
         }
-  
 
-        for (var itemL of item) {
+
+        for (var itemL of items) {
 
             for (it of itemL.items) {
+                console.log(it.data[0].itemType)
 
-                if (it.data.at(0).dataItem.itemType === 'food') {
+                if (it.data[0].itemType === 'food') {
+
                     totals.Food += it.itemPrice
                 }
 
-                if (it.data.at(0).dataItem.itemType === 'fashion') {
+                if (it.data[0].itemType === 'fashion') {
                     totals.Fashion += it.itemPrice
                 }
 
-                if (it.data.at(0).dataItem.itemType === 'Electronics') {
+                if (it.data[0].itemType === 'Electronics') {
                     totals.Electronics += it.itemPrice
                 }
 
-                if (it.data.at(0).dataItem.itemType === 'household') {
+                if (it.data[0].itemType === 'household') {
                     totals.houseHold += it.itemPrice
                 }
 
-                if (it.data.at(0).dataItem.itemType === 'other') {
+                if (it.data[0].itemType === 'other') {
                     totals.Other += it.itemPrice
                 }
             }
         }
-        console.log(totals)
         return {
             message: "User budgets retrieved",
             budgets: budgets,
@@ -1585,7 +1575,6 @@ async function getUserGeneralBudgets(userId, start, end) {
         };
     }
     catch (error) {
-        console.log(error)
         return {
             message: "Error retrieving budgets",
             budgets: {},
