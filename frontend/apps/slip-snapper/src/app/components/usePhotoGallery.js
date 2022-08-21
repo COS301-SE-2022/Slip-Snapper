@@ -1,5 +1,4 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { createWorker } from 'tesseract.js';
 import { doProcessing } from '../../api/apiCall';
 import '../theme/toasts.css';
 
@@ -36,40 +35,27 @@ function ScanSlip(photo) {
     loading.spinner = "crescent";
     loading.cssClass = "loading";
     loading.mode = "ios";
-    const worker = createWorker({
-      logger: (m) => {if(m.status === "recognizing text"){
-        loading.message = Math.trunc(m.progress*100) + "%";
-      }},
-    
-    });
     document.body.appendChild(loading);
     loading.present();
 
     (async () => {
-      await worker.load();
-      await worker.loadLanguage('eng');
-      await worker.initialize('eng');
-      const {
-        data: { text },
-      } = await worker.recognize(photo);
 
       localStorage.removeItem('photo')
       localStorage.setItem('photo', JSON.stringify(photo))
 
-      await doProcessing(text)
+      await doProcessing(photo)
         .then(apiResponse => {
           localStorage.removeItem('scan-content')
           localStorage.setItem('scan-content', JSON.stringify(apiResponse.data))
         });
       
-      await worker.terminate();
-      resolve(loading);
+       resolve(loading);
     })();
   });
 
   editSlip.then((loading) => {
     loading.dismiss();
-    loading.onDidDismiss(window.location.assign('/editslip'));
+   loading.onDidDismiss(window.location.assign('/editslip'));
   });
 }
 
