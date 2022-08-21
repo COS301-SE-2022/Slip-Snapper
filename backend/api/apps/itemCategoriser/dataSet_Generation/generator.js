@@ -5,59 +5,58 @@ const csvParser = require('csv-parse')
 // https://www.kaggle.com/datasets/lakritidis/product-classification-and-categorization?resource=download
 // https://www.kaggle.com/datasets/heeraldedhia/groceries-dataset
 
-const groceriesResults = [];
-const priceResults = [];
-const shopResults = [];
-const skroutzResults = [];
+let groceriesResults = [];
+let priceResults = [];
+let shopResults = [];
+let skroutzResults = [];
+let allResults = []
 
 async function findUniquesGroceries(){
-    let uniques = [];
     let count = { total: 0 };
-    
+
     for( const element of groceriesResults ) {
         
         if( !count[element.itemDescription] ){
             count[element.itemDescription] = 1;
             count.total++;
-            let pos = Math.floor(Math.random() * stores.length);
 
             const newElement = {
                 Date: element.Date,
                 Item: element.itemDescription,
-                Location: stores[pos],
+                Location: '',
                 Quantity: 1,
                 Price: 0.0,
                 Category: "Food"
             }
-            uniques.push(newElement);
+            allResults.push(newElement);
             continue;
         }
 
         count[element.itemDescription] = count[element.itemDescription] + 1;
     }
 
-    // console.log(count.total);
-    return uniques;
+    return true;
 }
 
 async function cleanGroceries(){
-    fs.createReadStream('./dataSets/Groceries_dataset.csv')
-        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
-        .on("data", function (row) {
-            groceriesResults.push(row)
-        })
-        .on("error", function (error) {
-            console.log(error.message);
-        })
-        .on("end", async function () {
-            let uniques = await findUniquesGroceries();
-            //console.table(uniques);
-            console.log("Finished gathering Uniques From Groceries");
-        });
+    return new Promise((resolve) => {
+        fs.createReadStream('./dataSets/Groceries_dataset.csv')
+            .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+            .on("data", function (row) {
+                groceriesResults.push(row)
+            })
+            .on("error", function (error) {
+                console.log(error.message);
+            })
+            .on("end", async function () {
+                let uniques = await findUniquesGroceries();
+                console.log("Finished gathering Uniques From Groceries");
+                resolve(true);
+            });
+    })
 }
 
 async function findUniquesPrice(){
-    let uniques = [];
     let count = { total: 0 };
 
     for( const element of priceResults ) {
@@ -73,37 +72,39 @@ async function findUniquesPrice(){
                 Price: 0.0,
                 Category: element.Category
             }
-            uniques.push(newElement);
+            allResults.push(newElement);
             continue;
         }
 
         count[element.Cluster] = count[element.Cluster] + 1
     }
 
-    return uniques
+    return true;
 }
 
 async function cleanPrice(){
-    fs.createReadStream('./dataSets/pricerunner_aggregate.csv')
-        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
-        .on('headers', (headers) => {
-            console.log(headers)
-        })
-        .on("data", function (row) {
-            priceResults.push(row)
-        })
-        .on("error", function (error) {
-            console.log(error.message);
-        })
-        .on("end", async function () {
-            let uniques = await findUniquesPrice();
-            //console.table(uniques);
-            console.log("Finished gathering Uniques From PriceRunner");
-        });
+    return new Promise((resolve) => {
+        fs.createReadStream('./dataSets/pricerunner_aggregate.csv')
+            .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+            .on('headers', (headers) => {
+                console.log(headers)
+            })
+            .on("data", function (row) {
+                priceResults.push(row)
+            })
+            .on("error", function (error) {
+                console.log(error.message);
+            })
+            .on("end", async function () {
+                let uniques = await findUniquesPrice();
+                console.log("Finished gathering Uniques From PriceRunner");
+                resolve(true)
+            });
+    })  
+    
 }
 
 async function findUniquesShop(){
-    let uniques = [];
     let count = { total: 0 };
 
     for( const element of shopResults ) {
@@ -119,37 +120,39 @@ async function findUniquesShop(){
                 Price: 0.0,
                 Category: element.Category
             }
-            uniques.push(newElement);
+            allResults.push(newElement);
             continue;
         }
 
         count[element.ProductTitle] = count[element.ProductTitle] + 1
     }
 
-    return uniques
+    return true
 }
 
 async function cleanShop(){
-    fs.createReadStream('./dataSets/shopmania.csv')
-        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
-        .on('headers', (headers) => {
-            console.log(headers)
-        })
-        .on("data", function (row) {
-            shopResults.push(row)
-        })
-        .on("error", function (error) {
-            console.log(error.message);
-        })
-        .on("end", async function () {
-            let uniques = await findUniquesShop();
-            //console.table(uniques)
-            console.log("Finished gathering Uniques From ShopMania");
-        });
+    return new Promise((resolve) => {
+        fs.createReadStream('./dataSets/shopmania.csv')
+            .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+            .on('headers', (headers) => {
+                console.log(headers)
+            })
+            .on("data", function (row) {
+                shopResults.push(row)
+            })
+            .on("error", function (error) {
+                console.log(error.message);
+            })
+            .on("end", async function () {
+                let uniques = await findUniquesShop();
+                console.log("Finished gathering Uniques From ShopMania");
+                resolve(true);
+            });
+    })
+    
 }
 
 async function findUniquesSkrout(){
-    let uniques = [];
     let count = { total: 0 };
 
     for( const element of skroutzResults ) {
@@ -165,33 +168,36 @@ async function findUniquesSkrout(){
                 Price: 0.0,
                 Category: element.Category
             }
-            uniques.push(newElement);
+            allResults.push(newElement);
             continue;
         }
 
         count[element.Cluster] = count[element.Cluster] + 1
     }
 
-    return uniques
+    return true;
 }
 
 async function cleanSkroutz(){
-    fs.createReadStream('./dataSets/skroutz_aggregate.csv')
-        .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
-        .on('headers', (headers) => {
-            console.log(headers)
-        })
-        .on("data", function (row) {
-            skroutzResults.push(row)
-        })
-        .on("error", function (error) {
-            console.log(error.message);
-        })
-        .on("end", async function () {
-            let uniques = await findUniquesSkrout();
-            console.table(uniques)
-            console.log("Finished gathering Uniques From Skroutz");
-        });
+    return new Promise((resolve) => {
+        fs.createReadStream('./dataSets/skroutz_aggregate.csv')
+            .pipe(csvParser.parse({ columns:true, relax_quotes:true , delimiter: "," }))
+            .on('headers', (headers) => {
+                console.log(headers)
+            })
+            .on("data", function (row) {
+                skroutzResults.push(row)
+            })
+            .on("error", function (error) {
+                console.log(error.message);
+            })
+            .on("end", async function () {
+                let uniques = await findUniquesSkrout();
+                console.log("Finished gathering Uniques From Skroutz");
+                resolve(true);
+            });
+    })
+    
 }
 
 async function createDataSet(){
@@ -199,11 +205,14 @@ async function createDataSet(){
 }
 
 async function main(){
-    // await cleanGroceries();
-    // await cleanPrice();
-    // await cleanShop();
+    await cleanGroceries();
+    await cleanPrice();
+    await cleanShop();
     await cleanSkroutz();
-    console.log("Finished Cleaning All")
+
+    console.log("Finished Cleaning All sets. Items:", allResults.length)
+
+    
 }
 
 main();
