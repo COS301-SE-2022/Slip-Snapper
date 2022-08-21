@@ -1,4 +1,4 @@
-const { categorize } = require("../text_categoriser/categorizer");
+const { categorize } = require("../../itemCategoriser/categorizer");
 
 /**
  * 
