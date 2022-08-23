@@ -2,6 +2,8 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonIt
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import { IonDatetime } from '@ionic/react';
+import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { addItemsA } from '../../api/apiCall';
@@ -37,7 +39,8 @@ const AddEntry: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput onClick={() => setNormalColour("Store_Name")} id={"date"} contentEditable="true"></IonInput>
+                                    <IonIcon icon={calendarOutline} slot="end"/>
+                                    <IonDatetime displayFormat='YYYY/MM/DD' id={"date"}/>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
@@ -191,7 +194,7 @@ const AddEntry: React.FC = () => {
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
         const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total = 0.00;
         if (tempTotal !== undefined) {
