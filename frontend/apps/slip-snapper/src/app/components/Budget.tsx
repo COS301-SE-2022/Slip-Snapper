@@ -11,6 +11,9 @@ import '../theme/profile.css';
 import { create } from 'ionicons/icons'
 import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
+
+let globalCategoryBudgets, globalCategorySpent: any
+
 function Budget() {
 
     const [present, dismiss] = useIonToast();
@@ -69,6 +72,9 @@ function Budget() {
         },
     });
 
+    globalCategoryBudgets = categoryBudgets;
+    globalCategorySpent = categorySpent;
+
     useEffect(() => {
         let user = JSON.parse(localStorage.getItem('user')!)
         if (user == null) {
@@ -81,8 +87,6 @@ function Budget() {
                         setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
                         setCategorySpent(apiResponse.data.otherBudgets.totals)
                         setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.totals)
-
-
                     }
                 })
     }, []);
@@ -267,38 +271,86 @@ function Budget() {
         }
     }
 
-    function isExceeded(budget: number, barID: string, total: number) {
-        const withinBudget = total / budget
 
-        if (total >= budget && !isNaN(budget)) {
-            document.getElementById(barID)?.setAttribute("color", "danger")
-        }
-        else if (total >= budget / 2 && !isNaN(budget)) {
-            document.getElementById(barID)?.setAttribute("color", "warning")
-        }
-        else if (!isNaN(budget)) {
-            document.getElementById(barID)?.setAttribute("color", "success")
-        }
 
-        document.getElementById(barID)?.setAttribute("value", withinBudget.toString())
 
-        if (budget === 0) {
-            document.getElementById(barID)?.setAttribute("value", "0")
-            document.getElementById(barID)?.setAttribute("color", "success")
-        }
+}
+
+function isExceeded(budget: number, barID: string, total: number) {
+    const withinBudget = total / budget
+
+    if (total >= budget && !isNaN(budget)) {
+        document.getElementById(barID)?.setAttribute("color", "danger")
+    }
+    else if (total >= budget / 2 && !isNaN(budget)) {
+        document.getElementById(barID)?.setAttribute("color", "warning")
+    }
+    else if (!isNaN(budget)) {
+        document.getElementById(barID)?.setAttribute("color", "success")
     }
 
-    function setProgressBars(budgets: any, totals: any) {
-        isExceeded(budgets.FoodBudget.weeklyValue, "elecBar", totals.Electronics);
-        isExceeded(budgets.FashionBudget.weeklyValue, "fashionBar", totals.Fashion);
-        isExceeded(budgets.ElectronicsBudget.weeklyValue, "foodBar", totals.Food);
-        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.household);
-        isExceeded(budgets.OtherBudget.weeklyValue, "otherBar", totals.Other);
+    document.getElementById(barID)?.setAttribute("value", withinBudget.toString())
+
+    if (budget === 0) {
+        document.getElementById(barID)?.setAttribute("value", "0")
+        document.getElementById(barID)?.setAttribute("color", "success")
     }
 }
 
-export function test() {
+function setProgressBars(budgets: any, totals: any) {
 
-    console.log()
+    console.log(budgets)
+    if (budgets.FoodBudget.timeFrame === true) {
+        isExceeded(budgets.FoodBudget.weeklyValue, "foodBar", totals.Food);       
+    }
+    else {
+        isExceeded(budgets.FoodBudget.monthlyValue, "foodBar", totals.Food);
+    }
+
+    if (budgets.ElectronicsBudget.timeFrame === true) {
+        isExceeded(budgets.ElectronicsBudget.weeklyValue, "elecBar", totals.Electronics);
+    }
+    else {
+        isExceeded(budgets.ElectronicsBudget.monthlyValue, "elecBar", totals.Electronics);
+    }
+
+    if (budgets.FashionBudget.timeFrame === true) {
+        isExceeded(budgets.FashionBudget.weeklyValue, "fashionBar", totals.Fashion);
+    }
+    else {
+        isExceeded(budgets.FashionBudget.monthlyValue, "fashionBar", totals.Fashion);
+    }
+
+    if (budgets.HouseholdBudget.timeFrame === true) {
+        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.household);
+    }
+    else {
+        isExceeded(budgets.HouseholdBudget.monthlyValue, "houseBar", totals.household);
+    }
+
+    if (budgets.OtherBudget.timeFrame === true) {
+        isExceeded(budgets.OtherBudget.weeklyValue, "otherBar", totals.Other);
+    }
+    else {
+        console.log(budgets.OtherBudget.monthlyValue)
+        isExceeded(budgets.OtherBudget.monthlyValue, "otherBar", totals.Other);
+    }
+}
+
+export function updateBudgets() {
+
+    let user = JSON.parse(localStorage.getItem('user')!)
+    if (user == null) {
+        user = { id: 24 }
+    }
+
+    getProfileData(user.id)
+        .then(
+            apiResponse => {
+                if (typeof (apiResponse.data) !== "string") {
+                    globalCategoryBudgets = apiResponse.data.otherBudgets.budgets.budgets;
+                    setProgressBars(globalCategoryBudgets, globalCategorySpent)
+                }
+            })
 }
 export default Budget;

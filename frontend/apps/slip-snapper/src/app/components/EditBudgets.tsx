@@ -14,7 +14,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from 'react';
 import { getProfileData, setGeneralBudget } from '../../api/apiCall';
-import { test } from './Budget';
+import { updateBudgets } from './Budget';
 
 
 export const EditBudgets = () => {
@@ -72,7 +72,7 @@ export const EditBudgets = () => {
   return (
     <IonItem color="primary">
       <IonButton fill="solid" slot="end" color="secondary" onClick={() => setIsOpen(true)}>Add/Remove</IonButton>
-      <IonModal isOpen={isOpen} onDidDismiss={() => { setStates(budgetIntervals, categoryStates); hideData(categoryStates); setIsOpen(false) }}>
+      <IonModal isOpen={isOpen} onDidDismiss={() => { setStates(budgetIntervals, categoryStates); updateBudgets(); hideData(categoryStates); setIsOpen(false) }}>
         <IonHeader>
           <IonToolbar color="primary">
             <IonTitle>Edit Budgets</IonTitle>

@@ -145,7 +145,6 @@ const EditReciept: React.FC = () => {
             setEditRecieptItems(data)
         }
     }
-
     function getData() {
         for (let i = 0; i < editRecieptItems.length; i++) {
             const n = document.getElementById(i + "/item")?.getElementsByTagName("input")[0].value
