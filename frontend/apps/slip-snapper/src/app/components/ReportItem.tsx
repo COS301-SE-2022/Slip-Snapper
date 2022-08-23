@@ -14,7 +14,7 @@ type Props = {
 }
 function ReportItem({ reportData }: Props) {
     return (
-        <IonCol className="item-col">
+        <IonCol className="recent-item-col">
             <IonCard color="primary">
                 <IonCardHeader>
                     <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
