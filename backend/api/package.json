@@ -9,12 +9,14 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "@tensorflow/tfjs-node": "^3.19.0",
     "aws-sdk": "^2.1177.0",
     "cors": "^2.8.5",
     "csv": "^6.2.0",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
+    "node-gyp": "^9.1.0",
     "pdfkit": "^0.13.0",
     "pdfkit-table": "^0.1.99",
     "pg": "^8.7.3"
