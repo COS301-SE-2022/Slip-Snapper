@@ -25,6 +25,10 @@
     justify-content: center;
 }
 
+.select-options{
+    --border-radius: 5px;
+}
+
 .elem{
     border-radius: 10px;
     display: flex;

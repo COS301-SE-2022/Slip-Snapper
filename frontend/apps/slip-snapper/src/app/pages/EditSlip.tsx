@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
@@ -95,7 +95,17 @@ const EditSlip: React.FC = () => {
                                     <IonCol className='item-col elem'>
                                         <IonLabel className='labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.type} ></IonInput>
+                                            <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
+                                            value={item.type.charAt(0).toUpperCase() + item.type.slice(1)}>
+                                                <IonSelectOption>Electronics</IonSelectOption>
+                                                <IonSelectOption>Fashion</IonSelectOption>
+                                                <IonSelectOption>Food</IonSelectOption>
+                                                <IonSelectOption>Healthcare</IonSelectOption>
+                                                <IonSelectOption>Hobby</IonSelectOption>
+                                                <IonSelectOption>Household</IonSelectOption>
+                                                <IonSelectOption>Vehicle</IonSelectOption>
+                                                <IonSelectOption>Other</IonSelectOption>
+                                            </IonSelect>
                                         </IonItem>
                                     </IonCol>
                                     <IonAlert
@@ -225,7 +235,6 @@ const EditSlip: React.FC = () => {
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
-        console.log(date)
         const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total = 0.00;
         if (tempTotal !== undefined) {
