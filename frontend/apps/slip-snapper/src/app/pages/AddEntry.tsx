@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast, IonSelectOption, IonSelect } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
@@ -86,8 +86,17 @@ const AddEntry: React.FC = () => {
 
                                     <IonCol className='item-col elem'>
                                         <IonLabel className='labels'>Type</IonLabel>
-                                        <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/type")} id={index + "/type"} value={item.type} ></IonInput>
+                                        <IonItem color="tertiary" className="select-options">
+                                            <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' value={item.type}>
+                                                <IonSelectOption>Electronics</IonSelectOption>
+                                                <IonSelectOption>Fashion</IonSelectOption>
+                                                <IonSelectOption>Food</IonSelectOption>
+                                                <IonSelectOption>Healthcare</IonSelectOption>
+                                                <IonSelectOption>Hobby</IonSelectOption>
+                                                <IonSelectOption>Household</IonSelectOption>
+                                                <IonSelectOption>Vehicle</IonSelectOption>
+                                                <IonSelectOption>Other</IonSelectOption>
+                                            </IonSelect>
                                         </IonItem>
                                     </IonCol>
                                     <IonAlert
