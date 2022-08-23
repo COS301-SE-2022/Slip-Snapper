@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
 import { imageOutline } from 'ionicons/icons';
+import { IonDatetime } from '@ionic/react';
+import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { addItemsA } from '../../api/apiCall';
@@ -45,7 +47,8 @@ const EditSlip: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput value={new Date(data.text[0]).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
+                                    <IonDatetime value={data.text[0]} displayFormat='DD/MM/YYYY' id={"date"}/>
+                                    <IonIcon icon={calendarOutline} slot="end"/>
                                 </IonItem>
                             </IonCardTitle>
                         </div>    
@@ -221,7 +224,8 @@ const EditSlip: React.FC = () => {
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
+        console.log(date)
         const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total = 0.00;
         if (tempTotal !== undefined) {

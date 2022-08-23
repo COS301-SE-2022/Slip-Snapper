@@ -221,7 +221,7 @@ const EditReciept: React.FC = () => {
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
         const temp = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total
         if (temp !==undefined)
