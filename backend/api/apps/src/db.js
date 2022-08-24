@@ -212,27 +212,19 @@ async function getItem(userId) {
                 usersId: userId
             },
             select: {
-                items: {
-                    include: {
-                        item: {
-                            select: {
-                                id: true,
-                                itemPrice: true,
-                                itemQuantity: true,
-                                data: {
-                                    include: {
-                                        dataItem: true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 location: true,
                 transactionDate: true,
-                total: true
+                total: true,
+                items: {
+                    include: {
+                        data: true
+                    }
+                }
             }
         })
+
+
+
         if (items == null) {
             return {
                 message: "No items associated with the user",
@@ -245,16 +237,18 @@ async function getItem(userId) {
         let i = 1;
         for (const slip of items) {
             for (const item of slip.items) {
-                itemList.push({
-                    id: i++,
-                    itemId: item.item.id,
-                    itemName: item.item.data.at(0).dataItem.item,
-                    type: item.item.data.at(0).dataItem.itemType,
-                    quantity: item.item.itemQuantity,
-                    price: item.item.itemPrice,
-                    location: slip.location,
-                    date: slip.transactionDate
-                })
+                if (slip.items.length > 0) {
+                    itemList.push({
+                        id: i++,
+                        itemId: item.id,
+                        itemName: item.data[0].item,
+                        type: item.data[0].itemType,
+                        quantity: item.itemQuantity,
+                        price: item.itemPrice,
+                        location: slip.location,
+                        date: slip.transactionDate
+                    })
+                }
             }
         }
         return {
@@ -377,13 +371,14 @@ async function addItem(userid, location, date, total, data) {
         const dataItems = await prisma.dataItem.findMany({})
 
         let additions = []
+        let dataIds
         for (let item of data) {
             item.slipId = slip.id;
             let matched = false
 
             for (const dataItem of dataItems) {
                 if (item.item == dataItem.item) {
-                    item.dataId = dataItem.id;
+                    dataIds = dataItem.id;
                     matched = true;
                 }
             }
@@ -395,20 +390,26 @@ async function addItem(userid, location, date, total, data) {
                         itemType: item.itemType,
                     }
                 })
-                item.dataId = dat.id;
+                dataIds = dat.id;
             }
-
-            additions.push({
-                slipId: slip.id,
-                itemPrice: item.itemPrice,
-                itemQuantity: item.itemQuantity,
-                dataId: item.dataId
+            let newItem = await prisma.item.create({
+                data: {
+                    Slip: {
+                        connect: { id: slip.id }
+                    },
+                    itemPrice: parseFloat(item.itemPrice),
+                    itemQuantity: item.itemQuantity,
+                    data: {
+                        connect: {
+                            id: dataIds
+                        }
+                    }
+                }
             })
+
         }
 
-        const items = await prisma.item.createMany({
-            data: additions
-        });
+
 
         if (items == null) {
             return {
@@ -440,6 +441,7 @@ async function addItem(userid, location, date, total, data) {
 async function insertAllItems(slipId, insertItems) {
     try {
         let additions = []
+        let dataIds
         const dataItems = await prisma.dataItem.findMany({})
 
         for (let item of insertItems) {
@@ -447,7 +449,7 @@ async function insertAllItems(slipId, insertItems) {
 
             for (const dataItem of dataItems) {
                 if (item.data.item == dataItem.item) {
-                    item.data.id = dataItem.id;
+                    dataIds = dataItem.id;
                     matched = true;
                     break;
                 }
@@ -460,21 +462,23 @@ async function insertAllItems(slipId, insertItems) {
                         itemType: item.data.itemType,
                     }
                 })
-                item.data.id = dat.id;
+                dataIds = dat.id;
             }
-
-            additions.push({
-                slipId: slipId,
-                itemPrice: parseFloat(item.itemPrice),
-                itemQuantity: item.itemQuantity,
-                dataId: item.data.id
+            let newItem = await prisma.item.create({
+                data: {
+                    Slip: {
+                        connect: { id: slipId }
+                    },
+                    itemPrice: parseFloat(item.itemPrice),
+                    itemQuantity: item.itemQuantity,
+                    data: {
+                        connect: {
+                            id: dataIds
+                        }
+                    }
+                }
             })
         }
-
-        const items = await prisma.item.createMany({
-            data: additions
-        });
-
         return {
             message: "All items added"
         }
@@ -551,6 +555,8 @@ async function deleteManyItems(itemIdArray) {
  */
 async function updateItem(itemId, dataA, dataB) {
     try {
+        console.log(dataA)
+        console.log(dataB)
         let item;
         if (dataA != {}) {
             item = await prisma.item.update({
@@ -566,16 +572,90 @@ async function updateItem(itemId, dataA, dataB) {
                 where: {
                     id: itemId
                 },
+                include: {
+                    data: true
+                }
             })
-
-            item = await prisma.dataItem.update({
+            
+            //to avoid duplicates in the dataItem table
+            let search = await prisma.dataItem.findFirst({
                 where: {
-                    id: data.dataId
-                },
-                data: dataB
+                    item: dataB.item,
+                    itemType: data.itemType
+                }
             })
-        }
+            if (search == null) {
+                console.log("search is not null")
+                const dataItem = await prisma.dataItem.create({
+                    data: {
+                        item: dataB.item,
+                        itemType: dataB.itemType,
+                        items: {
+                            connect: { id: itemId },
+                        },
+                    },
+                    include: {
+                        items: true, // Include all posts in the returned object
+                    },
+                })
+                item = await prisma.item.update({
+                    where: {
+                        id: itemId
+                    },
+                    data: {
+                        data: {
+                            disconnect: {
+                                id: data.data[0].id
+                            },
+                            connect: {
+                                id: dataItem.id
+                            },
 
+                        }
+                    }
+
+                })
+
+            }
+            else {
+                item = await prisma.item.upsert({
+                    where: {
+                        id: itemId
+                    },
+                    create: {
+                        itemPrice: dataA.itemPrice,
+                        itemQuantity: dataA.itemQuantity,
+                        data: {
+                            connectOrCreate: {
+                                create: {
+                                    item: dataB.item,
+                                    itemType: dataB.itemType
+                                },
+                                where: {
+                                    id: search.id
+                                }
+                            }
+                        }
+                    },
+                    update: {
+                        data: {
+                            connectOrCreate: {
+                                create: {
+                                    item: dataB.item,
+                                    itemType: dataB.itemType
+                                },
+                                where: {
+                                    id: search.id
+                                }
+                            }, disconnect: {
+                                id: data.data[0].id
+                            },
+                        }
+                    }
+                })
+            }
+        }
+        console.log(item)
         if (item == null) {
             return {
                 message: "No item associated with the user",
@@ -590,7 +670,10 @@ async function updateItem(itemId, dataA, dataB) {
         };
     }
     catch (error) {
+        console.log(error)
+
         return {
+
             message: "Error updating Item",
             item: null
         };
