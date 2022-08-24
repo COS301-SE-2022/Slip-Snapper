@@ -1,4 +1,4 @@
-const { getDataItems } = require("../../src/db")
+const { getDataItems } = require("../../apps/src/db")
 
 let items;
 

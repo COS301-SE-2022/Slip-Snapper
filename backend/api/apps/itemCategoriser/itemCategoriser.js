@@ -14,18 +14,21 @@ class ItemCategoriser{
         const numElements = arr.length;
 
         const dataSet = dataset.shuffle(1024)
-        const training = dataSet.take(numElements*0.8)
+        const train = dataSet.take(numElements*0.8)
         const valid = dataSet.skip(numElements*0.8).take(numElements*0.1)
         const test = dataSet.skip(numElements*0.9).take(numElements*0.1)
 
         return {
-            training: training,
+            train: train,
             valid: valid,
             test: test
         }
     }
 
-    compile() {
+    async compile(sets) {
+        console.log(sets)
+        console.log(await sets.train.take(3).toArray())
+
         const model = tf.sequential();
 
         model.add(tf.layers.dense({
@@ -38,7 +41,7 @@ class ItemCategoriser{
         }))
 
         model.compile({
-            loss: 'meanSquaredError',
+            loss: 'categoricalCrossentropy',
             optimizer: 'sgd'
         })
 
@@ -47,8 +50,7 @@ class ItemCategoriser{
 
     async run(){
         const sets = await this.getData();
-
-        const model = this.compile();
+        const model = await this.compile(sets);
 
         const xs = tf.tensor2d([
             [0.1,0.2,0.3],

@@ -264,7 +264,7 @@ async function updateCategories(){
             'Vitamins & Supplements', 'Women Cosmetics', 'Cleaning Supplies', 'Hair Care', 'Medical Supplies'
         ]
         let other = [
-            'Baby gear', 'Other gifts'
+            'Baby gear', 'Other gifts', 'Supplies'
         ]
 
         console.log('Updating Categories')
