@@ -77,12 +77,12 @@ const ViewReports: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonItem>
-          <IonTitle>Expenditure Totals</IonTitle>
+          <IonTitle>Create Reports</IonTitle>
         </IonItem>
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
-              <IonCol className="item-col" key={index}>
+              <IonCol className="generate-item-col" key={index}>
                 <IonCard color="primary">
                   <IonCardHeader>
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>

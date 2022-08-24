@@ -30,7 +30,7 @@ import '../theme/FetchData.css';
 
             <IonRow>
                 {slipItems.map((item, index) => (
-                    <IonCol key={index} className="item-col">
+                    <IonCol key={index} className="slip-item-col">
                         <IonCard color="primary" className="items" id={item.id}>
                             <IonItem color="primary"><IonItem color="tertiary" className="titles" slot="start">Receipt #{item.id}</IonItem>{new Date(item.transactionDate).toDateString()}</IonItem>
                             <IonItem color="primary">
