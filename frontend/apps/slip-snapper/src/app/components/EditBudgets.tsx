@@ -14,7 +14,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from 'react';
 import { getProfileData, setGeneralBudget } from '../../api/apiCall';
-import { updateBudgets } from './Budget';
+import { updateBudgets, globalCategoryBudgets } from './Budget';
 
 
 export const EditBudgets = () => {
@@ -174,29 +174,26 @@ export const EditBudgets = () => {
   }
 
   function setStates(budgetIntervals: any, categoryStates: any) {
-
-
-    if (budgetObject!==undefined)
-    {
-      budgetObject.FoodBudget.active = categoryStates[0].isActive
-      budgetObject.FashionBudget.active = categoryStates[1].isActive
-      budgetObject.ElectronicsBudget.active = categoryStates[2].isActive
-      budgetObject.HouseholdBudget.active = categoryStates[3].isActive
-      budgetObject.OtherBudget.active = categoryStates[4].isActive
-
-      budgetObject.FoodBudget.timeFrame = budgetIntervals[0].weekly
-      budgetObject.FashionBudget.timeFrame = budgetIntervals[1].weekly
-      budgetObject.ElectronicsBudget.timeFrame = budgetIntervals[2].weekly
-      budgetObject.HouseholdBudget.timeFrame = budgetIntervals[3].weekly
-      budgetObject.OtherBudget.timeFrame = budgetIntervals[4].weekly
-    }
-
     let user = JSON.parse(localStorage.getItem('user')!)
     if (user == null) {
       user = { id: 24 }
     }
-    setGeneralBudget(user.id,budgetObject)
-  }
 
+    if (globalCategoryBudgets !== undefined) {
+      globalCategoryBudgets.FoodBudget.active = categoryStates[0].isActive
+      globalCategoryBudgets.FashionBudget.active = categoryStates[1].isActive
+      globalCategoryBudgets.ElectronicsBudget.active = categoryStates[2].isActive
+      globalCategoryBudgets.HouseholdBudget.active = categoryStates[3].isActive
+      globalCategoryBudgets.OtherBudget.active = categoryStates[4].isActive
+
+      globalCategoryBudgets.FoodBudget.timeFrame = budgetIntervals[0].weekly
+      globalCategoryBudgets.FashionBudget.timeFrame = budgetIntervals[1].weekly
+      globalCategoryBudgets.ElectronicsBudget.timeFrame = budgetIntervals[2].weekly
+      globalCategoryBudgets.HouseholdBudget.timeFrame = budgetIntervals[3].weekly
+      globalCategoryBudgets.OtherBudget.timeFrame = budgetIntervals[4].weekly
+    }
+
+    setGeneralBudget(user.id, globalCategoryBudgets)
+  }
 
 };
