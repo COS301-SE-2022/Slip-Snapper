@@ -3,7 +3,7 @@ const express = require('express');
 function makeApp( database, parser = {}, token = {}, bucket = {}){
     const app = express();
     const bodyParser = require('body-parser');
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit: '50mb'}));
     const Cors = require('cors')
     app.use(Cors())
 

@@ -9,8 +9,15 @@
     padding: 2px;
 }
 
+.categoryBudgets {
+    vertical-align: middle;
+    --border-radius: 10px;
+    padding: 2px;
+    display: none;
+}
+
 .edit-budget:hover {
-    color:#5AD8C5;
+    color: #5AD8C5;
     cursor: pointer;
 }
 
@@ -28,10 +35,10 @@
     --background: #ebebeb;
 }
 
-.logout-button{
-    width:40%;
-    margin-left:30%;
-    margin-right:30%;
+.logout-button {
+    width: 40%;
+    margin-left: 30%;
+    margin-right: 30%;
     --border-radius: 10px;
     margin-top: 2rem;
     margin-bottom: 1rem;
@@ -39,7 +46,7 @@
 
 /* CARD FLEX  */
 
-.wrapper{
+.wrapper {
     margin: 0.5rem;
     display: flex;
     flex-wrap: wrap;
@@ -54,54 +61,54 @@
 }
 
 .profile {
-    flex:1;
+    flex: 1;
 }
 
 .budget {
-    flex:1;
+    flex: 1;
 }
 
 .favourite {
-    flex:1;
+    flex: 1;
 }
 
 .most-purchased {
-    flex:1;
+    flex: 1;
 }
 
 .most-spent {
-    flex:1;
+    flex: 1;
 }
 
 .weekly {
-    flex:1;
+    flex: 1;
 }
 
 .monthly {
-    flex:1;
+    flex: 1;
 }
 
 
 /* MEDIA SCALABILITY */
 @media screen and (min-width: 390px) {
     .wrapper {
-      grid-template-columns: repeat(auto-fit, minmax(14rem, 16rem));
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 16rem));
     }
-  
-    .card {
-      flex-direction: column;
-      text-align: center;
-      min-width: 16rem;
-    }
-  }
 
-  @media screen and (min-width: 576px) {
-    .logout-button{
-        width:40%;
-        margin-left:30%;
-        margin-right:30%;
+    .card {
+        flex-direction: column;
+        text-align: center;
+        min-width: 16rem;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    .logout-button {
+        width: 40%;
+        margin-left: 30%;
+        margin-right: 30%;
         --border-radius: 10px;
         margin-top: 2rem;
         margin-bottom: 1rem;
     }
-  }
+}

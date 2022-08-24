@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import '../theme/login-register.css';
 import { loginA } from "../../api/apiCall"
 import { useHistory } from 'react-router-dom';
+import { Tab } from '@mui/material';
 
 const Login: React.FC = () => {
 
@@ -35,7 +36,15 @@ const Login: React.FC = () => {
 
             <IonItem color="tertiary" text-align="center" class="LRItems">
               <IonButton type="submit" class="LRButtons" color="secondary" size="large" onClick={() => { login() }}>Login</IonButton>
-              <IonButton class="LRButtons" color="secondary" size="large" routerLink={"/register"}>Register</IonButton>
+            </IonItem>
+
+            <IonItem color="tertiary" class="LRItems">
+              <div className='register-link'>
+                <p>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
+              </div>
+              <div className='forgot-pass' slot="end">
+                <a href={"/register"}>Forgot Password</a>
+              </div>
             </IonItem>
 
             <IonAlert
@@ -106,7 +115,7 @@ const Login: React.FC = () => {
             localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
             history.push("/home")
-            //window.location.reload();
+            window.location.reload();
           }
         })
     }

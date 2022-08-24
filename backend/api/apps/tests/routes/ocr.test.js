@@ -3,6 +3,7 @@ const { makeApp } = require('../../src/index.js');
 
 const parse = jest.fn()
 const verifyToken = jest.fn()
+jest.setTimeout(20000)
 
 const app = makeApp({}, {
     parse
@@ -38,7 +39,7 @@ describe('POST /ocr', ()=>{
         const res = await request(app)
             .post('/api/ocr/process')
             .send({
-                text: "a",
+                image: __dirname + '/assets/IMG_5593.jpg',
             })
             .set({ "Authorization": "Bearer " + token })
         

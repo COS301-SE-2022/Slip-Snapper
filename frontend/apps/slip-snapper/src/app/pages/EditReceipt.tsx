@@ -1,7 +1,9 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import { IonDatetime } from '@ionic/react';
+import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { updateSlipA } from '../../api/apiCall';
@@ -39,7 +41,8 @@ const EditReciept: React.FC = () => {
                         <div color="primary">
                         <IonCardTitle className="date elem">Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonInput value={new Date(slipContents.transactionDate).toLocaleDateString('en-GB')} id={"date"} contentEditable="true"></IonInput>
+                                <IonDatetime value={slipContents.transactionDate} displayFormat='DD/MM/YYYY' id={"date"}/>
+                                <IonIcon icon={calendarOutline} slot="end"/>
                             </IonItem>
                         </IonCardTitle>
                         </div>
@@ -86,7 +89,17 @@ const EditReciept: React.FC = () => {
                                     <IonCol className='item-col elem'>
                                         <IonLabel className='labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput  id={index + "/type"} value={item.data.itemType} ></IonInput>
+                                            <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
+                                            value={item.data.itemType.charAt(0).toUpperCase() + item.data.itemType.slice(1)}>
+                                                <IonSelectOption>Electronics</IonSelectOption>
+                                                <IonSelectOption>Fashion</IonSelectOption>
+                                                <IonSelectOption>Food</IonSelectOption>
+                                                <IonSelectOption>Healthcare</IonSelectOption>
+                                                <IonSelectOption>Hobby</IonSelectOption>
+                                                <IonSelectOption>Household</IonSelectOption>
+                                                <IonSelectOption>Vehicle</IonSelectOption>
+                                                <IonSelectOption>Other</IonSelectOption>
+                                            </IonSelect>
                                         </IonItem>
                                     </IonCol>
 
@@ -145,7 +158,6 @@ const EditReciept: React.FC = () => {
             setEditRecieptItems(data)
         }
     }
-
     function getData() {
         for (let i = 0; i < editRecieptItems.length; i++) {
             const n = document.getElementById(i + "/item")?.getElementsByTagName("input")[0].value
@@ -221,7 +233,7 @@ const EditReciept: React.FC = () => {
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
         const temp = document.getElementById("total")?.getElementsByTagName("input")[0].value
         let total
         if (temp !==undefined)

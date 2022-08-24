@@ -14,13 +14,15 @@ const baseUrl = 'http://localhost:3000/api/'
  * @returns the response as a promise
  */
 export async function doProcessing(ocr){
+    console.log(ocr)
     return axios({
-        headers: headers,
+        headers:  {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+        },
         method: 'post',
         url: baseUrl + 'ocr/process',
-        data: JSON.stringify({
-            text: ocr,
-        })
+        data: JSON.stringify({image: ocr})
     })
 }
 
@@ -239,7 +241,7 @@ export async function getThisWeeksReports(userId) {
 export async function updateSlipA( userId, updateSlip, insertItems,updateItems, removeItems){
     return axios({
         headers: headers,
-        method: 'post',
+        method: 'patch',
         url: baseUrl + 'item/slip',
         data: JSON.stringify({
             userId: userId,
