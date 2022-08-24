@@ -7,6 +7,7 @@ import {
     IonCol,
     IonItem
 } from "@ionic/react";
+import { isPlatform } from "@ionic/core";
 import { getUserReport } from "../../api/apiCall";
 import '../theme/reportItem.css'
 type Props = {
@@ -37,10 +38,14 @@ function view(data: any) {
     getUserReport(user.username, data)
         .then(apiResponse => {
             if (apiResponse.data.report.data !== undefined) {
-                const arr = new Uint8Array(apiResponse.data.report.data);
-                const blob = new Blob([arr], { type: 'application/pdf' });
-                const docUrl = URL.createObjectURL(blob);
-                window.open(docUrl);
+                if(isPlatform("desktop") || isPlatform("mobileweb") || isPlatform("pwa")){
+                    const arr = new Uint8Array(apiResponse.data.report.data);
+                    const blob = new Blob([arr], { type: 'application/pdf' });
+                    const docUrl = URL.createObjectURL(blob);
+                    window.open(docUrl);
+                }else{
+                    //view for mobile
+                }
             }
         });
 }
