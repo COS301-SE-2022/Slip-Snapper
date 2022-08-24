@@ -12,7 +12,9 @@ import { create } from 'ionicons/icons'
 import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
 
-let globalCategoryBudgets, globalCategorySpent: any, globalRenderedBudgets: any, globalSetRenderedBudgets: any
+export let globalCategoryBudgets: any
+let globalCategorySpent: any, globalRenderedBudgets: any, globalSetRenderedBudgets: any
+
 
 function Budget() {
 
@@ -391,7 +393,7 @@ export function updateBudgets() {
             apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
                     globalCategoryBudgets = apiResponse.data.otherBudgets.budgets.budgets;
-                    setProgressBars(globalCategoryBudgets, globalCategorySpent)
+                    setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.totals)
                 }
             })
 }
