@@ -555,8 +555,7 @@ async function deleteManyItems(itemIdArray) {
  */
 async function updateItem(itemId, dataA, dataB) {
     try {
-        console.log(dataA)
-        console.log(dataB)
+
         let item;
         if (dataA != {}) {
             item = await prisma.item.update({
@@ -576,7 +575,7 @@ async function updateItem(itemId, dataA, dataB) {
                     data: true
                 }
             })
-            
+
             //to avoid duplicates in the dataItem table
             let search = await prisma.dataItem.findFirst({
                 where: {
@@ -585,7 +584,7 @@ async function updateItem(itemId, dataA, dataB) {
                 }
             })
             if (search == null) {
-                console.log("search is not null")
+
                 const dataItem = await prisma.dataItem.create({
                     data: {
                         item: dataB.item,
@@ -655,7 +654,6 @@ async function updateItem(itemId, dataA, dataB) {
                 })
             }
         }
-        console.log(item)
         if (item == null) {
             return {
                 message: "No item associated with the user",
@@ -670,7 +668,6 @@ async function updateItem(itemId, dataA, dataB) {
         };
     }
     catch (error) {
-        console.log(error)
 
         return {
 
