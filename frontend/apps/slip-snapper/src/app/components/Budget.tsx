@@ -1,5 +1,6 @@
 import {
     IonAlert,
+    IonFab,
     IonIcon,
     IonItem,
     IonProgressBar,
@@ -9,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import '../theme/profile.css';
 import { create } from 'ionicons/icons'
+import Filter7Icon from '@mui/icons-material/Filter7Outlined';
 import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
 
@@ -90,7 +92,7 @@ function Budget() {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
-                        console.log(apiResponse.data.otherBudgets.budgets.budgets)
+                        console.log(apiResponse.data)
                         setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
                         setCategorySpent(apiResponse.data.otherBudgets.totals)
                         setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.totals)
@@ -102,8 +104,12 @@ function Budget() {
             <IonItem id="foodBudget" className="categoryBudgets" color="tertiary" >
                 <IonIcon className="edit-budget" src={create} onClick={() => setFood(true)} />
                 <IonText>{"Food: R" + renderedBudgets.FoodBudget}</IonText>
-                <IonProgressBar id='foodBar' class='progressBar' slot="end"></IonProgressBar><br />
+                <IonProgressBar id='foodBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    <Filter7Icon />
+                </IonFab>
             </IonItem>
+
             <IonAlert
                 isOpen={food}
                 onDidDismiss={() => setFood(false)}
@@ -121,7 +127,10 @@ function Budget() {
             <IonItem id="fashionBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setFashion(true)} />
                 <IonText>{"Fashion: R" + renderedBudgets.FashionBudget}</IonText>
-                <IonProgressBar id='fashionBar' class='progressBar' slot="end"></IonProgressBar><br />
+                <IonProgressBar id='fashionBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    <Filter7Icon />
+                </IonFab>
             </IonItem>
             <IonAlert
                 isOpen={fashion}
@@ -140,7 +149,10 @@ function Budget() {
             <IonItem id="electronicsBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setElec(true)} />
                 <IonText>{"Electronics: R" + renderedBudgets.ElecBudget}</IonText>
-                <IonProgressBar id='elecBar' class='progressBar' slot="end"></IonProgressBar><br />
+                <IonProgressBar id='elecBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    <Filter7Icon />
+                </IonFab>
             </IonItem>
             <IonAlert
                 isOpen={elec}
@@ -159,7 +171,10 @@ function Budget() {
             <IonItem id="houseBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setHouseHold(true)} />
                 <IonText>{"Household: R" + renderedBudgets.HouseBudget}</IonText>
-                <IonProgressBar id='houseBar' class='progressBar' slot="end"></IonProgressBar><br />
+                <IonProgressBar id='houseBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    <Filter7Icon />
+                </IonFab>
             </IonItem>
             <IonAlert
                 isOpen={houseHold}
@@ -178,7 +193,10 @@ function Budget() {
             <IonItem id="otherBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)} />
                 <IonText>{"Other: R" + renderedBudgets.OtherBudget}</IonText>
-                <IonProgressBar id='otherBar' class='progressBar' slot="end"></IonProgressBar><br />
+                <IonProgressBar id='otherBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    <Filter7Icon />
+                </IonFab>
             </IonItem>
             <IonAlert
                 isOpen={other}
@@ -321,6 +339,7 @@ function isExceeded(budget: number, barID: string, total: number) {
     }
 }
 function setProgressBars(budgets: any, totals: any) {
+    console.log(budgets)
 
     const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0 }
 

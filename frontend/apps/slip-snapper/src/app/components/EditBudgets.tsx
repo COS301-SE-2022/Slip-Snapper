@@ -192,7 +192,6 @@ export const EditBudgets = () => {
       globalCategoryBudgets.HouseholdBudget.timeFrame = budgetIntervals[3].weekly
       globalCategoryBudgets.OtherBudget.timeFrame = budgetIntervals[4].weekly
     }
-
     setGeneralBudget(user.id, globalCategoryBudgets)
   }
 
