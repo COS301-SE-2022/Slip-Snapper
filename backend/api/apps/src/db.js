@@ -440,7 +440,6 @@ async function addItem(userid, location, date, total, data) {
  */
 async function insertAllItems(slipId, insertItems) {
     try {
-        let additions = []
         let dataIds
         const dataItems = await prisma.dataItem.findMany({})
 
@@ -448,7 +447,7 @@ async function insertAllItems(slipId, insertItems) {
             let matched = false
 
             for (const dataItem of dataItems) {
-                if (item.data.item == dataItem.item) {
+                if (item.data[0].item == dataItem.item) {
                     dataIds = dataItem.id;
                     matched = true;
                     break;
@@ -458,8 +457,8 @@ async function insertAllItems(slipId, insertItems) {
             if (!matched) {
                 const dat = await prisma.dataItem.create({
                     data: {
-                        item: item.data.item,
-                        itemType: item.data.itemType,
+                        item: item.data[0].item,
+                        itemType: item.data[0].itemType,
                     }
                 })
                 dataIds = dat.id;
@@ -713,10 +712,12 @@ async function updateAllItems(updateItems) {
  */
 async function updateSlip(userId, slipData, insertItems, updateItems, removeItems) {
     try {
+        console.log(slipData)
         const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
         const update = await updateAllItems(updateItems)
         const remove = await deleteManyItems(removeItems)
         const insert = await insertAllItems(slipData[5], insertItems)
+        console.log(insert.message)
 
         return {
             message: slip.message
@@ -1464,6 +1465,7 @@ async function retrieveAllSlips(userid) {
                 }
             }
         })
+
         return {
             message: "All slips retrieved",
             slips: allSlips

@@ -39,7 +39,6 @@ router.post('', async (req,res)=>{
     let { location, date, total, data } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
-
     if(tokenVerified === "Error"){
         return res.status(200)
             .send({
@@ -49,7 +48,6 @@ router.post('', async (req,res)=>{
     }
 
     //TODO make use actual date
-
     let values = []
     for (var item of data){
         values.push({
@@ -192,7 +190,6 @@ router.get('/slip', async (req, res) => {
     let { updateSlip, insertItems, updateItems, removeItems } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
-   
     if(tokenVerified === "Error"){
         return res.status(200)
             .send({
