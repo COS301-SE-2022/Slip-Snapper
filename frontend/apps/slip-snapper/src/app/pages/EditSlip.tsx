@@ -65,19 +65,21 @@ const EditSlip: React.FC = () => {
                                     <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className='big-chip'>
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
                                         <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Description</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
@@ -85,7 +87,8 @@ const EditSlip: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Price</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/price")} type='number'
                                                 id={index + "/price"} value={item.price} ></IonInput>
@@ -93,7 +96,8 @@ const EditSlip: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Type</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
                                             value={item.type.charAt(0).toUpperCase() + item.type.slice(1)}>

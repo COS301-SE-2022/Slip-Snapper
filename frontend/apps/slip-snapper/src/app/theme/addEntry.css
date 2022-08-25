@@ -11,6 +11,11 @@
     margin-top: 40px;
 }
 
+.big-chip-child{
+    max-width: fit-content;
+    margin-top: 20px;
+}
+
 .center-chip{
     display: flex;
     align-items: center;
@@ -83,11 +88,23 @@
     .big-chip {
         display:none;
     }
+
+    .big-chip-child{
+        display:none;
+    }
+
+    .labels{
+        display: none;
+    }
   }
 
   @media screen and (min-width: 1205px) {
     .small-chip {
         display:none;
+    }
+
+    .extra-labels{
+        display: none;
     }
   }
 
