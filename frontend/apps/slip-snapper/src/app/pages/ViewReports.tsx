@@ -12,7 +12,6 @@ import {
   IonCardTitle,
   IonItem,
   IonAlert,
-  IonCardSubtitle,
   IonCol,
   useIonToast,
 } from '@ionic/react';
