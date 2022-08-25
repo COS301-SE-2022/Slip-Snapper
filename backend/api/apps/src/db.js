@@ -1845,4 +1845,5 @@ module.exports = {
     updateSlip,
     updateWeeklyMonthlyCategoryBudgets,
     getWeeklyMonthlyCategoryBudgets,
+    deleteSlip,
 }
