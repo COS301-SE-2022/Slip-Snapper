@@ -15,10 +15,15 @@ import {
   IonIcon,
   IonText,
   useIonToast,
+  IonGrid,
+  IonCol,
+  IonRow,
+  IonLabel,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import { EditBudgets } from '../components/EditBudgets';
+import { ProfileImage } from '../components/ProfileImage';
 import '../theme/profile.css';
 import '../theme/toasts.css';
 import { setBudgetA, getProfileData } from "../../api/apiCall"
@@ -89,16 +94,21 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>User details</IonCardTitle>
               </IonItem>
-              <IonItem className="center-items username" color="tertiary">
-                <IonText>Name: {userDetails.firstname} {userDetails.lastname}</IonText>
-              </IonItem>
-              {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
-              <img className="profilePhoto" src="..\assets\mock-images\profile-picture-sample.jpg" alt="profile-picture" />
-            </IonCardHeader>
-          </IonCard>
 
-          <IonCard className="card budget" color="primary">
-            <IonCardHeader>
+              <IonGrid>
+                <div className="wrapper">
+                  <IonCol className='profile-elem'>
+                        <ProfileImage/>
+                      </IonCol>
+                  <IonCol className='profile-elem'>
+                    <IonItem className="center-items username" color="tertiary">
+                      <IonText>{userDetails.firstname} {userDetails.lastname}</IonText>
+                    </IonItem>
+                  </IonCol>
+                </div>
+              </IonGrid>
+
+              <IonCardHeader>
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
@@ -166,7 +176,10 @@ const Profile: React.FC = () => {
                   }
                 }
               ]}></IonAlert>
+            </IonCardHeader>
+          </IonCard>
 
+          <IonCard className="card budget" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Category Budgets</IonCardTitle>
