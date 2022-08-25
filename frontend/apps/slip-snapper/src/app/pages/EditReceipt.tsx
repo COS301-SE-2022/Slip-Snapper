@@ -7,16 +7,19 @@ import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
-import { updateSlipA } from '../../api/apiCall';
+import { updateSlipA} from '../../api/apiCall';
+
 
 const EditReceipt: React.FC = () => {
     
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
+
     const originalItems = slipContents.items
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+
     
     return (
         <IonPage>
@@ -69,7 +72,7 @@ const EditReceipt: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
                                         <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput id={index + "/item"} value={item.data.item}></IonInput>
+                                            <IonInput id={index + "/item"} value={item.data[0].item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -96,7 +99,7 @@ const EditReceipt: React.FC = () => {
                                         <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
-                                            value={item.data.itemType.charAt(0).toUpperCase() + item.data.itemType.slice(1)}>
+                                                value={item.data[0].itemType.charAt(0).toUpperCase() + item.data[0].itemType.slice(1)}>
                                                 <IonSelectOption>Electronics</IonSelectOption>
                                                 <IonSelectOption>Fashion</IonSelectOption>
                                                 <IonSelectOption>Food</IonSelectOption>
@@ -153,7 +156,7 @@ const EditReceipt: React.FC = () => {
 
     function addItem() {
         getData()
-        setEditReceiptItems([...editReceiptItems, { data: { id: editReceiptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
+        setEditReceiptItems([...editReceiptItems, { data: { 0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
     }
     function removeItem(index: number) {
         getData()
@@ -175,18 +178,18 @@ const EditReceipt: React.FC = () => {
             const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
 
             if (n !== undefined) {
-                editReceiptItems[i].data.item = n
+                editReceiptItems[i].data[0].item = n
             } if (q !== undefined) {
                 editReceiptItems[i].itemQuantity = Number(q)
             } if (p !== undefined) {
                 editReceiptItems[i].itemPrice = p
             } if (t !== undefined) {
-                editReceiptItems[i].data.itemType = t
+                editReceiptItems[i].data[0].itemType = t
             }
         }
     }
 
-    function validateData() {
+    async function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
@@ -204,8 +207,8 @@ const EditReceipt: React.FC = () => {
         }
 
         for (let i = 0; i < editReceiptItems.length; i++) {
-            if (editReceiptItems[i].data.item === "" ||
-                editReceiptItems[i].data.itemType === "" ||
+            if (editReceiptItems[i].data[0].item === "" ||
+                editReceiptItems[i].data[0].itemType === "" ||
                 !Number.isInteger(editReceiptItems[i].itemQuantity) || 
                 Math.sign(editReceiptItems[i].itemQuantity) !== 1 ||
                 editReceiptItems[i].price === "") {
@@ -257,8 +260,9 @@ const EditReceipt: React.FC = () => {
         if(user==null){
             user = {id: 24}
         }
-        updateSlipA(user.id, data, insertItems, updateItems, removeItems)
-        setEditReceiptItems([{ data: { id: editReceiptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
+        await updateSlipA(user.id, data, insertItems, updateItems, removeItems)
+        setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
+
         
         const button = document.getElementById("cancelButton")
         if (button) {
@@ -268,7 +272,5 @@ const EditReceipt: React.FC = () => {
 
     }
 }
-
-
 
 export default EditReceipt;
