@@ -1,17 +1,18 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { updateSlipA } from '../../api/apiCall';
 
-const EditReciept: React.FC = () => {
+const EditReceipt: React.FC = () => {
     
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
-    const [editRecieptItems, setEditRecieptItems] = useState(slipContents.items);
+    const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
     const originalItems = slipContents.items
 
     const [showAlert, setShowAlert] = useState(false);
@@ -21,7 +22,7 @@ const EditReciept: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar color="primary">
-                    <IonTitle>Edit Reciept</IonTitle>
+                    <IonTitle>Edit Receipt</IonTitle>
                     <IonButtons slot="end">
                         <NavButtons />
                     </IonButtons>
@@ -52,15 +53,16 @@ const EditReciept: React.FC = () => {
                         <IonCardTitle>Edit Details</IonCardTitle>
                     </IonCardHeader>
 
-                    {editRecieptItems.map((item: any, index: number) => {
+                    {editReceiptItems.map((item: any, index: number) => {
                         return (
                             <IonGrid key={index} >
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
                                 </div>
                                 <div className='wrapper'>
                                     <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
@@ -107,6 +109,9 @@ const EditReciept: React.FC = () => {
                                         </IonItem>
                                     </IonCol>
 
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
+                                    </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}
                                         onDidDismiss={() => setShowAlert(false)}
@@ -148,35 +153,35 @@ const EditReciept: React.FC = () => {
 
     function addItem() {
         getData()
-        setEditRecieptItems([...editRecieptItems, { data: { id: editRecieptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
+        setEditReceiptItems([...editReceiptItems, { data: { id: editReceiptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
     }
     function removeItem(index: number) {
         getData()
-        const data = [...editRecieptItems];
+        const data = [...editReceiptItems];
         if (data.length === 1) {
             setAlertMes("A receipt needs to have at least one item.")
             setShowAlert(true);
         }
         else {
             data.splice(index, 1)
-            setEditRecieptItems(data)
+            setEditReceiptItems(data)
         }
     }
     function getData() {
-        for (let i = 0; i < editRecieptItems.length; i++) {
+        for (let i = 0; i < editReceiptItems.length; i++) {
             const n = document.getElementById(i + "/item")?.getElementsByTagName("input")[0].value
             const q = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
             const p = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
             const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
 
             if (n !== undefined) {
-                editRecieptItems[i].data.item = n
+                editReceiptItems[i].data.item = n
             } if (q !== undefined) {
-                editRecieptItems[i].itemQuantity = Number(q)
+                editReceiptItems[i].itemQuantity = Number(q)
             } if (p !== undefined) {
-                editRecieptItems[i].itemPrice = p
+                editReceiptItems[i].itemPrice = p
             } if (t !== undefined) {
-                editRecieptItems[i].data.itemType = t
+                editReceiptItems[i].data.itemType = t
             }
         }
     }
@@ -198,12 +203,12 @@ const EditReciept: React.FC = () => {
             return
         }
 
-        for (let i = 0; i < editRecieptItems.length; i++) {
-            if (editRecieptItems[i].data.item === "" ||
-                editRecieptItems[i].data.itemType === "" ||
-                !Number.isInteger(editRecieptItems[i].itemQuantity) || 
-                Math.sign(editRecieptItems[i].itemQuantity) !== 1 ||
-                editRecieptItems[i].price === "") {
+        for (let i = 0; i < editReceiptItems.length; i++) {
+            if (editReceiptItems[i].data.item === "" ||
+                editReceiptItems[i].data.itemType === "" ||
+                !Number.isInteger(editReceiptItems[i].itemQuantity) || 
+                Math.sign(editReceiptItems[i].itemQuantity) !== 1 ||
+                editReceiptItems[i].price === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
@@ -211,13 +216,13 @@ const EditReciept: React.FC = () => {
             }
         }
 
-        const updateItems = editRecieptItems;
+        const updateItems = editReceiptItems;
 
         const removeItems: unknown[] = []
         
         for (const rem of originalItems){
             let flag = false
-            for(const item of editRecieptItems){
+            for(const item of editReceiptItems){
                 if(item.id === rem.id){
                     flag = true
                 }
@@ -228,7 +233,7 @@ const EditReciept: React.FC = () => {
         }
 
         const insertItems: unknown[] = []
-        for (const item of editRecieptItems){
+        for (const item of editReceiptItems){
             
             if(item.id === undefined){
                 insertItems.push(item)
@@ -253,7 +258,7 @@ const EditReciept: React.FC = () => {
             user = {id: 24}
         }
         updateSlipA(user.id, data, insertItems, updateItems, removeItems)
-        setEditRecieptItems([{ data: { id: editRecieptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
+        setEditReceiptItems([{ data: { id: editReceiptItems.length+1, item: "", itemType: "" }, itemPrice: 0, itemQuantity: 1 }])
         
         const button = document.getElementById("cancelButton")
         if (button) {
@@ -266,4 +271,4 @@ const EditReciept: React.FC = () => {
 
 
 
-export default EditReciept;
+export default EditReceipt;

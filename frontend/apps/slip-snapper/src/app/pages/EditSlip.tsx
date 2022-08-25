@@ -1,7 +1,8 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { imageOutline } from 'ionicons/icons';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
@@ -62,11 +63,12 @@ const EditSlip: React.FC = () => {
                         return (
                             <IonGrid key={index} >
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
                                 </div>
                                 <div className='wrapper'>
                                     <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
@@ -111,6 +113,10 @@ const EditSlip: React.FC = () => {
                                                 <IonSelectOption>Other</IonSelectOption>
                                             </IonSelect>
                                         </IonItem>
+                                    </IonCol>
+
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
                                     </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}
