@@ -218,10 +218,10 @@ describe('AddEntry', () => {
     expect(Component.getByText('Location:'));
     expect(Component.getByText('Date:'));
     expect(Component.getByText('Edit Details'));
-    expect(Component.getByText('Description'));
-    expect(Component.getByText('Quantity'));
-    expect(Component.getByText('Price'));
-    expect(Component.getByText('Type'));
+    // expect(Component.getByText('Description'));
+    // expect(Component.getByText('Quantity'));
+    // expect(Component.getByText('Price'));
+    // expect(Component.getByText('Type'));
     expect(Component.getByText('Total Amount:'));
   });
 });

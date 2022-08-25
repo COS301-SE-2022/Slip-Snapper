@@ -7,6 +7,7 @@ import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { addItemsA } from '../../api/apiCall';
+import { textAlign } from '@mui/system';
 
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
@@ -73,19 +74,21 @@ const AddEntry: React.FC = () => {
                                     <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className='big-chip'>
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
                                         <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
                                     
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Description</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
@@ -93,7 +96,8 @@ const AddEntry: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Price</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onIonChange={handleCostsChange} onClick={() => setNormalColour(index + "/price")}
                                                 id={index + "/price"} value={item.price} ></IonInput>
@@ -101,7 +105,8 @@ const AddEntry: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Type</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className="select-options">
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' value={item.type}>
                                                 <IonSelectOption>Electronics</IonSelectOption>
