@@ -495,6 +495,7 @@ async function insertAllItems(slipId, insertItems) {
  * @param {*} itemId The item id
  * @returns userid
  */
+
 async function deleteItem(itemId) {
     try {
         const item = await prisma.item.delete({
@@ -515,7 +516,55 @@ async function deleteItem(itemId) {
         };
     }
 }
+/**
+ * Funtion to delete multiple a slip from the database
+ * @param {*} itemId The slip id array
+ * @returns 
+ */
+async function deleteSlip(slipId) {
+    try {
+        const slip = await prisma.slip.findFirst({
+            where: {
+                id: slipId
+            },
+            include: {
+                items: {
+                    select: {
+                        id: true
+                    }
+                }
+            }
+        })
+        let itemArray = []
+        for (const itemIds of slip.items) {
+            itemArray.push(itemIds.id)
+        }
 
+        const item = await prisma.item.deleteMany({
+            where: {
+                id: {
+                    in: itemArray
+                }
+            }
+        });
+        slip = await prisma.slip.delete({
+            where: {
+                id: slipId
+            }
+        })
+
+        const transaction = await prisma.$transaction([item, slip])
+        return {
+            message: "Slip has been deleted",
+            slip: slip,
+        };
+    } catch (error) {
+        return {
+            message: "Error Deleting slip",
+            slip: null,
+        };
+    }
+}
 /**
  * Funtion to delete multiple items from the database
  * @param {*} itemId The item id array
