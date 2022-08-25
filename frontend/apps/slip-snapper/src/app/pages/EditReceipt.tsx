@@ -14,7 +14,6 @@ const EditReceipt: React.FC = () => {
     
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
-
     const originalItems = slipContents.items
 
     const [showAlert, setShowAlert] = useState(false);
@@ -215,7 +214,6 @@ const EditReceipt: React.FC = () => {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
-
             }
         }
 

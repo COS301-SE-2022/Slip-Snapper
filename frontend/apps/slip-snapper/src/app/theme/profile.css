@@ -26,19 +26,26 @@
     border-radius: 20px;
 }
 
-.profile-elem{
+.profile-elem {
     border-radius: 10px;
     display: flex;
     justify-content: center;
 }
 
-.profile-photo-fab{
+.profile-photo-fab {
     bottom: 0%;
 }
 
 .progressBar {
     max-width: 30%;
     --background: #ebebeb;
+
+}
+
+.categoryProgressBar {
+    max-width: 30%;
+    --background: #ebebeb;
+    right: 50px
 }
 
 .logout-button {
