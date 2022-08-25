@@ -554,7 +554,6 @@ async function deleteManyItems(itemIdArray) {
  */
 async function updateItem(itemId, dataA, dataB) {
     try {
-
         let item;
         if (dataA != {}) {
             item = await prisma.item.update({
@@ -648,6 +647,9 @@ async function updateItem(itemId, dataA, dataB) {
                             }, disconnect: {
                                 id: data.data[0].id
                             },
+                            connect: {
+                                id: search.id
+                            }
                         }
                     }
                 })
@@ -688,8 +690,8 @@ async function updateAllItems(updateItems) {
                 dataA.itemPrice = parseFloat(item.itemPrice);
                 dataA.itemQuantity = item.itemQuantity;
 
-                dataB.item = item.data.item;
-                dataB.itemType = item.data.itemType;
+                dataB.item = item.data[0].item;
+                dataB.itemType = item.data[0].itemType;
 
                 await updateItem(item.id, dataA, dataB)
             }
@@ -712,12 +714,10 @@ async function updateAllItems(updateItems) {
  */
 async function updateSlip(userId, slipData, insertItems, updateItems, removeItems) {
     try {
-        console.log(slipData)
         const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
         const update = await updateAllItems(updateItems)
         const remove = await deleteManyItems(removeItems)
         const insert = await insertAllItems(slipData[5], insertItems)
-        console.log(insert.message)
 
         return {
             message: slip.message
@@ -1605,7 +1605,6 @@ async function getUserGeneralBudgets(userId, start, end) {
             }
         })
 
-        //console.log(items)
 
         // var date = new Date();
         // date.setDate(date.getDate() - 7);
