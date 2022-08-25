@@ -1,7 +1,7 @@
-import { IonTitle, IonButton, IonCard, IonCol, IonItem, IonRow, IonAlert, IonCardHeader, IonCardTitle } from '@ionic/react';
+import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonCardTitle, IonLabel, IonSearchbar, IonCol, IonGrid, IonRow, IonToggle } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { getAllSlips } from '../../api/apiCall';
-import '../theme/FetchData.css';
+import '../theme/SlipItems.css';
 
 
 const SlipItems: React.FC = () => {
@@ -20,68 +20,88 @@ const SlipItems: React.FC = () => {
                 })
     }, []);
 
-
     const [deleteAlert, setDeleteAlert] = useState({
         state: false,
         name: '',
         Id: 0,
     });
     return (
-        <div className="App">
+        <div>
             <IonItem>
                 <IonTitle>All Receipts</IonTitle>
             </IonItem>
-            <IonCard color="primary" className="all-reports">
-                <IonCardHeader>
-                    <IonCardTitle>All Reciepts:</IonCardTitle>
-                </IonCardHeader>
-                {slipItems.map((item, index) => (
+                <div className='wrapper'>
+                    <IonCard color="primary" className="search-bar">
 
-                    <IonItem key={index} color="tertiary">
-                        {item.location + " [ Total: " + item.total + "]"}
-                        <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
-                            localStorage.removeItem('editSlip')
-                            localStorage.setItem('editSlip', JSON.stringify(item))
-                        }}>Edit</IonButton>
-                        <IonButton
-                            onClick={() =>
-                                setDeleteAlert({
-                                    state: true,
-                                    name: "report.reportName",
-                                    Id: 0,
-                                })
-                            }
-                            fill="solid"
-                            slot="end"
-                            color="medium"
-                        >
-                            Delete
-                        </IonButton>
-                        <IonAlert
-                            isOpen={deleteAlert.state}
-                            onDidDismiss={() =>
-                                setDeleteAlert({ state: false, name: '', Id: 0 })
-                            }
-                            header="Confirm Delete"
-                            message="Are you sure you want to delete this report?"
-                            buttons={[
-                                'Cancel',
-                                {
-                                    text: 'Delete',
-                                    cssClass: 'toasts',
-                                    handler: () => {
-                                        setDeleteAlert({ state: false, name: '', Id: 0 });
-                                    },
-                                },
-                            ]}
-                        />
-                    </IonItem>
+                        <IonItem color='primary'>
+                            <IonSearchbar color="tertiary"/>
+                        </IonItem>
 
-                ))
+                        <IonItem color='primary'>
+                            <IonLabel>Total Filter</IonLabel>
+                            <IonToggle color='secondary'/>
+                        </IonItem>
 
-                }
-            </IonCard>
+                        <IonItem color='primary'>
+                            <IonLabel>Date Filter</IonLabel>
+                            <IonToggle color='secondary'/>
+                        </IonItem>
 
+                    </IonCard>
+
+                    <IonCard color="primary" className="receipts-table">
+                        <IonCardHeader>
+                            <IonCardTitle>Receipts</IonCardTitle>
+                        </IonCardHeader>
+
+                        {slipItems.map((item, index) => {
+                                return (
+                                    <IonItem key={index} color="tertiary">
+                                        <IonLabel>
+                                            {item.transactionDate.split('T')[0].replace(/-/gi,"/").split('/').reverse().join('/') + " - " + item.location}
+                                        </IonLabel>
+                                        { " [ Total: R" + item.total + " ]"}
+                                        <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
+                                            localStorage.removeItem('editSlip')
+                                            localStorage.setItem('editSlip', JSON.stringify(item))
+                                        }}>Edit</IonButton>
+                                        <IonButton
+                                            onClick={() =>
+                                                setDeleteAlert({
+                                                    state: true,
+                                                    name: "report.reportName",
+                                                    Id: 0,
+                                                })
+                                            }
+                                            fill="solid"
+                                            slot="end"
+                                            color="medium"
+                                        >
+                                            Delete
+                                        </IonButton>
+                                        <IonAlert
+                                            isOpen={deleteAlert.state}
+                                            onDidDismiss={() =>
+                                                setDeleteAlert({ state: false, name: '', Id: 0 })
+                                            }
+                                            header="Confirm Delete"
+                                            message="Are you sure you want to delete this report?"
+                                            buttons={[
+                                                'Cancel',
+                                                {
+                                                    text: 'Delete',
+                                                    cssClass: 'toasts',
+                                                    handler: () => {
+                                                        setDeleteAlert({ state: false, name: '', Id: 0 });
+                                                    },
+                                                },
+                                            ]}
+                                        />
+                                </IonItem>
+                                )
+                            })}
+                    </IonCard>
+                </div>
         </div>
     );
 };
