@@ -18,6 +18,7 @@ import {
   IonGrid,
   IonCol,
   IonRow,
+  IonLabel,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
@@ -101,18 +102,13 @@ const Profile: React.FC = () => {
                       </IonCol>
                   <IonCol className='profile-elem'>
                     <IonItem className="center-items username" color="tertiary">
-                      <IonText>Name: {userDetails.firstname} {userDetails.lastname}</IonText>
+                      <IonText>{userDetails.firstname} {userDetails.lastname}</IonText>
                     </IonItem>
                   </IonCol>
                 </div>
               </IonGrid>
 
- 
-            </IonCardHeader>
-          </IonCard>
-
-          <IonCard className="card budget" color="primary">
-            <IonCardHeader>
+              <IonCardHeader>
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
@@ -180,7 +176,10 @@ const Profile: React.FC = () => {
                   }
                 }
               ]}></IonAlert>
+            </IonCardHeader>
+          </IonCard>
 
+          <IonCard className="card budget" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Category Budgets</IonCardTitle>
