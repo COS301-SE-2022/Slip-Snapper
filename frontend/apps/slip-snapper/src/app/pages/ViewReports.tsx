@@ -16,6 +16,9 @@ import {
   useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
+import { isPlatform } from '@ionic/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { FileOpener } from '@ionic-native/file-opener';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/viewReports.css';
 import {
@@ -177,9 +180,56 @@ const ViewReports: React.FC = () => {
         const arr = new Uint8Array(apiResponse.data.report.data);
         const blob = new Blob([arr], { type: 'application/pdf' });
         const docUrl = URL.createObjectURL(blob);
-        window.open(docUrl);
+
+        if (!isPlatform('android') && !isPlatform('ios')) {
+          window.open(docUrl);
+        } else {
+          //view for mobile, might need name
+          const reader = new FileReader();
+
+          reader.addEventListener(
+            'load',
+            () => {
+              if (reader.result) {
+                const result = reader.result as string;
+                const pdfData = result.split(',')[1];
+                downloadPDF(pdfData);
+              }
+            },
+            false
+          );
+
+          reader.readAsDataURL(blob);
+        }
       }
     });
+  }
+
+  function downloadPDF(pdfBase64: string) {
+    try {
+      Filesystem.writeFile({
+        path: 'report.pdf',
+        data: pdfBase64,
+        directory: Directory.External,
+      }).then((writeFileResult) => {
+        Filesystem.getUri({
+          directory: Directory.External,
+          path: 'report.pdf',
+        }).then(
+          (getUriResult) => {
+            const path = getUriResult.uri;
+            FileOpener.open(path, 'application/pdf').then(() =>
+              console.log('File is opened')
+            );
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      });
+    } catch (error) {
+      console.error('Unable to write file', error);
+    }
   }
 
   async function deleteReport(fileName: string, reportId: string) {
