@@ -1049,44 +1049,55 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@capacitor/android@^3.2.5":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-3.5.1.tgz#d81ec82f84ab7f0abeadb4cc100e6a3820197d65"
-  integrity sha512-rjehS0+BQBlwoN8hUyrMuzexn/9QJsONb1kmN5uXcL8JuTEbv35fa7z0tSD4x1LKwUFd+3Zeuwt60QRuwijlmw==
+"@capacitor/android@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-4.1.0.tgz#d4f4a84213b948911757a00a58255418f126f2c7"
+  integrity sha512-aYHvpYVlS6WC+bG9jJfwqgHMxTw3e8f3taNnl/y9qCjglmMmtFcZWFAVLlOleVK4Q7olSirqjx37f0ppvxRTLg==
 
-"@capacitor/camera@^1.3.1":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/camera/-/camera-1.3.1.tgz#bb63bd47e87b9b5916b77cdb164e5c01b2f85e25"
-  integrity sha512-P0Isb1RKUGUpvmLTxsfVOge6bte7hGzp/zObQAQJ96wh9IAGv8S87g7qPm6SLPhg9HK+E8JY3eUmN6KbIRGJNg==
+"@capacitor/browser@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/browser/-/browser-4.0.1.tgz#0a725fea27d706940af8dbcc362b6d14bf20bfd2"
+  integrity sha512-tPOA/eYDJdDeMFd+A3I8teuGfPP0GEqhWtMzH8z5r2tW40iJ/mL8qH5NgVLMZ3uvs7gN2LfQTCMNJvl0F/WdBw==
 
-"@capacitor/cli@^3.2.5":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-3.5.1.tgz#7184554f3460a6fa0988ed7db2617fd53e7eade5"
-  integrity sha512-zIA5BqT8ZnfUFEJwHlSdQ8Q5iWqmT7S6Mgsjbk55Pkv3BKQIP2VIFYpM4E7lGLEKd4kBnKStD0lTw5/P3E03KA==
+"@capacitor/camera@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@capacitor/camera/-/camera-4.0.1.tgz#6f76da92db508c1ed22a23b2bebc72fb538cadd5"
+  integrity sha512-ys8DV8gpnIGum23XFf25BtkEIoH4CpSDt8IT0F3DVLEQDFeepZbTsY4o+LuZ0cm4Gr0tl6Gi2wCbgcasezLY+w==
+
+"@capacitor/cli@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-4.1.0.tgz#90e3bddba2e508dbe1ad6d7be242ae95be8b870e"
+  integrity sha512-SkMtohfjZS0tJdCtoqugHQIYJ4DowjXk4yQzDFXN3MnhjAKEQmB7QcZY5R8o9NoPMx0ngw2Bzm00e7RdyERvzg==
   dependencies:
-    "@ionic/cli-framework-output" "^2.2.1"
-    "@ionic/utils-fs" "^3.1.5"
-    "@ionic/utils-subprocess" "^2.1.6"
-    "@ionic/utils-terminal" "^2.3.0"
-    commander "^6.0.0"
-    debug "^4.2.0"
+    "@ionic/cli-framework-output" "^2.2.5"
+    "@ionic/utils-fs" "^3.1.6"
+    "@ionic/utils-subprocess" "^2.1.11"
+    "@ionic/utils-terminal" "^2.3.3"
+    commander "^9.3.0"
+    debug "^4.3.4"
     env-paths "^2.2.0"
-    kleur "^4.1.1"
-    native-run "^1.5.0"
-    open "^7.4.2"
-    plist "^3.0.2"
-    prompts "^2.3.2"
-    semver "^7.3.2"
+    kleur "^4.1.4"
+    native-run "^1.6.0"
+    open "^8.4.0"
+    plist "^3.0.5"
+    prompts "^2.4.2"
+    rimraf "^3.0.2"
+    semver "^7.3.7"
     tar "^6.1.11"
-    tslib "^2.1.0"
+    tslib "^2.4.0"
     xml2js "^0.4.23"
 
-"@capacitor/core@^3.2.5":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-3.5.1.tgz#49d48c0261d811a4d8c43d89d8a10bd519675bd2"
-  integrity sha512-UTROxB7q/hZBnhDLcCN7mVsAX3SxXNMhVuPbtddsDOUCm4hExLXN62gPD7rjgmumhfHMjeXmkw/EfRzSjttL1g==
+"@capacitor/core@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-4.1.0.tgz#4f5b80cd9cbf65bfc5a203082399fa794ffc5f45"
+  integrity sha512-bMYFnC5l5n11D/kLTz9TOOJfUH+nQqYRwzG7h5h4AXIm8aFxH5ZY3iFlDZd7R4xcyrlnfxzfoooSH9trPjRBLA==
   dependencies:
     tslib "^2.1.0"
+
+"@capacitor/filesystem@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor/filesystem/-/filesystem-4.1.0.tgz#610ec3c1e13d484218e6920354cc5644aa73454c"
+  integrity sha512-isUL8kyH+GzcWToNu1uGyn83pwrnOC6wevefN6kGsq0jluBfryJme6WG1VTq0gi3cw604t8j8XtVoTKz8V7gfQ==
 
 "@capacitor/ios@^3.2.5":
   version "3.5.1"
@@ -1269,12 +1280,33 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@ionic/cli-framework-output@^2.2.1":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@ionic/cli-framework-output/-/cli-framework-output-2.2.4.tgz#177d8388140a2246dec111385ee63bf0343b013d"
-  integrity sha512-YdaXtHHg0zT1JSFlGrbTWe6uzD6u+w5yHE+aM7Js/3BNLYKIYngliMoojGxwNHbqMPNuvDzWMDAbxteY5u0vKg==
+"@ionic-native/core@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/core/-/core-5.36.0.tgz#712c40a530b119b0039e8d16cb577899f50541d4"
+  integrity sha512-lOrkktadlKYbYf1LrDyAtsu1JnQ0oCCdkOU7iHQ8oXnNOkMwobFfD2m62F1CoOr0u9LIkpYnZSPjng8lZbmbNw==
   dependencies:
-    "@ionic/utils-terminal" "2.3.2"
+    "@types/cordova" latest
+
+"@ionic-native/file-opener@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file-opener/-/file-opener-5.36.0.tgz#ad1f6bf4585bd0521625ea651dfefd92ea7308e1"
+  integrity sha512-UKp3pbqvQXsAtLMJ5JE+KcTMxpjSZMFebf6nvy/KJvwy85JGIaCV4ZVM/H9CFUrHJMWBH6wDbY+WPygnsrl4Yg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic-native/file@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/file/-/file-5.36.0.tgz#038c855be00680b03a9d9e802a1d60cb7de5ef28"
+  integrity sha512-x7yZ4VdC8n8FNlpRmUFtohNlOZnExvoxZ/6oCvGsV+ec8TJXUsDK/BYi1g+lkPTCUY3EmQIeBOe4PLO6fRJ7qg==
+  dependencies:
+    "@types/cordova" latest
+
+"@ionic/cli-framework-output@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@ionic/cli-framework-output/-/cli-framework-output-2.2.5.tgz#0db9fba7efe0c27bb5085b12ee01f22053e44152"
+  integrity sha512-YeDLTnTaE6V4IDUxT8GDIep0GuRIFaR7YZDLANMuuWJZDmnTku6DP+MmQoltBeLmVvz1BAAZgk41xzxdq6H2FQ==
+  dependencies:
+    "@ionic/utils-terminal" "2.3.3"
     debug "^4.0.0"
     tslib "^2.0.1"
 
@@ -1321,7 +1353,17 @@
     debug "^4.0.0"
     tslib "^2.0.1"
 
-"@ionic/utils-fs@3.1.5", "@ionic/utils-fs@^3.1.5":
+"@ionic/utils-fs@3.1.6", "@ionic/utils-fs@^3.1.6":
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/@ionic/utils-fs/-/utils-fs-3.1.6.tgz#f96cbf724fcc1612be5fc61367c815c0f97796fa"
+  integrity sha512-eikrNkK89CfGPmexjTfSWl4EYqsPSBh0Ka7by4F0PLc1hJZYtJxUZV3X4r5ecA8ikjicUmcbU7zJmAjmqutG/w==
+  dependencies:
+    "@types/fs-extra" "^8.0.0"
+    debug "^4.0.0"
+    fs-extra "^9.0.0"
+    tslib "^2.0.1"
+
+"@ionic/utils-fs@^3.1.5":
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/@ionic/utils-fs/-/utils-fs-3.1.5.tgz#fb87be5bd5089ca43a29bbbcab87b9907e6da4b1"
   integrity sha512-a41bY2dHqWSEQQ/80CpbXSs8McyiCFf2DnIWWLukrhYWf46h4qi6M/8dxcMKrofRiqI/3F+cL3S2mOm9Zz/o2Q==
@@ -1338,13 +1380,13 @@
     debug "^4.0.0"
     tslib "^2.0.1"
 
-"@ionic/utils-process@2.1.9":
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/@ionic/utils-process/-/utils-process-2.1.9.tgz#db7ce0bdd05551d9c8881af6fdabafc9d1259c51"
-  integrity sha512-+RD2mcwh7jtAtkvCFw1BBnUHg/UYgBiYxpXPuXUBSitHHAgVk1zDfYBTM31EKU5FGb5nVU/HkjeYGRHEmj4MPA==
+"@ionic/utils-process@2.1.10":
+  version "2.1.10"
+  resolved "https://registry.yarnpkg.com/@ionic/utils-process/-/utils-process-2.1.10.tgz#35686d933520064859368dd70e691c1ff545d5d9"
+  integrity sha512-mZ7JEowcuGQK+SKsJXi0liYTcXd2bNMR3nE0CyTROpMECUpJeAvvaBaPGZf5ERQUPeWBVuwqAqjUmIdxhz5bxw==
   dependencies:
     "@ionic/utils-object" "2.1.5"
-    "@ionic/utils-terminal" "2.3.2"
+    "@ionic/utils-terminal" "2.3.3"
     debug "^4.0.0"
     signal-exit "^3.0.3"
     tree-kill "^1.2.2"
@@ -1358,21 +1400,36 @@
     debug "^4.0.0"
     tslib "^2.0.1"
 
-"@ionic/utils-subprocess@^2.1.6":
-  version "2.1.10"
-  resolved "https://registry.yarnpkg.com/@ionic/utils-subprocess/-/utils-subprocess-2.1.10.tgz#a0f481132730bd41680ebe3774e46d6058ab9387"
-  integrity sha512-X5wXiA4moEzbvchWqa7kwnYw3IqFyP1otlN/APFOmzmpsQWdyz5LRqqMhPozJeN11Mi3pwNR+BCQWd6vFBHTTg==
+"@ionic/utils-subprocess@^2.1.11":
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/@ionic/utils-subprocess/-/utils-subprocess-2.1.11.tgz#805b86c066fe3a50f6739551ca228d52f25ffeb2"
+  integrity sha512-6zCDixNmZCbMCy5np8klSxOZF85kuDyzZSTTQKQP90ZtYNCcPYmuFSzaqDwApJT4r5L3MY3JrqK1gLkc6xiUPw==
   dependencies:
     "@ionic/utils-array" "2.1.5"
-    "@ionic/utils-fs" "3.1.5"
-    "@ionic/utils-process" "2.1.9"
+    "@ionic/utils-fs" "3.1.6"
+    "@ionic/utils-process" "2.1.10"
     "@ionic/utils-stream" "3.1.5"
-    "@ionic/utils-terminal" "2.3.2"
+    "@ionic/utils-terminal" "2.3.3"
     cross-spawn "^7.0.3"
     debug "^4.0.0"
     tslib "^2.0.1"
 
-"@ionic/utils-terminal@2.3.2", "@ionic/utils-terminal@^2.3.0", "@ionic/utils-terminal@^2.3.1":
+"@ionic/utils-terminal@2.3.3", "@ionic/utils-terminal@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@ionic/utils-terminal/-/utils-terminal-2.3.3.tgz#de118bbb07aae7eea833a9f8108bb7fe593cd26e"
+  integrity sha512-RnuSfNZ5fLEyX3R5mtcMY97cGD1A0NVBbarsSQ6yMMfRJ5YHU7hHVyUfvZeClbqkBC/pAqI/rYJuXKCT9YeMCQ==
+  dependencies:
+    "@types/slice-ansi" "^4.0.0"
+    debug "^4.0.0"
+    signal-exit "^3.0.3"
+    slice-ansi "^4.0.0"
+    string-width "^4.1.0"
+    strip-ansi "^6.0.0"
+    tslib "^2.0.1"
+    untildify "^4.0.0"
+    wrap-ansi "^7.0.0"
+
+"@ionic/utils-terminal@^2.3.1":
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/@ionic/utils-terminal/-/utils-terminal-2.3.2.tgz#99f565a1a0e4e08b424c9022994a074d52238d0e"
   integrity sha512-/yNrEZEDsjzTkpDWTsBjZeWJj2AkMwidyL72kqGkIDGt+J4sL/YVsA9CE3P9P1FAEm8jJmTy/EYAhC6EwA9f1A==
@@ -2803,6 +2860,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cordova@latest":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-0.0.34.tgz#ea7addf74ecec3d7629827a0c39e2c9addc73d04"
+  integrity sha512-rkiiTuf/z2wTd4RxFOb+clE7PF4AEJU0hsczbUdkHHBtkUmpWQpEddynNfJYKYtZFJKbq4F+brfekt1kx85IZA==
+
 "@types/eslint-scope@^3.7.3":
   version "3.7.3"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.3.tgz#125b88504b61e3c8bc6f870882003253005c3224"
@@ -2848,7 +2910,7 @@
     "@types/qs" "*"
     "@types/serve-static" "*"
 
-"@types/fs-extra@^8.0.1":
+"@types/fs-extra@^8.0.0", "@types/fs-extra@^8.0.1":
   version "8.1.2"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-8.1.2.tgz#7125cc2e4bdd9bd2fc83005ffdb1d0ba00cca61f"
   integrity sha512-SvSrYXfWSc7R4eqnOzbQF4TZmfpNSM9FrSWLU3EUnWBuyZqNBOrv1B1JA3byUDPUl9z4Ab3jeZG2eDdySlgNMg==
@@ -3080,6 +3142,11 @@
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.3.tgz#ff5e2f1902969d305225a047c8a0fd5c915cebef"
   integrity sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==
+
+"@types/slice-ansi@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/slice-ansi/-/slice-ansi-4.0.0.tgz#eb40dfbe3ac5c1de61f6bcb9ed471f54baa989d6"
+  integrity sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==
 
 "@types/sockjs@^0.3.33":
   version "0.3.33"
@@ -4334,15 +4401,15 @@ commander@^5.1.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
   integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
 
-commander@^6.0.0:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-6.2.1.tgz#0792eb682dfbc325999bb2b84fddddba110ac73c"
-  integrity sha512-U7VdrJFnJgo4xjrHpTzu0yrHPGImdsmD95ZlgYSEajAn2JKzDhDTPG9kBTefmObL2w/ngeZnilk+OV9CG3d7UA==
-
 commander@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-7.2.0.tgz#a36cb57d0b501ce108e4d20559a150a391d97ab7"
   integrity sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==
+
+commander@^9.3.0:
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.0.tgz#bc4a40918fefe52e22450c111ecd6b7acce6f11c"
+  integrity sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==
 
 common-path-prefix@^3.0.0:
   version "3.0.0"
@@ -4446,6 +4513,11 @@ copy-webpack-plugin@^9.0.1:
     normalize-path "^3.0.0"
     schema-utils "^3.1.1"
     serialize-javascript "^6.0.0"
+
+cordova-plugin-file-opener2@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-file-opener2/-/cordova-plugin-file-opener2-3.0.5.tgz#3bf481a724bcec9cfa2257a71915309df5ea5b4d"
+  integrity sha512-tjLHDamH5+y0bJZYVe2967L1S4R8tL4Y0rJUzJGoxsyiw3FUlrJNS199POOpzZZ6Xhlntn9a2o7+84r1dMN21A==
 
 core-js-compat@^3.21.0, core-js-compat@^3.22.1:
   version "3.22.5"
@@ -4749,7 +4821,7 @@ debug@2.6.9, debug@^2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.0.0, debug@^4.1.0, debug@^4.1.1, debug@^4.2.0, debug@^4.3.2, debug@^4.3.4:
+debug@4, debug@^4.0.0, debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
@@ -6719,7 +6791,7 @@ is-weakref@^1.0.2:
   dependencies:
     call-bind "^1.0.2"
 
-is-wsl@^2.1.1, is-wsl@^2.2.0:
+is-wsl@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/is-wsl/-/is-wsl-2.2.0.tgz#74a4c76e77ca9fd3f932f290c17ea326cd157271"
   integrity sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==
@@ -7273,6 +7345,11 @@ jest@27.2.3:
     import-local "^3.0.2"
     jest-cli "^27.2.3"
 
+jetifier@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-2.0.0.tgz#699391367ca1fe7bc4da5f8bf691eb117758e4cb"
+  integrity sha512-J4Au9KuT74te+PCCCHKgAjyLlEa+2VyIAEPNCdE5aNkAJ6FAJcAqcdzEkSnzNksIa9NkGmC4tPiClk2e7tCJuQ==
+
 jmespath@0.16.0:
   version "0.16.0"
   resolved "https://registry.yarnpkg.com/jmespath/-/jmespath-0.16.0.tgz#b15b0a85dfd4d930d43e69ed605943c802785076"
@@ -7453,10 +7530,10 @@ kleur@^3.0.3:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
-kleur@^4.1.1:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.4.tgz#8c202987d7e577766d039a8cd461934c01cda04d"
-  integrity sha512-8QADVssbrFjivHWQU7KkMgptGTl6WAcSdlbBPY4uNF+mWr6DGcKrvY2w4FQJoXch7+fKMjj0dRrL75vk3k23OA==
+kleur@^4.1.4:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/kleur/-/kleur-4.1.5.tgz#95106101795f7050c6c650f350c683febddb1780"
+  integrity sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==
 
 klona@^2.0.4, klona@^2.0.5:
   version "2.0.5"
@@ -7893,10 +7970,10 @@ native-request@^1.0.5:
   resolved "https://registry.yarnpkg.com/native-request/-/native-request-1.1.0.tgz#acdb30fe2eefa3e1bc8c54b3a6852e9c5c0d3cb0"
   integrity sha512-uZ5rQaeRn15XmpgE0xoPL8YWqcX90VtCFglYwAgkvKM5e8fog+vePLAhHxuuv/gRkrQxIeh5U3q9sMNUrENqWw==
 
-native-run@^1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/native-run/-/native-run-1.5.0.tgz#d0d04c802e5aeb9d5dc855b3df3ed26bf9f9d248"
-  integrity sha512-YYsYYAljk70N+FJLeY5KuafsBit7agOBR3ch1KTXOaKkREkM49yCwJIwVz2faoWpJ2MeyLdXltk5PskUuPQqZA==
+native-run@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/native-run/-/native-run-1.6.0.tgz#7de640510f4f38862f4297b572c1d06a822d4556"
+  integrity sha512-28bz2tnNSLg0ldeB2Qn/B3r1AowGNY8XdQ23akJbRPIYi69VduIj0DDyoptiIBtFFif2C32hQtSPW3v1hPcrjA==
   dependencies:
     "@ionic/utils-fs" "^3.1.5"
     "@ionic/utils-terminal" "^2.3.1"
@@ -8215,14 +8292,6 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-open@^7.4.2:
-  version "7.4.2"
-  resolved "https://registry.yarnpkg.com/open/-/open-7.4.2.tgz#b8147e26dcf3e426316c730089fd71edd29c2321"
-  integrity sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==
-  dependencies:
-    is-docker "^2.0.0"
-    is-wsl "^2.1.1"
-
 open@^8.0.9, open@^8.4.0:
   version "8.4.0"
   resolved "https://registry.yarnpkg.com/open/-/open-8.4.0.tgz#345321ae18f8138f82565a910fdc6b39e8c244f8"
@@ -8520,13 +8589,21 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-plist@^3.0.2, plist@^3.0.4:
+plist@^3.0.4:
   version "3.0.5"
   resolved "https://registry.yarnpkg.com/plist/-/plist-3.0.5.tgz#2cbeb52d10e3cdccccf0c11a63a85d830970a987"
   integrity sha512-83vX4eYdQp3vP9SxuYgEM/G/pJQqLUz/V/xzPrzruLs7fz7jxGQ1msZ/mg1nwZxUSuOp4sb+/bEIbRrbzZRxDA==
   dependencies:
     base64-js "^1.5.1"
     xmlbuilder "^9.0.7"
+
+plist@^3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/plist/-/plist-3.0.6.tgz#7cfb68a856a7834bca6dbfe3218eb9c7740145d3"
+  integrity sha512-WiIVYyrp8TD4w8yCvyeIr+lkmrGRd5u0VbRnU+tP/aRLxP/YadJUYOMZJ/6hIa3oUyVCsycXvtNRgd5XBJIbiA==
+  dependencies:
+    base64-js "^1.5.1"
+    xmlbuilder "^15.1.1"
 
 portfinder@^1.0.28:
   version "1.0.28"
@@ -8867,7 +8944,7 @@ promise.series@^0.2.0:
   resolved "https://registry.yarnpkg.com/promise.series/-/promise.series-0.2.0.tgz#2cc7ebe959fc3a6619c04ab4dbdc9e452d864bbd"
   integrity sha1-LMfr6Vn8OmYZwEq029yeRS2GS70=
 
-prompts@^2.0.1, prompts@^2.3.2:
+prompts@^2.0.1, prompts@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/prompts/-/prompts-2.4.2.tgz#7b57e73b3a48029ad10ebd44f74b01722a4cb069"
   integrity sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==
@@ -9503,7 +9580,7 @@ semver@7.3.4:
   dependencies:
     lru-cache "^6.0.0"
 
-semver@7.x, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5:
+semver@7.x, semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7:
   version "7.3.7"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.7.tgz#12c5b649afdbf9049707796e22a4028814ce523f"
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
@@ -10844,6 +10921,11 @@ xml2js@^0.4.23:
   dependencies:
     sax ">=0.6.0"
     xmlbuilder "~11.0.0"
+
+xmlbuilder@^15.1.1:
+  version "15.1.1"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-15.1.1.tgz#9dcdce49eea66d8d10b42cae94a79c3c8d0c2ec5"
+  integrity sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==
 
 xmlbuilder@^9.0.7, xmlbuilder@~9.0.1:
   version "9.0.7"
