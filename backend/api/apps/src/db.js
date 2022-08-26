@@ -351,12 +351,14 @@ async function getItemsReport(userid, start, end) {
  */
 async function addItem(userid, location, date, total, data) {
     try {
+       
+
         const slip = await prisma.slip.create({
             data: {
                 location: location,
                 total: total,
                 usersId: userid,
-                transactionDate: date
+                transactionDate: date,
             }
         })
 
@@ -627,7 +629,7 @@ async function updateItem(itemId, dataA, dataB) {
             let search = await prisma.dataItem.findFirst({
                 where: {
                     item: dataB.item,
-                    itemType: data.itemType
+                    itemType: dataB.itemType
                 }
             })
             if (search == null) {
@@ -970,12 +972,12 @@ async function getFavouriteCategory(userid) {
         }
         for (var item of items) {
             for (var sub of item.items) {
-                if (!types.cat.includes(sub.data.itemType)) {
-                    types.cat.push(sub.data.itemType)
+                if (!types.cat.includes(sub.data[0].itemType)) {
+                    types.cat.push(sub.data[0].itemType)
                     types.catNums.push(0)
                     types.catPrices.push(0)
                 }
-                var pos = types.cat.indexOf(sub.data.itemType)
+                var pos = types.cat.indexOf(sub.data[0].itemType)
                 types.catNums[pos]++;
                 types.catPrices[pos] += sub.itemPrice;
             }
@@ -1085,7 +1087,7 @@ async function getMostExpensiveItem(userid) {
             for (var it of itemL.items) {
                 if (it.itemPrice > expensiveItem) {
                     expensiveItem = it.itemPrice;
-                    dataItem = it.data.item;
+                    dataItem = it.data[0].item;
                 }
             }
         }
