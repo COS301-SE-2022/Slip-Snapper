@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import '../theme/profile.css';
 import { create } from 'ionicons/icons'
 import Filter7Icon from '@mui/icons-material/Filter7Outlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
 
@@ -135,10 +136,10 @@ function Budget() {
         <div>
             <IonItem id="foodBudget" className="categoryBudgets" color="tertiary" >
                 <IonIcon className="edit-budget" src={create} onClick={() => setFood(true)} />
-                <IonText>{"Food: R" + renderedBudgets.FoodBudget}</IonText>
+                <IonText>Food: R{categoryBudgets.FoodBudget.timeFrame === true? categoryBudgets.FoodBudget.weeklyValue: categoryBudgets.FoodBudget.monthlyValue}</IonText>
                 <IonProgressBar id='foodBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    <Filter7Icon />
+                    {categoryBudgets.FoodBudget.timeFrame === true? <Filter7Icon/>: <CalendarMonthIcon/>}
                 </IonFab>
             </IonItem>
 
@@ -158,10 +159,10 @@ function Budget() {
 
             <IonItem id="fashionBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setFashion(true)} />
-                <IonText>{"Fashion: R" + renderedBudgets.FashionBudget}</IonText>
+                <IonText>Fashion: R{categoryBudgets.FashionBudget.timeFrame === true? categoryBudgets.FashionBudget.weeklyValue: categoryBudgets.FashionBudget.monthlyValue}</IonText>
                 <IonProgressBar id='fashionBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    <Filter7Icon />
+                    {categoryBudgets.FashionBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -180,10 +181,10 @@ function Budget() {
 
             <IonItem id="electronicsBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setElec(true)} />
-                <IonText>{"Electronics: R" + renderedBudgets.ElecBudget}</IonText>
+                <IonText>Electronics: R{categoryBudgets.ElectronicsBudget.timeFrame === true? categoryBudgets.ElectronicsBudget.weeklyValue: categoryBudgets.ElectronicsBudget.monthlyValue}</IonText>
                 <IonProgressBar id='elecBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    <Filter7Icon />
+                    {categoryBudgets.ElectronicsBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -202,10 +203,10 @@ function Budget() {
 
             <IonItem id="houseBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setHouseHold(true)} />
-                <IonText>{"Household: R" + renderedBudgets.HouseBudget}</IonText>
+                <IonText>Household: R{categoryBudgets.HouseholdBudget.timeFrame === true? categoryBudgets.HouseholdBudget.weeklyValue: categoryBudgets.HouseholdBudget.monthlyValue}</IonText>
                 <IonProgressBar id='houseBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    <Filter7Icon />
+                    {categoryBudgets.HouseholdBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -290,10 +291,10 @@ function Budget() {
 
             <IonItem id="otherBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)} />
-                <IonText>{"Other: R" + renderedBudgets.OtherBudget}</IonText>
+                <IonText>Other: R{categoryBudgets.OtherBudget.timeFrame === true? categoryBudgets.OtherBudget.weeklyValue: categoryBudgets.OtherBudget.monthlyValue}</IonText>
                 <IonProgressBar id='otherBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
-                <IonFab horizontal='end' edge id='otherMonthlyFab'>
-                    <Filter7Icon id='otherWeeklyFab' />
+                <IonFab horizontal='end' edge>
+                    {categoryBudgets.OtherBudget.timeFrame === true? <Filter7Icon/>: <CalendarMonthIcon/>}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -494,9 +495,9 @@ function setProgressBars(budgets: any, totals: any) {
         newBudgets.OtherBudget = budgets.OtherBudget.monthlyValue
 
     }
-
+    
     globalSetRenderedBudgets(newBudgets)
-
+    
 }
 
 export function updateBudgets() {

@@ -17,8 +17,6 @@ import {
   useIonToast,
   IonGrid,
   IonCol,
-  IonRow,
-  IonLabel,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
