@@ -8,7 +8,6 @@ import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { addItemsA } from '../../api/apiCall';
-import { textAlign } from '@mui/system';
 
 const AddEntry: React.FC = () => {
     const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);

@@ -25,20 +25,33 @@ export const EditBudgets = () => {
   const [electronics, setElectronics] = useState(false);
   const [household, setHousehold] = useState(false);
   const [other, setOther] = useState(false);
+  const [hobby, setHobby] = useState(false);
+  const [vehicle, setVehicle] = useState(false);
+  const [healthcare, setHealthcare] = useState(false);
+
 
   const categoryStates = [
     { name: 'Food', isActive: food, id: "foodBudget" },
     { name: 'Fashion', isActive: fashion, id: "fashionBudget" },
     { name: 'Electronics', isActive: electronics, id: "electronicsBudget" },
     { name: 'Household', isActive: household, id: "houseBudget" },
-    { name: 'Other', isActive: other, id: "otherBudget" }
+    { name: 'Other', isActive: other, id: "otherBudget" },
+    { name: 'Hobby', isActive: hobby, id: "hobbyBudget" },
+    { name: 'Health', isActive: healthcare, id: "healthcareBudget" },
+    { name: 'Vehicle', isActive: vehicle, id: "vehicleBudget" }
+   
   ];
+
 
   const [foodInterval, setFoodInterval] = useState(false);
   const [fashionInterval, setFashionInterval] = useState(false);
   const [electronicsInterval, setElectronicsInterval] = useState(false);
   const [householdInterval, setHouseholdInterval] = useState(false);
   const [otherInterval, setOtherInterval] = useState(false);
+  const [hobbyInterval, setHobbyInterval] = useState(false);
+  const [vehicleInterval, setVehicleInterval] = useState(false);
+  const [healthcareInterval, setHealthcareInterval] = useState(false);
+
 
   //true for weekly
   //false for monthly
@@ -47,7 +60,11 @@ export const EditBudgets = () => {
     { name: 'Fashion', weekly: fashionInterval, id: "fashionInterval" },
     { name: 'Electronics', weekly: electronicsInterval, id: "electronicsInterval" },
     { name: 'Household', weekly: householdInterval, id: "houseInterval" },
-    { name: 'Other', weekly: otherInterval, id: "otherInterval" }
+    { name: 'Other', weekly: otherInterval, id: "otherInterval" },
+    { name: 'Hobby', weekly: hobbyInterval, id: "hobbyInterval" },
+    { name: 'Vehicle', weekly: vehicleInterval, id: "vehicleInterval" },
+    { name: 'Healthcare', weekly: healthcareInterval, id: "healthcareInterval" }
+
   ];
 
   const [budgetObject, setBudgetObject] = useState<any>([])
@@ -86,12 +103,13 @@ export const EditBudgets = () => {
         </IonHeader>
         <IonContent>
           <IonList>
+
             <IonItem>
-              <IonLabel>Food</IonLabel>
+              <IonLabel>Electronics</IonLabel>
               <IonItem>
-                <IonLabel>{foodInterval ? "Weekly" : "Monthly"}</IonLabel>
-                <IonToggle checked={foodInterval} onClick={() => setFoodInterval(!foodInterval)} color='secondary'></IonToggle>
-                <IonCheckbox slot="end" checked={food} onIonChange={e => setFood(e.detail.checked)} />
+                <IonLabel>{electronicsInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={electronicsInterval} onClick={() => setElectronicsInterval(!electronicsInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={electronics} onIonChange={e => setElectronics(e.detail.checked)} />
               </IonItem>
             </IonItem>
 
@@ -105,13 +123,32 @@ export const EditBudgets = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel>Electronics</IonLabel>
+              <IonLabel>Food</IonLabel>
               <IonItem>
-                <IonLabel>{electronicsInterval ? "Weekly" : "Monthly"}</IonLabel>
-                <IonToggle checked={electronicsInterval} onClick={() => setElectronicsInterval(!electronicsInterval)} color='secondary'></IonToggle>
-                <IonCheckbox slot="end" checked={electronics} onIonChange={e => setElectronics(e.detail.checked)} />
+                <IonLabel>{foodInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={foodInterval} onClick={() => setFoodInterval(!foodInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={food} onIonChange={e => setFood(e.detail.checked)} />
               </IonItem>
             </IonItem>
+
+            <IonItem>
+              <IonLabel>Healthcare</IonLabel>
+              <IonItem>
+                <IonLabel>{healthcareInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={healthcareInterval} onClick={() => setHealthcareInterval(!healthcareInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={healthcare} onIonChange={e => setHealthcare(e.detail.checked)} />
+              </IonItem>
+            </IonItem>
+
+            <IonItem>
+              <IonLabel>Hobby</IonLabel>
+              <IonItem>
+                <IonLabel>{hobbyInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={hobbyInterval} onClick={() => setHobbyInterval(!hobbyInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={hobby} onIonChange={e => setHobby(e.detail.checked)} />
+              </IonItem>
+            </IonItem>
+
 
             <IonItem>
               <IonLabel>Household</IonLabel>
@@ -119,6 +156,15 @@ export const EditBudgets = () => {
                 <IonLabel>{householdInterval ? "Weekly" : "Monthly"}</IonLabel>
                 <IonToggle checked={householdInterval} onClick={() => setHouseholdInterval(!householdInterval)} color='secondary'></IonToggle>
                 <IonCheckbox slot="end" checked={household} onIonChange={e => setHousehold(e.detail.checked)} />
+              </IonItem>
+            </IonItem>
+
+            <IonItem>
+              <IonLabel>Vehicle</IonLabel>
+              <IonItem>
+                <IonLabel>{vehicleInterval ? "Weekly" : "Monthly"}</IonLabel>
+                <IonToggle checked={vehicleInterval} onClick={() => setVehicleInterval(!vehicleInterval)} color='secondary'></IonToggle>
+                <IonCheckbox slot="end" checked={vehicle} onIonChange={e => setVehicle(e.detail.checked)} />
               </IonItem>
             </IonItem>
 
