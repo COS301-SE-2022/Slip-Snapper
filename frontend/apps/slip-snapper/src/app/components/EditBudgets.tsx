@@ -62,8 +62,9 @@ export const EditBudgets = () => {
     { name: 'Household', weekly: householdInterval, id: "houseInterval" },
     { name: 'Other', weekly: otherInterval, id: "otherInterval" },
     { name: 'Hobby', weekly: hobbyInterval, id: "hobbyInterval" },
+    { name: 'Healthcare', weekly: healthcareInterval, id: "healthcareInterval" },
     { name: 'Vehicle', weekly: vehicleInterval, id: "vehicleInterval" },
-    { name: 'Healthcare', weekly: healthcareInterval, id: "healthcareInterval" }
+   
 
   ];
 
@@ -232,6 +233,7 @@ export const EditBudgets = () => {
     if (user == null) {
       user = { id: 24 }
     }
+
 
     if (globalCategoryBudgets !== undefined) {
       globalCategoryBudgets.FoodBudget.active = categoryStates[0].isActive
