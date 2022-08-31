@@ -62,8 +62,9 @@ export const EditBudgets = () => {
     { name: 'Household', weekly: householdInterval, id: "houseInterval" },
     { name: 'Other', weekly: otherInterval, id: "otherInterval" },
     { name: 'Hobby', weekly: hobbyInterval, id: "hobbyInterval" },
+    { name: 'Healthcare', weekly: healthcareInterval, id: "healthcareInterval" },
     { name: 'Vehicle', weekly: vehicleInterval, id: "vehicleInterval" },
-    { name: 'Healthcare', weekly: healthcareInterval, id: "healthcareInterval" }
+   
 
   ];
 
@@ -204,19 +205,27 @@ export const EditBudgets = () => {
     categoryStates[2].isActive = budgets.ElectronicsBudget.active
     categoryStates[3].isActive = budgets.HouseholdBudget.active
     categoryStates[4].isActive = budgets.OtherBudget.active
+    categoryStates[5].isActive = budgets.HobbyBudget.active
+    categoryStates[6].isActive = budgets.HealthcareBudget.active
+    categoryStates[7].isActive = budgets.VehicleBudget.active
 
     setFood(budgets.FoodBudget.active)
     setFashion(budgets.FashionBudget.active)
     setElectronics(budgets.ElectronicsBudget.active)
     setHousehold(budgets.HouseholdBudget.active)
     setOther(budgets.OtherBudget.active)
+    setHobby(budgets.HobbyBudget.active)
+    setHealthcare(budgets.HealthcareBudget.active)
+    setVehicle(budgets.VehicleBudget.active)
 
     setFoodInterval(budgets.FoodBudget.timeFrame)
     setFashionInterval(budgets.FashionBudget.timeFrame)
     setElectronicsInterval(budgets.ElectronicsBudget.timeFrame)
     setHouseholdInterval(budgets.HouseholdBudget.timeFrame)
     setOtherInterval(budgets.OtherBudget.timeFrame)
-
+    setHobbyInterval(budgets.HobbyBudget.timeFrame)
+    setHealthcareInterval(budgets.HealthcareBudget.timeFrame)
+    setVehicleInterval(budgets.VehicleBudget.timeFrame)
   }
 
   function setStates(budgetIntervals: any, categoryStates: any) {
@@ -225,18 +234,26 @@ export const EditBudgets = () => {
       user = { id: 24 }
     }
 
+
     if (globalCategoryBudgets !== undefined) {
       globalCategoryBudgets.FoodBudget.active = categoryStates[0].isActive
       globalCategoryBudgets.FashionBudget.active = categoryStates[1].isActive
       globalCategoryBudgets.ElectronicsBudget.active = categoryStates[2].isActive
       globalCategoryBudgets.HouseholdBudget.active = categoryStates[3].isActive
       globalCategoryBudgets.OtherBudget.active = categoryStates[4].isActive
+      globalCategoryBudgets.HobbyBudget.active = categoryStates[5].isActive
+      globalCategoryBudgets.HealthcareBudget.active = categoryStates[6].isActive
+      globalCategoryBudgets.VehicleBudget.active = categoryStates[7].isActive
+
 
       globalCategoryBudgets.FoodBudget.timeFrame = budgetIntervals[0].weekly
       globalCategoryBudgets.FashionBudget.timeFrame = budgetIntervals[1].weekly
       globalCategoryBudgets.ElectronicsBudget.timeFrame = budgetIntervals[2].weekly
       globalCategoryBudgets.HouseholdBudget.timeFrame = budgetIntervals[3].weekly
       globalCategoryBudgets.OtherBudget.timeFrame = budgetIntervals[4].weekly
+      globalCategoryBudgets.HobbyBudget.timeFrame = budgetIntervals[5].weekly
+      globalCategoryBudgets.HealthcareBudget.timeFrame = budgetIntervals[6].weekly
+      globalCategoryBudgets.VehicleBudget.timeFrame = budgetIntervals[7].weekly
     }
     setGeneralBudget(user.id, globalCategoryBudgets)
   }
