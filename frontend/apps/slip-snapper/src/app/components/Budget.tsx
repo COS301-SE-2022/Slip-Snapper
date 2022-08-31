@@ -29,6 +29,10 @@ function Budget() {
     const [elec, setElec] = useState(false);
     const [houseHold, setHouseHold] = useState(false);
     const [other, setOther] = useState(false);
+    const [healthcare, setHealthCare] = useState(false);
+    const [hobby, setHobby] = useState(false);
+    const [vehicle, setVehicle] = useState(false);
+
 
     const [categorySpent, setCategorySpent] = useState({
         Food: 0,
@@ -36,6 +40,10 @@ function Budget() {
         Electronics: 0,
         household: 0,
         Other: 0,
+        Healthcare: 0,
+        Hobby: 0,
+        Vehicle: 0
+
     });
 
     //User Expenditure
@@ -75,9 +83,34 @@ function Budget() {
             weeklyValue: 0,
             monthlyValue: 0
         },
+        HealthcareBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        HobbyBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        VehicleBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
     });
-    
-    const [renderedBudgets, setRenderedBudgets] = useState()
+
+    const [renderedBudgets, setRenderedBudgets] = useState({
+        FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0
+        , HealthcareBudget: 0, HobbyBudget: 0, VehicleBudget: 0
+    })
+
     globalCategoryBudgets = categoryBudgets;
     globalCategorySpent = categorySpent;
     globalRenderedBudgets = renderedBudgets
@@ -187,6 +220,72 @@ function Budget() {
                         text: 'Apply',
                         handler: (alertData) => {
                             applyToBudget("house", alertData.house)
+                        }
+                    }]}></IonAlert>
+
+            <IonItem id="hobbyBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setHobby(true)} />
+                <IonText>{"Hobby: R" + renderedBudgets.HobbyBudget}</IonText>
+                <IonProgressBar id='hobbyBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge id='hobbyMonthlyFab'>
+                    <Filter7Icon id='hobbyWeeklyFab' />
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={hobby}
+                onDidDismiss={() => setHobby(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'hobby', placeholder: 'Insert Hobby Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("hobby", alertData.hobby)
+                        }
+                    }]}></IonAlert>
+
+            <IonItem id="healthcareBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setHealthCare(true)} />
+                <IonText>{"Healthcare: R" + renderedBudgets.HealthcareBudget}</IonText>
+                <IonProgressBar id='healthcareBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge id='healthcareMonthlyFab'>
+                    <Filter7Icon id='hobbyWeeklyFab' />
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={healthcare}
+                onDidDismiss={() => setHealthCare(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'healthcare', placeholder: 'Insert Healthcare Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("healthcare", alertData.healthcare)
+                        }
+                    }]}></IonAlert>
+
+            <IonItem id="vehicleBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setVehicle(true)} />
+                <IonText>{"Vehicle: R" + renderedBudgets.VehicleBudget}</IonText>
+                <IonProgressBar id='vehicleBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge id='vehicleeMonthlyFab'>
+                    <Filter7Icon id='hobbyWeeklyFab' />
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={vehicle}
+                onDidDismiss={() => setVehicle(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'vehicle', placeholder: 'Insert Vehicle Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("vehicle", alertData.vehicle)
                         }
                     }]}></IonAlert>
 
@@ -339,8 +438,6 @@ function isExceeded(budget: number, barID: string, total: number) {
     }
 }
 function setProgressBars(budgets: any, totals: any) {
-    console.log(budgets)
-
     const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0 }
 
     if (budgets.FoodBudget.timeFrame === true) {
@@ -388,6 +485,9 @@ function setProgressBars(budgets: any, totals: any) {
     if (budgets.OtherBudget.timeFrame === true) {
         isExceeded(budgets.OtherBudget.weeklyValue, "otherBar", totals.Other);
         newBudgets.OtherBudget = budgets.OtherBudget.weeklyValue
+        console.log(document.getElementById("otherMonthlyFab"))
+
+        // document.getElementById("otherMonthlyFab")?.setAttribute("display","none");
 
     }
     else {

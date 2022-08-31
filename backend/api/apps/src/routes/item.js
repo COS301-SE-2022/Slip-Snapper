@@ -59,9 +59,7 @@ router.post('', async (req,res)=>{
         })
     }
 
-    let date1 = new Date().toISOString()
-
-    const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date1, total, values);
+    const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date, total, values);
 
     let status = 200;
 

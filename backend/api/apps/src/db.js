@@ -336,8 +336,8 @@ async function getItemsReport(userid, start, end) {
 
             for (var it of itemL.items) {
                 itemList.push({
-                    itemName: it.data.item,
-                    type: it.data.itemType,
+                    itemName: it.data[0].item,
+                    type: it.data[0].itemType,
                     quantity: it.itemQuantity,
                     price: it.itemPrice,
                     location: location,
@@ -1754,12 +1754,12 @@ async function getUserGeneralBudgets(userId, start, end) {
 
             for (it of itemL.items) {
 
-                if (it.data[0].itemType === 'food') {
+                if (it.data[0].itemType === 'Food') {
 
                     totals.Food += it.itemPrice
                 }
 
-                if (it.data[0].itemType === 'fashion') {
+                if (it.data[0].itemType === 'Fashion') {
                     totals.Fashion += it.itemPrice
                 }
 
@@ -1767,11 +1767,11 @@ async function getUserGeneralBudgets(userId, start, end) {
                     totals.Electronics += it.itemPrice
                 }
 
-                if (it.data[0].itemType === 'household') {
+                if (it.data[0].itemType === 'Household') {
                     totals.houseHold += it.itemPrice
                 }
 
-                if (it.data[0].itemType === 'other') {
+                if (it.data[0].itemType === 'Other') {
                     totals.Other += it.itemPrice
                 }
             }

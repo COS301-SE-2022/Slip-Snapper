@@ -44,7 +44,7 @@ async function sortItemsIntoCategories(itemList){
         totals[0].itemNum += 1
         item.price = parseFloat(item.price).toFixed(2)
         switch (item.type) {
-            case "food": 
+            case "Food": 
                 types.totals.Food[3] += parseFloat(item.price)
                 types.totals.Food[2] += 1
                 types.Food.push(item);
@@ -54,12 +54,12 @@ async function sortItemsIntoCategories(itemList){
                 types.totals.Electronics[2] += 1
                 types.Electronics.push(item);
                 break
-            case "fashion": 
+            case "Fashion": 
                 types.totals.Fashion[3] += parseFloat(item.price)
                 types.totals.Fashion[2] += 1
                 types.Fashion.push(item);
                 break
-            case "household": 
+            case "Household": 
                 types.totals.Household[3] += parseFloat(item.price)
                 types.totals.Household[2] += 1
                 types.Household.push(item);
@@ -172,7 +172,6 @@ router.post('/pdf', async (req,res)=>{
     if(report){
         const path = `${userName}/${name}`
         const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
-    
         const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
         try {
