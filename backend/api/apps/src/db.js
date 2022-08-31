@@ -1,4 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client');
+const { toProjectName } = require('nx/src/config/workspaces');
 
 const prisma = new PrismaClient()
 
@@ -351,7 +352,24 @@ async function getItemsReport(userid, start, end) {
  */
 async function addItem(userid, location, date, total, data) {
     try {
-       
+        const highestSlip = await prisma.slip.findMany({
+                take: 1,
+                where: {
+                    usersId: userid
+                },
+                orderBy: {
+                    id: "desc"
+                },
+                select: {
+                    slipNumber: true
+                }
+            })
+           
+            let newSlipNumber = 1
+            if (highestSlip.length>0) {
+                newSlipNumber = highestSlip[0].slipNumber + 1
+            }
+           
 
         const slip = await prisma.slip.create({
             data: {
@@ -359,8 +377,10 @@ async function addItem(userid, location, date, total, data) {
                 total: total,
                 usersId: userid,
                 transactionDate: date,
+                slipNumber:newSlipNumber
             }
         })
+        
 
         if (slip == null) {
             return {
@@ -371,15 +391,14 @@ async function addItem(userid, location, date, total, data) {
         }
 
         const dataItems = await prisma.dataItem.findMany({})
-
-        let additions = []
         let dataIds
+        let count = 0
         for (let item of data) {
             item.slipId = slip.id;
             let matched = false
-
+            count++
             for (const dataItem of dataItems) {
-                if (item.item == dataItem.item) {
+                if (item.item == dataItem.item && item.itemType == dataItem.itemType) {
                     dataIds = dataItem.id;
                     matched = true;
                 }
@@ -409,25 +428,24 @@ async function addItem(userid, location, date, total, data) {
                 }
             })
 
+            //const transaction= await prisma.$transaction([slip,dataItems,newItem])
+            if (newItem == null) {
+                return {
+                    message: "Item/s could not be added",
+                    numItems: 0,
+                };
+            }
         }
-
-
-
-        if (items == null) {
-            return {
-                message: "Item/s could not be added",
-                numItems: 0,
-            };
-        }
-
         return {
             message: "Item/s has been added",
-            numItems: items.count,
+            numItems: count,
         };
+
+
     }
     catch (error) {
         return {
-            message: "Error creating Slip nad associated Item/s",
+            message: "Error creating Slip and associated Item/s",
             numItems: 0,
         };
     }
@@ -1154,9 +1172,13 @@ async function getMostSpentATStore(userid) {
 async function getWeeklyExpenditure(userid) {
     try {
         const date1 = new Date()
-        const lastweek = date1.setDate(date1.getDate() - 7);
+        date1.setDate(date1.getDate() - 7);
+        let lastweek = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const date2 = new Date()
-        const otherWeek = date2.setDate(date2.getDate() - 14)
+        date2.setDate(date2.getDate() - 14)
+        let otherWeek = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
 
         const weeklyExpenditure = await prisma.slip.findMany({
             where: {
@@ -1171,17 +1193,17 @@ async function getWeeklyExpenditure(userid) {
         let recentWeek = 0;
         let previousWeek = 0;
         for (const weekly of weeklyExpenditure) {
-            if (weekly.transactionDate.toISOString() >= date1.toISOString()) {
+            if (weekly.transactionDate >= lastweek) {
                 recentWeek += weekly.total;
             }
-            else if (weekly.transactionDate.toISOString() >= date2.toISOString()) {
+            else if (weekly.transactionDate >= otherWeek) {
                 previousWeek += weekly.total;
             }
         }
 
         return {
             recentWeek: recentWeek,
-            previousWeek: recentMonth
+            previousWeek: previousWeek
         }
     }
     catch (error) {
@@ -1201,9 +1223,11 @@ async function getWeeklyExpenditure(userid) {
 async function getMonthlyExpenditure(userid) {
     try {
         const date1 = new Date()
-        const lastMonth = date1.setDate(date1.getDate() - 4 * 7);
+        date1.setDate(date1.getDate() - 30)
+        let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date2 = new Date()
-        const otherMonth = date2.setDate(date2.getDate() - 8 * 7)
+        date2.setDate(date2.getDate() - 30 * 2)
+        let otherMonth = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const MonthlyExpenditure = await prisma.slip.findMany({
             where: {
@@ -1218,13 +1242,14 @@ async function getMonthlyExpenditure(userid) {
         let recentMonth = 0;
         let previousMonth = 0;
         for (const weekly of MonthlyExpenditure) {
-            if (weekly.transactionDate.toISOString() >= date1.toISOString()) {
+            if (weekly.transactionDate >= lastMonth) {
                 recentMonth += weekly.total;
             }
-            else if (weekly.transactionDate.toISOString() >= date2.toISOString()) {
+            else if (weekly.transactionDate >= otherMonth) {
                 previousMonth += weekly.total;
             }
         }
+       
 
         return {
             recentMonth: recentMonth,
@@ -1318,11 +1343,15 @@ async function getAllReports(userid) {
 async function getDailyWeeklyMonthlyReports(userid) {
     try {
         const date1 = new Date()
-        const daily = date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate() - 1)
+        let daily = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date2 = new Date()
-        const weekly = date2.setDate(date1.getDate() - 7)
+        date2.setDate(date2.getDate() - 7)
+        let weekly = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date3 = new Date()
-        const monthly = date3.setDate(date1.getDate() - 30)
+        date3.setDate(date3.getDate() - 30)
+        let monthly = date3.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
 
         const userReports = await prisma.reports.findMany({
             where: {
@@ -1349,7 +1378,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
         let weeklyReportsList = []
         let monthlyReportsList = []
         for (const report of userReports) {
-            if (report.generatedDate.toISOString() >= date1.toISOString()) {
+            if (report.generatedDate >= daily) {
                 numReports++
                 dailyReportsList.push({
                     reportId: report.id,
@@ -1357,7 +1386,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
                     reportDate: report.generatedDate
                 })
             }
-            if (report.generatedDate.toISOString() >= date2.toISOString()) {
+            if (report.generatedDate >= weekly) {
                 numReports++
                 weeklyReportsList.push({
                     reportId: report.id,
@@ -1365,7 +1394,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
                     reportDate: report.generatedDate
                 })
             }
-            if (report.generatedDate.toISOString() >= date3.toISOString()) {
+            if (report.generatedDate >= monthly) {
                 numReports++
                 monthlyReportsList.push({
                     reportId: report.id,
@@ -1452,10 +1481,34 @@ async function getRecentReports(userid) {
  */
 async function createReportRecord(userid, reportName, reportTotal) {
     try {
+        const date1 = new Date()
+        date1.setDate(date1.getDate())
+        let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        const highestReport= await prisma.reports.findMany({
+            take: 1,
+            where: {
+                usersId: userid
+            },
+            orderBy: {
+                id: "desc"
+            },
+            select: {
+                reportNumber: true
+            }
+        })
+       
+        let newReportNumber = 1
+        if (highestReport.length>0) {
+            newReportNumber = highestReport[0].reportNumber + 1
+        }
+       
         const userReports = await prisma.reports.create({
             data: {
                 usersId: userid,
-                reportName: reportName
+                reportName: reportName,
+                reportTotal: reportTotal,
+                generatedDate: todaysDate,
+                reportNumber: newReportNumber
             }
         })
 
@@ -1538,13 +1591,15 @@ async function retrieveAllSlips(userid) {
 async function todaysReports(userid) {
     try {
         const date1 = new Date()
-        const lastweek = date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate() - 1)
+        let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const todaysReport = await prisma.slip.findMany({
 
             where: {
                 usersId: userid,
                 transactionDate: {
-                    gte: date1
+                    gte: todaysDate
                 }
             },
             select: {
@@ -1567,7 +1622,7 @@ async function todaysReports(userid) {
             where: {
                 usersId: userid,
                 transactionDate: {
-                    gte: date1
+                    gte: todaysDate
                 }
             },
             _sum: {
