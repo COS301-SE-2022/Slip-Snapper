@@ -94,7 +94,29 @@ async function addUser(username, password, firstname, lastname) {
                 timeFrame: false,
                 weeklyValue: 0,
                 monthlyValue: 0
+            },
+            HealthcareBudget:
+            {
+                active: false,
+                timeFrame: false,
+                weeklyValue: 0,
+                monthlyValue: 0
+            },
+            HobbyBudget:
+            {
+                active: false,
+                timeFrame: false,
+                weeklyValue: 0,
+                monthlyValue: 0
+            },
+            VehicleBudget:
+            {
+                active: false,
+                timeFrame: false,
+                weeklyValue: 0,
+                monthlyValue: 0
             }
+
         }
         let budgetObjectString = JSON.stringify(budgetObject)
         const user = await prisma.user.create({
@@ -353,23 +375,23 @@ async function getItemsReport(userid, start, end) {
 async function addItem(userid, location, date, total, data) {
     try {
         const highestSlip = await prisma.slip.findMany({
-                take: 1,
-                where: {
-                    usersId: userid
-                },
-                orderBy: {
-                    id: "desc"
-                },
-                select: {
-                    slipNumber: true
-                }
-            })
-           
-            let newSlipNumber = 1
-            if (highestSlip.length>0) {
-                newSlipNumber = highestSlip[0].slipNumber + 1
+            take: 1,
+            where: {
+                usersId: userid
+            },
+            orderBy: {
+                id: "desc"
+            },
+            select: {
+                slipNumber: true
             }
-           
+        })
+
+        let newSlipNumber = 1
+        if (highestSlip.length > 0) {
+            newSlipNumber = highestSlip[0].slipNumber + 1
+        }
+
 
         const slip = await prisma.slip.create({
             data: {
@@ -377,10 +399,10 @@ async function addItem(userid, location, date, total, data) {
                 total: total,
                 usersId: userid,
                 transactionDate: date,
-                slipNumber:newSlipNumber
+                slipNumber: newSlipNumber
             }
         })
-        
+
 
         if (slip == null) {
             return {
@@ -1249,7 +1271,7 @@ async function getMonthlyExpenditure(userid) {
                 previousMonth += weekly.total;
             }
         }
-       
+
 
         return {
             recentMonth: recentMonth,
@@ -1484,7 +1506,7 @@ async function createReportRecord(userid, reportName, reportTotal) {
         const date1 = new Date()
         date1.setDate(date1.getDate())
         let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-        const highestReport= await prisma.reports.findMany({
+        const highestReport = await prisma.reports.findMany({
             take: 1,
             where: {
                 usersId: userid
@@ -1496,12 +1518,12 @@ async function createReportRecord(userid, reportName, reportTotal) {
                 reportNumber: true
             }
         })
-       
+
         let newReportNumber = 1
-        if (highestReport.length>0) {
+        if (highestReport.length > 0) {
             newReportNumber = highestReport[0].reportNumber + 1
         }
-       
+
         const userReports = await prisma.reports.create({
             data: {
                 usersId: userid,
