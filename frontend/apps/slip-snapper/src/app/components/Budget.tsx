@@ -38,7 +38,7 @@ function Budget() {
         Food: 0,
         Fashion: 0,
         Electronics: 0,
-        household: 0,
+        Household: 0,
         Other: 0,
         Healthcare: 0,
         Hobby: 0,
@@ -390,7 +390,7 @@ function Budget() {
                     categoryBudgets.HouseholdBudget.monthlyValue = newBudget
                 }
                 setCategoryBudgets(categoryBudgets)
-                isExceeded(newBudget, "houseBar", categorySpent.household)
+                isExceeded(newBudget, "houseBar", categorySpent.Household)
                 setGeneralBudget(user.id, categoryBudgets)
                 present("New Household budget set", 1200)
             }
@@ -410,6 +410,60 @@ function Budget() {
                 isExceeded(newBudget, "otherBar", categorySpent.Other)
                 setGeneralBudget(user.id, categoryBudgets)
                 present("New Other budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "healthcare") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.HealthcareBudget.timeFrame === true) {
+                    categoryBudgets.HealthcareBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.HealthcareBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "healthcareBar", categorySpent.Healthcare)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Healthcare budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "hobby") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.HobbyBudget.timeFrame === true) {
+                    categoryBudgets.HobbyBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.HobbyBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "hobbyBar", categorySpent.Hobby)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Hobby budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "vehicle") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.VehicleBudget.timeFrame === true) {
+                    categoryBudgets.VehicleBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.VehicleBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "vehicleBar", categorySpent.Vehicle)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Vehicle budget set", 1200)
             }
         }
         setProgressBars(categoryBudgets, categorySpent)
@@ -438,7 +492,8 @@ function isExceeded(budget: number, barID: string, total: number) {
     }
 }
 function setProgressBars(budgets: any, totals: any) {
-    const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0 }
+    const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0, HealthcareBudget: 0, HobbyBudget: 0, VehicleBudget: 0 }
+
 
     if (budgets.FoodBudget.timeFrame === true) {
         isExceeded(budgets.FoodBudget.weeklyValue, "foodBar", totals.Food);
@@ -472,12 +527,12 @@ function setProgressBars(budgets: any, totals: any) {
     }
 
     if (budgets.HouseholdBudget.timeFrame === true) {
-        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.household);
+        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.Household);
         newBudgets.HouseBudget = budgets.HouseholdBudget.weeklyValue
 
     }
     else {
-        isExceeded(budgets.HouseholdBudget.monthlyValue, "houseBar", totals.household);
+        isExceeded(budgets.HouseholdBudget.monthlyValue, "houseBar", totals.Household);
         newBudgets.HouseBudget = budgets.HouseholdBudget.monthlyValue
 
     }
@@ -485,15 +540,45 @@ function setProgressBars(budgets: any, totals: any) {
     if (budgets.OtherBudget.timeFrame === true) {
         isExceeded(budgets.OtherBudget.weeklyValue, "otherBar", totals.Other);
         newBudgets.OtherBudget = budgets.OtherBudget.weeklyValue
-        console.log(document.getElementById("otherMonthlyFab"))
-
-        // document.getElementById("otherMonthlyFab")?.setAttribute("display","none");
 
     }
     else {
         isExceeded(budgets.OtherBudget.monthlyValue, "otherBar", totals.Other);
         newBudgets.OtherBudget = budgets.OtherBudget.monthlyValue
 
+    }
+
+    if (budgets.HealthcareBudget.timeFrame === true) {
+        isExceeded(budgets.HealthcareBudget.weeklyValue, "healthcareBar", totals.Healthcare);
+        newBudgets.HealthcareBudget = budgets.HealthcareBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.HealthcareBudget.monthlyValue, "healthcareBar", totals.Healthcare);
+        newBudgets.HealthcareBudget = budgets.HealthcareBudget.monthlyValue
+    }
+
+    if (budgets.VehicleBudget.timeFrame === true) {
+        isExceeded(budgets.VehicleBudget.weeklyValue, "vehicleBar", totals.Vehicle);
+        newBudgets.VehicleBudget = budgets.VehicleBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.VehicleBudget.monthlyValue, "vehicleBar", totals.Vehicle);
+        newBudgets.VehicleBudget = budgets.VehicleBudget.monthlyValue
+    }
+
+    if (budgets.HobbyBudget.timeFrame === true) {
+        isExceeded(budgets.HobbyBudget.weeklyValue, "hobbyBar", totals.Hobby);
+        newBudgets.HobbyBudget = budgets.HobbyBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.HobbyBudget.monthlyValue, "hobbyBar", totals.Hobby);
+        newBudgets.HobbyBudget = budgets.HobbyBudget.monthlyValue
     }
     
     globalSetRenderedBudgets(newBudgets)

@@ -1745,8 +1745,11 @@ async function getUserGeneralBudgets(userId, start, end) {
             Food: 0,
             Fashion: 0,
             Electronics: 0,
-            houseHold: 0,
+            Household: 0,
             Other: 0,
+            Healthcare:0,
+            Hobby:0,
+            Vehicle:0,
         }
 
 
@@ -1768,11 +1771,23 @@ async function getUserGeneralBudgets(userId, start, end) {
                 }
 
                 if (it.data[0].itemType === 'Household') {
-                    totals.houseHold += it.itemPrice
+                    totals.Household += it.itemPrice
                 }
 
                 if (it.data[0].itemType === 'Other') {
                     totals.Other += it.itemPrice
+                }
+
+                if (it.data[0].itemType === 'Healthcare') {
+                    totals.Healthcare += it.itemPrice
+                }
+
+                if (it.data[0].itemType === 'Hobby') {
+                    totals.Hobby += it.itemPrice
+                }
+
+                if (it.data[0].itemType === 'Vehicle') {
+                    totals.Vehicle += it.itemPrice
                 }
             }
         }
