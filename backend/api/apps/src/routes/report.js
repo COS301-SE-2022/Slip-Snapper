@@ -31,12 +31,17 @@ const router = require("express").Router();
  * @returns JSON object of arrays with the items in them
  */
 async function sortItemsIntoCategories(itemList){
-    let types = { Food : [], Electronics : [], Fashion : [], Household : [], Other : [], totals: { 
+    let types = {
+        Food: [], Electronics: [], Fashion: [], Household: [], Healthcare: [], Hobby: [], Vehicle: [], Other : [], totals: { 
         Other: ["", "", 0, 0 ],
         Food : ["", "", 0, 0 ], 
         Electronics : ["", "", 0, 0 ], 
         Fashion : ["", "", 0, 0 ], 
         Household : ["", "", 0, 0 ],
+        Healthcare: ["", "", 0, 0],
+        Hobby: ["", "", 0, 0],
+        Vehicle: ["", "", 0, 0],
+
     }}
     let totals =  [{price:0, itemNum:0}]
     for(const item of itemList){
@@ -44,7 +49,7 @@ async function sortItemsIntoCategories(itemList){
         totals[0].itemNum += 1
         item.price = parseFloat(item.price).toFixed(2)
         switch (item.type) {
-            case "food": 
+            case "Food": 
                 types.totals.Food[3] += parseFloat(item.price)
                 types.totals.Food[2] += 1
                 types.Food.push(item);
@@ -54,16 +59,31 @@ async function sortItemsIntoCategories(itemList){
                 types.totals.Electronics[2] += 1
                 types.Electronics.push(item);
                 break
-            case "fashion": 
+            case "Fashion": 
                 types.totals.Fashion[3] += parseFloat(item.price)
                 types.totals.Fashion[2] += 1
                 types.Fashion.push(item);
                 break
-            case "household": 
+            case "Household": 
                 types.totals.Household[3] += parseFloat(item.price)
                 types.totals.Household[2] += 1
                 types.Household.push(item);
                 break
+            // case "Healthcare":
+            //     types.totals.Healthcare[3] += parseFloat(item.price)
+            //     types.totals.Healthcare[2] += 1
+            //     types.Healthcare.push(item);
+            //     break
+            // case "Hobby":
+            //     types.totals.Hobby[3] += parseFloat(item.price)
+            //     types.totals.Hobby[2] += 1
+            //     types.Hobby.push(item);
+            //     break
+            // case "Vehicle":
+            //     types.totals.Vehicle[3] += parseFloat(item.price)
+            //     types.totals.Vehicle[2] += 1
+            //     types.Vehicle.push(item);
+            //     break
             default: 
                 types.totals.Other[3] += parseFloat(item.price)
                 types.totals.Other[2] += 1
@@ -172,7 +192,6 @@ router.post('/pdf', async (req,res)=>{
     if(report){
         const path = `${userName}/${name}`
         const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
-    
         const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
         try {

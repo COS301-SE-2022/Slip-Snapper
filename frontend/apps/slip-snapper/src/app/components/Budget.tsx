@@ -29,13 +29,21 @@ function Budget() {
     const [elec, setElec] = useState(false);
     const [houseHold, setHouseHold] = useState(false);
     const [other, setOther] = useState(false);
+    const [healthcare, setHealthCare] = useState(false);
+    const [hobby, setHobby] = useState(false);
+    const [vehicle, setVehicle] = useState(false);
+
 
     const [categorySpent, setCategorySpent] = useState({
         Food: 0,
         Fashion: 0,
         Electronics: 0,
-        household: 0,
+        Household: 0,
         Other: 0,
+        Healthcare: 0,
+        Hobby: 0,
+        Vehicle: 0
+
     });
 
     //User Expenditure
@@ -75,9 +83,34 @@ function Budget() {
             weeklyValue: 0,
             monthlyValue: 0
         },
+        HealthcareBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        HobbyBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
+        VehicleBudget:
+        {
+            active: false,
+            timeFrame: false,
+            weeklyValue: 0,
+            monthlyValue: 0
+        },
     });
-    
-    const [renderedBudgets, setRenderedBudgets] = useState()
+
+    const [renderedBudgets, setRenderedBudgets] = useState({
+        FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0
+        , HealthcareBudget: 0, HobbyBudget: 0, VehicleBudget: 0
+    })
+
     globalCategoryBudgets = categoryBudgets;
     globalCategorySpent = categorySpent;
     globalRenderedBudgets = renderedBudgets
@@ -190,6 +223,72 @@ function Budget() {
                         }
                     }]}></IonAlert>
 
+            <IonItem id="hobbyBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setHobby(true)} />
+                <IonText>Hobby: R{categoryBudgets.HobbyBudget.timeFrame === true ? categoryBudgets.HobbyBudget.weeklyValue : categoryBudgets.HobbyBudget.monthlyValue}</IonText>
+                <IonProgressBar id='hobbyBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    {categoryBudgets.HobbyBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={hobby}
+                onDidDismiss={() => setHobby(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'hobby', placeholder: 'Insert Hobby Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("hobby", alertData.hobby)
+                        }
+                    }]}></IonAlert>
+
+            <IonItem id="healthcareBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setHealthCare(true)} />
+                <IonText>Healthcare: R{categoryBudgets.HealthcareBudget.timeFrame === true ? categoryBudgets.HealthcareBudget.weeklyValue : categoryBudgets.HealthcareBudget.monthlyValue}</IonText>
+                <IonProgressBar id='healthcareBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    {categoryBudgets.HealthcareBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={healthcare}
+                onDidDismiss={() => setHealthCare(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'healthcare', placeholder: 'Insert Healthcare Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("healthcare", alertData.healthcare)
+                        }
+                    }]}></IonAlert>
+
+            <IonItem id="vehicleBudget" className="categoryBudgets" color="tertiary">
+                <IonIcon className="edit-budget" src={create} onClick={() => setVehicle(true)} />
+                <IonText>Vehicle: R{categoryBudgets.VehicleBudget.timeFrame === true ? categoryBudgets.VehicleBudget.weeklyValue : categoryBudgets.VehicleBudget.monthlyValue}</IonText>
+                <IonProgressBar id='vehicleBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
+                <IonFab horizontal='end' edge>
+                    {categoryBudgets.VehicleBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
+                </IonFab>
+            </IonItem>
+            <IonAlert
+                isOpen={vehicle}
+                onDidDismiss={() => setVehicle(false)}
+                header={'Change Budget'}
+                inputs={[
+                    { name: 'vehicle', placeholder: 'Insert Vehicle Budget' },]}
+                buttons={[
+                    {
+                        text: 'Apply',
+                        handler: (alertData) => {
+                            applyToBudget("vehicle", alertData.vehicle)
+                        }
+                    }]}></IonAlert>
+
             <IonItem id="otherBudget" className="categoryBudgets" color="tertiary">
                 <IonIcon className="edit-budget" src={create} onClick={() => setOther(true)} />
                 <IonText>Other: R{categoryBudgets.OtherBudget.timeFrame === true? categoryBudgets.OtherBudget.weeklyValue: categoryBudgets.OtherBudget.monthlyValue}</IonText>
@@ -291,7 +390,7 @@ function Budget() {
                     categoryBudgets.HouseholdBudget.monthlyValue = newBudget
                 }
                 setCategoryBudgets(categoryBudgets)
-                isExceeded(newBudget, "houseBar", categorySpent.household)
+                isExceeded(newBudget, "houseBar", categorySpent.Household)
                 setGeneralBudget(user.id, categoryBudgets)
                 present("New Household budget set", 1200)
             }
@@ -311,6 +410,60 @@ function Budget() {
                 isExceeded(newBudget, "otherBar", categorySpent.Other)
                 setGeneralBudget(user.id, categoryBudgets)
                 present("New Other budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "healthcare") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.HealthcareBudget.timeFrame === true) {
+                    categoryBudgets.HealthcareBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.HealthcareBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "healthcareBar", categorySpent.Healthcare)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Healthcare budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "hobby") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.HobbyBudget.timeFrame === true) {
+                    categoryBudgets.HobbyBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.HobbyBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "hobbyBar", categorySpent.Hobby)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Hobby budget set", 1200)
+            }
+        }
+
+        if (categoryBudgetType === "vehicle") {
+
+            if (isNaN(newBudget) || newBudget < 0) {
+                present("Invalid Other budget set", 1200)
+            }
+
+            else {
+                if (categoryBudgets.VehicleBudget.timeFrame === true) {
+                    categoryBudgets.VehicleBudget.weeklyValue = newBudget
+                }
+                else { categoryBudgets.VehicleBudget.monthlyValue = newBudget }
+                setCategoryBudgets(categoryBudgets)
+                isExceeded(newBudget, "vehicleBar", categorySpent.Vehicle)
+                setGeneralBudget(user.id, categoryBudgets)
+                present("New Vehicle budget set", 1200)
             }
         }
         setProgressBars(categoryBudgets, categorySpent)
@@ -339,9 +492,8 @@ function isExceeded(budget: number, barID: string, total: number) {
     }
 }
 function setProgressBars(budgets: any, totals: any) {
-    console.log(budgets)
+    const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0, HealthcareBudget: 0, HobbyBudget: 0, VehicleBudget: 0 }
 
-    const newBudgets = { FoodBudget: 0, FashionBudget: 0, ElecBudget: 0, HouseBudget: 0, OtherBudget: 0 }
 
     if (budgets.FoodBudget.timeFrame === true) {
         isExceeded(budgets.FoodBudget.weeklyValue, "foodBar", totals.Food);
@@ -375,12 +527,12 @@ function setProgressBars(budgets: any, totals: any) {
     }
 
     if (budgets.HouseholdBudget.timeFrame === true) {
-        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.household);
+        isExceeded(budgets.HouseholdBudget.weeklyValue, "houseBar", totals.Household);
         newBudgets.HouseBudget = budgets.HouseholdBudget.weeklyValue
 
     }
     else {
-        isExceeded(budgets.HouseholdBudget.monthlyValue, "houseBar", totals.household);
+        isExceeded(budgets.HouseholdBudget.monthlyValue, "houseBar", totals.Household);
         newBudgets.HouseBudget = budgets.HouseholdBudget.monthlyValue
 
     }
@@ -394,6 +546,39 @@ function setProgressBars(budgets: any, totals: any) {
         isExceeded(budgets.OtherBudget.monthlyValue, "otherBar", totals.Other);
         newBudgets.OtherBudget = budgets.OtherBudget.monthlyValue
 
+    }
+
+    if (budgets.HealthcareBudget.timeFrame === true) {
+        isExceeded(budgets.HealthcareBudget.weeklyValue, "healthcareBar", totals.Healthcare);
+        newBudgets.HealthcareBudget = budgets.HealthcareBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.HealthcareBudget.monthlyValue, "healthcareBar", totals.Healthcare);
+        newBudgets.HealthcareBudget = budgets.HealthcareBudget.monthlyValue
+    }
+
+    if (budgets.VehicleBudget.timeFrame === true) {
+        isExceeded(budgets.VehicleBudget.weeklyValue, "vehicleBar", totals.Vehicle);
+        newBudgets.VehicleBudget = budgets.VehicleBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.VehicleBudget.monthlyValue, "vehicleBar", totals.Vehicle);
+        newBudgets.VehicleBudget = budgets.VehicleBudget.monthlyValue
+    }
+
+    if (budgets.HobbyBudget.timeFrame === true) {
+        isExceeded(budgets.HobbyBudget.weeklyValue, "hobbyBar", totals.Hobby);
+        newBudgets.HobbyBudget = budgets.HobbyBudget.weeklyValue
+
+
+    }
+    else {
+        isExceeded(budgets.HobbyBudget.monthlyValue, "hobbyBar", totals.Hobby);
+        newBudgets.HobbyBudget = budgets.HobbyBudget.monthlyValue
     }
     
     globalSetRenderedBudgets(newBudgets)
