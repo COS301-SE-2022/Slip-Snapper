@@ -59,7 +59,7 @@ const SlipItems: React.FC = () => {
                                         <IonLabel>
                                             {item.transactionDate.split('T')[0].replace(/-/gi,"/").split('/').reverse().join('/') + " - " + item.location}
                                         </IonLabel>
-                                        { " [ Total: R" + item.total + " ]"}
+                                        {"Total: R" + item.total.toFixed(2) }
                                         <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
                                             localStorage.removeItem('editSlip')
                                             localStorage.setItem('editSlip', JSON.stringify(item))

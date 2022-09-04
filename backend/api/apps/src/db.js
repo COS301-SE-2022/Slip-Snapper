@@ -1652,6 +1652,9 @@ async function todaysReports(userid) {
             },
         })
 
+        if (todaystotal._sum.total===null)
+            todaystotal._sum.total=0;
+
         return {
             message: "Today's Stats retrieved",
             sum: sum,

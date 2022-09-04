@@ -44,10 +44,10 @@ export const UserStats = () => {
                         <IonCardTitle>Weekly Expenditure</IonCardTitle>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='thisWeek'>Current Weekly Total: R{userStats.lastWeek.current}</IonText>
+                        <IonText data-testid='thisWeek'>Current Weekly Total: R{userStats.lastWeek.current.toFixed(2)}</IonText>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='lastWeek'>Previous Weekly Total: R{userStats.lastWeek.previous}</IonText>
+                        <IonText data-testid='lastWeek'>Previous Weekly Total: R{userStats.lastWeek.previous.toFixed(2)}</IonText>
                     </IonItem>
                 </IonCardHeader>
             </IonCard>
@@ -59,10 +59,10 @@ export const UserStats = () => {
                         <IonCardTitle>Monthly Expenditure</IonCardTitle>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='thisMonth'>Current Monthly Total: R{userStats.lastMonth.current}</IonText>
+                        <IonText data-testid='thisMonth'>Current Monthly Total: R{userStats.lastMonth.current.toFixed(2)}</IonText>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='lastMonth'>Previous Monthly Total: R{userStats.lastMonth.previous}</IonText>
+                        <IonText data-testid='lastMonth'>Previous Monthly Total: R{userStats.lastMonth.previous.toFixed(2)}</IonText>
                     </IonItem>
                 </IonCardHeader>
             </IonCard>
@@ -76,7 +76,7 @@ export const UserStats = () => {
                         <IonText data-testid='categoryName'>Category: {userStats.category.name}</IonText>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='categoryTotal'>Total Spent: R{userStats.category.amount}</IonText>
+                        <IonText data-testid='categoryTotal'>Total Spent: R{userStats.category.amount.toFixed(2)}</IonText>
                     </IonItem>
                 </IonCardHeader>
             </IonCard>
@@ -90,7 +90,7 @@ export const UserStats = () => {
                         <IonText data-testid='storeName'>Item: {userStats.mostExpensive.name}</IonText>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount}</IonText>
+                        <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount.toFixed(2)}</IonText>
                     </IonItem>
                 </IonCardHeader>
             </IonCard>
