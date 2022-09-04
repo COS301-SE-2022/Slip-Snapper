@@ -1320,7 +1320,8 @@ async function getAllReports(userid) {
             select: {
                 id: true,
                 reportName: true,
-                generatedDate: true
+                generatedDate: true,
+                reportNumber:true
             }
         })
 
@@ -1338,7 +1339,9 @@ async function getAllReports(userid) {
             reportsList.push({
                 reportId: report.id,
                 reportName: report.reportName,
-                reportDate: report.generatedDate
+                reportDate: report.generatedDate,
+                reportNumber:report.reportNumber,
+                otherName:report.reportName
             })
         }
         return {

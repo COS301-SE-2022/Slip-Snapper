@@ -164,7 +164,7 @@ async function generatePDF(name, object, today, period){
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
 router.post('/pdf', async (req,res)=>{
-    let { period, userName } = req.body;
+    let { period, userName, newReportNumber } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -184,7 +184,7 @@ router.post('/pdf', async (req,res)=>{
 
     const types = await sortItemsIntoCategories(result.itemList)
 
-    const name = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear() + "_" + period + ".pdf";
+    const name = today.getDate() + "-" + (today.getMonth() + 1) + "-" + today.getFullYear() + "_" + period + "_"+ newReportNumber+ ".pdf";
     const dir = __dirname + "/"
     const pdfName = dir + name
     const report = await generatePDF(pdfName, types, today, period)
