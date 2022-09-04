@@ -1,7 +1,9 @@
-import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonCardTitle, IonLabel, IonSearchbar, IonCol, IonGrid, IonRow, IonToggle } from '@ionic/react';
+import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonCardTitle, IonLabel, IonSearchbar, IonCol, IonGrid, IonRow, IonToggle, IonDatetime, IonIcon } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/SlipItems.css';
+import { calendarOutline, idCard } from 'ionicons/icons';
+
 
 
 const SlipItems: React.FC = () => {
@@ -18,6 +20,7 @@ const SlipItems: React.FC = () => {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
+                        orderSlips(apiResponse.data.slips)
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)
                     }
@@ -28,6 +31,14 @@ const SlipItems: React.FC = () => {
         name: '',
         id: 0,
     });
+
+    const current = new Date();
+    const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
+    const [filterDates, setFilterDates] = useState({
+        from: date,
+        to: date,
+    });
+
     return (
         <div>
             <IonItem>
@@ -47,8 +58,34 @@ const SlipItems: React.FC = () => {
 
                     <IonItem color='primary'>
                         <IonLabel>Date Filter</IonLabel>
-                        <IonToggle color='secondary' />
+                        <IonToggle color='secondary' onIonChange={e => toggleDates(e.detail.checked)} />
                     </IonItem>
+
+                    <div id='date-div' className='date-div' color="primary" >
+                        <IonCardTitle className="date elem">From Date:
+                            <IonItem className='date-item' color="tertiary">
+                                <IonDatetime value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                                <IonIcon icon={calendarOutline} slot="end" />
+                            </IonItem>
+                        </IonCardTitle>
+
+
+
+
+                        <IonCardTitle className="date elem">To Date:
+                            <IonItem className='date-item' color="tertiary">
+                                <IonDatetime value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                                <IonIcon icon={calendarOutline} slot="end" />
+                            </IonItem>
+                        </IonCardTitle>
+
+                        <IonItem color="primary" >
+                            <IonButton color="secondary" slot="end" onClick={() => {
+                                dateFilter()
+                            }}>Apply</IonButton>
+                        </IonItem>
+
+                    </div>
 
                 </IonCard>
 
@@ -122,18 +159,76 @@ const SlipItems: React.FC = () => {
 
         if (searchText !== undefined) {
             for (let i = 0; i < originalSlips.length; i++) {
-                console.log( )
                 if (originalSlips[i].location.toLowerCase().includes(searchText.toLowerCase())) {
                     temp.push(originalSlips[i]);
                 }
-                else if (originalSlips[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase()))
-                {
+                else if (originalSlips[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase())) {
                     temp.push(originalSlips[i]);
                 }
             }
         }
         setSlipItems(temp)
     }
+
+    function toggleDates(state: any) {
+        const temp = document.getElementById('date-div')
+        if (state) {
+            if (temp !== null)
+                temp.style.display = "block";
+        }
+
+        if (!state) {
+            if (temp !== null)
+                temp.style.display = "none";
+
+            setSlipItems(originalSlips)
+        }
+    }
+
+    function dateFilter() {
+        let fromDate: any, toDate: any;
+        if (document.getElementById("fromDate") !== null) {
+            fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        }
+
+        if (document.getElementById("toDate") !== null) {
+            toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        }
+            setSlipItems([])
+            const temp: any[] = [];
+
+            for (let i = 0; i < originalSlips.length; i++) {
+
+                if (fromDate <= originalSlips[i].transactionDate) {
+
+                    if (toDate >= originalSlips[i].transactionDate) {
+                        temp.push(originalSlips[i]);
+                    }
+                }
+            }
+            setSlipItems(temp)
+            setFilterDates({from:fromDate,to:toDate})
+    }
+
+    function orderSlips(slips:any)
+    {
+       let temp :any;
+
+       for(let i = 0 ; i < slips.length ;i++)
+       {
+           for (let j = 1; j < (slips.length-i); j++)
+           {
+               if (slips[j - 1].transactionDate < slips[j].transactionDate)
+               {
+                   temp = slips[j - 1]
+                   slips[j - 1]=slips[j]
+                   slips[j]=temp;
+               }
+           }
+       }
+    }
 };
 
+
 export default SlipItems;
+
