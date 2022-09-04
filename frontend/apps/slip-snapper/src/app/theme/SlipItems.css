@@ -34,6 +34,18 @@ ul.no-bullets {
     min-width: 20rem;
 }
 
+.date-div {
+    max-width: 200px;
+    margin-left: 40px;
+    display: none;
+}
+
+.date-item {
+   max-width: 200px;
+}
+
+
+
 /* @media only screen and (max-width: 2200px) {
     .slip-item-col {
         min-width: 20%;

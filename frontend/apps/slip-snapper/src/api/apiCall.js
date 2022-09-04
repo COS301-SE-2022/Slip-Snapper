@@ -128,7 +128,7 @@ export async function signupA( userName, first, last, password){
     })
 }
 
-export async function generateReportA( userName, userId, period ){
+export async function generateReportA( userName, userId, period,newReportNumber ){
     return axios({
         headers: headers,
         method: 'post',
@@ -136,7 +136,8 @@ export async function generateReportA( userName, userId, period ){
         data: {
             userName: userName,
             userId: userId,
-            period: period
+            period: period,
+            newReportNumber: newReportNumber
         }
     })
 }
