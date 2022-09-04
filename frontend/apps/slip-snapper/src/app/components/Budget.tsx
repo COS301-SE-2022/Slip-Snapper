@@ -468,7 +468,6 @@ function Budget() {
         }
         setProgressBars(categoryBudgets, categorySpent)
     }
-
 }
 
 function isExceeded(budget: number, barID: string, total: number) {
