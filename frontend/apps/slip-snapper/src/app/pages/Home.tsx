@@ -46,27 +46,11 @@ const Home: React.FC = () => {
     if (user == null) {
       user = { id: 24 };
     }
-    getRecentReports(user.id)
-      .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
-          setR(apiResponse.data.reports);
-        }
-      });
-
-    getThisWeeksReports(user.id)
-      .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
-          setThisWeeksReports(apiResponse.data.reports)
-        }
-      });
-
-    getTodayStats(user.id)
-      .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
-          setTodayItem(apiResponse.data.totalItems)
-          setTodayTotal(Number(apiResponse.data.totalSpent))
-        }
-      });
+    getRecentReports(user.id).then((apiResponse) => {
+      if (typeof apiResponse.data !== 'string') {
+        setR(apiResponse.data.reports);
+      }
+    });
 
     getThisWeeksReports(user.id).then((apiResponse) => {
       if (typeof apiResponse.data !== 'string') {
