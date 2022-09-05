@@ -103,9 +103,6 @@ const Home: React.FC = () => {
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
               <IonItem color="tertiary">Total Expenditure: R {todayTotal.toFixed(2)}</IonItem>
-              <IonItem color="tertiary">
-                Total Expenditure: R{todayTotal}{' '}
-              </IonItem>
               <IonItem color="tertiary"></IonItem>
             </IonCard>
           </IonCol>
