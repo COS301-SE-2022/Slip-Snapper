@@ -112,12 +112,12 @@ const Profile: React.FC = () => {
               </IonItem>
               <IonItem id="weekly-budget" className="center-items" color="tertiary">
                 <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
-                <IonText>Weekly: R{weeklyBudgetValue}</IonText>
+                  <IonText>Weekly: R{weeklyBudgetValue.toFixed(2)}</IonText>
                 <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
               <IonItem id="monthly-budget" className="center-items" color="tertiary">
                 <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
-                <IonText>Monthly: R{monthlyBudgetValue}</IonText>
+                  <IonText>Monthly: R{monthlyBudgetValue.toFixed(2)}</IonText>
                 <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
               </IonItem>
             </IonCardHeader>
@@ -143,7 +143,7 @@ const Profile: React.FC = () => {
                   role: 'applyWeeklyBudget',
                   text: 'Apply',
                   handler: (alertData) => {
-                    applyToBudget(alertData.weeklyBudget, "");
+                    applyToBudget("weekly",alertData.weeklyBudget);
                   }
                 }
               ]}></IonAlert>
@@ -170,7 +170,7 @@ const Profile: React.FC = () => {
                   role: 'applyMonthlyBudget',
                   text: 'Apply',
                   handler: (alertData) => {
-                    applyToBudget("", alertData.monthlyBudget);
+                    applyToBudget("monthly", alertData.monthlyBudget);
                   }
                 }
               ]}></IonAlert>
@@ -204,7 +204,7 @@ const Profile: React.FC = () => {
               {profile.favouriteStore.receipts.map((item: any, index: number) => {
                 return (
                   <IonItem key={index} className="center-items" color="tertiary">
-                    <IonText>Receipt #{item.id}: R{item.total}</IonText>
+                    <IonText>Receipt #{item.id}: R{item.total.toFixed(2)}</IonText>
                   </IonItem>
                 )
               })}
@@ -240,39 +240,46 @@ const Profile: React.FC = () => {
     window.location.reload()
   }
 
-  function applyToBudget(newWeeklyBudget: string, newMonthlyBudget: string) {
+  function applyToBudget(budgetType: string, newBudget: string) {
     let user = JSON.parse(localStorage.getItem('user')!)
     if (user == null) {
       user = { id: 24 }
     }
-    weeklyBudget = parseFloat(newWeeklyBudget)
-    monthlyBudget = parseFloat(newMonthlyBudget)
 
-    if (isNaN(weeklyBudget) || weeklyBudget < 0)
+    if(budgetType==="weekly")
     {
-      present("Invalid weekly budget set", 1200)
+      weeklyBudget = parseFloat(newBudget)
+
+      if (isNaN(weeklyBudget) || weeklyBudget < 0) {
+        present("Invalid weekly budget set", 1200)
+      }
+
+      else {
+        setWeeklyBudget(weeklyBudget)
+        isExceeded(weeklyBudget, monthlyBudget)
+        present("New weekly budget applied", 1200)
+
+        setBudgetA(user.id, weeklyBudget, NaN)
+
+      }
+
     }
 
-    else {
-      setWeeklyBudget(weeklyBudget)
-      isExceeded(weeklyBudget, monthlyBudget)
-      present("New weekly budget applied",1200)
+    if (budgetType === "monthly")
+    {
+      monthlyBudget = parseFloat(newBudget)
 
-      setBudgetA(user.id, weeklyBudget, monthlyBudget)
+      if (isNaN(monthlyBudget) || monthlyBudget < 0) {
+        present("Invalid Monthly budget set", 1200)
+      }
 
-    }
+      else {
+        setMonthlyBudget(monthlyBudget)
+        isExceeded(weeklyBudget, monthlyBudget)
+        present("New monthly budget applied", 1200)
 
-    if (isNaN(monthlyBudget) || monthlyBudget < 0) {
-      present("Invalid weekly budget set", 1200)
-    }
-
-    else {
-      setMonthlyBudget(monthlyBudget)
-      isExceeded(weeklyBudget, monthlyBudget)
-      present("New monthly budget applied", 1200)
-
-      setBudgetA(user.id, weeklyBudget, monthlyBudget)
-
+        setBudgetA(user.id, NaN, monthlyBudget)
+      }
     }
   }
 
