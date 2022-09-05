@@ -1,42 +1,61 @@
 const Jimp = require("jimp");
+const jo = require('jpeg-autorotate');
 
-function convertURIToImageData(b64Data, contentType, sliceSize) {
-    /*b64Data = b64Data.split(",")[1];
-    const byteCharacters = Buffer.from(decodeURI(b64Data), "base64");
-    const byteArrays = [];
+/**
+ * method to process the image for tesseract
+ * @param {*} image data url of image
+ */
+async function processImage(image) {
+    const b64Data = image.split(",")[1];
+    var returnImage = ""; 
+    var bufferOfImg = Buffer.from(b64Data, 'base64')
+    //try to check for EXIF tag
 
-    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-            byteNumbers[i] = slice.charCodeAt(i);
+    jo.rotate(Buffer.from(b64Data, 'base64'), {orientation: 1, quality: 100}) 
+    .then(({buffer ,orientation, dimensions, quality}) => {
+        console.log(`Orientation was ${orientation}`)
+        console.log(`Dimensions after rotation: ${dimensions.width}x${dimensions.height}`)
+        console.log(`Quality: ${quality}`)
+        bufferOfImg = buffer;
+    })
+    .catch((error) => { 
+        if (error.code === jo.errors.correct_orientation) {
+            console.log("orientation is correct")
+        }
+        if (error.code === jo.errors.read_exif) {
+            console.log('no exif')
+        }
+        if (error.code === jo.errors.no_orientation) {
+            console.log('no orientation')
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
-    }
 
-    const blob = new Blob(byteArrays, { type: contentType });
-    return blob;*/
-    return b64Data
-}
+    })
 
-function processImage(image) {
-
-    
-        Jimp.read(image)
-            .then(imageProcess => {
-                imageProcess.grayscale()
-                    .contrast(+1)
-                    .normalize()
-                    .write("./img-opt.jpg")
-            })
-            .catch(err => {
-                console.error(err);
+    await Jimp.read(bufferOfImg)
+        .then(imageProcess => {
+            imageProcess.threshold({ max: 255, autoGreyscale: true })
+                .contrast(+1)
+                .normalize()
+                //.write("./img-opt.jpg")
+                .getBase64(Jimp.AUTO, async (err, img) => {
+                if (err) {
+                    returnImage = "Error processing image";
+                }
+               
+                returnImage = img;
             });
-    
+        })
+        .catch(err => {
+            console.error(err);
+            returnImage = "Error processing image";
+        });
 
+
+
+    return returnImage;
 }
 
-module.exports.processImage = processImage
+module.exports = {
+    processImage
+}
