@@ -1408,7 +1408,8 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 dailyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
                 })
             }
             if (report.generatedDate >= weekly) {
@@ -1416,7 +1417,9 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 weeklyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
+
                 })
             }
             if (report.generatedDate >= monthly) {
@@ -1424,7 +1427,9 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 monthlyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
+
                 })
             }
 
@@ -1481,7 +1486,9 @@ async function getRecentReports(userid) {
             reportsList.push({
                 reportId: report.id,
                 reportName: report.reportName,
-                reportDate: report.generatedDate
+                reportDate: report.generatedDate,
+                otherName: report.reportName,
+
             })
         }
 

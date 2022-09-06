@@ -57,7 +57,7 @@ export const graphSettings_1 = {
     },
     title: {
       display: true,
-      text: 'Apple Prices Across various Store Locations',
+      text: 'Apple Prices across various Stores',
     },
   },
 };
@@ -90,13 +90,15 @@ const Home: React.FC = () => {
   const [todayItems, setTodayItem] = useState(0)
   const [todayTotal, setTodayTotal] = useState(0)
   const [present, dismiss] = useIonToast();
-  const [reports, setR] = useState([{reportId:"0", reportName:"No reports Available"}]);
+  const [reports, setR] = useState([{reportId:"0", reportName:"No reports Available",otherName:""}]);
 
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if(user==null){
         user = {id: 24}
     }
+    // setNewNames(reports)
+
     getRecentReports(user.id)
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
@@ -121,7 +123,8 @@ const Home: React.FC = () => {
 
 
   }, []);
-
+  setNewNames(reports)
+  setNewNames(thisWeeksReports)
   return (
     <IonPage>
       <IonHeader>
@@ -140,7 +143,7 @@ const Home: React.FC = () => {
         <IonRow>
           {reports.map((reps, index) => {
             return (
-              <ReportItem key={index} reportData={[reps.reportId, reps.reportName]} />
+              <ReportItem key={index} reportData={[reps.reportId, reps.reportName, reps.otherName]} />
             )
           })
           }
@@ -170,7 +173,7 @@ const Home: React.FC = () => {
               {thisWeeksReports.map((item, index) => {
                 return (
                   <IonItem key={index} color="tertiary">
-                    {item.reportName}
+                    {item.otherName}
                     <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
@@ -245,6 +248,19 @@ const Home: React.FC = () => {
 
 
 
+  }
+
+  async function setNewNames(reports: any) {
+    if (reports !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (typeof reports[i].otherName === 'string') {
+          reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
+          reports[i].otherName = reports[i].otherName.replace('_', ' ');
+          reports[i].otherName = reports[i].otherName.replace('_', ' #');
+        }
+      }
+    }
+    return reports;
   }
 };
 

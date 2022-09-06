@@ -11,7 +11,7 @@ import { isPlatform } from "@ionic/core";
 import { getUserReport } from "../../api/apiCall";
 import '../theme/reportItem.css'
 type Props = {
-    reportData: string[]
+    reportData: string[];
 }
 function ReportItem({ reportData }: Props) {
     return (
@@ -19,7 +19,7 @@ function ReportItem({ reportData }: Props) {
             <IonCard color="primary">
                 <IonCardHeader>
                     <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
-                    <IonCardTitle>{reportData[1]}</IonCardTitle>
+                    <IonCardTitle>{reportData[2]}</IonCardTitle>
                 </IonCardHeader>
                 <IonItem color="tertiary">
                     <IonButton onClick={() => view(reportData[1])} fill="solid" slot="end" color="secondary">
@@ -49,4 +49,5 @@ function view(data: any) {
             }
         });
 }
+
 export default ReportItem;
