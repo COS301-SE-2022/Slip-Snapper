@@ -19,7 +19,7 @@ import React, { useEffect, useState } from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import { getAllUserReports, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
+import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
 
 import {
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
   const [todayItems, setTodayItem] = useState(0)
   const [todayTotal, setTodayTotal] = useState(0)
   const [present, dismiss] = useIonToast();
-  const [reports, setR] = useState([{reportId:"0", reportName:"No reports Available",otherName:""}]);
+  const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
 
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
@@ -143,7 +143,7 @@ const Home: React.FC = () => {
         <IonRow>
           {reports.map((reps, index) => {
             return (
-              <ReportItem key={index} reportData={[reps.reportId, reps.reportName, reps.otherName]} />
+              <ReportItem key={index} reportData={[reps.reportNumber, reps.reportName, reps.otherName]} />
             )
           })
           }
@@ -187,10 +187,13 @@ const Home: React.FC = () => {
             </IonCard>
           </IonCol>
 
-          <IonCol>
+
+        </IonRow>
+        <IonRow>
+          <IonCol className='graphCol'>
             <Bar options={graphSettings_1} data={graphData_1} />
           </IonCol>
-          <IonCol>
+          <IonCol className='graphCol'>
             <Bar options={graphSettings_1} data={graphData_1} />
           </IonCol>
         </IonRow>
