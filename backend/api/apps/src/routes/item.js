@@ -235,4 +235,32 @@ router.get('/slip', async (req, res) => {
         });
 });
 
+/**
+ * Get data for graphing item prices in various Store Location
+ * Uses the slipId
+ */
+
+router.get('/graph', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if (tokenVerified === "Error") {
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                slips: [],
+            });
+    }
+
+    // const result = await req.app.get('db').retrieveAllSlips(Number(tokenVerified.user.id))
+
+    let status = 200;
+    return res.status(status)
+        .send({
+            message: result.message,
+            // graphData: result.graphData,
+
+        });
+});
+
 module.exports.router = router;

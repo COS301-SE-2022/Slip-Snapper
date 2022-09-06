@@ -1341,7 +1341,8 @@ async function getAllReports(userid) {
                 reportName: report.reportName,
                 reportDate: report.generatedDate,
                 reportNumber:report.reportNumber,
-                otherName:report.reportName
+                otherName:report.reportName,
+                reportNumber: report.reportNumber,
             })
         }
         return {
@@ -1385,7 +1386,8 @@ async function getDailyWeeklyMonthlyReports(userid) {
             select: {
                 id: true,
                 reportName: true,
-                generatedDate: true
+                generatedDate: true,
+                reportNumber: true
             }
         })
 
@@ -1408,7 +1410,9 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 dailyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
+                    reportNumber: report.reportNumber,
                 })
             }
             if (report.generatedDate >= weekly) {
@@ -1416,7 +1420,10 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 weeklyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
+                    reportNumber: report.reportNumber,
+
                 })
             }
             if (report.generatedDate >= monthly) {
@@ -1424,7 +1431,10 @@ async function getDailyWeeklyMonthlyReports(userid) {
                 monthlyReportsList.push({
                     reportId: report.id,
                     reportName: report.reportName,
-                    reportDate: report.generatedDate
+                    reportDate: report.generatedDate,
+                    otherName: report.reportName,
+                    reportNumber:report.reportNumber,
+
                 })
             }
 
@@ -1461,7 +1471,8 @@ async function getRecentReports(userid) {
             select: {
                 id: true,
                 reportName: true,
-                generatedDate: true
+                generatedDate: true,
+                reportNumber:true
             },
             take: 5,
             orderBy: {
@@ -1481,7 +1492,10 @@ async function getRecentReports(userid) {
             reportsList.push({
                 reportId: report.id,
                 reportName: report.reportName,
-                reportDate: report.generatedDate
+                reportDate: report.generatedDate,
+                otherName: report.reportName,
+                reportNumber: report.reportNumber,
+
             })
         }
 

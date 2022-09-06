@@ -204,7 +204,7 @@ const Profile: React.FC = () => {
               {profile.favouriteStore.receipts.map((item: any, index: number) => {
                 return (
                   <IonItem key={index} className="center-items" color="tertiary">
-                    <IonText>Receipt #{item.id}: R{item.total.toFixed(2)}</IonText>
+                    <IonText>Receipt #{item.slipNumber}: R{item.total.toFixed(2)}</IonText>
                   </IonItem>
                 )
               })}
