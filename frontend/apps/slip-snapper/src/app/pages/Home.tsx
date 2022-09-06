@@ -22,6 +22,69 @@ import ReportItem from '../components/ReportItem';
 import { getAllUserReports, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+/**
+ * Config for Graph_1
+ */
+export const graphSettings_1 = {
+  responsive: true,
+  barThickness:43,
+  borderWidth:2,
+  hoverBackgroundColor: '#5d6c83',
+  
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Apple Prices Across various Store Locations',
+    },
+  },
+};
+
+export const graphData_1 = {
+  labels: ['Checkers', 'Shoprite', 'Pick n Pay', 'Woolworths', 'Clicks'],
+  datasets: [
+    {
+      label: 'Apples',
+      data: [20, 10,15,26,14],
+      backgroundColor: '#27A592',
+      width:8,
+    },
+    {
+      label: 'Occurrences',
+      data: [5, 4, 2, 5, 10],
+      backgroundColor: '#292592',
+      width: 8,
+      hidden: true,
+    }
+  ],
+};
+
+/**
+ * Config for Graph_2
+ */
+
 const Home: React.FC = () => {
   const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([])
   const [todayItems, setTodayItem] = useState(0)
@@ -119,6 +182,13 @@ const Home: React.FC = () => {
               })
               }
             </IonCard>
+          </IonCol>
+
+          <IonCol>
+            <Bar options={graphSettings_1} data={graphData_1} />
+          </IonCol>
+          <IonCol>
+            <Bar options={graphSettings_1} data={graphData_1} />
           </IonCol>
         </IonRow>
 
