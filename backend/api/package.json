@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@prisma/client": "^3.14.0",
+    "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
     "@tensorflow/tfjs-node": "^3.19.0",
     "aws-sdk": "^2.1177.0",
     "cors": "^2.8.5",

@@ -1,10 +1,10 @@
-const { data } = require('@tensorflow/tfjs-node');
 const tf = require('@tensorflow/tfjs-node');
+const vector = require('@tensorflow-models/universal-sentence-encoder')
 
 class ItemCategoriser{
 
     async getData(){
-        const fileLocation = "file://"+__dirname.replaceAll('\\','/')+"/fullDataSet.csv";
+        const fileLocation = "file://"+__dirname.replaceAll('\\','/')+"/dataSet_Generation/fullDataSet.csv";
         const columns = ['Date', 'Item', 'Location', 'Quantity', 'Price', 'Category'];
         const dataset = tf.data.csv(fileLocation, {
             hasHeader:true,
@@ -25,24 +25,30 @@ class ItemCategoriser{
         }
     }
 
-    async compile(sets) {
-        console.log(sets)
-        console.log(await sets.train.take(3).toArray())
-
+    async compile() {
         const model = tf.sequential();
-
+        
         model.add(tf.layers.dense({
-            units: 3,
-            inputShape: [3],
+            units: 512,
+            inputShape: [512],
+            activation: 'sigmoid',
         }))
 
-        model.add(tf.layers.dense({
-            units: 2,
-        }))
+        // model.add(tf.layers.dense({
+        //     units: 2,
+        //     inputShape: [512],
+        //     activation: 'sigmoid',
+        // }))
+
+        // model.add(tf.layers.dense({
+        //     units: 2,
+        //     inputShape: [2],
+        //     activation: 'sigmoid',
+        // }))
 
         model.compile({
-            loss: 'categoricalCrossentropy',
-            optimizer: 'sgd'
+            loss: 'meanSquaredError',
+            optimizer: tf.train.adam(0.06)
         })
 
         return model;
@@ -52,23 +58,19 @@ class ItemCategoriser{
         const sets = await this.getData();
         const model = await this.compile(sets);
 
-        const xs = tf.tensor2d([
-            [0.1,0.2,0.3],
-            [0.1,0.2,0.3],
-            [0.1,0.2,0.3],
-        ])
+        // const sentences = (await sets.train.toArray().take(200000)).map((element,index) => {return [element.Item.toLowerCase(),index]})
+        const encoder = await vector.load();
 
-        const ys = tf.tensor2d([
-            [1,0],
-            [0,1],
-            [1,1],
-        ])
+        const items = await sets.train.take(2000).toArray()
+        const inputs = items.map((element) => {return element.Item.toLowerCase()});
+        const outputs = items.map((element) => {return element.Category.toLowerCase()});
+        const inputsEmbed = await encoder.embed(inputs);
+        const outputsEmbed = await encoder.embed(inputs);
+        // console.log(inputsEmbed)
+        // console.log(outputsEmbed)
 
-        model.fit(xs,ys,{
-            epochs: 1,
-
-        }).then(()=>{
-
+        model.fit(inputsEmbed,outputsEmbed,{ epochs: 2, })
+        .then(()=>{
             const data = tf.tensor2d([
                 [1.0,1.0,1.0],
             ])
