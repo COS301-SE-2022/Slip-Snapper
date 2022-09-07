@@ -19,21 +19,86 @@ import React, { useEffect, useState } from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import { getAllUserReports, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
+import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+/**
+ * Config for Graph_1
+ */
+export const graphSettings_1 = {
+  responsive: true,
+  barThickness:43,
+  borderWidth:2,
+  hoverBackgroundColor: '#5d6c83',
+  
+  plugins: {
+    legend: {
+      position: 'top' as const,
+    },
+    title: {
+      display: true,
+      text: 'Apple Prices across various Stores',
+    },
+  },
+};
+
+export const graphData_1 = {
+  labels: ['Checkers', 'Shoprite', 'Pick n Pay', 'Woolworths', 'Clicks'],
+  datasets: [
+    {
+      label: 'Apples',
+      data: [20, 10,15,26,14],
+      backgroundColor: '#27A592',
+      width:8,
+    },
+    {
+      label: 'Occurrences',
+      data: [5, 4, 2, 5, 10],
+      backgroundColor: '#292592',
+      width: 8,
+      hidden: true,
+    }
+  ],
+};
+
+/**
+ * Config for Graph_2
+ */
 
 const Home: React.FC = () => {
   const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([])
   const [todayItems, setTodayItem] = useState(0)
   const [todayTotal, setTodayTotal] = useState(0)
   const [present, dismiss] = useIonToast();
-  const [reports, setR] = useState([{reportId:"0", reportName:"No reports Available"}]);
+  const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
 
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if(user==null){
         user = {id: 24}
     }
+    // setNewNames(reports)
+
     getRecentReports(user.id)
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
@@ -52,13 +117,14 @@ const Home: React.FC = () => {
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setTodayItem(apiResponse.data.totalItems)
-          setTodayTotal(apiResponse.data.totalSpent)
+          setTodayTotal(Number(apiResponse.data.totalSpent))
         }
       });
 
 
   }, []);
-
+  setNewNames(reports)
+  setNewNames(thisWeeksReports)
   return (
     <IonPage>
       <IonHeader>
@@ -77,7 +143,7 @@ const Home: React.FC = () => {
         <IonRow>
           {reports.map((reps, index) => {
             return (
-              <ReportItem key={index} reportData={[reps.reportId, reps.reportName]} />
+              <ReportItem key={index} reportData={[reps.reportNumber, reps.reportName, reps.otherName]} />
             )
           })
           }
@@ -93,7 +159,7 @@ const Home: React.FC = () => {
                 <IonCardTitle>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R{todayTotal} </IonItem>
+              <IonItem color="tertiary">Total Expenditure: R {todayTotal.toFixed(2)}</IonItem>
               <IonItem color="tertiary">
               </IonItem>
             </IonCard>
@@ -107,7 +173,7 @@ const Home: React.FC = () => {
               {thisWeeksReports.map((item, index) => {
                 return (
                   <IonItem key={index} color="tertiary">
-                    {item.reportName}
+                    {item.otherName}
                     <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
@@ -119,6 +185,16 @@ const Home: React.FC = () => {
               })
               }
             </IonCard>
+          </IonCol>
+
+
+        </IonRow>
+        <IonRow>
+          <IonCol className='graphCol'>
+            <Bar options={graphSettings_1} data={graphData_1} />
+          </IonCol>
+          <IonCol className='graphCol'>
+            <Bar options={graphSettings_1} data={graphData_1} />
           </IonCol>
         </IonRow>
 
@@ -175,6 +251,19 @@ const Home: React.FC = () => {
 
 
 
+  }
+
+  async function setNewNames(reports: any) {
+    if (reports !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (typeof reports[i].otherName === 'string') {
+          reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
+          reports[i].otherName = reports[i].otherName.replace('_', ' ');
+          reports[i].otherName = reports[i].otherName.replace('_', ' #');
+        }
+      }
+    }
+    return reports;
   }
 };
 

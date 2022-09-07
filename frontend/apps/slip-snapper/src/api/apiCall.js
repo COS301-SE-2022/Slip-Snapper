@@ -128,7 +128,7 @@ export async function signupA( userName, first, last, password){
     })
 }
 
-export async function generateReportA( userName, userId, period ){
+export async function generateReportA( userName, userId, period,newReportNumber ){
     return axios({
         headers: headers,
         method: 'post',
@@ -136,7 +136,8 @@ export async function generateReportA( userName, userId, period ){
         data: {
             userName: userName,
             userId: userId,
-            period: period
+            period: period,
+            newReportNumber: newReportNumber
         }
     })
 }
@@ -286,5 +287,19 @@ export async function deleteSlip( slipId ){
         data: JSON.stringify({
           slipId: slipId,
         })
+    })
+}
+
+/**
+ * To retrieve data for graphs
+ * @param {*} slipId the slipId
+ * @returns the response from the server
+ */
+
+export async function getGraphStats(userId) {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'item/graph?userId=' + userId,
     })
 }

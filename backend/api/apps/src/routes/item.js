@@ -39,7 +39,6 @@ router.post('', async (req,res)=>{
     let { location, date, total, data } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
-
     if(tokenVerified === "Error"){
         return res.status(200)
             .send({
@@ -49,7 +48,6 @@ router.post('', async (req,res)=>{
     }
 
     //TODO make use actual date
-
     let values = []
     for (var item of data){
         values.push({
@@ -61,9 +59,7 @@ router.post('', async (req,res)=>{
         })
     }
 
-    let date1 = new Date().toISOString()
-
-    const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date1, total, values);
+    const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date, total, values);
 
     let status = 200;
 
@@ -192,7 +188,6 @@ router.get('/slip', async (req, res) => {
     let { updateSlip, insertItems, updateItems, removeItems } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
-   
     if(tokenVerified === "Error"){
         return res.status(200)
             .send({
@@ -228,8 +223,7 @@ router.get('/slip', async (req, res) => {
             });
     }
 
-    //const result = await req.app.get('db').deleteSlip(Number(slipId))
-    const result = {message: "Recepit has been deleted"}
+    const result = await req.app.get('db').deleteSlip(Number(slipId))
 
     let status = 200;
 
@@ -238,6 +232,34 @@ router.get('/slip', async (req, res) => {
     return res.status(status)
         .send({
             message: result.message,
+        });
+});
+
+/**
+ * Get data for graphing item prices in various Store Location
+ * Uses the slipId
+ */
+
+router.get('/graph', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if (tokenVerified === "Error") {
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                slips: [],
+            });
+    }
+
+    // const result = await req.app.get('db').retrieveAllSlips(Number(tokenVerified.user.id))
+
+    let status = 200;
+    return res.status(status)
+        .send({
+            message: result.message,
+            // graphData: result.graphData,
+
         });
 });
 

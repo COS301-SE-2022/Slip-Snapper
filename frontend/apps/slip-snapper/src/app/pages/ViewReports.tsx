@@ -12,7 +12,6 @@ import {
   IonCardTitle,
   IonItem,
   IonAlert,
-  IonCardSubtitle,
   IonCol,
   useIonToast,
 } from '@ionic/react';
@@ -44,7 +43,8 @@ export const mockTotals = [
 
 // day week month
 const ViewReports: React.FC = () => {
-  const [r, setR] = useState<any[]>([{}]);
+  const [reports, setReports] = useState<any[]>([{}]);
+
   const [deleteAlert, setDeleteAlert] = useState({
     state: false,
     name: '',
@@ -58,12 +58,14 @@ const ViewReports: React.FC = () => {
       user = { id: 24 };
     }
     getAllUserReports(user.id).then((apiResponse) => {
-      console.log(typeof apiResponse.data);
       if (typeof apiResponse.data !== 'string') {
-        setR(apiResponse.data.reports);
+        setReports(apiResponse.data.reports);
+        
       }
     });
   }, []);
+
+  setNewNames(reports)
 
   return (
     <IonPage>
@@ -77,12 +79,12 @@ const ViewReports: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonItem>
-          <IonTitle>Expenditure Totals</IonTitle>
+          <IonTitle>Create Reports</IonTitle>
         </IonItem>
         <IonRow>
           {mockTotals.map((totals, index) => {
             return (
-              <IonCol className="item-col" key={index}>
+              <IonCol className="generate-item-col" key={index}>
                 <IonCard color="primary">
                   <IonCardHeader>
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>
@@ -112,10 +114,10 @@ const ViewReports: React.FC = () => {
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
-          {r.map((report, index) => {
+          {reports.map((report, index) => {
             return (
               <IonItem key={index} color="tertiary">
-                {report.reportName}
+                {report.otherName}
                 <IonButton
                   onClick={() => view(report.reportName)}
                   color="secondary"
@@ -195,7 +197,7 @@ const ViewReports: React.FC = () => {
     );
 
     getAllUserReports(userS.id).then((apiResponse) => {
-      setR(apiResponse.data.reports);
+      setReports(apiResponse.data.reports);
     });
   }
 
@@ -204,8 +206,8 @@ const ViewReports: React.FC = () => {
     if (userS == null) {
       userS = { id: 24, username: 'demoUser' };
     }
-
-    await generateReportA(userS.username, userS.id, period).then(
+    // demoUser_31 - 08 - 2022Weekly_1.pdf 
+    await generateReportA(userS.username, userS.id, period, getReportNumber()+1).then(
       (apiResponse) => {
         if (apiResponse.data.message === 'Report Generated and uploaded') {
           present('Generated ' + period + ' Report', 1200);
@@ -216,8 +218,38 @@ const ViewReports: React.FC = () => {
     );
 
     getAllUserReports(userS.id).then((apiResponse) => {
-      setR(apiResponse.data.reports);
+      setReports(apiResponse.data.reports);
     });
+  }
+
+  function getReportNumber()
+  {
+    let maxReportNum:number
+    maxReportNum=0
+    for(let i = 0 ; i < reports.length;i++)
+    {
+      if(reports[i].reportNumber>maxReportNum)
+      {
+        maxReportNum = reports[i].reportNumber;
+      }
+    }
+    return maxReportNum
+
+  }
+
+ async function setNewNames(reports:any)
+  {
+    if(reports!==undefined)
+    {
+      for (let i = 0; i < reports.length; i++) {
+        if (typeof reports[i].otherName === 'string') {
+          reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
+          reports[i].otherName = reports[i].otherName.replace('_', ' ');
+          reports[i].otherName = reports[i].otherName.replace('_', ' #');
+        }
+      }
+    }
+    return reports;
   }
 };
 

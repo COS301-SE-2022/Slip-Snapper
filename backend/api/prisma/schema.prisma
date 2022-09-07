@@ -14,6 +14,7 @@ model User {
   id            Int       @id @default(autoincrement())
   username      String    @unique
   firstname     String
+  email         String    @default("")
   lastname      String
   weeklyBudget  Float     @default(0)
   monthlyBudget Float     @default(0)
@@ -24,18 +25,18 @@ model User {
 }
 
 model Slip {
-  id              Int         @id @default(autoincrement())
-  slipNumber      Int         @default(1)
+  id              Int     @id @default(autoincrement())
+  slipNumber      Int     @default(1)
   location        String?
-  transactionDate DateTime    @default(now()) @db.Date()
+  transactionDate String  @default("")
   items           Item[]
   total           Float
-  User            User?       @relation(fields: [usersId], references: [id])
+  User            User?   @relation(fields: [usersId], references: [id])
   usersId         Int?
 }
 
 model Item {
-  id           Int             @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   data         dataItem[]
   itemQuantity Int
   itemPrice    Float
@@ -43,18 +44,18 @@ model Item {
 }
 
 model dataItem {
-  id       Int             @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   item     String
   itemType String
   items    Item[]
 }
 
 model Reports {
-  id            Int      @id @default(autoincrement())
-  user          User?    @relation(fields: [usersId], references: [id])
+  id            Int    @id @default(autoincrement())
+  user          User?  @relation(fields: [usersId], references: [id])
   usersId       Int?
-  reportName    String   @db.VarChar(255)
-  reportNumber  Int      @default(1)
-  generatedDate DateTime @default(now()) @db.Date()
-  reportTotal   Float @default(0)
+  reportName    String @db.VarChar(255)
+  reportNumber  Int    @default(1)
+  generatedDate String @default("")
+  reportTotal   Float  @default(0)
 }

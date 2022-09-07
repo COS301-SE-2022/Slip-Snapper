@@ -16,7 +16,7 @@ import {
   
   export const Menu = () => {
     return (
-      <IonMenu side="end" contentId="main" >
+      <IonMenu side="end" contentId="main" type="overlay" swipeGesture= {false} >
         <IonHeader>
           <IonToolbar color="primary">
             <IonTitle>Menu</IonTitle>

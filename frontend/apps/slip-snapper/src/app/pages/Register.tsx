@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import {  IonPage,  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert} from '@ionic/react';
+import {  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert } from '@ionic/react';
 import '../theme/login-register.css';
 import { signupA } from "../../api/apiCall"
+import { color } from '@mui/system';
 
 
 const Register: React.FC = () => {
@@ -75,6 +76,13 @@ const Register: React.FC = () => {
               </IonButton>
               <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
+
+            <IonItem color="tertiary" class="LRItems">
+              <div className='register-link'>
+                <p style={{color:"#b5bab7"}}>Already have an account? &nbsp;<a href={"/login"}>Login</a></p>
+              </div>
+            </IonItem>
+
             <IonAlert
               isOpen={errorAlert}
               onDidDismiss={() => setAlert(false)}

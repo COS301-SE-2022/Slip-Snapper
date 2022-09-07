@@ -23,16 +23,29 @@
 
 .profilePhoto {
     margin: auto;
-    display: block;
     border-radius: 20px;
-    padding: 10px;
-    float: left;
-    object-fit: contain;
+}
+
+.profile-elem {
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-photo-fab {
+    bottom: 0%;
 }
 
 .progressBar {
     max-width: 30%;
     --background: #ebebeb;
+
+}
+
+.categoryProgressBar {
+    max-width: 30%;
+    --background: #ebebeb;
+    right: 50px
 }
 
 .logout-button {

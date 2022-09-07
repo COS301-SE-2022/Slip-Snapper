@@ -40,7 +40,7 @@ const Login: React.FC = () => {
 
             <IonItem color="tertiary" class="LRItems">
               <div className='register-link'>
-                <p>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
+                <p style={{color:"#b5bab7"}}>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
               </div>
               <div className='forgot-pass' slot="end">
                 <a href={"/register"}>Forgot Password</a>

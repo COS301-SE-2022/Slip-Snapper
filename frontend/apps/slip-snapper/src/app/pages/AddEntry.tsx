@@ -1,7 +1,8 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast, IonSelectOption, IonSelect } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
@@ -13,6 +14,22 @@ const AddEntry: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
     const [present, dismiss] = useIonToast();
+
+    const handleCostsChange = (event: any) => {
+        const _tempCosts = [...items];
+        let temp = event.target.id
+        temp = temp.substring(0, 1)
+        _tempCosts[temp].price = event.target.value
+        getData();
+        setItems(_tempCosts);
+    };
+    const getTotalCosts = () => {
+        return items.reduce((total, item) => {
+            // console.log(parseFloat(items[0].price))
+            return total + Number(item.price);
+
+        }, 0);
+    };
 
 
     return (
@@ -54,22 +71,25 @@ const AddEntry: React.FC = () => {
                         return (
                             <IonGrid key={index}>
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className='big-chip'>
-                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
                                     
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Description</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
@@ -77,15 +97,17 @@ const AddEntry: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Price</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/price")}
+                                            <IonInput type='number' onIonChange={handleCostsChange} onClick={() => setNormalColour(index + "/price")}
                                                 id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Type</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className="select-options">
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' value={item.type}>
                                                 <IonSelectOption>Electronics</IonSelectOption>
@@ -98,6 +120,10 @@ const AddEntry: React.FC = () => {
                                                 <IonSelectOption>Other</IonSelectOption>
                                             </IonSelect>
                                         </IonItem>
+                                    </IonCol>
+
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
                                     </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}
@@ -119,8 +145,8 @@ const AddEntry: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardHeader className="wrapper">
-                        <IonItem className='addEntry' color="tertiary">
-                            <IonInput id={"total"} ></IonInput>
+                        <IonItem id={"total"} className='addEntry' color="tertiary">
+                            {getTotalCosts()}
                         </IonItem>
                     </IonCardHeader>
 
@@ -184,8 +210,16 @@ const AddEntry: React.FC = () => {
             setShowAlert(true)
             return
         }
-        if (document.getElementById("total")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Please enter a Total to continue.")
+        if (document.getElementById("total")?.innerHTML === "NaN") {
+
+            for (let i = 0; i < items.length; i++) {
+                if (isNaN(+items[i].price)) {
+                    setAlertMes("Please input a number at item #" + (i + 1) + " to continue.")
+                    setShowAlert(true)
+                    return
+                }
+            }
+            setAlertMes("Please check that all your Item prices are Numbers")
             setShowAlert(true)
             return
         }
@@ -204,7 +238,7 @@ const AddEntry: React.FC = () => {
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
-        const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        const tempTotal = document.getElementById("total")?.innerHTML
         let total = 0.00;
         if (tempTotal !== undefined) {
             total = parseFloat(tempTotal)
@@ -232,7 +266,6 @@ const AddEntry: React.FC = () => {
         setItems([{ item: "", quantity: 1, price: "0.00", type: "" }]);
         document.getElementById("Store_Name")!.getElementsByTagName("input")[0].value = "";
         document.getElementById("date")!.getElementsByTagName("input")[0].value = "";
-        document.getElementById("total")!.getElementsByTagName("input")[0].value = "";
     }
 
     function setNormalColour(i: string) {

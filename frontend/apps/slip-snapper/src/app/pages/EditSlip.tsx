@@ -1,7 +1,8 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import  AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { imageOutline } from 'ionicons/icons';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
@@ -62,22 +63,25 @@ const EditSlip: React.FC = () => {
                         return (
                             <IonGrid key={index} >
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className='big-chip'>
-                                        <Chip label={"Item # "+ (index+1)} onDelete={() => removeItem(index)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Description</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
@@ -85,7 +89,8 @@ const EditSlip: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Price</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput onClick={() => setNormalColour(index + "/price")} type='number'
                                                 id={index + "/price"} value={item.price} ></IonInput>
@@ -93,7 +98,8 @@ const EditSlip: React.FC = () => {
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels'>Type</IonLabel>
+                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
                                             value={item.type.charAt(0).toUpperCase() + item.type.slice(1)}>
@@ -107,6 +113,10 @@ const EditSlip: React.FC = () => {
                                                 <IonSelectOption>Other</IonSelectOption>
                                             </IonSelect>
                                         </IonItem>
+                                    </IonCol>
+
+                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
+                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
                                     </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}

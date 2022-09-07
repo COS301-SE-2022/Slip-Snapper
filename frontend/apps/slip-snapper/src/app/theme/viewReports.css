@@ -1,4 +1,4 @@
-.item-col {
+.generate-item-col {
     max-width: 33%;
 }
 
@@ -7,7 +7,7 @@
 }
 
 @media only screen and (max-width: 830px) {
-    .item-col {
+    .generate-item-col {
         min-width: 50%;
     }
 
@@ -17,7 +17,7 @@
 }
 
 @media only screen and (max-width: 540px) {
-    .item-col {
+    .generate-item-col {
         min-width: 100%;
     }
 }

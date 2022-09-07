@@ -1,0 +1,55 @@
+ul.no-bullets {
+    list-style-type: none;
+    line-height: 1.5;
+}
+
+.titles{
+    --border-radius: 5px;
+}
+
+.details{
+    --border-radius: 5px;
+}
+
+.wrapper {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.receipts-items {
+    vertical-align: middle;
+    --border-radius: 10px;
+    padding: 2px;
+}
+.receipts-table{
+    flex:3;
+    min-width: 20rem;
+}
+
+.search-bar{
+    flex:2;
+    min-width: 20rem;
+}
+
+.date-div {
+    max-width: 200px;
+    margin-left: 40px;
+    display: none;
+}
+
+.date-item {
+   max-width: 200px;
+}
+
+
+
+/* @media only screen and (max-width: 2200px) {
+    .slip-item-col {
+        min-width: 20%;
+    }
+}
+
+*/
