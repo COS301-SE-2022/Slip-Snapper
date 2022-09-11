@@ -1928,6 +1928,27 @@ async function getUserAverageSpent(userId) {
     }
 }
 
+/**
+ * Function to get the users average spent
+ * @param {*} userId The users ID 
+ * @returns the user average
+ */
+async function getUserAnalysis(userId) {
+
+    //modify to average spent per week once the date is fixed
+
+    try {
+     
+    }
+    catch (error) {
+        return {
+            message: "Error retrieving User Analysis",
+            average: "0.00"
+        }
+    }
+}
+
+
 
 
 async function getUserMode(userId) {
