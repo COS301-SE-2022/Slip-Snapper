@@ -96,13 +96,11 @@ async function sortItemsIntoCategories(itemList){
             types.totals[key][3] = parseFloat(types.totals[key][3]).toFixed(2)
         }
     }
-
     return { 
         types,
         totals
     }
 }
-
 /**
  * Function to geneerate a pdf
  * @param {*} name The name of the pdf
@@ -146,11 +144,9 @@ async function generatePDF(name, object, today, period){
                     types.totals[key]
                 ],
             }
-        
             pdf.table(subTable);
         }
     }
-
     pdf.end();
 
     return {
