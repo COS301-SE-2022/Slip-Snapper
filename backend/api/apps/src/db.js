@@ -1973,7 +1973,7 @@ async function getUserAnalysis(userId) {
 
             }
         })
-     
+
         let listOfItems = []
         for (const k in commonItems) {
             listOfItems.push(commonItems[k].item)
@@ -1994,6 +1994,36 @@ async function getUserAnalysis(userId) {
                 }
             }
         })
+
+        let analysisObject = []
+
+        for (const i in listOfItems) {
+            let locationArray = []
+            let reliabilityTally = []
+            let averagePerLocation = []
+            for (const k in groupedLocations) {
+                const aggregates = await prisma.item.aggregate({
+                    where: {
+                        data: {
+                            some: {
+                                item: commonItems[i].item,
+                            },
+                        },
+                        Slip: {
+                            some: {
+                                location: groupedLocations[k].location
+                            }
+                        }
+                    },
+                    _avg: {
+                        itemPrice: true
+                    },
+                    _count: {
+                        id: true
+                    }
+                })
+            }
+        }
 
     }
     catch (error) {
