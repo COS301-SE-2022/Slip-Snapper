@@ -1935,9 +1935,9 @@ async function getUserAverageSpent(userId) {
  */
 async function getUserAnalysis(userId) {
 
-   
 
-    try { 
+
+    try {
         /**
          * new month is set to the 01 of the current month
          */
@@ -1971,6 +1971,27 @@ async function getUserAnalysis(userId) {
                     item: "desc"
                 }
 
+            }
+        })
+     
+        let listOfItems = []
+        for (const k in commonItems) {
+            listOfItems.push(commonItems[k].item)
+        }
+        const groupedLocations = await prisma.slip.groupBy({
+            by: ["location"],
+            where: {
+                items: {
+                    some: {
+                        data: {
+                            some: {
+                                item: {
+                                    in: listOfItems
+                                }
+                            }
+                        }
+                    }
+                }
             }
         })
 
