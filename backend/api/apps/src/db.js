@@ -1321,7 +1321,7 @@ async function getAllReports(userid) {
                 id: true,
                 reportName: true,
                 generatedDate: true,
-                reportNumber:true
+                reportNumber: true
             }
         })
 
@@ -1340,8 +1340,8 @@ async function getAllReports(userid) {
                 reportId: report.id,
                 reportName: report.reportName,
                 reportDate: report.generatedDate,
-                reportNumber:report.reportNumber,
-                otherName:report.reportName,
+                reportNumber: report.reportNumber,
+                otherName: report.reportName,
                 reportNumber: report.reportNumber,
             })
         }
@@ -1433,7 +1433,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
                     reportName: report.reportName,
                     reportDate: report.generatedDate,
                     otherName: report.reportName,
-                    reportNumber:report.reportNumber,
+                    reportNumber: report.reportNumber,
 
                 })
             }
@@ -1472,7 +1472,7 @@ async function getRecentReports(userid) {
                 id: true,
                 reportName: true,
                 generatedDate: true,
-                reportNumber:true
+                reportNumber: true
             },
             take: 5,
             orderBy: {
@@ -1669,8 +1669,8 @@ async function todaysReports(userid) {
             },
         })
 
-        if (todaystotal._sum.total===null)
-            todaystotal._sum.total=0;
+        if (todaystotal._sum.total === null)
+            todaystotal._sum.total = 0;
 
         return {
             message: "Today's Stats retrieved",
@@ -1767,9 +1767,9 @@ async function getUserGeneralBudgets(userId, start, end) {
             Electronics: 0,
             Household: 0,
             Other: 0,
-            Healthcare:0,
-            Hobby:0,
-            Vehicle:0,
+            Healthcare: 0,
+            Hobby: 0,
+            Vehicle: 0,
         }
 
 
@@ -1928,6 +1928,128 @@ async function getUserAverageSpent(userId) {
     }
 }
 
+/**
+ * Function to get the users average spent
+ * @param {*} userId The users ID 
+ * @returns the user average
+ */
+async function getUserAnalysis(userId) {
+
+
+
+    try {
+        /**
+         * new month is set to the 01 of the current month
+         */
+        const date1 = new Date()
+        date1.setDate(01)
+        let newMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        /**
+         * query to get the top 5 most commonly bought items within a certain time frame
+         */
+        const commonItems = await prisma.dataItem.groupBy({
+            by: ['item'],
+            where: {
+                items: {
+                    some: {
+                        Slip: {
+                            some: {
+                                AND: {
+                                    usersId: userId,
+                                    transactionDate: {
+                                        gte: newMonth
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            take: 5,
+            orderBy: {
+                _count: {
+                    item: "desc"
+                }
+
+            }
+        })
+
+        let listOfItems = []
+        for (const k in commonItems) {
+            listOfItems.push(commonItems[k].item)
+        }
+        const groupedLocations = await prisma.slip.groupBy({
+            by: ["location"],
+            where: {
+                items: {
+                    some: {
+                        data: {
+                            some: {
+                                item: {
+                                    in: listOfItems
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+        let analysisObject = []
+
+        for (const i in listOfItems) {
+            let locationArray = []
+            let reliabilityTally = []
+            let averagePerLocation = []
+            for (const k in groupedLocations) {
+                const aggregates = await prisma.item.aggregate({
+                    where: {
+                        data: {
+                            some: {
+                                item: commonItems[i].item,
+                            },
+                        },
+                        Slip: {
+                            some: {
+                                location: groupedLocations[k].location
+                            }
+                        }
+                    },
+                    _avg: {
+                        itemPrice: true
+                    },
+                    _count: {
+                        id: true
+                    }
+                })
+                if (aggregates != null) {
+                    locationArray.push(groupedLocations[k].location)
+                    reliabilityTally.push(aggregates._count)
+                    averagePerLocation.push(aggregates._avg)
+                }
+            }
+            analysisObject.push({
+                itemName: commonItems[i].item,
+                stores: locationArray,
+                occurances: reliabilityTally,
+                amounts: averagePerLocation
+            })
+        }
+        return{
+            
+                message: "Success retrieving User Analysis",
+                analysis:analysisObject
+            
+        }
+
+    }
+    catch (error) {
+        return {
+            message: "Error retrieving User Analysis",
+            analysis:[]
+        }
+    }
+}
 
 
 async function getUserMode(userId) {
@@ -1960,4 +2082,5 @@ module.exports = {
     updateWeeklyMonthlyCategoryBudgets,
     getWeeklyMonthlyCategoryBudgets,
     deleteSlip,
+    getUserAnalysis
 }
