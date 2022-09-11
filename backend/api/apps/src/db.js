@@ -2022,14 +2022,31 @@ async function getUserAnalysis(userId) {
                         id: true
                     }
                 })
+                if (aggregates != null) {
+                    locationArray.push(groupedLocations[k].location)
+                    reliabilityTally.push(aggregates._count)
+                    averagePerLocation.push(aggregates._avg)
+                }
             }
+            analysisObject.push({
+                itemName: commonItems[i].item,
+                stores: locationArray,
+                occurances: reliabilityTally,
+                amounts: averagePerLocation
+            })
+        }
+        return{
+            
+                message: "Success retrieving User Analysis",
+                analysis:analysisObject
+            
         }
 
     }
     catch (error) {
         return {
             message: "Error retrieving User Analysis",
-            average: "0.00"
+            analysis:[]
         }
     }
 }
