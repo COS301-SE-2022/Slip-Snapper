@@ -252,14 +252,12 @@ router.get('/graph', async (req, res) => {
             });
     }
 
-    // const result = await req.app.get('db').retrieveAllSlips(Number(tokenVerified.user.id))
+    const result = await req.app.get('db').getUserAnalysis(Number(tokenVerified.user.id))
 
     let status = 200;
     return res.status(status)
         .send({
-            message: result.message,
-            // graphData: result.graphData,
-
+            data: result.analysis,
         });
 });
 
