@@ -1,5 +1,5 @@
 import { Bar } from "react-chartjs-2";
-import '../theme/reportItem.css'
+import '../theme/graph.css'
 
 
 type Props = {
@@ -53,7 +53,7 @@ function Graph({ graphData }: Props) {
     };
 
     return (
-        <Bar options={graphSettings} data={graphStats} />
+        <Bar className="graph" options={graphSettings} data={graphStats} />
     );
 }
 
