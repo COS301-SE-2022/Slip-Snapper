@@ -294,6 +294,8 @@ const ViewReports: React.FC = () => {
       for (let i = 0; i < reports.length; i++) {
         if (typeof reports[i].otherName === 'string') {
           reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
+          reports[i].otherName = reports[i].otherName.replace('_', ' ');
+          reports[i].otherName = reports[i].otherName.replace('_', ' #');
         }
       }
     }

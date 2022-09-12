@@ -7,3 +7,18 @@
 .successRedirect {
     display: none;
 }
+.graph-card{
+    min-width: 30%;
+    padding: 2%;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
+}
+
+.graph-wrapper {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}

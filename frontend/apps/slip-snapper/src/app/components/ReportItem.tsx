@@ -14,29 +14,24 @@ import { getUserReport } from '../../api/apiCall';
 import '../theme/reportItem.css';
 
 type Props = {
-  reportData: string[];
-};
+    reportData: string[];
+}
 function ReportItem({ reportData }: Props) {
-  return (
-    <IonCol className="recent-item-col">
-      <IonCard color="primary">
-        <IonCardHeader>
-          <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
-          <IonCardTitle>{reportData[1]}</IonCardTitle>
-        </IonCardHeader>
-        <IonItem color="tertiary">
-          <IonButton
-            onClick={() => view(reportData[1])}
-            fill="solid"
-            slot="end"
-            color="secondary"
-          >
-            View
-          </IonButton>
-        </IonItem>
-      </IonCard>
-    </IonCol>
-  );
+    return (
+        <IonCol className="recent-item-col">
+            <IonCard color="primary">
+                <IonCardHeader>
+                    <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
+                    <IonCardTitle>{reportData[2]}</IonCardTitle>
+                </IonCardHeader>
+                <IonItem color="tertiary">
+                    <IonButton onClick={() => view(reportData[1])} fill="solid" slot="end" color="secondary">
+                        View
+                    </IonButton>
+                </IonItem>
+            </IonCard>
+        </IonCol>
+    );
 }
 function view(data: any) {
   let user = JSON.parse(localStorage.getItem('user')!);

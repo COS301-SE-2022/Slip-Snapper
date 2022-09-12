@@ -286,3 +286,17 @@ export async function deleteSlip( slipId ){
         })
     })
 }
+
+/**
+ * To retrieve data for graphs
+ * @param {*} slipId the slipId
+ * @returns the response from the server
+ */
+
+export async function getGraphStats(userId) {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'item/graph?userId=' + userId,
+    })
+}

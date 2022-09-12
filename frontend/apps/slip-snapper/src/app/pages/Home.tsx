@@ -22,50 +22,79 @@ import { FileOpener } from '@ionic-native/file-opener';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
-import {
-  getAllUserReports,
-  getRecentReports,
-  getThisWeeksReports,
-  getTodayStats,
-  getUserReport,
-  removeReport,
-} from '../../api/apiCall';
+import Graph from '../components/Graph';
+import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+
+/**
+ * Config for Graph_2
+ */
 
 const Home: React.FC = () => {
   const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([]);
   const [todayItems, setTodayItem] = useState(0);
   const [todayTotal, setTodayTotal] = useState(0);
   const [present, dismiss] = useIonToast();
-  const [reports, setR] = useState([
-    { reportId: '0', reportName: 'No reports Available' },
-  ]);
+  const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
 
+  const [graphData, setGraphData] = useState<any[]>([])
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!);
     if (user == null) {
       user = { id: 24 };
     }
-    getRecentReports(user.id).then((apiResponse) => {
-      if (typeof apiResponse.data !== 'string') {
-        setR(apiResponse.data.reports);
-      }
-    });
 
-    getThisWeeksReports(user.id).then((apiResponse) => {
-      if (typeof apiResponse.data !== 'string') {
-        setThisWeeksReports(apiResponse.data.reports);
-      }
-    });
+    getRecentReports(user.id)
+      .then(apiResponse => {
+        if(typeof(apiResponse.data) !== "string"){
+          setR(apiResponse.data.reports);
+        }
+      });
 
-    getTodayStats(user.id).then((apiResponse) => {
-      if (typeof apiResponse.data !== 'string') {
-        setTodayItem(apiResponse.data.totalItems);
-        setTodayTotal(apiResponse.data.totalSpent);
-      }
-    });
+    getThisWeeksReports(user.id)
+      .then(apiResponse => {
+        if(typeof(apiResponse.data) !== "string"){
+          setThisWeeksReports(apiResponse.data.reports)
+        }
+      });
+
+    getTodayStats(user.id)
+      .then(apiResponse => {
+        if(typeof(apiResponse.data) !== "string"){
+          setTodayItem(apiResponse.data.totalItems)
+          setTodayTotal(Number(apiResponse.data.totalSpent))
+        }
+      });
+    getGraphStats(user.id)
+      .then(apiResponse => {
+        if (typeof (apiResponse.data) !== "string") {
+          setGraphData(apiResponse.data.data)
+        }
+      });
   }, []);
-
+  setNewNames(reports)
+  setNewNames(thisWeeksReports)
   return (
     <IonPage>
       <IonHeader>
@@ -84,12 +113,10 @@ const Home: React.FC = () => {
         <IonRow>
           {reports.map((reps, index) => {
             return (
-              <ReportItem
-                key={index}
-                reportData={[reps.reportId, reps.reportName]}
-              />
-            );
-          })}
+              <ReportItem key={index} reportData={[reps.reportNumber, reps.reportName, reps.otherName]} />
+            )
+          })
+          }
         </IonRow>
 
         <IonItem>
@@ -115,15 +142,8 @@ const Home: React.FC = () => {
               {thisWeeksReports.map((item, index) => {
                 return (
                   <IonItem key={index} color="tertiary">
-                    {item.reportName}
-                    <IonButton
-                      onClick={() => {
-                        view(item.reportName);
-                      }}
-                      color="secondary"
-                      slot="end"
-                      class="viewButton"
-                    >
+                    {item.otherName}
+                    <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
                     <IonButton
@@ -141,7 +161,26 @@ const Home: React.FC = () => {
               })}
             </IonCard>
           </IonCol>
+
         </IonRow>
+
+        <IonItem>
+          <IonTitle>Frequent Purchase Analysis</IonTitle>
+        </IonItem>
+
+        <div className="graph-wrapper">
+          {graphData.map((item) => {
+                return (
+                  <IonCard className='graph-card'>
+                    <Graph graphData={item}></Graph>
+                  </IonCard>
+                )
+              })
+              }  
+        </div>
+          
+
+
       </IonContent>
       <IonFooter>
         <TakePictureButton />
@@ -237,6 +276,19 @@ const Home: React.FC = () => {
     getThisWeeksReports(user.id).then((apiResponse) => {
       setThisWeeksReports(apiResponse.data.reports);
     });
+  }
+
+  async function setNewNames(reports: any) {
+    if (reports !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (typeof reports[i].otherName === 'string') {
+          reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
+          reports[i].otherName = reports[i].otherName.replace('_', ' ');
+          reports[i].otherName = reports[i].otherName.replace('_', ' #');
+        }
+      }
+    }
+    return reports;
   }
 };
 
