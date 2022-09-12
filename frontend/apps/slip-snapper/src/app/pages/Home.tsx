@@ -154,14 +154,25 @@ const Home: React.FC = () => {
             </IonCard>
           </IonCol>
 
-
         </IonRow>
-        {graphData.map((item) => {
-          return (
-            <Graph graphData={item}></Graph>
-          )
-        })
-        }  
+
+        <IonItem>
+          <IonTitle>Frequent Purchase Analysis</IonTitle>
+        </IonItem>
+
+        <div className="graph-wrapper">
+          {graphData.map((item) => {
+                return (
+                  <IonCard className='graph-card'>
+                    <Graph graphData={item}></Graph>
+                  </IonCard>
+                )
+              })
+              }  
+        </div>
+          
+
+
       </IonContent>
       <IonFooter>
         <TakePictureButton />

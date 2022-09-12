@@ -1,6 +1,4 @@
 import { Bar } from "react-chartjs-2";
-import '../theme/graph.css'
-
 
 type Props = {
     graphData: any;
@@ -19,16 +17,17 @@ function Graph({ graphData }: Props) {
      const graphSettings = {
         responsive: true,
         barThickness: 43,
-        borderWidth: 2,
-        hoverBackgroundColor: '#5d6c83',
+        borderWidth: 1,
+        borderRadius: 10,
+        
 
         plugins: {
             legend: {
-                position: 'top' as const,
+                position: 'bottom' as const,
             },
             title: {
                 display: true,
-                text: graphData.itemName+' prices across various Stores',
+                text: graphData.itemName+' prices across various stores',
             },
         },
     };
@@ -39,14 +38,16 @@ function Graph({ graphData }: Props) {
             {
                 label: 'Price (R)',
                 data: amounts,
-                backgroundColor: '#27A592',
+                backgroundColor: "rgb(39, 165, 146, 0.8)",
                 width: 8,
+                hoverBackgroundColor: "rgb(47, 198, 176, 0.8)",
             },
             {
                 label: 'Occurrences',
                 data: occurrences,
-                backgroundColor: '#292592',
+                backgroundColor: 'rgb(156, 39, 176, 0.8)',
                 width: 8,
+                hoverBackgroundColor: "rgb(187, 54, 211, 0.8)",
                 hidden: true,
             }
         ],

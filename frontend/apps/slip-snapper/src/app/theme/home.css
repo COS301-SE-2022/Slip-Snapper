@@ -7,12 +7,18 @@
 .successRedirect {
     display: none;
 }
-.graphCol{
-    max-width: 50%;
-    padding-left: 2%;
+.graph-card{
+    min-width: 30%;
+    padding: 2%;
+    align-items: center;
+    display: flex;
+    border-radius: 10px;
 }
- @media screen and (max-width: 1205px) {
-.graphCol {
-       max-width: 100%;
-    }
-  }
+
+.graph-wrapper {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
