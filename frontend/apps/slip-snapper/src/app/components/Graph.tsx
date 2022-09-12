@@ -6,11 +6,11 @@ type Props = {
 function Graph({ graphData }: Props) {
 
     const amounts = []
-    const occurrences = []
+    const frequency = []
     for(let i = 0 ; i<graphData.amounts.length;i++)
     {
         amounts[i] = graphData.amounts[i].itemPrice
-        occurrences[i] = graphData.occurances[i].id
+        frequency[i] = graphData.occurances[i].id
     }
 
 
@@ -20,7 +20,6 @@ function Graph({ graphData }: Props) {
         borderWidth: 1,
         borderRadius: 10,
         
-
         plugins: {
             legend: {
                 position: 'bottom' as const,
@@ -43,8 +42,8 @@ function Graph({ graphData }: Props) {
                 hoverBackgroundColor: "rgb(47, 198, 176, 0.8)",
             },
             {
-                label: 'Occurrences',
-                data: occurrences,
+                label: 'Frequency',
+                data: frequency,
                 backgroundColor: 'rgb(156, 39, 176, 0.8)',
                 width: 8,
                 hoverBackgroundColor: "rgb(187, 54, 211, 0.8)",
