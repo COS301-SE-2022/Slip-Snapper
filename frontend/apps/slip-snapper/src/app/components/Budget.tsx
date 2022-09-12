@@ -125,7 +125,6 @@ function Budget() {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
-                        console.log(apiResponse.data)
                         setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
                         setCategorySpent(apiResponse.data.otherBudgets.totals)
                         setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.totals)
@@ -327,9 +326,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.FoodBudget.timeFrame === true) {
-                    categoryBudgets.FoodBudget.weeklyValue = newBudget
+                    categoryBudgets.FoodBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.FoodBudget.monthlyValue = newBudget }
+                else { categoryBudgets.FoodBudget.monthlyValue = Number(newBudget) }
                 console.log(categoryBudgets)
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "foodBar", categorySpent.Food)
@@ -346,9 +345,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.FashionBudget.timeFrame === true) {
-                    categoryBudgets.FashionBudget.weeklyValue = newBudget
+                    categoryBudgets.FashionBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.FashionBudget.monthlyValue = newBudget }
+                else { categoryBudgets.FashionBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "fashionBar", categorySpent.Fashion)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -365,10 +364,10 @@ function Budget() {
 
             else {
                 if (categoryBudgets.ElectronicsBudget.timeFrame === true) {
-                    categoryBudgets.ElectronicsBudget.weeklyValue = newBudget
+                    categoryBudgets.ElectronicsBudget.weeklyValue = Number(newBudget)
 
                 }
-                else { categoryBudgets.ElectronicsBudget.monthlyValue = newBudget }
+                else { categoryBudgets.ElectronicsBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "elecBar", categorySpent.Electronics)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -384,10 +383,10 @@ function Budget() {
 
             else {
                 if (categoryBudgets.HouseholdBudget.timeFrame === true) {
-                    categoryBudgets.HouseholdBudget.weeklyValue = newBudget
+                    categoryBudgets.HouseholdBudget.weeklyValue = Number(newBudget)
                 }
                 else {
-                    categoryBudgets.HouseholdBudget.monthlyValue = newBudget
+                    categoryBudgets.HouseholdBudget.monthlyValue = Number(newBudget)
                 }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "houseBar", categorySpent.Household)
@@ -403,9 +402,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.OtherBudget.timeFrame === true) {
-                    categoryBudgets.OtherBudget.weeklyValue = newBudget
+                    categoryBudgets.OtherBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.OtherBudget.monthlyValue = newBudget }
+                else { categoryBudgets.OtherBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "otherBar", categorySpent.Other)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -421,9 +420,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.HealthcareBudget.timeFrame === true) {
-                    categoryBudgets.HealthcareBudget.weeklyValue = newBudget
+                    categoryBudgets.HealthcareBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.HealthcareBudget.monthlyValue = newBudget }
+                else { categoryBudgets.HealthcareBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "healthcareBar", categorySpent.Healthcare)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -439,9 +438,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.HobbyBudget.timeFrame === true) {
-                    categoryBudgets.HobbyBudget.weeklyValue = newBudget
+                    categoryBudgets.HobbyBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.HobbyBudget.monthlyValue = newBudget }
+                else { categoryBudgets.HobbyBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "hobbyBar", categorySpent.Hobby)
                 setGeneralBudget(user.id, categoryBudgets)
@@ -457,9 +456,9 @@ function Budget() {
 
             else {
                 if (categoryBudgets.VehicleBudget.timeFrame === true) {
-                    categoryBudgets.VehicleBudget.weeklyValue = newBudget
+                    categoryBudgets.VehicleBudget.weeklyValue = Number(newBudget)
                 }
-                else { categoryBudgets.VehicleBudget.monthlyValue = newBudget }
+                else { categoryBudgets.VehicleBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "vehicleBar", categorySpent.Vehicle)
                 setGeneralBudget(user.id, categoryBudgets)
