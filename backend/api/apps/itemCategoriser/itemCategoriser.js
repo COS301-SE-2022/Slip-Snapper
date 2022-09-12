@@ -107,12 +107,42 @@ class ItemCategoriser{
         const data = await encoder.embed(item);
 
         const prediction = model.predict(data)
+        const value = await prediction.data();
+        let j = 0;
+        for(let i = 0; i < 8; i++){
+            if(value[i] > value[j]){
+                j = i;
+            }
+        }
+
         prediction.print()
+        switch (j) {
+            case 0:
+                return 'Food';
+            case 1:
+                return 'Electronics';
+            case 2:
+                return 'Fashion';
+            case 3:
+                return 'Household';
+            case 4:
+                return 'Hobby';
+            case 5:
+                return 'Vehicle';
+            case 6:
+                return 'Healthcare';
+            default:
+                return 'Other';
+        }
     }
 }
 
 const categoriser = new ItemCategoriser();
 // categoriser.run()
-categoriser.predict('bread')
+async function test(){
+    console.log(await categoriser.predict('phone'))
+}
+
+test();
 
 module.exports = ItemCategoriser
