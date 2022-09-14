@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
+import Graph from '../components/Graph';
 import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
 
@@ -42,44 +43,6 @@ ChartJS.register(
   Legend
 );
 
-/**
- * Config for Graph_1
- */
-export const graphSettings_1 = {
-  responsive: true,
-  barThickness:43,
-  borderWidth:2,
-  hoverBackgroundColor: '#5d6c83',
-  
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Apple Prices across various Stores',
-    },
-  },
-};
-
-export const graphData_1 = {
-  labels: ['Checkers', 'Shoprite', 'Pick n Pay', 'Woolworths', 'Clicks'],
-  datasets: [
-    {
-      label: 'Apples',
-      data: [20, 10,15,26,14],
-      backgroundColor: '#27A592',
-      width:8,
-    },
-    {
-      label: 'Occurrences',
-      data: [5, 4, 2, 5, 10],
-      backgroundColor: '#292592',
-      width: 8,
-      hidden: true,
-    }
-  ],
-};
 
 /**
  * Config for Graph_2
@@ -92,12 +55,12 @@ const Home: React.FC = () => {
   const [present, dismiss] = useIonToast();
   const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
 
+  const [graphData, setGraphData] = useState<any[]>([])
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if(user==null){
         user = {id: 24}
     }
-    // setNewNames(reports)
 
     getRecentReports(user.id)
       .then(apiResponse => {
@@ -120,8 +83,12 @@ const Home: React.FC = () => {
           setTodayTotal(Number(apiResponse.data.totalSpent))
         }
       });
-
-
+    getGraphStats(user.id)
+      .then(apiResponse => {
+        if (typeof (apiResponse.data) !== "string") {
+          setGraphData(apiResponse.data.data)
+        }
+      });
   }, []);
   setNewNames(reports)
   setNewNames(thisWeeksReports)
@@ -187,16 +154,24 @@ const Home: React.FC = () => {
             </IonCard>
           </IonCol>
 
+        </IonRow>
 
-        </IonRow>
-        <IonRow>
-          <IonCol className='graphCol'>
-            <Bar options={graphSettings_1} data={graphData_1} />
-          </IonCol>
-          <IonCol className='graphCol'>
-            <Bar options={graphSettings_1} data={graphData_1} />
-          </IonCol>
-        </IonRow>
+        <IonItem>
+          <IonTitle>Frequent Purchase Analysis</IonTitle>
+        </IonItem>
+
+        <div className="graph-wrapper">
+          {graphData.map((item) => {
+                return (
+                  <IonCard className='graph-card'>
+                    <Graph graphData={item}></Graph>
+                  </IonCard>
+                )
+              })
+              }  
+        </div>
+          
+
 
       </IonContent>
       <IonFooter>
