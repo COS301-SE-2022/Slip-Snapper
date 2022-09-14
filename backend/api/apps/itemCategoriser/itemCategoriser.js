@@ -1,6 +1,5 @@
 const tf = require('@tensorflow/tfjs-node');
 const vector = require('@tensorflow-models/universal-sentence-encoder');
-const { model } = require('@tensorflow/tfjs-node');
 
 class ItemCategoriser{
 
@@ -100,14 +99,19 @@ class ItemCategoriser{
         model.summary();
     }
 
-    async predict(item){
-        const model = await tf.loadLayersModel('file://'+__dirname+'/itemcategory/model.json');
-        
-        const encoder = await vector.load();
-        const data = await encoder.embed(item);
+    async loadModel(){
+        this.predictModel = await tf.loadLayersModel('file://'+__dirname+'/itemcategory/model.json');
+        this.encoderP = await vector.load();
+    }
 
+    async predict(item){
+        const model = this.predictModel;
+        const encoder = this.encoderP;
+
+        const data = await encoder.embed(item);
         const prediction = model.predict(data)
         const value = await prediction.data();
+
         let j = 0;
         for(let i = 0; i < 8; i++){
             if(value[i] > value[j]){
@@ -115,7 +119,7 @@ class ItemCategoriser{
             }
         }
 
-        prediction.print()
+        // prediction.print()
         switch (j) {
             case 0:
                 return 'Food';
@@ -137,12 +141,17 @@ class ItemCategoriser{
     }
 }
 
-const categoriser = new ItemCategoriser();
-// categoriser.run()
+// const categoriser = new ItemCategoriser();
+async function setup(){
+    categoriser.run();
+}
 async function test(){
+    await categoriser.loadModel();
     console.log(await categoriser.predict('phone'))
 }
+// setup();
+// test();
 
-test();
-
-module.exports = ItemCategoriser
+module.exports = {
+    ItemCategoriser
+}

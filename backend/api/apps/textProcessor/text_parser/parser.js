@@ -1,16 +1,21 @@
 const { categorize } = require("../../itemCategoriser/categorizer");
+const { ItemCategoriser } = require('../../itemCategoriser/itemCategoriser')
+
+const category = new ItemCategoriser();
+category.loadModel();
 
 /**
  * 
- * @param {*} text array of slip text
+ * @param {*} text the fill slip text
  * @returns array of slip date, location, total amount and items
  */
-function parse(text) {
+async function parse(lines) {
+    let text = lines.split('\n');
     let correctedText = textCorrection(text)
     let dateOfPurchase = dateParser(correctedText);
     let locationOfSlip = locationParser(correctedText);
     let totalSlip = totalParser(correctedText);
-    let slipItems = itemsParser(correctedText);
+    let slipItems = await itemsParser(correctedText);
 
     let numItems = slipItems.length
 
@@ -189,18 +194,19 @@ function totalParser(text) {
  * @param {*} text array of line text from ocr
  * @returns array of arrays of items
  */
-function itemsParser(text) {
+async function itemsParser(text) {
     const receiptRegex = /^\s*(\d*)\s*(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
     let items = [];
     const unwantedEntryRegex = /\b(total)\b|\b(subtotal)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b|\b(rounding)\b|\b(debit)\b/gm
     const itemNumRemoval = /\b(\d+)\.(\d{2})\b/gm
 
-    for (let i = 0; i < text.length; i++) {
-        if (text[i].match(receiptRegex) != null) {
-            const matches = text[i].matchAll(receiptRegex)
+    // for (let i = 0; i < text.length; i++) {
+    for (const line of text) {
+        if (line.match(receiptRegex) != null) {
+            const matches = line.matchAll(receiptRegex)
 
             for (const matchedGroup of matches) {
-                var [
+                let [
                     fullString,
                     quantity,
                     item,
@@ -216,7 +222,7 @@ function itemsParser(text) {
                     item = item.replaceAll(itemNumRemoval, "").replaceAll("@", "")
 
                     if (item != "" && !/^(\d*\s*)*$/.test(item)) {
-                        const type = categorize(item);
+                        const type = await category.predict(item);
                         items.push({
                             quantity,
                             item,
