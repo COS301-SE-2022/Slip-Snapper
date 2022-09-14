@@ -63,17 +63,21 @@ Architectural Structures are within the SRS Demo 2
 ## [SRS Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214324/COS301_SRS_Anoobis_Demo3.pdf)
 <br>
 
-# [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
-# [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
+# User Manual
+## [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
 
+## [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
+
+# Technical Installation Manual
 # [Technical Installation Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214305/Demo3_Anoobis_Technical_Installation_Manual.pdf)
 
-# [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
+# Coding Standards
+## [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
 
-# [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
+# Project Board
+## [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
 # Contributors
-
 
 ## [Gabriel Grobler](https://github.com/Grobbies26) (Team Lead)
 
