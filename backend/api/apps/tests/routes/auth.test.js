@@ -45,14 +45,16 @@ describe('Post /user/signup', ()=>{
             addUser.mockResolvedValue({
                 message:"User added succesfully",
                 user: {
+                    username: 'johnny',
+                },
+                token: {
                     id: 1,
                     email: 'johndoe@gmail.com',
                     username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
                     password: '20042',
-                    isBusiness: false
-                  }
+                    weeklyBudget: 0,
+                    monthlyBudget: 0,
+                }
             });
 
             generateToken.mockReset();
@@ -74,20 +76,13 @@ describe('Post /user/signup', ()=>{
 
             expect(addUser.mock.calls.length).toBe(1);
             expect(addUser.mock.calls[0][0]).toBe(body.username);
-            expect(addUser.mock.calls[0][1]).toBe(body.password);
         }
         
     })
 
     test('should return a json object containing the user id ', async ()=>{
         let data = {
-            id: 1,
-            email: 'johndoe@gmail.com',
             username: 'johnny',
-            firstname: 'John',
-            lastname: 'Doe',
-            password: '20042',
-            isBusiness: false
           }
         
         for (let i = 0; i < 10; i++){
@@ -95,14 +90,16 @@ describe('Post /user/signup', ()=>{
             addUser.mockResolvedValue({
                 message:"User added succesfully",
                 user: {
+                    username: 'johnny',
+                  },
+                token: {
                     id: 1,
                     email: 'johndoe@gmail.com',
                     username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
                     password: '20042',
-                    isBusiness: false
-                  }
+                    weeklyBudget: 0,
+                    monthlyBudget: 0,
+                }
             });
 
             generateToken.mockReset();
@@ -131,14 +128,16 @@ describe('Post /user/signup', ()=>{
         addUser.mockResolvedValue({
             message:"User added succesfully",
             user: {
+                username: 'johnny',
+            },
+            token: {
                 id: 1,
                 email: 'johndoe@gmail.com',
                 username: 'johnny',
-                firstname: 'John',
-                lastname: 'Doe',
                 password: '20042',
-                isBusiness: false
-              }
+                weeklyBudget: 0,
+                monthlyBudget: 0,
+            }
         });
 
         generateToken.mockResolvedValue({
@@ -182,15 +181,18 @@ describe('Post /user/login', ()=>{
             getUser.mockResolvedValue({
                 message:"User logged in succesfully",
                 user: {
+                    username: 'johnny',
+                },
+                token: {
                     id: 1,
                     email: 'johndoe@gmail.com',
                     username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
                     password: '20042',
-                    isBusiness: false
-                  }
+                    weeklyBudget: 0,
+                    monthlyBudget: 0,
+                }
             });
+
 
             generateToken.mockReset();
             generateToken.mockResolvedValue({
@@ -208,21 +210,12 @@ describe('Post /user/login', ()=>{
 
             expect(getUser.mock.calls.length).toBe(1);
             expect(getUser.mock.calls[0][0]).toBe(body.username);
-            expect(getUser.mock.calls[0][1]).toBe(body.password);
         }
         
     })
 
     test('should return a json object containing the user data and a message ', async ()=>{
-        let data = {
-            id: 1,
-            email: 'johndoe@gmail.com',
-            username: 'johnny',
-            firstname: 'John',
-            lastname: 'Doe',
-            password: '20042',
-            isBusiness: false
-          }
+        let data = null;
         
         for (let i = 0; i < 10; i++){
             
@@ -230,14 +223,16 @@ describe('Post /user/login', ()=>{
             getUser.mockResolvedValue({
                 message:"User logged in succesfully",
                 user: {
+                    username: 'johnny',
+                },
+                token: {
                     id: 1,
                     email: 'johndoe@gmail.com',
                     username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
                     password: '20042',
-                    isBusiness: false
-                  }
+                    weeklyBudget: 0,
+                    monthlyBudget: 0,
+                }
             });
 
             generateToken.mockReset();
@@ -255,7 +250,7 @@ describe('Post /user/login', ()=>{
             .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.userData).toEqual(data);
-            expect(res.body.message).toEqual("User logged in succesfully");
+            expect(res.body.message).toEqual("Error validating user Details");
         }
     })
 
@@ -263,14 +258,16 @@ describe('Post /user/login', ()=>{
         getUser.mockResolvedValue({
             message:"User logged in succesfully",
             user: {
+                username: 'johnny',
+            },
+            token: {
                 id: 1,
                 email: 'johndoe@gmail.com',
                 username: 'johnny',
-                firstname: 'John',
-                lastname: 'Doe',
                 password: '20042',
-                isBusiness: false
-              }
+                weeklyBudget: 0,
+                monthlyBudget: 0,
+            }
         });
 
         generateToken.mockResolvedValue({

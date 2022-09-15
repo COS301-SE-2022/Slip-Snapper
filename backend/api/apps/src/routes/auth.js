@@ -1,15 +1,20 @@
 const router = require("express").Router();
+const bcrypt = require('bcrypt');
 
 /**
  * Add a user
  * Adds a user with an Name, Password
  */
 router.post('/signup', async (req,res)=>{
-    //TODO add input checking and password hashing
+    //TODO add input checking
     let { firstname, lastname, username, password } = req.body;
-    const result = await req.app.get('db').addUser(username, password, firstname, lastname);
 
-    const token = await req.app.get('token').generateToken(result.user)
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashed = bcrypt.hashSync(password,salt);
+
+    const result = await req.app.get('db').addUser(username, hashed, firstname, lastname);
+    const token = await req.app.get('token').generateToken(result.token);
 
     const path = `${username}/`
     const bucket = await req.app.get('bucket').createFolder(path)
@@ -30,20 +35,28 @@ router.post('/signup', async (req,res)=>{
  * Logs the user in with their password and username
  */
 router.post('/login', async (req, res)=>{
-    //TODO add input checking and password hashing
+    //TODO add input checking
     let { username, password } = req.body;
 
-    const result = await req.app.get('db').getUser(username,password);
+    const result = await req.app.get('db').getUser(username);
+    const correctPassword = bcrypt.compareSync(password, result.token.password)
+    if (!correctPassword || result.user == null) {
+        result.message = "Error validating user Details";
+        result.user = null;
+        result.token = "";
+    }
+
     let status = 200;
     //TODO checking for errors
-    
-    const token = await req.app.get('token').generateToken(result.user)
+    if(result.token != ""){
+        result.token = await req.app.get('token').generateToken(result.user)
+    }
 
     return res.status(status)
         .send({
             message: result.message,
             userData: result.user,
-            token: token,
+            token: result.token,
         });
 });
 
