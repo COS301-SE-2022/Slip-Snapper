@@ -63,7 +63,6 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
-
         let budgetObject = {
             FoodBudget: {
                 active: false,
@@ -146,6 +145,7 @@ async function addUser(username, password, firstname, lastname) {
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error Creating User",
             user: null

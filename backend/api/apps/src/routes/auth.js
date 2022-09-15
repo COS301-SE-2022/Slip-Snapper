@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const bcrypt = require('bcrypt');
 
 /**
  * Add a user
@@ -7,12 +8,19 @@ const router = require("express").Router();
 router.post('/signup', async (req,res)=>{
     //TODO add input checking and password hashing
     let { firstname, lastname, username, password } = req.body;
-    const result = await req.app.get('db').addUser(username, password, firstname, lastname);
 
-    const token = await req.app.get('token').generateToken(result.user)
+    const saltRounds = 15;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hashed = bcrypt.hashSync(password,salt);
+    console.log(hashed);
 
-    const path = `${username}/`
-    const bucket = await req.app.get('bucket').createFolder(path)
+    const result = await req.app.get('db').addUser(username, hashed, firstname, lastname);
+
+    const token = '';
+    // const token = await req.app.get('token').generateToken(result.user)
+
+    // const path = `${username}/`
+    // const bucket = await req.app.get('bucket').createFolder(path)
 
     let status = 200;
     //TODO checking for errors
