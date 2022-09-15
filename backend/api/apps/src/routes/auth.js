@@ -51,7 +51,7 @@ router.post('/login', async (req, res)=>{
     if(result.token != ""){
         result.token = await req.app.get('token').generateToken(result.user)
     }
-    
+
     return res.status(status)
         .send({
             message: result.message,
