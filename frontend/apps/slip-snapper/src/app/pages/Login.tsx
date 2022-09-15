@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import '../theme/login-register.css';
 import { loginA } from "../../api/apiCall"
 import { useHistory } from 'react-router-dom';
-import { Tab } from '@mui/material';
+import { Chip } from '@mui/material';
 
 const Login: React.FC = () => {
 
@@ -23,6 +23,10 @@ const Login: React.FC = () => {
           <IonCard color="tertiary" class="LRCard">
 
             <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
+            
+            <div>
+              <Chip label={"Log In"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
+            </div>
 
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Username</IonLabel>
@@ -43,7 +47,7 @@ const Login: React.FC = () => {
                 <p style={{color:"#b5bab7"}}>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
               </div>
               <div className='forgot-pass' slot="end">
-                <a href={"/register"}>Forgot Password</a>
+                <a href={"/forgotpass"}>Forgot Password</a>
               </div>
             </IonItem>
 
@@ -85,11 +89,11 @@ const Login: React.FC = () => {
   function login() {
 
     if (usernameInput === undefined || usernameInput === "" || usernameInput === "*") {
-      setErrorMessage("Please fill in all fields!")
+      setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
     else if (passwordInput === undefined || passwordInput === "" || passwordInput === "*") {
-      setErrorMessage("Please fill in all fields!")
+      setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
 
@@ -100,11 +104,11 @@ const Login: React.FC = () => {
       loginA(usernameInput, passwordInput)
         .then(apiResponse => {
           if (apiResponse.data.message === "Invalid Username") {
-            setErrorMessage("Username not found!")
+            setErrorMessage("Username not found.")
             setAlert(true)
           }
           else if (apiResponse.data.message === "Invalid Password") {
-            setErrorMessage("Incorrect Password!")
+            setErrorMessage("Incorrect Password.")
             setAlert(true)
           }
           else {
