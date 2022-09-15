@@ -7,9 +7,10 @@ import Profile from './pages/Profile';
 import Receipts from './pages/Receipts';
 import EditSlip from './pages/EditSlip';
 import Register from './pages/Register';
-import Login from './pages/Login'
-import AddEntry from './pages/AddEntry'
-import EditReceipt from './pages/EditReceipt'
+import Login from './pages/Login';
+import ForgotPass from './pages/ForgotPass';
+import AddEntry from './pages/AddEntry';
+import EditReceipt from './pages/EditReceipt';
 
 /*Component Imports*/
 import { Redirect, Route } from 'react-router-dom';
@@ -48,6 +49,7 @@ const App: React.FC = () => (
         <Route path="/editslip" component={EditSlip} exact={true} />
         <Route path="/register" component={Register} exact={true} />
         <Route path="/login" component={Login} exact={true} />
+        <Route path="/forgotpass" component={ForgotPass} exact={true} />
         <Route path="/addentry" component={AddEntry} exact={true} />
         <Route path="/editreceipt" component={EditReceipt} exact={true} />
 

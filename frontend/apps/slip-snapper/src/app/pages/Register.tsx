@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import {  IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert } from '@ionic/react';
 import '../theme/login-register.css';
 import { signupA } from "../../api/apiCall"
-import { color } from '@mui/system';
+import { Chip } from '@mui/material';
 
 
 const Register: React.FC = () => {
-  const [nameInput,setNameInput ] = useState<string>();
-  const [surnameInput, setSurnameInput] = useState<string>();
+  const [emailInput, setEmailInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
   const [errorAlert, setAlert] = useState(false);
@@ -19,29 +18,11 @@ const Register: React.FC = () => {
       <div className="header">
         <div className="inner-header flexbox">
           <IonCard color="tertiary" class="LRCard">
-          <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
+            <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
 
-            <IonItem color="tertiary" class="LRItems">
-              <IonLabel position="floating">Name</IonLabel>
-              <IonInput
-                title="name_Input"
-                value={nameInput}
-                onIonChange={(e) => setNameInput(e.detail.value!)}
-                required
-                
-              ></IonInput>
-            </IonItem>
-
-            <IonItem color="tertiary" class="LRItems">
-              <IonLabel position="floating">Surname</IonLabel>
-              <IonInput
-                title="surname_Input"
-                type="text"
-                value={surnameInput}
-                onIonChange={(e) => setSurnameInput(e.detail.value!)}
-                clearOnEdit
-              ></IonInput>
-            </IonItem>
+            <div>
+              <Chip label={"Register"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
+            </div>
 
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Username</IonLabel>
@@ -51,6 +32,17 @@ const Register: React.FC = () => {
                 value={userInput}
                 onIonChange={(e) => setUserInput(e.detail.value!)}
                 required
+              ></IonInput>
+            </IonItem>
+
+            <IonItem color="tertiary" class="LRItems">
+              <IonLabel position="floating">Email Address</IonLabel>
+              <IonInput
+                title="email_Input"
+                type="text"
+                value={emailInput}
+                onIonChange={(e) => setEmailInput(e.detail.value!)}
+                clearOnEdit
               ></IonInput>
             </IonItem>
 
@@ -72,7 +64,7 @@ const Register: React.FC = () => {
                 size="large"
                 onClick={() => { register() }}
               >
-                Register
+                Submit
               </IonButton>
               <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
@@ -141,24 +133,20 @@ const Register: React.FC = () => {
 
   function register() {
 
-    if (nameInput === undefined || nameInput === "" ) {
-      setErrorMessage("Please fill in all fields!")
-      setAlert(true)
-    }
-    if (surnameInput === undefined || surnameInput === "") {
-      setErrorMessage("Please fill in all fields!")
+    if (emailInput === undefined || emailInput === "") {
+      setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
     if (userInput === undefined || userInput === "" ) {
-      setErrorMessage("Please fill in all fields!")
+      setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
     if (passwordInput === undefined || passwordInput === "" ) {
-      setErrorMessage("Please fill in all fields!")
+      setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
     else{
-      signupA(userInput, nameInput, surnameInput, passwordInput)
+      signupA(userInput, emailInput, passwordInput)
         .then(apiResponse => {
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
