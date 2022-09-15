@@ -9,6 +9,7 @@ import { ionFireEvent as fire } from '@ionic/react-test-utils';
 import Register from '../pages/Register';
 //ReportTotal Imports
 import AddEntry from '../pages/AddEntry';
+import ForgotPass from '../pages/ForgotPass';
 
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -181,6 +182,25 @@ describe('Register', () => {
     expect(Component.findByText('Jane_Doe777'));
     expect(Component.findByText('example@gmail.com'));
     expect(Component.findByText('password123'));
+  });
+});
+
+describe('Forgot Password', () => {
+  it('Correctly renders the forgot password page', () => {
+    const Component = render(<ForgotPass />);
+
+    expect(Component.getByText('Forgot Password?'));
+    expect(Component.getByText('Email Address'));
+    expect(Component.getByText('Submit'));
+  });
+
+  test('Correctly renders user input', async () => {
+    const Component = render(<ForgotPass />);
+    const userInput = await Component.findByTitle('forgotPassInput');
+
+    fire.ionChange(userInput, 'test@email.com');
+    expect(Component.findByText('test@email.com'));
+
   });
 });
 

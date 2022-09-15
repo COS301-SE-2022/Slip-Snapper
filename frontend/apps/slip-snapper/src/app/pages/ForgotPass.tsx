@@ -34,7 +34,7 @@ const ForgotPass: React.FC = () => {
 
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Email Address</IonLabel>
-              <IonInput title="usernameInput" type="text" value={emailInput} onIonChange={e => setEmailInput(e.detail.value!)} required></IonInput>
+              <IonInput title="forgotPassInput" type="text" value={emailInput} onIonChange={e => setEmailInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
             <IonItem color="tertiary" text-align="center" class="LRItems">
