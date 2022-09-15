@@ -52,28 +52,26 @@
 ## [Demo 2 Recording](https://drive.google.com/file/d/1wLIFnKHJh7Q3rNDHcftW2L89lJFEFFai/view?usp=sharing)
 ## [Demo 3 Recording](https://drive.google.com/file/d/1s150qzzVPPMcAO7Il2uKDYj3bjWAEDhM/view?usp=sharing)
 
-<br>
-
 # SRS Documents
 ## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
 Architectural Structures are within the SRS Demo 2
-
 ## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
-
 ## [SRS Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214324/COS301_SRS_Anoobis_Demo3.pdf)
-<br>
 
-# [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
-# [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
+# User Manual
+## [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
+## [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
 
-# [Technical Installation Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214305/Demo3_Anoobis_Technical_Installation_Manual.pdf)
+# Technical Installation Manual
+## [Technical Installation Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214305/Demo3_Anoobis_Technical_Installation_Manual.pdf)
 
-# [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
+# Coding Standards
+## [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
 
-# [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
+# Project Board
+## [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
 # Contributors
-
 
 ## [Gabriel Grobler](https://github.com/Grobbies26) (Team Lead)
 
