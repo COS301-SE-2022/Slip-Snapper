@@ -9,7 +9,7 @@ router.post('/signup', async (req,res)=>{
     //TODO add input checking
     let { firstname, lastname, username, password } = req.body;
 
-    const saltRounds = 15;
+    const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashed = bcrypt.hashSync(password,salt);
 
