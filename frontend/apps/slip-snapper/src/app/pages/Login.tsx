@@ -25,7 +25,7 @@ const Login: React.FC = () => {
             <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
             
             <div>
-              <Chip label={"Login"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
+              <Chip label={"Log In"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
             </div>
 
             <IonItem color="tertiary" class="LRItems">

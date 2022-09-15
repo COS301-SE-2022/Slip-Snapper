@@ -64,7 +64,7 @@ const Register: React.FC = () => {
                 size="large"
                 onClick={() => { register() }}
               >
-                Register
+                Submit
               </IonButton>
               <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>

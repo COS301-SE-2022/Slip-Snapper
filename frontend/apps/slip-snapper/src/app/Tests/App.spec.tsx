@@ -162,28 +162,24 @@ describe('Register', () => {
   it('Correctly renders the register page', () => {
     const Component = render(<Register />);
 
-    expect(Component.getByText('Name'));
-    expect(Component.getByText('Surname'));
     expect(Component.getByText('Username'));
+    expect(Component.getByText('Email Address'));
     expect(Component.getByText('Password'));
-    expect(Component.getByText('Register'));
+    expect(Component.getByText('Submit'));
   });
 
   test('Correctly renders user input', async () => {
     const Component = render(<Register />);
-    const nameInput = await Component.findByTitle('name_Input');
-    const surnameInput = await Component.findByTitle('surname_Input');
     const usernameInput = await Component.findByTitle('username_Input');
+    const emailInput = await Component.findByTitle('email_Input');
     const passwordInput = await Component.findByTitle('password_Input');
 
-    fire.ionChange(nameInput, 'Jane');
-    fire.ionChange(surnameInput, 'Doe');
     fire.ionChange(usernameInput, 'Jane_Doe777');
+    fire.ionChange(emailInput, 'example@gmail.com');
     fire.ionChange(passwordInput, 'password123');
 
-    expect(Component.findByText('Jane'));
-    expect(Component.findByText('Doe'));
     expect(Component.findByText('Jane_Doe777'));
+    expect(Component.findByText('example@gmail.com'));
     expect(Component.findByText('password123'));
   });
 });
