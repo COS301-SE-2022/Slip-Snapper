@@ -223,9 +223,6 @@ const Home: React.FC = () => {
       .then(apiResponse => {
         setThisWeeksReports(apiResponse.data.reports)
       });
-
-
-
   }
 
   async function setNewNames(reports: any) {
