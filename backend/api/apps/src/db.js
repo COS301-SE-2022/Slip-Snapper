@@ -6,10 +6,9 @@ const prisma = new PrismaClient()
 /**
  * Funtion to get the user from the database
  * @param {*} username (String) The users name
- * @param {*} password (String) The users password
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function getUser(userName, password) {
+async function getUser(userName) {
     try {
         const user = await prisma.user.findFirst({
             where: {
@@ -19,35 +18,33 @@ async function getUser(userName, password) {
 
         if (user == null) {
             return {
-                message: "Invalid Username",
-                user: null
-            };
-        }
-
-        if (user.password != password) {
-            return {
-                message: "Invalid Password",
-                user: null
+                message: "Error validating user Details",
+                user: null,
+                token: { password: "" },
             };
         }
 
         return {
             message: "User logged in successfully",
-            user: {
+            user: { 
+                username: user.username,
+            },
+            token: {
                 id: user.id,
                 username: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
+                email: user.email,
                 weeklyBudget: user.weeklyBudget,
-                monthlyBudget: user.monthlyBudget,
-                budgets: user.budgets
-            }
+                monthlyBudget: user.weeklyBudget,
+                password: user.password,
+            },
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error validating user Details",
-            user: null
+            user: null,
+            token: { password: "" },
         };
     }
 
@@ -63,7 +60,6 @@ async function getUser(userName, password) {
  */
 async function addUser(username, password, firstname, lastname) {
     try {
-
         let budgetObject = {
             FoodBudget: {
                 active: false,
@@ -134,21 +130,33 @@ async function addUser(username, password, firstname, lastname) {
         if (user == null) {
             return {
                 message: "User failed to be added",
-                user: null
+                user: null,
+                token: {},
             };
         }
 
         //TODO return specific aspects of user and not all
-
         return {
             message: "User added successfully",
-            user: user
+            user: { 
+                username: user.username,
+            },
+            token: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                weeklyBudget: user.weeklyBudget,
+                monthlyBudget: user.weeklyBudget,
+                password: user.password,
+            },
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error Creating User",
-            user: null
+            user: null,
+            token: {},
         };
     }
 
