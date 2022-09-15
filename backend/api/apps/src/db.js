@@ -133,22 +133,33 @@ async function addUser(username, password, firstname, lastname) {
         if (user == null) {
             return {
                 message: "User failed to be added",
-                user: null
+                user: null,
+                token: {},
             };
         }
 
         //TODO return specific aspects of user and not all
-
         return {
             message: "User added successfully",
-            user: user
+            user: { 
+                username: user.username,
+            },
+            token: {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                weeklyBudget: user.weeklyBudget,
+                monthlyBudget: user.weeklyBudget,
+                password: user.password,
+            },
         };
     }
     catch (error) {
         console.log(error)
         return {
             message: "Error Creating User",
-            user: null
+            user: null,
+            token: {},
         };
     }
 

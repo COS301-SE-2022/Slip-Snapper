@@ -12,15 +12,12 @@ router.post('/signup', async (req,res)=>{
     const saltRounds = 15;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashed = bcrypt.hashSync(password,salt);
-    console.log(hashed);
 
     const result = await req.app.get('db').addUser(username, hashed, firstname, lastname);
+    const token = await req.app.get('token').generateToken(result.token);
 
-    const token = '';
-    // const token = await req.app.get('token').generateToken(result.user)
-
-    // const path = `${username}/`
-    // const bucket = await req.app.get('bucket').createFolder(path)
+    const path = `${username}/`
+    const bucket = await req.app.get('bucket').createFolder(path)
 
     let status = 200;
     //TODO checking for errors
