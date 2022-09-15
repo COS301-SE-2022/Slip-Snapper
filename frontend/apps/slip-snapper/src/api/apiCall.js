@@ -14,7 +14,6 @@ const baseUrl = 'http://localhost:3000/api/'
  * @returns the response as a promise
  */
 export async function doProcessing(ocr){
-    console.log(ocr)
     return axios({
         headers:  headers,
         method: 'post',

@@ -32,7 +32,7 @@ router.post('/process', async (req,res)=>{
     if(processedImage == "Error processing image"){
         return res.status(200).send({
             message : "Error processing image",
-            text : ""
+            text : []
         });
     }
 

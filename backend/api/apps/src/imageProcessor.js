@@ -9,9 +9,8 @@ async function processImage(image) {
     const b64Data = image.split(",")[1];
     var returnImage = ""; 
     var bufferOfImg = Buffer.from(b64Data, 'base64')
-    //try to check for EXIF tag
 
-    jo.rotate(Buffer.from(b64Data, 'base64'), {orientation: 1, quality: 100}) 
+    await jo.rotate(Buffer.from(b64Data, 'base64'), {quality: 100}) 
     .then(({buffer ,orientation, dimensions, quality}) => {
         console.log(`Orientation was ${orientation}`)
         console.log(`Dimensions after rotation: ${dimensions.width}x${dimensions.height}`)
@@ -37,7 +36,6 @@ async function processImage(image) {
             imageProcess.threshold({ max: 255, autoGreyscale: true })
                 .contrast(+1)
                 .normalize()
-                //.write("./img-opt.jpg")
                 .getBase64(Jimp.AUTO, async (err, img) => {
                 if (err) {
                     returnImage = "Error processing image";
