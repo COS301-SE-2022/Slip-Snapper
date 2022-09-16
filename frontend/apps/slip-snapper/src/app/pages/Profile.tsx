@@ -36,7 +36,7 @@ const Profile: React.FC = () => {
   const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
 
-  const [userDetails, setUserDetails] = useState({ firstname: "", lastname: "" });
+  const [userDetails, setUserDetails] = useState({ username: "" });
   const [expenditure, setExpenditure] = useState({ weekly: 0, monthly: 0 });
   const val = { weekly: 0, monthly: 0 };
   const history = useHistory();
@@ -100,7 +100,7 @@ const Profile: React.FC = () => {
                       </IonCol>
                   <IonCol className='profile-elem'>
                     <IonItem className="center-items username" color="tertiary">
-                      <IonText>{userDetails.firstname} {userDetails.lastname}</IonText>
+                      <IonText>{userDetails.username}</IonText>
                     </IonItem>
                   </IonCol>
                 </div>
