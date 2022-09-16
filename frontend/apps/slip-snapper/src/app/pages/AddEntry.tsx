@@ -25,7 +25,6 @@ const AddEntry: React.FC = () => {
     };
     const getTotalCosts = () => {
         return items.reduce((total, item) => {
-            // console.log(parseFloat(items[0].price))
             return total + Number(item.price);
 
         }, 0);
@@ -246,12 +245,7 @@ const AddEntry: React.FC = () => {
         const data = {
             text: [date, storeName, "", "", total]
         };
-
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if (user == null) {
-            user = { id: 24 }
-        }
-        addItemsA(user.id, data, items)
+        addItemsA( data, items)
         clearData()
         const button = document.getElementById("cancelButton")
         if (button) {

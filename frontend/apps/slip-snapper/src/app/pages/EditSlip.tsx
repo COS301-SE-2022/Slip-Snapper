@@ -237,12 +237,6 @@ const EditSlip: React.FC = () => {
                 return
             }
         }
-
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if (user == null) {
-            user = { id: 24 }
-        }
-
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
         const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
@@ -254,7 +248,7 @@ const EditSlip: React.FC = () => {
             text: [date, storeName, "", "", total]
         };
 
-        addItemsA(user.id, data, items)
+        addItemsA(data, items)
         const button = document.getElementById("successRedirect")
         if (button) {
             button.click();

@@ -53,11 +53,7 @@ const ViewReports: React.FC = () => {
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user')!);
-    if (user == null) {
-      user = { id: 24 };
-    }
-    getAllUserReports(user.id).then((apiResponse) => {
+    getAllUserReports().then((apiResponse) => {
       if (typeof apiResponse.data !== 'string') {
         setReports(apiResponse.data.reports);
         
@@ -196,7 +192,7 @@ const ViewReports: React.FC = () => {
       }
     );
 
-    getAllUserReports(userS.id).then((apiResponse) => {
+    getAllUserReports().then((apiResponse) => {
       setReports(apiResponse.data.reports);
     });
   }
@@ -207,7 +203,7 @@ const ViewReports: React.FC = () => {
       userS = { id: 24, username: 'demoUser' };
     }
     // demoUser_31 - 08 - 2022Weekly_1.pdf 
-    await generateReportA(userS.username, userS.id, period, getReportNumber()+1).then(
+    await generateReportA(userS.username, period, getReportNumber()+1).then(
       (apiResponse) => {
         if (apiResponse.data.message === 'Report Generated and uploaded') {
           present('Generated ' + period + ' Report', 1200);
@@ -217,7 +213,7 @@ const ViewReports: React.FC = () => {
       }
     );
 
-    getAllUserReports(userS.id).then((apiResponse) => {
+    getAllUserReports().then((apiResponse) => {
       setReports(apiResponse.data.reports);
     });
   }

@@ -50,7 +50,7 @@ const Profile: React.FC = () => {
       user = { id: 24 }
     }
     setUserDetails(user)
-    getProfileData(user.id)
+    getProfileData()
       .then(
         apiResponse => {
           if (typeof (apiResponse.data) !== "string") {
@@ -241,11 +241,7 @@ const Profile: React.FC = () => {
   }
 
   function applyToBudget(budgetType: string, newBudget: string) {
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-      user = { id: 24 }
-    }
-
+    
     if(budgetType==="weekly")
     {
       weeklyBudget = parseFloat(newBudget)
@@ -259,7 +255,7 @@ const Profile: React.FC = () => {
         isExceeded(weeklyBudget, monthlyBudget)
         present("New weekly budget applied", 1200)
 
-        setBudgetA(user.id, weeklyBudget, NaN)
+        setBudgetA(weeklyBudget, NaN)
 
       }
 
@@ -278,7 +274,7 @@ const Profile: React.FC = () => {
         isExceeded(weeklyBudget, monthlyBudget)
         present("New monthly budget applied", 1200)
 
-        setBudgetA(user.id, NaN, monthlyBudget)
+        setBudgetA( NaN, monthlyBudget)
       }
     }
   }

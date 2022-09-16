@@ -26,7 +26,7 @@ async function getUser(userName) {
 
         return {
             message: "User logged in successfully",
-            user: { 
+            user: {
                 username: user.username,
             },
             token: {
@@ -138,7 +138,7 @@ async function addUser(username, password, firstname, lastname) {
         //TODO return specific aspects of user and not all
         return {
             message: "User added successfully",
-            user: { 
+            user: {
                 username: user.username,
             },
             token: {
@@ -963,6 +963,8 @@ async function getUserStats(userId) {
         let month = await getMonthlyExpenditure(userId);
         let favouriteCategory = await getFavouriteCategory(userId);
 
+        console.log(favouriteCategory)
+
         return {
             message: "User statistics retrieved",
             storeDetails: store,
@@ -1035,6 +1037,11 @@ async function getFavouriteCategory(userid) {
         const index = types.catNums.indexOf(max);
 
         types.catPrices[index] = Math.round((types.catPrices[index] + Number.EPSILON) * 100) / 100
+
+        if (isNaN(types.catPrices[index])) {
+            types.cat[index]="N/A"
+            types.catPrices[index] = 0
+        }
 
         return {
             category: types.cat[index],
@@ -2043,18 +2050,18 @@ async function getUserAnalysis(userId) {
                 amounts: averagePerLocation
             })
         }
-        return{
-            
-                message: "Success retrieving User Analysis",
-                analysis:analysisObject
-            
+        return {
+
+            message: "Success retrieving User Analysis",
+            analysis: analysisObject
+
         }
 
     }
     catch (error) {
         return {
             message: "Error retrieving User Analysis",
-            analysis:[]
+            analysis: []
         }
     }
 }

@@ -7,18 +7,13 @@ import { calendarOutline, idCard } from 'ionicons/icons';
 
 
 const SlipItems: React.FC = () => {
-    let user = JSON.parse(localStorage.getItem('user')!)
-
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
     const [slipItems, setSlipItems] = useState<any[]>([]);
     const [present, dismiss] = useIonToast();
 
 
     useEffect(() => {
-        if (user == null) {
-            user = { id: 24 }
-        }
-        getAllSlips(user.id)
+        getAllSlips()
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
@@ -129,7 +124,7 @@ const SlipItems: React.FC = () => {
                                             cssClass: 'toasts',
                                             handler: async () => {
                                                 await deleteSlip(deleteAlert.id)
-                                                getAllSlips(user.id)
+                                                getAllSlips()
                                                     .then(
                                                         apiResponse => {
                                                             if (typeof (apiResponse.data) !== "string") {

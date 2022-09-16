@@ -254,11 +254,7 @@ const EditReceipt: React.FC = () => {
             text: [date, storeName, "", "", total, slipContents.id]
         };
 
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if(user==null){
-            user = {id: 24}
-        }
-        await updateSlipA(user.id, data, insertItems, updateItems, removeItems)
+        await updateSlipA(data, insertItems, updateItems, removeItems)
         setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
 
         

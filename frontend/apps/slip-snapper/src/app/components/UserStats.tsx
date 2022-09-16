@@ -23,18 +23,17 @@ export const UserStats = () => {
     });
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if(user==null){
-            user = {id: 24}
-        }
-        getStatsA(user.id)
+        getStatsA()
             .then(
                 apiResponse => {
                     if(typeof(apiResponse.data) !== "string"){
                         setUserStats(apiResponse.data)
+                        console.log(apiResponse.data)
                     }  
                 })
     }, []);
+
+    console.log(userStats)
     return(
         <div className="wrapper">
             {/* Weekly Expenditure */}

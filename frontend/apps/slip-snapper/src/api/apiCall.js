@@ -29,7 +29,6 @@ export async function doProcessing(ocr){
 /**
  * Update an item in the database
  * @param {*} item the item id
- * @param {*} userId the user id
  * @param {*} name the name of the item
  * @param {*} location the location of the item
  * @param {*} quantity the quantity of the item
@@ -37,14 +36,13 @@ export async function doProcessing(ocr){
  * @param {*} type the type of the item
  * @returns response from server
  */
-export async function updateItemA( item, userId, name, location, quantity, price, type){
+export async function updateItemA( item, name, location, quantity, price, type){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'item/update',
         data: JSON.stringify({
             itemid: item,
-            user: userId,
             name : name,
             location : location,
             quantity : quantity,
@@ -56,10 +54,9 @@ export async function updateItemA( item, userId, name, location, quantity, price
 
 /**
  * Get all the items from the server
- * @param {*} userId the users id
  * @returns the reposnse from the server
  */
-export async function getItemsA(userId){
+export async function getItemsA(){
     return axios({
         headers: headers,
         method: 'get',
@@ -67,24 +64,23 @@ export async function getItemsA(userId){
     })
 }
 
-export async function setBudgetA( userId, weekly, monthly){
+export async function setBudgetA( weekly, monthly){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'report/budget',
         data: JSON.stringify({
-            userId: userId,
             weekly: weekly,
             monthly: monthly
         })
     })
 }
 
-export async function getProfileData( userId ){
+export async function getProfileData( ){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/profile?userId='+userId,
+        url: baseUrl + 'report/profile',
     })
 }
 
@@ -126,42 +122,39 @@ export async function signupA( userName, email, password){
     })
 }
 
-export async function generateReportA( userName, userId, period,newReportNumber ){
+export async function generateReportA( userName, period,newReportNumber ){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'report/pdf',
         data: {
             userName: userName,
-            userId: userId,
             period: period,
             newReportNumber: newReportNumber
         }
     })
 }
 
-export async function getStatsA( userId ){
+export async function getStatsA(  ){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/statistics?userId='+userId,
+        url: baseUrl + 'report/statistics',
       })
 }
 
 /**
  * To add an item
- * @param {*} userId the users id
  * @param {*} data the data of the item
  * @param {*} text the slip data of the item
  * @returns the response from the server
  */
-export async function addItemsA( userId, data, text){
+export async function addItemsA( data, text){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'item',
         data: JSON.stringify({
-          userId: userId,
           location: data.text[1],
           date: data.text[0],
           total: data.text[4],
@@ -170,11 +163,11 @@ export async function addItemsA( userId, data, text){
     })
 }
 
-export async function getAllUserReports(userId){
+export async function getAllUserReports(){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/user?userId='+ userId,
+        url: baseUrl + 'report/user' ,
       })
 }
 
@@ -186,11 +179,11 @@ export async function getUserReport(userName, fileName){
     })
 }
 
-export async function getRecentReports(userId){
+export async function getRecentReports(){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/recent?userId='+ userId,
+        url: baseUrl + 'report/recent',
       })
 }
 
@@ -209,41 +202,38 @@ export async function removeReport( userName, fileName , reportId){
 
 /**
  * To get all the slips for a user
- * @param {*} userId the users id
  * @returns response from the server
  */
-export async function getAllSlips(userId) {
+export async function getAllSlips() {
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'item/slip?userId=' + userId,
+        url: baseUrl + 'item/slip' ,
     })
 }
 
-export async function getThisWeeksReports(userId) {
+export async function getThisWeeksReports() {
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/thisweek?userId=' + userId,
+        url: baseUrl + 'report/thisweek',
     })
 }
 
 /**
  * To update a slip and its related items
- * @param {*} userId the users id
  * @param {*} updateSlip slip contents to update
  * @param {*} insertItems the items to be added
  * @param {*} updateItems the items to be updated
  * @param {*} removeItems the items to be removed
  * @returns the response from the server
  */
-export async function updateSlipA( userId, updateSlip, insertItems,updateItems, removeItems){
+export async function updateSlipA(  updateSlip, insertItems,updateItems, removeItems){
     return axios({
         headers: headers,
         method: 'patch',
         url: baseUrl + 'item/slip',
         data: JSON.stringify({
-            userId: userId,
             updateSlip: updateSlip,
             insertItems: insertItems,
             updateItems: updateItems, 
@@ -252,21 +242,20 @@ export async function updateSlipA( userId, updateSlip, insertItems,updateItems, 
     })
 }
 
-export async function getTodayStats(userId) {
+export async function getTodayStats() {
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/today?userId=' + userId,
+        url: baseUrl + 'report/today',
     })
 }
 
-export async function setGeneralBudget( userId, budgets){
+export async function setGeneralBudget( budgets){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'report/otherBudgets',
         data: JSON.stringify({
-            userId: userId,
             budgets: budgets,
         })
     })
@@ -294,10 +283,10 @@ export async function deleteSlip( slipId ){
  * @returns the response from the server
  */
 
-export async function getGraphStats(userId) {
+export async function getGraphStats() {
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'item/graph?userId=' + userId,
+        url: baseUrl + 'item/graph',
     })
 }

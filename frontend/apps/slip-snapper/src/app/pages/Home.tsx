@@ -57,33 +57,29 @@ const Home: React.FC = () => {
 
   const [graphData, setGraphData] = useState<any[]>([])
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if(user==null){
-        user = {id: 24}
-    }
-
-    getRecentReports(user.id)
+    
+    getRecentReports()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setR(apiResponse.data.reports);
         }
       });
 
-    getThisWeeksReports(user.id)
+    getThisWeeksReports()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setThisWeeksReports(apiResponse.data.reports)
         }
       });
 
-    getTodayStats(user.id)
+    getTodayStats()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setTodayItem(apiResponse.data.totalItems)
           setTodayTotal(Number(apiResponse.data.totalSpent))
         }
       });
-    getGraphStats(user.id)
+    getGraphStats()
       .then(apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
           setGraphData(apiResponse.data.data)
@@ -209,17 +205,12 @@ const Home: React.FC = () => {
         present('Deleted ' + fileName, 1200);
       });
 
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-      user = { id: 24 }
-    }
-
-    getRecentReports(user.id)
+    getRecentReports()
       .then(apiResponse => {
         setR(apiResponse.data.reports);
       });
 
-    getThisWeeksReports(user.id)
+    getThisWeeksReports()
       .then(apiResponse => {
         setThisWeeksReports(apiResponse.data.reports)
       });
