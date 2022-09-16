@@ -69,21 +69,21 @@ async function sortItemsIntoCategories(itemList){
                 types.totals.Household[2] += 1
                 types.Household.push(item);
                 break
-            // case "Healthcare":
-            //     types.totals.Healthcare[3] += parseFloat(item.price)
-            //     types.totals.Healthcare[2] += 1
-            //     types.Healthcare.push(item);
-            //     break
-            // case "Hobby":
-            //     types.totals.Hobby[3] += parseFloat(item.price)
-            //     types.totals.Hobby[2] += 1
-            //     types.Hobby.push(item);
-            //     break
-            // case "Vehicle":
-            //     types.totals.Vehicle[3] += parseFloat(item.price)
-            //     types.totals.Vehicle[2] += 1
-            //     types.Vehicle.push(item);
-            //     break
+            case "Healthcare":
+                 types.totals.Healthcare[3] += parseFloat(item.price)
+                 types.totals.Healthcare[2] += 1
+                 types.Healthcare.push(item);
+                 break
+             case "Hobby":
+                 types.totals.Hobby[3] += parseFloat(item.price)
+                 types.totals.Hobby[2] += 1
+                 types.Hobby.push(item);
+                 break
+             case "Vehicle":
+                 types.totals.Vehicle[3] += parseFloat(item.price)
+                 types.totals.Vehicle[2] += 1
+                 types.Vehicle.push(item);
+                 break
             default: 
                 types.totals.Other[3] += parseFloat(item.price)
                 types.totals.Other[2] += 1
@@ -110,9 +110,9 @@ async function sortItemsIntoCategories(itemList){
  */
 async function generatePDF(name, object, today, period){
     let pdf = new PDFDocument;
-    pdf.pipe(fs.createWriteStream(name))
-    const xcoord = pdf.x
-    pdf.image(__dirname + '/assets/maskable_icon.png', 240, 50, {fit:[150,150], align:'center'})
+    pdf.pipe(fs.createWriteStream(name));
+    const xcoord = pdf.x;
+    await pdf.image(__dirname + '/assets/maskable_icon.png', 240, 50, {fit:[150,150], align:'center'});
     const pdfTitle = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
     pdf.fontSize(20).text(pdfTitle,xcoord,210,{align:'center'}); 
     pdf.y= 240;
@@ -126,7 +126,7 @@ async function generatePDF(name, object, today, period){
         ],
         datas: object.totals,
     }
-    pdf.table(table);
+    await pdf.table(table);
 
     let pdfTotal = 0
     for (const key in types){
@@ -144,7 +144,7 @@ async function generatePDF(name, object, today, period){
                     types.totals[key]
                 ],
             }
-            pdf.table(subTable);
+            await pdf.table(subTable);
         }
     }
     pdf.end();

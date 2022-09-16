@@ -46,6 +46,10 @@ function textCorrection(text) {
                 str.replaceAll(",", ".")
                     .replaceAll("(", " ")
                     .replaceAll(")", " ")
+                    .replaceAll("[", " ")
+                    .replaceAll("]", " ")
+                    .replaceAll("{", " ")
+                    .replaceAll("}", " ")
                     .replaceAll("=", " ")
                     .replaceAll("'", " ")
                     .replaceAll('"', " ")
@@ -192,7 +196,7 @@ function totalParser(text) {
 function itemsParser(text) {
     const receiptRegex = /^\s*(\d*)\s*(.*\S)\s+(\(?)([0-9]+[.][0-9]{2})\)*/gm
     let items = [];
-    const unwantedEntryRegex = /\b(total)\b|\b(subtotal)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b|\b(rounding)\b|\b(debit)\b/gm
+    const unwantedEntryRegex = /\b(total)\b|\b(subtotal)\b|\b(change)\b|\b(cash)\b|\b(payment)\b|\b(vat)\b|\b(items)\b|\b(amount)\b|\b(tax)\b|\b(card ret)\b|\b(rounding)\b|\b(debit)\b/gm
     const itemNumRemoval = /\b(\d+)\.(\d{2})\b/gm
 
     for (let i = 0; i < text.length; i++) {

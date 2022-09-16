@@ -11,6 +11,7 @@ import Register from '../pages/Register';
 import AddEntry from '../pages/AddEntry';
 import ForgotPass from '../pages/ForgotPass';
 
+jest.mock('@ionic-native/file-opener/index', () => jest.fn());
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
   expect(baseElement).toBeDefined();

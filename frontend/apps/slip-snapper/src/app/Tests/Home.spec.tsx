@@ -2,6 +2,7 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import Home from '../pages/Home';
 
+jest.mock('@ionic-native/file-opener/index', () => jest.fn());
 describe('Home', () => {
   beforeAll(() => {
     Object.defineProperty(window, 'matchMedia', {
