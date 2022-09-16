@@ -39,7 +39,6 @@
 .progressBar {
     max-width: 30%;
     --background: #ebebeb;
-
 }
 
 .categoryProgressBar {
@@ -113,6 +112,22 @@
         text-align: center;
         min-width: 16rem;
     }
+
+    .categoryBudgets {
+        vertical-align: middle;
+        --border-radius: 10px;
+        padding: 2px;
+        display: none;
+        width: 90%;
+        margin-left: 3%;
+    }
+
+    .categoryProgressBar {
+        max-width: 30%;
+        --background: #ebebeb;
+        right: 30px
+    }
+
 }
 
 @media screen and (min-width: 576px) {
