@@ -10,6 +10,8 @@
   },
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
     "@capacitor/android": "^4.1.0",
     "@capacitor/cli": "^4.1.0",
     "@capacitor/ios": "^3.2.5",
@@ -66,8 +68,8 @@
     "@mui/material": "^5.10.1",
     "aws-sdk": "^2.1174.0",
     "axios": "^0.27.2",
-    "cordova-plugin-file-opener2": "^3.0.5",
     "chart.js": "^3.9.1",
+    "cordova-plugin-file-opener2": "^3.0.5",
     "core-js": "^3.6.5",
     "http-server": "^14.1.1",
     "ionicons": "^5.5.3",
@@ -78,7 +80,7 @@
     "react-dom": "18.0.0",
     "react-router-dom": "5.3.0",
     "regenerator-runtime": "0.13.7",
-    "tesseract.js": "^2.1.5",
+    "rxjs": "6.5.0",
     "tslib": "^2.0.0"
   },
   "main": "index.js",
