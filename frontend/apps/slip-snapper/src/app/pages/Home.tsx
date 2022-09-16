@@ -269,13 +269,15 @@ const Home: React.FC = () => {
       user = { id: 24 };
     }
 
-    getRecentReports(user.id).then((apiResponse) => {
-      setR(apiResponse.data.reports);
-    });
+    getRecentReports(user.id)
+      .then(apiResponse => {
+        setR(apiResponse.data.reports);
+      });
 
-    getThisWeeksReports(user.id).then((apiResponse) => {
-      setThisWeeksReports(apiResponse.data.reports);
-    });
+    getThisWeeksReports(user.id)
+      .then(apiResponse => {
+        setThisWeeksReports(apiResponse.data.reports)
+      });
   }
 
   async function setNewNames(reports: any) {
