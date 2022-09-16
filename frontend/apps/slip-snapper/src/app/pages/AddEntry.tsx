@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast, IonSelectOption, IonSelect } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
@@ -30,7 +30,6 @@ const AddEntry: React.FC = () => {
         }, 0);
     };
 
-
     return (
         <IonPage>
             <IonHeader>
@@ -48,15 +47,15 @@ const AddEntry: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput onClick={() => setNormalColour("Store_Name")} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput id={"Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonIcon icon={calendarOutline} slot="end"/>
-                                    <IonDatetime displayFormat='YYYY/MM/DD' id={"date"}/>
+                                    <IonIcon icon={calendarOutline} slot="end" />
+                                    <IonDatetime displayFormat='YYYY/MM/DD' id={"date"} />
                                 </IonItem>
                             </IonCardTitle>
                         </div>
@@ -70,42 +69,40 @@ const AddEntry: React.FC = () => {
                         return (
                             <IonGrid key={index}>
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
-                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
+                                    <Chip label={"Item # " + (index + 1)} sx={{ bgcolor: '#27A592', color: 'white' }} />
+                                    <Chip icon={<DeleteIcon />} label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end" />
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <IonCol className={index > 0 ? 'big-chip-child' : 'big-chip'}>
+                                        <Chip label={"Item # " + (index + 1)} sx={{ bgcolor: '#27A592', color: 'white' }} />
                                     </IonCol>
-                                    
+
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Description</IonLabel>
                                         <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
+                                            <IonInput  id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Quantity</IonLabel>
                                         <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
-                                                id={index + "/quantity"} value={item.quantity}  ></IonInput>
+                                            <IonInput type='number' id={index + "/quantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} onClick={() => setNormalColour(index + "/price")}
-                                                id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Type</IonLabel>
                                         <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className="select-options">
                                             <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' value={item.type}>
@@ -121,8 +118,8 @@ const AddEntry: React.FC = () => {
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
+                                    <IonCol className={index > 0 ? 'big-chip-child' : 'big-chip'}>
+                                        <Chip icon={<DeleteIcon />} label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" />
                                     </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}
@@ -136,7 +133,7 @@ const AddEntry: React.FC = () => {
                         )
                     })}
                     <div className='wrapper'>
-                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary"/>
+                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary" />
                     </div>
 
                     <IonCardHeader className="wrapper">
@@ -145,7 +142,7 @@ const AddEntry: React.FC = () => {
 
                     <IonCardHeader className="wrapper">
                         <IonItem id={"total"} className='addEntry' color="tertiary">
-                            {getTotalCosts()}
+                            {getTotalCosts().toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
 
@@ -200,25 +197,12 @@ const AddEntry: React.FC = () => {
 
     function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Please enter a Store Name to continue.")
+            setAlertMes("Please enter a Store Location to continue.")
             setShowAlert(true)
             return
         }
         if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Date to continue.")
-            setShowAlert(true)
-            return
-        }
-        if (document.getElementById("total")?.innerHTML === "NaN") {
-
-            for (let i = 0; i < items.length; i++) {
-                if (isNaN(+items[i].price)) {
-                    setAlertMes("Please input a number at item #" + (i + 1) + " to continue.")
-                    setShowAlert(true)
-                    return
-                }
-            }
-            setAlertMes("Please check that all your Item prices are Numbers")
             setShowAlert(true)
             return
         }
@@ -233,10 +217,17 @@ const AddEntry: React.FC = () => {
                 setShowAlert(true)
                 return
             }
+
+            if (Number(items[i].price) < 0 || items[i].price.includes('e'))
+            {
+                setAlertMes("Please enter a valid price at item #" + (i + 1) + ".")
+                setShowAlert(true)
+                return
+            }
         }
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
+        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
         const tempTotal = document.getElementById("total")?.innerHTML
         let total = 0.00;
         if (tempTotal !== undefined) {
@@ -245,13 +236,13 @@ const AddEntry: React.FC = () => {
         const data = {
             text: [date, storeName, "", "", total]
         };
-        addItemsA( data, items)
+        addItemsA(data, items)
         clearData()
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
             window.location.reload()
-            present('Deleted ' , 1200);
+            present('Deleted ', 1200);
         }
 
     }
@@ -260,10 +251,6 @@ const AddEntry: React.FC = () => {
         setItems([{ item: "", quantity: 1, price: "0.00", type: "" }]);
         document.getElementById("Store_Name")!.getElementsByTagName("input")[0].value = "";
         document.getElementById("date")!.getElementsByTagName("input")[0].value = "";
-    }
-
-    function setNormalColour(i: string) {
-        document.getElementById(i)?.setAttribute("color", "light");
     }
 }
 
