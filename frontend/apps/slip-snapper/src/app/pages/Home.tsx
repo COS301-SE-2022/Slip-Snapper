@@ -16,6 +16,9 @@ import {
   useIonToast,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
+import { isPlatform } from '@ionic/core';
+import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { FileOpener } from '@ionic-native/file-opener';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
@@ -49,9 +52,9 @@ ChartJS.register(
  */
 
 const Home: React.FC = () => {
-  const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([])
-  const [todayItems, setTodayItem] = useState(0)
-  const [todayTotal, setTodayTotal] = useState(0)
+  const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([]);
+  const [todayItems, setTodayItem] = useState(0);
+  const [todayTotal, setTodayTotal] = useState(0);
   const [present, dismiss] = useIonToast();
   const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
 
@@ -123,8 +126,7 @@ const Home: React.FC = () => {
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
               <IonItem color="tertiary">Total Expenditure: R {todayTotal.toFixed(2)}</IonItem>
-              <IonItem color="tertiary">
-              </IonItem>
+              <IonItem color="tertiary"></IonItem>
             </IonCard>
           </IonCol>
 
@@ -140,13 +142,19 @@ const Home: React.FC = () => {
                     <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
                       View
                     </IonButton>
-                    <IonButton onClick={() => deleteReport(item.reportName, item.reportId.toString())} fill="solid" slot="end" color="medium">
+                    <IonButton
+                      onClick={() =>
+                        deleteReport(item.reportName, item.reportId.toString())
+                      }
+                      fill="solid"
+                      slot="end"
+                      color="medium"
+                    >
                       Delete
                     </IonButton>
                   </IonItem>
-                )
-              })
-              }
+                );
+              })}
             </IonCard>
           </IonCol>
 
@@ -180,30 +188,77 @@ const Home: React.FC = () => {
   );
 
   function view(data: any) {
-    let user = JSON.parse(localStorage.getItem('user')!)
+    let user = JSON.parse(localStorage.getItem('user')!);
     if (user == null) {
-      user = { username: 'demoUser' }
+      user = { username: 'demoUser' };
     }
-    getUserReport(user.username, data)
-      .then(apiResponse => {
-        if (apiResponse.data.report.data !== undefined) {
-          const arr = new Uint8Array(apiResponse.data.report.data);
-          const blob = new Blob([arr], { type: 'application/pdf' });
-          const docUrl = URL.createObjectURL(blob);
+    getUserReport(user.username, data).then((apiResponse) => {
+      if (apiResponse.data.report.data !== undefined) {
+        const arr = new Uint8Array(apiResponse.data.report.data);
+        const blob = new Blob([arr], { type: 'application/pdf' });
+        const docUrl = URL.createObjectURL(blob);
+
+        if (!isPlatform('android') && !isPlatform('ios')) {
           window.open(docUrl);
+        } else {
+          //view for mobile, might need name
+          const reader = new FileReader();
+
+          reader.addEventListener(
+            'load',
+            () => {
+              if (reader.result) {
+                const result = reader.result as string;
+                const pdfData = result.split(',')[1];
+                downloadPDF(pdfData);
+              }
+            },
+            false
+          );
+
+          reader.readAsDataURL(blob);
         }
+      }
+    });
+  }
+
+  function downloadPDF(pdfBase64: string) {
+    try {
+      Filesystem.writeFile({
+        path: 'report.pdf',
+        data: pdfBase64,
+        directory: Directory.External,
+      }).then((writeFileResult) => {
+        Filesystem.getUri({
+          directory: Directory.External,
+          path: 'report.pdf',
+        }).then(
+          (getUriResult) => {
+            const path = getUriResult.uri;
+            FileOpener.open(path, 'application/pdf').then(() =>
+              console.log('File is opened')
+            );
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
       });
+    } catch (error) {
+      console.error('Unable to write file', error);
+    }
   }
 
   async function deleteReport(fileName: string, reportId: string) {
-    let userS = JSON.parse(localStorage.getItem('user')!)
+    let userS = JSON.parse(localStorage.getItem('user')!);
     if (userS == null) {
-      userS = { username: "demoUser" }
+      userS = { username: 'demoUser' };
     }
-    await removeReport(userS.username, fileName, reportId)
-      .then(apiResponse => {
+    await removeReport(userS.username, fileName, reportId).then(
+      (apiResponse) => {
         present('Deleted ' + fileName, 1200);
-      });
+      }
+    );
 
     getRecentReports()
       .then(apiResponse => {
