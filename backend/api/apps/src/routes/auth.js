@@ -49,7 +49,7 @@ router.post('/login', async (req, res)=>{
     let status = 200;
     //TODO checking for errors
     if(result.token != ""){
-        result.token = await req.app.get('token').generateToken(result.user)
+        result.token = await req.app.get('token').generateToken(result.token)
     }
 
     return res.status(status)

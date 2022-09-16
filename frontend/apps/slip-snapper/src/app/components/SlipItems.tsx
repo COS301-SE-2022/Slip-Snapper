@@ -1,4 +1,4 @@
-import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonCardTitle, IonLabel, IonSearchbar, IonCol, IonGrid, IonRow, IonToggle, IonDatetime, IonIcon } from '@ionic/react';
+import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonCardTitle, IonLabel, IonSearchbar, IonCol, IonGrid, IonRow, IonToggle, IonDatetime, IonIcon, useIonToast } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/SlipItems.css';
@@ -11,6 +11,8 @@ const SlipItems: React.FC = () => {
 
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
     const [slipItems, setSlipItems] = useState<any[]>([]);
+    const [present, dismiss] = useIonToast();
+
 
     useEffect(() => {
         if (user == null) {
@@ -33,12 +35,10 @@ const SlipItems: React.FC = () => {
     });
 
     const current = new Date();
-    const date = `${current.getMonth() + 1}/${current.getDate()}/${current.getFullYear()}`;
     const [filterDates, setFilterDates] = useState({
-        from: date,
-        to: date,
+        from: "",
+        to: "",
     });
-
     return (
         <div>
             <IonItem>
@@ -48,7 +48,7 @@ const SlipItems: React.FC = () => {
                 <IonCard color="primary" className="search-bar">
 
                     <IonItem color='primary'>
-                        <IonSearchbar color="tertiary" onIonChange={e => searchFilter(e.detail.value)} />
+                        <IonSearchbar color="tertiary" id='searchBar' onIonChange={filter} />
                     </IonItem>
 
                     <IonItem color='primary'>
@@ -69,9 +69,6 @@ const SlipItems: React.FC = () => {
                             </IonItem>
                         </IonCardTitle>
 
-
-
-
                         <IonCardTitle className="date elem">To Date:
                             <IonItem className='date-item' color="tertiary">
                                 <IonDatetime value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
@@ -81,12 +78,11 @@ const SlipItems: React.FC = () => {
 
                         <IonItem color="primary" >
                             <IonButton color="secondary" slot="end" onClick={() => {
-                                dateFilter()
+                                filter()
                             }}>Apply</IonButton>
                         </IonItem>
 
                     </div>
-
                 </IonCard>
 
                 <IonCard color="primary" className="receipts-table">
@@ -96,7 +92,7 @@ const SlipItems: React.FC = () => {
 
                     {slipItems.map((item, index) => {
                         return (
-                            <IonItem key={index} color="tertiary">
+                            <IonItem key={index} color="tertiary" id={"slipItem" + index}>
                                 <IonLabel>
                                     {item.transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/') + " - " + item.location}
                                 </IonLabel>
@@ -153,21 +149,41 @@ const SlipItems: React.FC = () => {
         </div>
     );
 
+    function filter() {
+
+        for (let i = 0; i < slipItems.length; i++) {
+            const temp = document.getElementById("slipItem" + i)
+            if (temp !== null)
+                temp.style.display = "block";
+        }
+
+        const searchValue = document.getElementById("searchBar")?.getElementsByTagName("input")[0].value
+        if (searchValue !== "") {
+            searchFilter(searchValue)
+        }
+
+        if (document.getElementById("fromDate")?.getElementsByTagName("input")[0].value !== "" || document.getElementById("toDate")?.getElementsByTagName("input")[0].value !== "") {
+            dateFilter()
+        }
+
+    }
+
     function searchFilter(searchText: string | undefined) {
-        setSlipItems([])
-        const temp: any[] = [];
 
         if (searchText !== undefined) {
-            for (let i = 0; i < originalSlips.length; i++) {
-                if (originalSlips[i].location.toLowerCase().includes(searchText.toLowerCase())) {
-                    temp.push(originalSlips[i]);
+            for (let i = 0; i < slipItems.length; i++) {
+                if (!slipItems[i].location.toLowerCase().includes(searchText.toLowerCase())) {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
                 }
-                else if (originalSlips[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase())) {
-                    temp.push(originalSlips[i]);
+                else if (slipItems[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase())) {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
                 }
             }
         }
-        setSlipItems(temp)
     }
 
     function toggleDates(state: any) {
@@ -186,46 +202,51 @@ const SlipItems: React.FC = () => {
     }
 
     function dateFilter() {
-        let fromDate: any, toDate: any;
-        if (document.getElementById("fromDate") !== null) {
-            fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+
+        const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+
+        if (toDate !== "" && fromDate !== "" && toDate!==undefined&&fromDate!==undefined&&toDate<fromDate)
+        {
+            present('Please enter a valid Date interval.', 1200);
+            return
+
         }
 
-        if (document.getElementById("toDate") !== null) {
-            toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-        }
-            setSlipItems([])
-            const temp: any[] = [];
-
+        if (fromDate !== "" && fromDate !== undefined) {
             for (let i = 0; i < originalSlips.length; i++) {
-
-                if (fromDate <= originalSlips[i].transactionDate) {
-
-                    if (toDate >= originalSlips[i].transactionDate) {
-                        temp.push(originalSlips[i]);
-                    }
+                if (fromDate > originalSlips[i].transactionDate) {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
                 }
             }
-            setSlipItems(temp)
-            setFilterDates({from:fromDate,to:toDate})
+        }
+
+        if (toDate !== "" && toDate !== undefined) {
+            for (let i = 0; i < originalSlips.length; i++) {
+                if (toDate < originalSlips[i].transactionDate) {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
+                }
+            }
+        }
+        if (fromDate !== undefined && toDate !== undefined)
+            setFilterDates({ from: fromDate, to: toDate })
     }
 
-    function orderSlips(slips:any)
-    {
-       let temp :any;
-
-       for(let i = 0 ; i < slips.length ;i++)
-       {
-           for (let j = 1; j < (slips.length-i); j++)
-           {
-               if (slips[j - 1].transactionDate < slips[j].transactionDate)
-               {
-                   temp = slips[j - 1]
-                   slips[j - 1]=slips[j]
-                   slips[j]=temp;
-               }
-           }
-       }
+    function orderSlips(slips: any) {
+        let temp: any;
+        for (let i = 0; i < slips.length; i++) {
+            for (let j = 1; j < (slips.length - i); j++) {
+                if (slips[j - 1].transactionDate < slips[j].transactionDate) {
+                    temp = slips[j - 1]
+                    slips[j - 1] = slips[j]
+                    slips[j] = temp;
+                }
+            }
+        }
     }
 };
 
