@@ -16,9 +16,29 @@ const EditSlip: React.FC = () => {
     const data = JSON.parse(localStorage.getItem('scan-content')!);
     const photo = JSON.parse(localStorage.getItem('photo')!);
     const [items, setItems] = useState(data.text[2]);
+    const [location, setLocation] = useState(data.text[1]);
+
+
+
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
     const [showImage, setShowImage] = useState(false);
+
+    const handleCostsChange = (event: any) => {
+        const _tempCosts = [...items];
+        let temp = event.target.id
+        temp = temp.substring(0, 1)
+        _tempCosts[temp].price = event.target.value
+        getData();
+        setItems(_tempCosts);
+    };
+    const getTotalCosts = () => {
+        return items.reduce((total: number, item: { price: any; }) => {
+            return total + Number(item.price);
+
+        }, 0);
+    };
+    
     return (
         <IonPage>
             <IonHeader>
@@ -41,7 +61,7 @@ const EditSlip: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput value={data.text[1]} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput value={location} onIonChange={e => setLocation(e.detail.value!)} id={"Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
@@ -75,7 +95,7 @@ const EditSlip: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
                                         <IonLabel className='extra-labels'>Description</IonLabel>
                                         <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/item")} id={index + "/item"} value={item.item}></IonInput>
+                                            <IonInput id={index + "/item"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -83,7 +103,7 @@ const EditSlip: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
                                         <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onClick={() => setNormalColour(index + "/quantity")}
+                                            <IonInput type='number' 
                                                 id={index + "/quantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
@@ -92,8 +112,7 @@ const EditSlip: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput onClick={() => setNormalColour(index + "/price")} type='number'
-                                                id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -151,8 +170,8 @@ const EditSlip: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardHeader className="wrapper">
-                        <IonItem className='addEntry' color="tertiary">
-                            <IonInput id={"total"} value={data.text[4]}></IonInput>
+                        <IonItem id={"total"} className='addEntry' color="tertiary">
+                            {getTotalCosts().toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
 
@@ -219,11 +238,6 @@ const EditSlip: React.FC = () => {
             setShowAlert(true)
             return
         }
-        if (document.getElementById("total")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Please enter a Total to continue.")
-            setShowAlert(true)
-            return
-        }
 
         for (let i = 0; i < items.length; i++) {
             if (items[i].item === "" ||
@@ -236,10 +250,17 @@ const EditSlip: React.FC = () => {
                 setShowAlert(true)
                 return
             }
+
+            if (Number(items[i].price) < 0 || items[i].price.includes('e')) {
+                setAlertMes("Please enter a valid price at item #" + (i + 1) + ".")
+                setShowAlert(true)
+                return
+            }
         }
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
-        const tempTotal = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        const tempTotal = document.getElementById("total")?.innerHTML
+
         let total = 0.00;
         if (tempTotal !== undefined) {
             total = parseFloat(tempTotal)
@@ -254,11 +275,6 @@ const EditSlip: React.FC = () => {
             button.click();
             window.location.reload()
         }
-
-    }
-
-    function setNormalColour(i: string) {
-        document.getElementById(i)?.setAttribute("color", "light");
     }
 
 }

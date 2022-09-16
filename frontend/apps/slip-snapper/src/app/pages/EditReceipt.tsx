@@ -15,15 +15,15 @@ const EditReceipt: React.FC = () => {
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
     const originalItems = slipContents.items
-
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+
 
     const handleCostsChange = (event: any) => {
         const _tempCosts = [...editReceiptItems];
         let temp = event.target.id
         temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
+        _tempCosts[temp].itemPrice = event.target.value
         getData();
         setEditReceiptItems(_tempCosts);
     };
@@ -148,7 +148,7 @@ const EditReceipt: React.FC = () => {
 
                     <IonCardHeader className="wrapper">
                         <IonItem id={"total"} className='addEntry' color="tertiary" >
-                            {getTotalCosts()}
+                            {getTotalCosts().toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
                     <IonItem color="primary">
@@ -216,8 +216,14 @@ const EditReceipt: React.FC = () => {
                 editReceiptItems[i].data[0].itemType === "" ||
                 !Number.isInteger(editReceiptItems[i].itemQuantity) || 
                 Math.sign(editReceiptItems[i].itemQuantity) !== 1 ||
-                editReceiptItems[i].price === "") {
+                editReceiptItems[i].itemPrice === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
+                setShowAlert(true)
+                return
+            }
+
+            if (Number(editReceiptItems[i].itemPrice) < 0 || editReceiptItems[i].itemPrice.includes('e')) {
+                setAlertMes("Please enter a valid price at item #" + (i + 1) + ".")
                 setShowAlert(true)
                 return
             }
