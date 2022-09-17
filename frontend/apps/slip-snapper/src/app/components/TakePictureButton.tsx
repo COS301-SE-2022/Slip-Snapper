@@ -8,6 +8,7 @@ import {
   IonIcon,
 } from '@ionic/react';
 import React from 'react';
+import '../theme/fab-home.css';
 
 /**
  * 

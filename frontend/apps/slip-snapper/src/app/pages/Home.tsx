@@ -179,15 +179,15 @@ const Home: React.FC = () => {
               }  
         </div>
           
-
+      <div className='footer-home'/>
 
       </IonContent>
       <IonFooter>
         <TakePictureButton />
       </IonFooter>
-      <IonFooter>
+      {/* <IonFooter>
         <IonToolbar color="primary"></IonToolbar>
-      </IonFooter>
+      </IonFooter> */}
     </IonPage>
   );
 
