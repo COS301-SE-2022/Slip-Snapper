@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const createWorker = require('tesseract.js').createWorker;
+const processImage = require('../imageProcessor').processImage
 
 /**
  * Request to have text extracted to be processed by the ML
@@ -17,6 +18,8 @@ router.post('/process', async (req,res)=>{
             });
     }
 
+    const processedImage = await processImage(image);
+
     const worker =  createWorker({
         cachePath: '..',
         cacheMethod: 'readOnly',
@@ -25,9 +28,17 @@ router.post('/process', async (req,res)=>{
     await worker.load();
     await worker.loadLanguage('eng');
     await worker.initialize('eng');
+
+    if(processedImage == "Error processing image"){
+        return res.status(200).send({
+            message : "Error processing image",
+            text : []
+        });
+    }
+
     const {
         data: { text },
-    } = await worker.recognize(image);
+    } = await worker.recognize(processedImage);
     
     await worker.terminate();
 
