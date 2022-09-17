@@ -180,15 +180,15 @@ const Home: React.FC = () => {
           : <IonText>No Graph Data</IonText>}  
         </div>
           
-
+      <div className='footer-home'/>
 
       </IonContent>
       <IonFooter>
         <TakePictureButton />
       </IonFooter>
-      <IonFooter>
+      {/* <IonFooter>
         <IonToolbar color="primary"></IonToolbar>
-      </IonFooter>
+      </IonFooter> */}
     </IonPage>
   );
 
