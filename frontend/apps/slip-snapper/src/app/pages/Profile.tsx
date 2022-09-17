@@ -201,7 +201,7 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
-              {profile.favouriteStore.receipts.map((item: any, index: number) => {
+              {profile?.favouriteStore.receipts.map((item: any, index: number) => {
                 return (
                   <IonItem key={index} className="center-items" color="tertiary">
                     <IonText>Receipt #{item.slipNumber}: R{item.total.toFixed(2)}</IonText>
