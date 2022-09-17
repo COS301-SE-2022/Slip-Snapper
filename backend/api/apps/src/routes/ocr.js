@@ -42,9 +42,7 @@ router.post('/process', async (req,res)=>{
     
     await worker.terminate();
 
-    let lines = text.split('\n');
-
-    const processedText = await req.app.get('parser').parse(lines);
+    const processedText = await req.app.get('parser').parse(text);
 
     return res.status(200).send({
             message : "Text has been processed",
