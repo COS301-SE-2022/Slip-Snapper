@@ -79,8 +79,8 @@ export const EditBudgets = () => {
       .then(
         apiResponse => {
           if (typeof (apiResponse.data) !== "string") {
-            setBudgetObject(apiResponse.data.otherBudgets.budgets.budgets)
-            initializeStates(apiResponse.data.otherBudgets.budgets.budgets, categoryStates)
+            setBudgetObject(apiResponse.data.otherBudgets?.budgets.budgets)
+            initializeStates(apiResponse.data.otherBudgets?.budgets.budgets, categoryStates)
             hideData(categoryStates)
           }
         })
