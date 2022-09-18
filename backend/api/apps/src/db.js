@@ -1264,11 +1264,11 @@ async function getWeeklyExpenditure(userid) {
 async function getMonthlyExpenditure(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(01)
+        date1.setDate(1)
         let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date2 = new Date()
         date2.setMonth(date2.getMonth() - 1)
-        date2.setDate(01)
+        date2.setDate(1)
         let otherMonth = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const MonthlyExpenditure = await prisma.slip.findMany({
@@ -1400,7 +1400,7 @@ async function getDailyWeeklyMonthlyReports(userid) {
         let weekly = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const date3 = new Date()
-        date3.setDate(01)
+        date3.setDate(1)
         let monthly = date3.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
 
@@ -1758,7 +1758,7 @@ async function getUserProfile(userId) {
     let monday = new Date(date1.setDate(diff));
     let lastWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     date1 = new Date()
-    date1.setDate(01)
+    date1.setDate(1)
     let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     let olderDate = lastMonth
 
@@ -2055,10 +2055,10 @@ async function getUserAnalysis(userId) {
 
     try {
         /**
-         * new month is set to the 01 of the current month
+         * new month is set to the 1 of the current month
          */
         const date1 = new Date()
-        date1.setDate(01)
+        date1.setDate(1)
         let newMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         /**
          * query to get the top 5 most commonly bought items within a certain time frame
