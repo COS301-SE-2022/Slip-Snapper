@@ -49,12 +49,12 @@ const SlipItems: React.FC = () => {
             label: 'R0',
         },
         {
-            value: 5000,
-            label: 'R5000',
+            value: 2500,
+            label: 'R2500',
         },
         {
-            value: 10000,
-            label: 'R10000+',
+            value: 5000,
+            label: 'R5000+',
         },
     ];
 
@@ -78,12 +78,12 @@ const SlipItems: React.FC = () => {
                     <Slider
                         id='totalSlider'
                         className='totalSlider'
-                        getAriaLabel={() => 'Temperature range'}
+                        getAriaLabel={() => 'Total range'}
                         value={value}
                         onChange={handleChange}
                         valueLabelDisplay="auto"
                         min={0}
-                        max={10000}
+                        max={5000}
                         step={100}
                         marks={marks}
                     // getAriaValueText={valuetext}
@@ -237,7 +237,6 @@ const SlipItems: React.FC = () => {
     }
 
     function toggleTotalFilter(state: any) {
-        console.log("HELLO")
         const temp = document.getElementById('totalSlider')
         if (state) {
             if (temp !== null)
@@ -288,7 +287,18 @@ const SlipItems: React.FC = () => {
     function totalFilter()
     {
         for (let i = 0; i < originalSlips.length; i++) {
-            if (value[0] > originalSlips[i].total || value[1] < originalSlips[i].total) {
+
+            if(value[1]===5000)
+            {
+                if (value[0] > originalSlips[i].total)
+                {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
+                }
+            }
+
+            else if (value[0] > originalSlips[i].total || value[1] < originalSlips[i].total) {
                 const temp = document.getElementById("slipItem" + i)
                 if (temp !== null)
                     temp.style.display = "none";
