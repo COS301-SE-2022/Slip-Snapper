@@ -16,6 +16,19 @@
     display: none;
 }
 
+.info-icon{
+    cursor: pointer;
+}
+
+.info-icon:hover{
+    color: #5AD8C5;
+}
+
+.popover-text{
+    margin: 10px;
+    max-width: 200px;
+}
+
 .edit-budget:hover {
     color: #5AD8C5;
     cursor: pointer;

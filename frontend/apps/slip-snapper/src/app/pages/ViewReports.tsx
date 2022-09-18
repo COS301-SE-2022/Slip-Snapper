@@ -27,6 +27,7 @@ import {
   getUserReport,
   removeReport,
 } from '../../api/apiCall';
+import { present } from '@ionic/core/dist/types/utils/overlays';
 
 export const mockTotals = [
   { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
@@ -46,7 +47,7 @@ export const mockTotals = [
 
 // day week month
 const ViewReports: React.FC = () => {
-  const [reports, setReports] = useState<any[]>([{}]);
+  const [reports, setReports] = useState<any[]>([]);
 
   const [deleteAlert, setDeleteAlert] = useState({
     state: false,
@@ -113,7 +114,7 @@ const ViewReports: React.FC = () => {
           <IonCardHeader>
             <IonCardTitle>Reports:</IonCardTitle>
           </IonCardHeader>
-          {reports.map((report, index) => {
+          {reports?.map((report, index) => {
             return (
               <IonItem key={index} color="tertiary">
                 {report.otherName}
@@ -255,13 +256,19 @@ const ViewReports: React.FC = () => {
     // demoUser_31 - 08 - 2022Weekly_1.pdf 
     await generateReportA(userS.username, period, getReportNumber()+1).then(
       (apiResponse) => {
-        if (apiResponse.data.message === 'Report Generated and uploaded') {
-          present('Generated ' + period + ' Report', 1200);
-        } else {
-          present('Error generating report, Try again.', 1200);
+        if(typeof(apiResponse.data) !== "string"){
+          if (apiResponse.data.message === 'Report Generated and uploaded') {
+            present('Generated ' + period + ' Report', 1200);
+          } else {
+            present('Error generating report, Try again.', 1200);
+          }
+        }else{
+          present("500 Internel Server Error", 1200)
         }
       }
-    );
+    ).catch(err =>{
+      present("500 Internel Server Error", 1200)
+    });
 
     getAllUserReports().then((apiResponse) => {
       setReports(apiResponse.data.reports);
@@ -272,7 +279,7 @@ const ViewReports: React.FC = () => {
   {
     let maxReportNum:number
     maxReportNum=0
-    for(let i = 0 ; i < reports.length;i++)
+    for(let i = 0 ; i < reports?.length;i++)
     {
       if(reports[i].reportNumber>maxReportNum)
       {

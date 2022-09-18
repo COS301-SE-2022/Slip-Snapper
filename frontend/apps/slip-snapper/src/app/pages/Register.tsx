@@ -148,17 +148,24 @@ const Register: React.FC = () => {
     else{
       signupA(userInput, emailInput, passwordInput)
         .then(apiResponse => {
+          if(typeof(apiResponse.data) !== "string"){
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
             localStorage.removeItem('token')
             localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+
+            const button = document.getElementById("successRedirect")
+            if (button) {
+              button.click();
+            }
+          }else{
+            setErrorMessage("500 Internal Service Error.")
+            setAlert(true)
+          } 
+        }).catch(err => {
+          setErrorMessage("500 Internal Service Error.")
+          setAlert(true)
         });
-
-      const button = document.getElementById("successRedirect")
-      if (button) {
-        button.click();
-      }
-
     }
   }
 

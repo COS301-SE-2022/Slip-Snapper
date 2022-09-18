@@ -28,6 +28,8 @@ import { setBudgetA, getProfileData } from "../../api/apiCall"
 import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
+import { helpCircleOutline } from 'ionicons/icons';
+import { Popover } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { float } from 'aws-sdk/clients/lightsail';
 
@@ -74,6 +76,11 @@ const Profile: React.FC = () => {
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
   const [profile, setProfile] = useState({ favouriteStore: { name: "", receipts: [{ id: 0, total: 0 }] }, weeklyTotal: 0, monthlyTotal: 0 });
   let weeklyBudget: number, monthlyBudget: number
+
+  const [mostFrequent, setMostFrequent] = useState(null);
+  const openMostFrequent = (event:any) => { setMostFrequent(event.currentTarget); };
+  const closeMostFrequent = () => { setMostFrequent(null); };
+
   return (
     <IonPage>
       <IonHeader>
@@ -191,6 +198,22 @@ const Profile: React.FC = () => {
             <IonCardHeader>
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Most Frequent Store</IonCardTitle>
+                <IonIcon src={helpCircleOutline} onClick={openMostFrequent} className="info-icon"/>
+                        <Popover
+                            open={Boolean(mostFrequent)}
+                            onClose={closeMostFrequent}
+                            anchorEl={mostFrequent}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                              }}
+                              transformOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                              }}
+                        >
+                            <p className="popover-text">The store that you have purchased products at most frequently this month.</p>
+                        </Popover>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
                 <IonText data-testid='favoriteStore'>{profile.favouriteStore.name}</IonText>
@@ -201,7 +224,7 @@ const Profile: React.FC = () => {
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Recent Receipts</IonCardTitle>
               </IonItem>
-              {profile.favouriteStore.receipts.map((item: any, index: number) => {
+              {profile?.favouriteStore.receipts.map((item: any, index: number) => {
                 return (
                   <IonItem key={index} className="center-items" color="tertiary">
                     <IonText>Receipt #{item.slipNumber}: R{item.total.toFixed(2)}</IonText>

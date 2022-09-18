@@ -103,24 +103,29 @@ const Login: React.FC = () => {
     else {
       loginA(usernameInput, passwordInput)
         .then(apiResponse => {
-          if (apiResponse.data.message === "Invalid Username") {
-            setErrorMessage("Username not found.")
+          if(typeof(apiResponse.data) !== "string"){
+            if (apiResponse.data.message === "Error validating user Details") {
+              setErrorMessage("Username or Password is incorrect.")
+              setAlert(true)
+            }
+            else {
+              //Change user local storage item
+              localStorage.removeItem('user')
+              localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+              localStorage.removeItem('token')
+              localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+  
+              history.push("/home")
+              window.location.reload();
+            }
+          }else{
+            setErrorMessage("500 Internel Server Error.")
             setAlert(true)
           }
-          else if (apiResponse.data.message === "Invalid Password") {
-            setErrorMessage("Incorrect Password.")
-            setAlert(true)
-          }
-          else {
-            //Change user local storage item
-            localStorage.removeItem('user')
-            localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-            localStorage.removeItem('token')
-            localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
-
-            history.push("/home")
-            window.location.reload();
-          }
+          
+        }).catch(err => {
+          setErrorMessage("500 Internel Server Error.")
+          setAlert(true)
         })
     }
   }

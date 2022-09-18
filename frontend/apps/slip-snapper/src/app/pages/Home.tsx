@@ -14,6 +14,7 @@ import {
   IonCardTitle,
   IonItem,
   useIonToast,
+  IonText,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { isPlatform } from '@ionic/core';
@@ -56,7 +57,7 @@ const Home: React.FC = () => {
   const [todayItems, setTodayItem] = useState(0);
   const [todayTotal, setTodayTotal] = useState(0);
   const [present, dismiss] = useIonToast();
-  const [reports, setR] = useState([{reportNumber:"0", reportName:"No reports Available",otherName:""}]);
+  const [reports, setR] = useState<any[]>([]);
 
   const [graphData, setGraphData] = useState<any[]>([])
   useEffect(() => {
@@ -107,9 +108,9 @@ const Home: React.FC = () => {
         </IonItem>
 
         <IonRow>
-          {reports.map((reps, index) => {
+          {reports?.map((reps, index) => {
             return (
-              <ReportItem key={index} reportData={[reps.reportNumber, reps.reportName, reps.otherName]} />
+              <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
             )
           })
           }
@@ -135,7 +136,7 @@ const Home: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>This Week's Reports:</IonCardTitle>
               </IonCardHeader>
-              {thisWeeksReports.map((item, index) => {
+              {thisWeeksReports?.map((item, index) => {
                 return (
                   <IonItem key={index} color="tertiary">
                     {item.otherName}
@@ -165,25 +166,25 @@ const Home: React.FC = () => {
         </IonItem>
 
         <div className="graph-wrapper">
-          {graphData.map((item) => {
+          {graphData? graphData.map((item) => {
                 return (
                   <IonCard className='graph-card'>
                     <Graph graphData={item}></Graph>
                   </IonCard>
                 )
               })
-              }  
+          : <IonText>No Graph Data</IonText>}  
         </div>
           
-
+      <div className='footer-home'/>
 
       </IonContent>
       <IonFooter>
         <TakePictureButton />
       </IonFooter>
-      <IonFooter>
+      {/* <IonFooter>
         <IonToolbar color="primary"></IonToolbar>
-      </IonFooter>
+      </IonFooter> */}
     </IonPage>
   );
 
