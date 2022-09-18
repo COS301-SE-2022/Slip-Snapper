@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { toProjectName } = require('nx/src/config/workspaces');
 
 const prisma = new PrismaClient()
 

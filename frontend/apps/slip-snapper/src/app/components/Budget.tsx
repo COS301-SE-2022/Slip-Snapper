@@ -133,10 +133,12 @@ function Budget() {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
-                        setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
-                        setWeeklyCategorySpent(apiResponse.data.otherBudgets.weeklyTotal)
-                        setMonthlyCategorySpent(apiResponse.data.otherBudgets.monthlyTotal)
-                        setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.weeklyTotal, apiResponse.data.otherBudgets.monthlyTotal)
+                       if(apiResponse.data.otherBudgets.budgets){
+                            setCategoryBudgets(apiResponse.data.otherBudgets.budgets.budgets)
+                            setWeeklyCategorySpent(apiResponse.data.otherBudgets.weeklyTotal)
+                            setMonthlyCategorySpent(apiResponse.data.otherBudgets.monthlyTotal)
+                            setProgressBars(apiResponse.data.otherBudgets.budgets.budgets, apiResponse.data.otherBudgets.weeklyTotal, apiResponse.data.otherBudgets.monthlyTotal)
+                        }
                     }
                 })
     }, []);
