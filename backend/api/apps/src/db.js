@@ -1950,6 +1950,21 @@ async function getUserProfile(userId) {
  */
 async function getUserBudgets(userId) {
     try {
+        let date1 = new Date()
+        date1.setDate(date1.getDate())
+        var day = date1.getDay(),
+            diff = date1.getDate() - day + (day == 0 ? -6 : 1);
+        let monday = new Date(date1.setDate(diff));
+        let lastWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date1 = new Date()
+        date1.setDate(1)
+        let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        let olderDate = lastMonth
+    
+        if (lastWeek < lastMonth) {
+            olderDate = lastWeek
+        }
+
         const user = await prisma.user.findFirst({
             where: {
                 id: userId
@@ -1958,34 +1973,27 @@ async function getUserBudgets(userId) {
 
         const items = await prisma.slip.findMany({
             where: {
-                usersId: userId
-                // transactionDate: {
-                //     gte: start,
-                //     lt:  end
-                //   }
+                usersId: userId,
+                transactionDate:{
+                    gte:olderDate
+                }
             },
         })
 
         let weeklyTotal = 0;
         let monthlyTotal = 0;
-        // var date = new Date();
-        // date.setDate(date.getDate() - 7);
-        // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
-        // date = new Date();
-        // date.setDate(date.getMonth() - 1);
-        // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
+       
         for (var itemL of items) {
-            //let tDate = transactionDate;
-
-            //if(tDate > week){
-            weeklyTotal += itemL.total;
-            //}
-
-            //if(tDate > month){
-            monthlyTotal += itemL.total;
-            //}
+            
+            if(itemL.transactionDate>=lastWeek)
+            {
+              weeklyTotal += itemL.total;  
+            }
+            if(itemL.transactionDate>=lastMonth)
+            {
+                 monthlyTotal += itemL.total;
+            }
+            
         }
 
         return {
