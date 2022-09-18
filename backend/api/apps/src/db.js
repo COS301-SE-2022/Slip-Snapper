@@ -1209,13 +1209,18 @@ async function getMostSpentATStore(userid) {
 async function getWeeklyExpenditure(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 7);
-        let lastweek = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date1.setDate(date1.getDate())
+        var day = date1.getDay(),
+            diff = date1.getDate() - day + (day == 0 ? -6 : 1);
+        let monday = new Date(date1.setDate(diff));
+        let lastweek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 14)
-        let otherWeek = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-
+        date2.setDate(date2.getDate() - 7)
+        var day = date2.getDay(),
+            diff = date2.getDate() - day + (day == 0 ? -6 : 1);
+        monday = new Date(date2.setDate(diff));
+        let otherWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const weeklyExpenditure = await prisma.slip.findMany({
             where: {
@@ -1260,10 +1265,11 @@ async function getWeeklyExpenditure(userid) {
 async function getMonthlyExpenditure(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 30)
+        date1.setDate(01)
         let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 30 * 2)
+        date2.setMonth(date2.getMonth() - 1)
+        date2.setDate(01)
         let otherMonth = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const MonthlyExpenditure = await prisma.slip.findMany({
@@ -1390,12 +1396,14 @@ async function getDailyWeeklyMonthlyReports(userid) {
         const date2 = new Date()
         date2.setDate(date2.getDate())
         var day = date2.getDay(),
-            diff = date2.getDate() - day + (day == 0 ? -6 : 1); 
+            diff = date2.getDate() - day + (day == 0 ? -6 : 1);
         let monday = new Date(date2.setDate(diff));
         let weekly = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const date3 = new Date()
-        date3.setDate(date3.getDate() - 30)
+        date3.setDate(01)
         let monthly = date3.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
 
 
         const userReports = await prisma.reports.findMany({
