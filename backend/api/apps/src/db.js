@@ -1039,7 +1039,7 @@ async function getFavouriteCategory(userid) {
         types.catPrices[index] = Math.round((types.catPrices[index] + Number.EPSILON) * 100) / 100
 
         if (isNaN(types.catPrices[index])) {
-            types.cat[index]="N/A"
+            types.cat[index] = "N/A"
             types.catPrices[index] = 0
         }
 
@@ -1384,11 +1384,15 @@ async function getAllReports(userid) {
 async function getDailyWeeklyMonthlyReports(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate())
         let daily = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 7)
-        let weekly = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date2.setDate(date2.getDate())
+        var day = date2.getDay(),
+            diff = date2.getDate() - day + (day == 0 ? -6 : 1); 
+        let monday = new Date(date2.setDate(diff));
+        let weekly = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date3 = new Date()
         date3.setDate(date3.getDate() - 30)
         let monthly = date3.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
