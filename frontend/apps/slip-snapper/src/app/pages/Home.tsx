@@ -36,7 +36,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(
   CategoryScale,
@@ -46,11 +45,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-
-/**
- * Config for Graph_2
- */
 
 const Home: React.FC = () => {
   const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([]);
@@ -166,9 +160,9 @@ const Home: React.FC = () => {
         </IonItem>
 
         <div className="graph-wrapper">
-          {graphData? graphData.map((item) => {
+          {graphData? graphData.map((item,index) => {
                 return (
-                  <IonCard className='graph-card'>
+                  <IonCard key={index} className='graph-card'>
                     <Graph graphData={item}></Graph>
                   </IonCard>
                 )

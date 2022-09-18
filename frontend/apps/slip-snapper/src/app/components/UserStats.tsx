@@ -1,9 +1,10 @@
 import { IonCard, IonCardHeader, IonCardTitle, IonContent, IonIcon, IonItem, IonText } from "@ionic/react";
 import React, { useEffect, useState } from 'react';
-import {  getStatsA } from "../../api/apiCall"
+import { getStatsA } from "../../api/apiCall"
 import '../theme/user-stats.css';
 import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
+import ProfileBarGraph from "./ProfileBarGraph";
 
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
@@ -29,10 +30,9 @@ export const UserStats = () => {
         getStatsA()
             .then(
                 apiResponse => {
-                    if(typeof(apiResponse.data) !== "string"){
+                    if (typeof (apiResponse.data) !== "string") {
                         setUserStats(apiResponse.data)
-                        console.log(apiResponse.data)
-                    }  
+                    }
                 })
     }, []);
 
@@ -41,24 +41,24 @@ export const UserStats = () => {
     const [mostCategory, setMostCategory] = useState(null);
     const [mostExpensive, setMostExpensive] = useState(null);
 
-    const openWeekExPop = (event:any) => { setWeekExPop(event.currentTarget); };
-    const openMonthExPop = (event:any) => { setMonthExPop(event.currentTarget); };
-    const openMostCategory = (event:any) => { setMostCategory(event.currentTarget); };
-    const openMostExpensive = (event:any) => { setMostExpensive(event.currentTarget); };
+    const openWeekExPop = (event: any) => { setWeekExPop(event.currentTarget); };
+    const openMonthExPop = (event: any) => { setMonthExPop(event.currentTarget); };
+    const openMostCategory = (event: any) => { setMostCategory(event.currentTarget); };
+    const openMostExpensive = (event: any) => { setMostExpensive(event.currentTarget); };
 
     const closeWeekExPop = () => { setWeekExPop(null); };
     const closeMonthExPop = () => { setMonthExPop(null); };
     const closeMostCategory = () => { setMostCategory(null); };
     const closeMostExpensive = () => { setMostExpensive(null); };
 
-    return(
+    return (
         <div className="wrapper">
             {/* Weekly Expenditure */}
             <IonCard className="card weekly" color="primary">
                 <IonCardHeader>
                     <IonItem className="headings" color="primary">
                         <IonCardTitle>Weekly Expenditure</IonCardTitle>
-                        <IonIcon src={helpCircleOutline} onClick={openWeekExPop} className="info-icon"/>
+                        <IonIcon src={helpCircleOutline} onClick={openWeekExPop} className="info-icon" />
                         <Popover
                             open={Boolean(weekExPop)}
                             onClose={closeWeekExPop}
@@ -66,22 +66,17 @@ export const UserStats = () => {
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
-                              }}
-                              transformOrigin={{
+                            }}
+                            transformOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
-                              }}
+                            }}
                         >
                             <p className="popover-text">Compare your total weekly expenditure for this week
-                            and the previous week to manage your spending habits.</p>
+                                and the previous week to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='thisWeek'>Current Weekly Total: R{userStats.lastWeek.current.toFixed(2)}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='lastWeek'>Previous Weekly Total: R{userStats.lastWeek.previous.toFixed(2)}</IonText>
-                    </IonItem>
+                    <ProfileBarGraph graphData={userStats.lastWeek}></ProfileBarGraph>
                 </IonCardHeader>
             </IonCard>
 
@@ -90,7 +85,7 @@ export const UserStats = () => {
                 <IonCardHeader>
                     <IonItem className="headings" color="primary">
                         <IonCardTitle>Monthly Expenditure</IonCardTitle>
-                        <IonIcon src={helpCircleOutline} onClick={openMonthExPop} className="info-icon"/>
+                        <IonIcon src={helpCircleOutline} onClick={openMonthExPop} className="info-icon" />
                         <Popover
                             open={Boolean(monthExPop)}
                             onClose={closeMonthExPop}
@@ -98,22 +93,17 @@ export const UserStats = () => {
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
-                              }}
-                              transformOrigin={{
+                            }}
+                            transformOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
-                              }}
+                            }}
                         >
                             <p className="popover-text">Compare your total monthly expenditure for this month
-                            and the previous month to manage your spending habits.</p>
+                                and the previous month to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='thisMonth'>Current Monthly Total: R{userStats.lastMonth.current.toFixed(2)}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='lastMonth'>Previous Monthly Total: R{userStats.lastMonth.previous.toFixed(2)}</IonText>
-                    </IonItem>
+                    <ProfileBarGraph graphData={userStats.lastMonth}></ProfileBarGraph>
                 </IonCardHeader>
             </IonCard>
 
@@ -121,7 +111,7 @@ export const UserStats = () => {
                 <IonCardHeader>
                     <IonItem className="headings" color="primary">
                         <IonCardTitle>Most Purchased Category</IonCardTitle>
-                        <IonIcon src={helpCircleOutline} onClick={openMostCategory} className="info-icon"/>
+                        <IonIcon src={helpCircleOutline} onClick={openMostCategory} className="info-icon" />
                         <Popover
                             open={Boolean(mostCategory)}
                             onClose={closeMostCategory}
@@ -129,14 +119,14 @@ export const UserStats = () => {
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
-                              }}
-                              transformOrigin={{
+                            }}
+                            transformOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
-                              }}
+                            }}
                         >
                             <p className="popover-text">The category of products that you purchase most frequently as well as
-                            the total amount spent on this category this month.</p>
+                                the total amount spent on this category this month.</p>
                         </Popover>
                     </IonItem>
                     <IonItem className="center-items" color="tertiary">
@@ -152,7 +142,7 @@ export const UserStats = () => {
                 <IonCardHeader>
                     <IonItem className="headings" color="primary">
                         <IonCardTitle>Most Expensive Recent Purchase</IonCardTitle>
-                        <IonIcon src={helpCircleOutline} onClick={openMostExpensive} className="info-icon"/>
+                        <IonIcon src={helpCircleOutline} onClick={openMostExpensive} className="info-icon" />
                         <Popover
                             open={Boolean(mostExpensive)}
                             onClose={closeMostExpensive}
@@ -160,11 +150,11 @@ export const UserStats = () => {
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
-                              }}
-                              transformOrigin={{
+                            }}
+                            transformOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
-                              }}
+                            }}
                         >
                             <p className="popover-text">The most expensive purchase that you have made this month.</p>
                         </Popover>
