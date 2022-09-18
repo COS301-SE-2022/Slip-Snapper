@@ -159,8 +159,8 @@ async function generatePDF(name, object, today, period){
 
 async function generateSpreadsheet(name, allItems, period){
     const types = await sortItemsIntoCategories(allItems)
-    // console.log(types.types.Food)
-    // console.log(allItems)
+    // console.log(types.types)
+
     allItems.map((item) => {
         item.price = parseFloat(item.price)
     })
@@ -168,7 +168,7 @@ async function generateSpreadsheet(name, allItems, period){
 
     let range = XLSX.utils.decode_range(allItemsSheet['!ref']);
 
-    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: "A1" })
+    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: 'A1' })
     XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Items:',{t:'n', v:3, f:'SUM(C2:C'+(range.e.r+1)+')'}]], { origin: 'H2' })
     XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Amount:',{t:'n', v:3, f:'SUM(D2:D'+(range.e.r+1)+')'}]], { origin: 'H3' })
 
@@ -178,6 +178,21 @@ async function generateSpreadsheet(name, allItems, period){
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook,allItemsSheet,"All Items");
+
+    for(const key in types.types){
+        if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
+            const sheet = XLSX.utils.json_to_sheet(types.types[key]);
+            const range = XLSX.utils.decode_range(sheet['!ref']);
+
+            XLSX.utils.sheet_add_aoa(sheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: 'A1' })
+            XLSX.utils.sheet_add_aoa(sheet, [['Total Items:',{t:'n', v:3, f:'SUM(C2:C'+(range.e.r+1)+')'}]], { origin: 'H2' })
+            XLSX.utils.sheet_add_aoa(sheet, [['Total Amount:',{t:'n', v:3, f:'SUM(D2:D'+(range.e.r+1)+')'}]], { origin: 'H3' })
+
+            sheet['!cols'] = [ { wch: widthName }, { wch: 12 }, { wch: 7 },{ wch: 10 }, { wch: widthLocation }, { wch: 10 }, {wch:5}, { wch: 12 } ];
+
+            XLSX.utils.book_append_sheet(workbook,sheet,key);
+        }
+    }
 
     XLSX.writeFile(workbook,__dirname+"/Report.xlsx");
 
@@ -627,7 +642,6 @@ router.post('/spreadsheet', async (req, res) => {
     // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
     const sheet = await generateSpreadsheet("testfile",result.itemList, period)
-    console.log(sheet)
 
     let status = 200;
 
