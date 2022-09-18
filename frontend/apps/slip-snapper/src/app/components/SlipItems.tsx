@@ -75,9 +75,8 @@ const SlipItems: React.FC = () => {
                         <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(e.detail.checked)} />
                     </IonItem>
 
+                    <div id='totalSlider' className='totalSlider'>
                     <Slider
-                        id='totalSlider'
-                        className='totalSlider'
                         getAriaLabel={() => 'Total range'}
                         value={value}
                         onChange={handleChange}
@@ -88,6 +87,7 @@ const SlipItems: React.FC = () => {
                         marks={marks}
                     // getAriaValueText={valuetext}
                     />
+                    </div>
 
                     <IonItem color='primary'>
                         <IonLabel>Date Filter</IonLabel>
