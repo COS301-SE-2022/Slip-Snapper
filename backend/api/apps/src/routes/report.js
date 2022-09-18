@@ -1,6 +1,8 @@
+const { all } = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit-table');
+const XLSX = require('xlsx')
 const router = require("express").Router();
 
 /**
@@ -155,6 +157,33 @@ async function generatePDF(name, object, today, period){
     };
 }
 
+async function generateSpreadsheet(name, allItems, period){
+    const types = await sortItemsIntoCategories(allItems)
+    // console.log(types.types.Food)
+    // console.log(allItems)
+    allItems.map((item) => {
+        item.price = parseFloat(item.price)
+    })
+    const allItemsSheet = XLSX.utils.json_to_sheet(allItems);
+
+    let range = XLSX.utils.decode_range(allItemsSheet['!ref']);
+
+    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: "A1" })
+    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Items:',{t:'n', v:3, f:'SUM(C2:C'+(range.e.r+1)+')'}]], { origin: 'H2' })
+    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Amount:',{t:'n', v:3, f:'SUM(D2:D'+(range.e.r+1)+')'}]], { origin: 'H3' })
+
+    const widthName = allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10);
+    const widthLocation = allItems.reduce((w,r) => Math.max(w, r.location.length), 10);
+    allItemsSheet['!cols'] = [ { wch: widthName }, { wch: 12 }, { wch: 7 },{ wch: 10 }, { wch: widthLocation }, { wch: 10 }, {wch:5}, { wch: 12 } ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook,allItemsSheet,"All Items");
+
+    XLSX.writeFile(workbook,__dirname+"/Report.xlsx");
+
+    return workbook.Sheets;
+}
+  
 /**
  * Generate the pdf report for a user
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
@@ -571,6 +600,45 @@ router.get('/today', async (req, res) => {
             totalSpent: result.todaystotal
         });
 
+});
+
+/**
+ * Generate a excel spreadsheet for a user
+ */
+router.post('/spreadsheet', async (req, res) => {
+    let { period, userName } = req.body;
+    // const token = req.headers.authorization.split(' ')[1];
+    // const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    // if(tokenVerified === "Error"){
+    //     return res.status(200)
+    //         .send({
+    //             message: "Token has expired Login again to continue using the application",
+    //             title: "",
+    //             reportTotal: 0
+    //         });
+    // }
+
+    const today = new Date();
+    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    const periodStart = await determinePeriodStart(period, periodEnd);
+
+    const result = await req.app.get('db').getItemsReport(41, periodStart, periodEnd);
+    // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+
+    const sheet = await generateSpreadsheet("testfile",result.itemList, period)
+    console.log(sheet)
+
+    let status = 200;
+
+    //TODO error checking
+
+    return res.status(status)
+        .send({
+            message: result.message,
+            totalItems: result.sum,
+            totalSpent: result.todaystotal
+        });
 });
 
 module.exports.router = router;
