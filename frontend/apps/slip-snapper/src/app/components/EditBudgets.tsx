@@ -71,11 +71,7 @@ export const EditBudgets = () => {
   const [budgetObject, setBudgetObject] = useState<any>([])
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-      user = { id: 24 }
-    }
-    getProfileData(user.id)
+    getProfileData()
       .then(
         apiResponse => {
           if (typeof (apiResponse.data) !== "string") {
@@ -229,11 +225,6 @@ export const EditBudgets = () => {
   }
 
   function setStates(budgetIntervals: any, categoryStates: any) {
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-      user = { id: 24 }
-    }
-
 
     if (globalCategoryBudgets !== undefined) {
       globalCategoryBudgets.FoodBudget.active = categoryStates[0].isActive
@@ -255,7 +246,7 @@ export const EditBudgets = () => {
       globalCategoryBudgets.HealthcareBudget.timeFrame = budgetIntervals[6].weekly
       globalCategoryBudgets.VehicleBudget.timeFrame = budgetIntervals[7].weekly
     }
-    setGeneralBudget(user.id, globalCategoryBudgets)
+    setGeneralBudget(globalCategoryBudgets)
   }
 
 };

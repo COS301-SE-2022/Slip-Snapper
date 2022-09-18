@@ -117,11 +117,7 @@ function Budget() {
     globalSetRenderedBudgets = setRenderedBudgets
 
     useEffect(() => {
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if (user == null) {
-            user = { id: 24 }
-        }
-        getProfileData(user.id)
+        getProfileData()
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
@@ -138,7 +134,7 @@ function Budget() {
                 <IonText>Food: R{categoryBudgets.FoodBudget.timeFrame === true ? categoryBudgets.FoodBudget.weeklyValue.toFixed(2) : categoryBudgets.FoodBudget.monthlyValue.toFixed(2)}</IonText>
                 <IonProgressBar id='foodBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    {categoryBudgets.FoodBudget.timeFrame === true? <Filter7Icon/>: <CalendarMonthIcon/>}
+                    {categoryBudgets.FoodBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
 
@@ -161,7 +157,7 @@ function Budget() {
                 <IonText>Fashion: R{categoryBudgets.FashionBudget.timeFrame === true ? categoryBudgets.FashionBudget.weeklyValue.toFixed(2) : categoryBudgets.FashionBudget.monthlyValue.toFixed(2)}</IonText>
                 <IonProgressBar id='fashionBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    {categoryBudgets.FashionBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
+                    {categoryBudgets.FashionBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -183,7 +179,7 @@ function Budget() {
                 <IonText>Electronics: R{categoryBudgets.ElectronicsBudget.timeFrame === true ? categoryBudgets.ElectronicsBudget.weeklyValue.toFixed(2) : categoryBudgets.ElectronicsBudget.monthlyValue.toFixed(2)}</IonText>
                 <IonProgressBar id='elecBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    {categoryBudgets.ElectronicsBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
+                    {categoryBudgets.ElectronicsBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -205,7 +201,7 @@ function Budget() {
                 <IonText>Household: R{categoryBudgets.HouseholdBudget.timeFrame === true ? categoryBudgets.HouseholdBudget.weeklyValue.toFixed(2) : categoryBudgets.HouseholdBudget.monthlyValue.toFixed(2)}</IonText>
                 <IonProgressBar id='houseBar' class='categoryProgressBar' slot="end" ></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    {categoryBudgets.HouseholdBudget.timeFrame === true? <Filter7Icon />: <CalendarMonthIcon />}
+                    {categoryBudgets.HouseholdBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -293,7 +289,7 @@ function Budget() {
                 <IonText>Other: R{categoryBudgets.OtherBudget.timeFrame === true ? categoryBudgets.OtherBudget.weeklyValue.toFixed(2) : categoryBudgets.OtherBudget.monthlyValue.toFixed(2)}</IonText>
                 <IonProgressBar id='otherBar' class='categoryProgressBar' slot="end"></IonProgressBar><br />
                 <IonFab horizontal='end' edge>
-                    {categoryBudgets.OtherBudget.timeFrame === true? <Filter7Icon/>: <CalendarMonthIcon/>}
+                    {categoryBudgets.OtherBudget.timeFrame === true ? <Filter7Icon /> : <CalendarMonthIcon />}
                 </IonFab>
             </IonItem>
             <IonAlert
@@ -313,11 +309,6 @@ function Budget() {
     );
 
     function applyToBudget(categoryBudgetType: string, newBudget: number) {
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if (user == null) {
-            user = { id: 24 }
-        }
-
         if (categoryBudgetType === "food") {
 
             if (isNaN(newBudget) || newBudget < 0) {
@@ -332,7 +323,7 @@ function Budget() {
                 console.log(categoryBudgets)
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "foodBar", categorySpent.Food)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Food budget set", 1200)
             }
         }
@@ -350,7 +341,7 @@ function Budget() {
                 else { categoryBudgets.FashionBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "fashionBar", categorySpent.Fashion)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Fashion budget set", 1200)
 
             }
@@ -370,7 +361,7 @@ function Budget() {
                 else { categoryBudgets.ElectronicsBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "elecBar", categorySpent.Electronics)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Electronics budget set", 1200)
             }
         }
@@ -390,7 +381,7 @@ function Budget() {
                 }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "houseBar", categorySpent.Household)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Household budget set", 1200)
             }
         }
@@ -407,7 +398,7 @@ function Budget() {
                 else { categoryBudgets.OtherBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "otherBar", categorySpent.Other)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Other budget set", 1200)
             }
         }
@@ -425,7 +416,7 @@ function Budget() {
                 else { categoryBudgets.HealthcareBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "healthcareBar", categorySpent.Healthcare)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Healthcare budget set", 1200)
             }
         }
@@ -443,7 +434,7 @@ function Budget() {
                 else { categoryBudgets.HobbyBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "hobbyBar", categorySpent.Hobby)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Hobby budget set", 1200)
             }
         }
@@ -461,7 +452,7 @@ function Budget() {
                 else { categoryBudgets.VehicleBudget.monthlyValue = Number(newBudget) }
                 setCategoryBudgets(categoryBudgets)
                 isExceeded(newBudget, "vehicleBar", categorySpent.Vehicle)
-                setGeneralBudget(user.id, categoryBudgets)
+                setGeneralBudget(categoryBudgets)
                 present("New Vehicle budget set", 1200)
             }
         }
@@ -578,19 +569,13 @@ function setProgressBars(budgets: any, totals: any) {
         isExceeded(budgets.HobbyBudget.monthlyValue, "hobbyBar", totals.Hobby);
         newBudgets.HobbyBudget = budgets.HobbyBudget.monthlyValue
     }
-    
+
     globalSetRenderedBudgets(newBudgets)
-    
+
 }
 
 export function updateBudgets() {
-
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-        user = { id: 24 }
-    }
-
-    getProfileData(user.id)
+    getProfileData()
         .then(
             apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
