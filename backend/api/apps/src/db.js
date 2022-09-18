@@ -2059,8 +2059,6 @@ async function getUserAverageSpent(userId) {
  */
 async function getUserAnalysis(userId) {
 
-
-
     try {
         /**
          * new month is set to the 1 of the current month
@@ -2089,7 +2087,7 @@ async function getUserAnalysis(userId) {
                     }
                 }
             },
-            take: 5,
+            take: 6,
             orderBy: {
                 _count: {
                     item: "desc"
@@ -2122,6 +2120,7 @@ async function getUserAnalysis(userId) {
         let analysisObject = []
 
         for (const i in listOfItems) {
+            let counter=0
             let locationArray = []
             let reliabilityTally = []
             let averagePerLocation = []
@@ -2146,7 +2145,8 @@ async function getUserAnalysis(userId) {
                         id: true
                     }
                 })
-                if (aggregates != null) {
+                if (aggregates._count.id != 0 && counter<5) {
+                    counter++
                     locationArray.push(groupedLocations[k].location)
                     reliabilityTally.push(aggregates._count)
                     averagePerLocation.push(aggregates._avg)
@@ -2158,6 +2158,7 @@ async function getUserAnalysis(userId) {
                 occurances: reliabilityTally,
                 amounts: averagePerLocation
             })
+            counter=0
         }
         return {
 
