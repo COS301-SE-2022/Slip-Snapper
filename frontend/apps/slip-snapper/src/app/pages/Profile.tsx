@@ -103,7 +103,7 @@ const Profile: React.FC = () => {
               <IonGrid>
                 <div className="wrapper">
                   <IonCol className='profile-elem'>
-                        {/* <ProfileImage/> */}
+                        {/* <ProfileImage/> TO-DO */}
                       </IonCol>
                   <IonCol className='profile-elem'>
                     <IonItem className="center-items username" color="tertiary">
