@@ -57,7 +57,7 @@ async function getUser(userName) {
  * @param {*} lastname (String) the lastname
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function addUser(username, password, firstname, lastname) {
+async function addUser(username, password, firstname, lastname,email) {
     try {
         let budgetObject = {
             FoodBudget: {
@@ -120,6 +120,7 @@ async function addUser(username, password, firstname, lastname) {
                 password: password,
                 lastname: lastname,
                 firstname: firstname,
+                email:email,
                 weeklyBudget: 0,
                 monthlyBudget: 0,
                 budgets: JSON.parse(budgetObjectString)
@@ -1655,7 +1656,7 @@ async function retrieveAllSlips(userid) {
 async function todaysReports(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate())
         let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const todaysReport = await prisma.slip.findMany({
@@ -1749,7 +1750,7 @@ async function getUserProfile(userId) {
  * @param {*} end the end date for the period
  * @returns json object with the user budgets
  */
- async function getUserGeneralBudgets(userId, start, end) {
+async function getUserGeneralBudgets(userId, start, end) {
     let date1 = new Date()
     date1.setDate(date1.getDate())
     var day = date1.getDay(),
@@ -1959,7 +1960,7 @@ async function getUserBudgets(userId) {
         date1.setDate(1)
         let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         let olderDate = lastMonth
-    
+
         if (lastWeek < lastMonth) {
             olderDate = lastWeek
         }
@@ -1973,26 +1974,24 @@ async function getUserBudgets(userId) {
         const items = await prisma.slip.findMany({
             where: {
                 usersId: userId,
-                transactionDate:{
-                    gte:olderDate
+                transactionDate: {
+                    gte: olderDate
                 }
             },
         })
 
         let weeklyTotal = 0;
         let monthlyTotal = 0;
-       
+
         for (var itemL of items) {
-            
-            if(itemL.transactionDate>=lastWeek)
-            {
-              weeklyTotal += itemL.total;  
+
+            if (itemL.transactionDate >= lastWeek) {
+                weeklyTotal += itemL.total;
             }
-            if(itemL.transactionDate>=lastMonth)
-            {
-                 monthlyTotal += itemL.total;
+            if (itemL.transactionDate >= lastMonth) {
+                monthlyTotal += itemL.total;
             }
-            
+
         }
 
         return {
@@ -2119,7 +2118,7 @@ async function getUserAnalysis(userId) {
         let analysisObject = []
 
         for (const i in listOfItems) {
-            let counter=0
+            let counter = 0
             let locationArray = []
             let reliabilityTally = []
             let averagePerLocation = []
@@ -2144,7 +2143,7 @@ async function getUserAnalysis(userId) {
                         id: true
                     }
                 })
-                if (aggregates._count.id != 0 && counter<5) {
+                if (aggregates._count.id != 0 && counter < 5) {
                     counter++
                     locationArray.push(groupedLocations[k].location)
                     reliabilityTally.push(aggregates._count)
@@ -2157,7 +2156,7 @@ async function getUserAnalysis(userId) {
                 occurances: reliabilityTally,
                 amounts: averagePerLocation
             })
-            counter=0
+            counter = 0
         }
         return {
 
