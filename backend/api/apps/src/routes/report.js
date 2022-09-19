@@ -1,8 +1,8 @@
-const { all } = require('@tensorflow/tfjs-node');
 const fs = require('fs');
 const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit-table');
-const XLSX = require('xlsx')
+const XLSX = require('xlsx');
+const Excel = require('exceljs')
 const router = require("express").Router();
 
 /**
@@ -104,7 +104,7 @@ async function sortItemsIntoCategories(itemList){
     }
 }
 /**
- * Function to geneerate a pdf
+ * Function to generate a pdf
  * @param {*} name The name of the pdf
  * @param {*} types The items list
  * @param {*} today The date for today
@@ -157,46 +157,63 @@ async function generatePDF(name, object, today, period){
     };
 }
 
-async function generateSpreadsheet(name, allItems, period){
-    const types = await sortItemsIntoCategories(allItems)
-    // console.log(types.types)
+/**
+ * Function to generate a excel spreadsheet
+ * @param {*} name The name of the File
+ * @param {*} allItems 
+ * @returns the workbook object
+ */
+async function generateSpreadsheet(name, allItems){
+    const types = await sortItemsIntoCategories(allItems);
+
+    const workbook = new Excel.Workbook();
+    const allItemSheet = workbook.addWorksheet('All Items');
+    allItemSheet.columns = [
+        {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+        {header: 'Type', key:'type', width: 12},
+        {header: 'Quantity', key:'quantity', width: 11},
+        {header: 'Price', key:'price', width: 11},
+        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+        {header: 'Date', key:'date', width: 11},
+    ]
+ 
+    const titleRow = allItemSheet.getRow(1);
+    titleRow.alignment = {
+        horizontal: 'center'
+    }
 
     allItems.map((item) => {
-        item.price = parseFloat(item.price)
+        let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+        let row = allItemSheet.addRow(data);
     })
-    const allItemsSheet = XLSX.utils.json_to_sheet(allItems);
-
-    let range = XLSX.utils.decode_range(allItemsSheet['!ref']);
-
-    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: 'A1' })
-    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Items:',{t:'n', v:3, f:'SUM(C2:C'+(range.e.r+1)+')'}]], { origin: 'H2' })
-    XLSX.utils.sheet_add_aoa(allItemsSheet, [['Total Amount:',{t:'n', v:3, f:'SUM(D2:D'+(range.e.r+1)+')'}]], { origin: 'H3' })
-
-    const widthName = allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10);
-    const widthLocation = allItems.reduce((w,r) => Math.max(w, r.location.length), 10);
-    allItemsSheet['!cols'] = [ { wch: widthName }, { wch: 12 }, { wch: 7 },{ wch: 10 }, { wch: widthLocation }, { wch: 10 }, {wch:5}, { wch: 12 } ];
-
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook,allItemsSheet,"All Items");
 
     for(const key in types.types){
         if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
-            const sheet = XLSX.utils.json_to_sheet(types.types[key]);
-            const range = XLSX.utils.decode_range(sheet['!ref']);
+            const sheet = workbook.addWorksheet(key);
+            sheet.columns = [
+                {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+                {header: 'Type', key:'type', width: 12},
+                {header: 'Quantity', key:'quantity', width: 11},
+                {header: 'Price', key:'price', width: 11},
+                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+                {header: 'Date', key:'date', width: 11},
+            ]
+        
+            const titleRow = sheet.getRow(1);
+            titleRow.alignment = {
+                horizontal: 'center'
+            }
 
-            XLSX.utils.sheet_add_aoa(sheet, [['Item Name', 'Type', 'Quantity', 'Price', 'Location', 'Date']], { origin: 'A1' })
-            XLSX.utils.sheet_add_aoa(sheet, [['Total Items:',{t:'n', v:3, f:'SUM(C2:C'+(range.e.r+1)+')'}]], { origin: 'H2' })
-            XLSX.utils.sheet_add_aoa(sheet, [['Total Amount:',{t:'n', v:3, f:'SUM(D2:D'+(range.e.r+1)+')'}]], { origin: 'H3' })
-
-            sheet['!cols'] = [ { wch: widthName }, { wch: 12 }, { wch: 7 },{ wch: 10 }, { wch: widthLocation }, { wch: 10 }, {wch:5}, { wch: 12 } ];
-
-            XLSX.utils.book_append_sheet(workbook,sheet,key);
+            types.types[key].map((item) => {
+                let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+                let row = sheet.addRow(data);
+            })
         }
     }
 
-    XLSX.writeFile(workbook,__dirname+"/Report.xlsx");
-
-    return workbook.Sheets;
+    await workbook.xlsx.writeFile(__dirname+'/'+name+'.xlsx');
+ 
+    return workbook;
 }
   
 /**
@@ -641,7 +658,8 @@ router.post('/spreadsheet', async (req, res) => {
     const result = await req.app.get('db').getItemsReport(41, periodStart, periodEnd);
     // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
-    const sheet = await generateSpreadsheet("testfile",result.itemList, period)
+    const spreadSheet = await generateSpreadsheet("Report",result.itemList, period)
+    // console.log(spreadSheet)
 
     let status = 200;
 
@@ -650,8 +668,7 @@ router.post('/spreadsheet', async (req, res) => {
     return res.status(status)
         .send({
             message: result.message,
-            totalItems: result.sum,
-            totalSpent: result.todaystotal
+            // spreadSheet: spreadSheet,
         });
 });
 
