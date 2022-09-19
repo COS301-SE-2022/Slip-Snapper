@@ -32,9 +32,7 @@ function ProfileBarGraph({ graphData }: Props) {
     };
 
     return (
-        document.addEventListener('DOMContentLoaded', function () {
-            <Bar className="graph" options={graphSettings} data={graphStats} />
-        })
+        <Bar className="graph" options={graphSettings} data={graphStats} />
     );
 }
 

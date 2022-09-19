@@ -72,7 +72,7 @@ jobs:
         if: inputs.testtype == 'unit' && inputs.test == 'affected'
         run: |
           cd frontend
-          yarn nx affected:test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+          yarn nx affected:test --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }} --verbose
 
       # - name: Integration test affected
       #   if: inputs.testtype == 'e2e' && inputs.test == 'affected'
@@ -87,7 +87,7 @@ jobs:
           cd frontend
           yarn nx run-many --target=lint --all --skip-nx-cache --parallel
           yarn nx run-many --target=build --all --skip-nx-cache --parallel
-          yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage 
+          yarn nx run-many --target=test --all --skip-nx-cache --parallel --coverage --verbose
 #         yarn nx run-many --target=e2e --all --skip-nx-cache --parallel 
 
         #send file to codecov
