@@ -31,7 +31,7 @@ class TokenFunctions{
      */
     async verifyToken(token) {
         if(!token){
-            return new Error("Error! No Token Provided.");
+            return "Error";
         }
 
         try{
