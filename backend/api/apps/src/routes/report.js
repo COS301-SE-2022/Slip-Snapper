@@ -15,11 +15,15 @@ const router = require("express").Router();
         case "Daily":
             return periodEnd;
         case "Weekly":
-            date.setDate(date.getDate() - 7);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "Monthly":
-            date.setMonth(date.getMonth() - 1);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            date.setDate(date.getDate())
+            var day = date.getDay(),
+                diff = date.getDate() - day + (day == 0 ? -6 : 1);
+            let monday = new Date(date.setDate(diff));
+            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+               
+            case "Monthly":
+                date.setDate(1)
+                return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         // case "Yearly":
         //     d.setFullYear(date.getFullYear() - 1);
         //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
@@ -248,7 +252,7 @@ router.post('/pdf', async (req,res)=>{
     }
 
     const today = new Date();
-    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
     const periodStart = await determinePeriodStart(period, periodEnd);
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
