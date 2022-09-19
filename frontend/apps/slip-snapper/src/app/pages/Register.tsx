@@ -8,7 +8,10 @@ import { Chip } from '@mui/material';
 const Register: React.FC = () => {
   const [emailInput, setEmailInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
+  const [firstNameInput, setFirstNameInput] = useState<string>();
+  const [lastNameInput, setLastNameInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
+  const [confirmPasswordInput, setConfirmPasswordInput] = useState<string>();
   const [errorAlert, setAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -21,7 +24,7 @@ const Register: React.FC = () => {
             <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
 
             <div>
-              <Chip label={"Register"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
+              <Chip label={"Register"} sx={{ fontSize: 22, bgcolor: '#333C4A', color: 'white' }}/>
             </div>
 
             <IonItem color="tertiary" class="LRItems">
@@ -34,6 +37,32 @@ const Register: React.FC = () => {
                 required
               ></IonInput>
             </IonItem>
+
+            <div className='center-items'>
+              <IonItem color="tertiary" className="full-name" lines="none">
+                <IonItem color="tertiary" className="fl-name">
+                  <IonLabel position="floating">First Name</IonLabel>
+                  <IonInput
+                      title="firstname_Input"
+                      type="text"
+                      value={firstNameInput}
+                      onIonChange={(e) => setFirstNameInput(e.detail.value!)}
+                      required
+                    ></IonInput>
+                </IonItem>
+
+                <IonItem color="tertiary" className="fl-name">
+                  <IonLabel position="floating">Last Name</IonLabel>
+                  <IonInput
+                    title="lastname_Input"
+                    type="text"
+                    value={lastNameInput}
+                    onIonChange={(e) => setLastNameInput(e.detail.value!)}
+                    required
+                  ></IonInput>
+                </IonItem>
+              </IonItem>
+            </div>
 
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Email Address</IonLabel>
@@ -57,7 +86,18 @@ const Register: React.FC = () => {
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" text-align="center" class="LRItems">
+            <IonItem color="tertiary" class="LRItems">
+              <IonLabel position="floating">Confirm Password</IonLabel>
+              <IonInput
+                title="confirmPassword_Input"
+                type="password"
+                value={confirmPasswordInput}
+                onIonChange={(e) => setConfirmPasswordInput(e.detail.value!)}
+                required
+              ></IonInput>
+            </IonItem>
+
+            <IonItem color="tertiary" text-align="center" class="LRItems" lines="none">
               <IonButton
                 class="LRButtons"
                 color="secondary"
@@ -69,7 +109,7 @@ const Register: React.FC = () => {
               <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             </IonItem>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines="none">
               <div className='register-link'>
                 <p style={{color:"#b5bab7"}}>Already have an account? &nbsp;<a href={"/login"}>Login</a></p>
               </div>
