@@ -191,8 +191,7 @@ const Register: React.FC = () => {
           if(typeof(apiResponse.data) !== "string"){
             localStorage.removeItem('user')
             localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-            localStorage.removeItem('token')
-            localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+            sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
             const button = document.getElementById("successRedirect")
             if (button) {

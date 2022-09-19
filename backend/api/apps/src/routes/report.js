@@ -1,6 +1,7 @@
 const fs = require('fs');
 const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit-table');
+const Excel = require('exceljs')
 const router = require("express").Router();
 
 /**
@@ -102,7 +103,7 @@ async function sortItemsIntoCategories(itemList){
     }
 }
 /**
- * Function to geneerate a pdf
+ * Function to generate a pdf
  * @param {*} name The name of the pdf
  * @param {*} types The items list
  * @param {*} today The date for today
@@ -155,6 +156,79 @@ async function generatePDF(name, object, today, period){
     };
 }
 
+/**
+ * Function to generate a excel spreadsheet
+ * @param {*} name The name of the File
+ * @param {*} allItems 
+ * @returns the workbook object
+ */
+async function generateSpreadsheet(name, allItems){
+    const types = await sortItemsIntoCategories(allItems);
+
+    const workbook = new Excel.Workbook();
+    const allItemSheet = workbook.addWorksheet('All Items');
+    allItemSheet.columns = [
+        {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+        {header: 'Type', key:'type', width: 12},
+        {header: 'Quantity', key:'quantity', width: 11},
+        {header: 'Price', key:'price', width: 11},
+        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+        {header: 'Date', key:'date', width: 11},
+        {},{},
+        {width: 15},
+    ]
+ 
+    const titleRow = allItemSheet.getRow(1);
+    titleRow.alignment = {
+        horizontal: 'center'
+    }
+    
+    allItems.map((item) => {
+        let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+        let row = allItemSheet.addRow(data);
+    })
+
+    allItemSheet.getCell('I2').value = "Total Quantity:"; 
+    allItemSheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
+    allItemSheet.getCell('I3').value = "Total Price:"; 
+    allItemSheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
+
+    for(const key in types.types){
+        if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
+            const sheet = workbook.addWorksheet(key);
+            sheet.columns = [
+                {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+                {header: 'Type', key:'type', width: 12},
+                {header: 'Quantity', key:'quantity', width: 11},
+                {header: 'Price', key:'price', width: 11},
+                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+                {header: 'Date', key:'date', width: 11},
+                {},{},
+                {width: 15},
+            ]
+        
+            const titleRow = sheet.getRow(1);
+            titleRow.alignment = {
+                horizontal: 'center'
+            }
+
+            types.types[key].map((item) => {
+                let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+                let row = sheet.addRow(data);
+            })
+
+            sheet.getCell('I2').value = "Total Quantity:"; 
+            sheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
+            sheet.getCell('I3').value = "Total Price:"; 
+            sheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
+        }
+    }
+
+    await workbook.xlsx.writeFile(__dirname+'/'+name+'.xlsx');
+ 
+    return workbook;
+}
+  
 /**
  * Generate the pdf report for a user
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
@@ -571,6 +645,43 @@ router.get('/today', async (req, res) => {
             totalSpent: result.todaystotal
         });
 
+});
+
+/**
+ * Generate a excel spreadsheet for a user
+ */
+router.post('/spreadsheet', async (req, res) => {
+    let { period } = req.body;
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if(tokenVerified === "Error"){
+        return res.status(200)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+                title: "",
+                reportTotal: 0
+            });
+    }
+
+    const today = new Date();
+    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    const periodStart = await determinePeriodStart(period, periodEnd);
+
+    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+
+    const spreadSheet = await generateSpreadsheet("Report",result.itemList)
+
+    let status = 200;
+
+    //TODO error checking
+    res.status(status)
+        .setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        .setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+    spreadSheet.xlsx.write(res)
+        .then(() => {
+            res.end();
+        });
 });
 
 module.exports.router = router;

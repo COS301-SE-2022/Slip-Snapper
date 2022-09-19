@@ -22,6 +22,7 @@ import { FileOpener } from '@ionic-native/file-opener';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/viewReports.css';
 import {
+  generateSpreadSheet,
   generateReportA,
   getAllUserReports,
   getUserReport,
@@ -90,6 +91,16 @@ const ViewReports: React.FC = () => {
                     <IonCardTitle>{totals.timePeriod}</IonCardTitle>
                   </IonCardHeader>
                   <IonItem color="tertiary">
+                    <IonButton
+                      fill="solid"
+                      color="secondary"
+                      onClick={() => {
+                        getSpread();
+                      }}
+                    >
+                      Generate Excel
+                    </IonButton>
+
                     <IonButton
                       fill="solid"
                       title={totals.title}
@@ -251,7 +262,7 @@ const ViewReports: React.FC = () => {
   async function generateReport(period: string) {
     let userS = JSON.parse(localStorage.getItem('user')!);
     if (userS == null) {
-      userS = { id: 24, username: 'demoUser' };
+      userS = { username: 'demoUser' };
     }
     // demoUser_31 - 08 - 2022Weekly_1.pdf 
     await generateReportA(userS.username, period, getReportNumber()+1).then(
@@ -303,6 +314,18 @@ const ViewReports: React.FC = () => {
       }
     }
     return reports;
+  }
+
+  async function getSpread(){
+    await generateSpreadSheet().then( (apiResponseData) => {
+      const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const sheetUrl = URL.createObjectURL(sheet);
+      const sheetDownload = document.createElement("a");
+      sheetDownload.setAttribute("href", sheetUrl);
+      sheetDownload.setAttribute("download", "report.xlsx");
+      document.body.appendChild(sheetDownload);
+      sheetDownload.click();
+    })
   }
 };
 

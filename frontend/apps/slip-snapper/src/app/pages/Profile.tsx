@@ -258,8 +258,8 @@ const Profile: React.FC = () => {
 
   function Logout() {
     history.push("/login")
-    localStorage.removeItem('token')
     localStorage.removeItem('user')
+    sessionStorage.removeItem('token')
     window.location.reload()
   }
 

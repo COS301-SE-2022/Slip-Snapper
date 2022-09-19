@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const headers = {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem('token'))
+    'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
 }
 
 //const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
@@ -278,11 +278,19 @@ export async function deleteSlip( slipId ){
  * @param {*} slipId the slipId
  * @returns the response from the server
  */
-
 export async function getGraphStats() {
     return axios({
         headers: headers,
         method: 'get',
         url: baseUrl + 'item/graph',
+    })
+}
+
+export async function generateSpreadSheet() {
+    return axios({
+        headers: headers,
+        responseType: 'blob',
+        method: 'post',
+        url: baseUrl + 'report/spreadsheet',
     })
 }
