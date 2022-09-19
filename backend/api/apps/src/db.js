@@ -308,10 +308,10 @@ async function getItemsReport(userid, start, end) {
         const items = await prisma.slip.findMany({
             where: {
                 usersId: userid,
-                // transactionDate: {
-                //     gte: start,
-                //     lt:  end
-                //   } 
+                transactionDate: {
+                    gte: start,
+                    lte: end
+                }
             },
             select: {
                 items: {
