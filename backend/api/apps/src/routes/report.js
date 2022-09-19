@@ -1,7 +1,6 @@
 const fs = require('fs');
 const fsPromises = require("fs/promises");
 const PDFDocument = require('pdfkit-table');
-const XLSX = require('xlsx');
 const Excel = require('exceljs')
 const router = require("express").Router();
 
