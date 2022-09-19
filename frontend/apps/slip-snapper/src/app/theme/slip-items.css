@@ -40,8 +40,8 @@ ul.no-bullets {
 }
 
 .date-div {
-    display: flex;
     flex-direction: column;
+    display: none;
 }
 
 .date-item {

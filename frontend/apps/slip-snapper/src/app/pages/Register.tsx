@@ -176,26 +176,41 @@ const Register: React.FC = () => {
     if (emailInput === undefined || emailInput === "") {
       setErrorMessage("Please fill in all fields.")
       setAlert(true)
-    }
-    if (userInput === undefined || userInput === "" ) {
+    }else if (userInput === undefined || userInput === "" ) {
       setErrorMessage("Please fill in all fields.")
       setAlert(true)
-    }
-    if (passwordInput === undefined || passwordInput === "" ) {
+    }else if (passwordInput === undefined || passwordInput === "" ) {
       setErrorMessage("Please fill in all fields.")
+      setAlert(true)
+    }else if (firstNameInput === undefined || firstNameInput === "") {
+      setErrorMessage("Please fill in all fields.")
+      setAlert(true)
+    }else if (lastNameInput === undefined || lastNameInput === "" ) {
+      setErrorMessage("Please fill in all fields.")
+      setAlert(true)
+    }else if (confirmPasswordInput === undefined || confirmPasswordInput === "" ) {
+      setErrorMessage("Please fill in all fields.")
+      setAlert(true)
+    }else if(confirmPasswordInput !== passwordInput){
+      setErrorMessage("Passwords do not match.")
       setAlert(true)
     }
     else{
-      signupA(userInput, emailInput, passwordInput)
+      signupA(firstNameInput, lastNameInput, userInput, passwordInput, emailInput)
         .then(apiResponse => {
           if(typeof(apiResponse.data) !== "string"){
-            localStorage.removeItem('user')
-            localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-            sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+            if(apiResponse.data.message !== "Error Creating User"){
+              localStorage.removeItem('user')
+              localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+              sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
-            const button = document.getElementById("successRedirect")
-            if (button) {
-              button.click();
+              const button = document.getElementById("successRedirect")
+              if (button) {
+                button.click();
+              }
+            }else{
+              setErrorMessage("Unable to create user, please try again.")
+              setAlert(true)
             }
           }else{
             setErrorMessage("500 Internal Service Error.")
