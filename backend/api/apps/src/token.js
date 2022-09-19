@@ -15,7 +15,7 @@ class TokenFunctions{
                 { user: data },
                 process.env.JWT_PRIVATE_KEY,
                 { 
-                    expiresIn: '60min'
+                    expiresIn: '1h'
                 }
             );
         } catch (error) {

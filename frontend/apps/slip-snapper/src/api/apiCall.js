@@ -286,11 +286,19 @@ export async function getGraphStats() {
     })
 }
 
-export async function generateSpreadSheet() {
+/**
+ * To generate the excel spreadsheet
+ * @param {*} period the time frame to generate for
+ * @returns the response from the server
+ */
+export async function generateSpreadSheet(period) {
     return axios({
         headers: headers,
         responseType: 'blob',
         method: 'post',
         url: baseUrl + 'report/spreadsheet',
+        data: JSON.stringify({
+            period: period,
+        })
     })
 }
