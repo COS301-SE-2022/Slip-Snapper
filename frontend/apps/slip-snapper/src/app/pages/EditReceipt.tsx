@@ -15,11 +15,24 @@ const EditReceipt: React.FC = () => {
     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
     const originalItems = slipContents.items
-
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
 
-    
+
+    const handleCostsChange = (event: any) => {
+        const _tempCosts = [...editReceiptItems];
+        let temp = event.target.id
+        temp = temp.substring(0, 1)
+        _tempCosts[temp].itemPrice = event.target.value
+        getData();
+        setEditReceiptItems(_tempCosts);
+    };
+    const getTotalCosts = () => {
+        return editReceiptItems.reduce((total: number, item: { itemPrice: any; }) => {
+            return total + Number(item.itemPrice);
+
+        }, 0);
+    };
     return (
         <IonPage>
             <IonHeader>
@@ -88,8 +101,7 @@ const EditReceipt: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput
-                                                id={index + "/price"} value={item.itemPrice} ></IonInput>
+                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.itemPrice} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -135,13 +147,12 @@ const EditReceipt: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardHeader className="wrapper">
-                        <IonItem className='addEntry' color="tertiary">
-                            <IonInput id={"total"} value={slipContents.total}></IonInput>
+                        <IonItem id={"total"} className='addEntry' color="tertiary" >
+                            {getTotalCosts().toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
-
                     <IonItem color="primary">
-                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/receipts'}>Cancel</IonButton>
+                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/receipts'} >Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
@@ -199,19 +210,20 @@ const EditReceipt: React.FC = () => {
             setShowAlert(true)
             return
         }
-        if (document.getElementById("total")?.getElementsByTagName("input")[0].value === "") {
-            setAlertMes("Please enter a Total to continue.")
-            setShowAlert(true)
-            return
-        }
 
         for (let i = 0; i < editReceiptItems.length; i++) {
             if (editReceiptItems[i].data[0].item === "" ||
                 editReceiptItems[i].data[0].itemType === "" ||
                 !Number.isInteger(editReceiptItems[i].itemQuantity) || 
                 Math.sign(editReceiptItems[i].itemQuantity) !== 1 ||
-                editReceiptItems[i].price === "") {
+                editReceiptItems[i].itemPrice === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
+                setShowAlert(true)
+                return
+            }
+
+            if (Number(editReceiptItems[i].itemPrice) < 0 || editReceiptItems[i].itemPrice.includes('e')) {
+                setAlertMes("Please enter a valid price at item #" + (i + 1) + ".")
                 setShowAlert(true)
                 return
             }
@@ -244,7 +256,7 @@ const EditReceipt: React.FC = () => {
 
         const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
-        const temp = document.getElementById("total")?.getElementsByTagName("input")[0].value
+        const temp = document.getElementById("total")?.innerHTML
         let total
         if (temp !==undefined)
         {
@@ -254,14 +266,8 @@ const EditReceipt: React.FC = () => {
             text: [date, storeName, "", "", total, slipContents.id]
         };
 
-        let user = JSON.parse(localStorage.getItem('user')!)
-        if(user==null){
-            user = {id: 24}
-        }
-        await updateSlipA(user.id, data, insertItems, updateItems, removeItems)
+        await updateSlipA(data, insertItems, updateItems, removeItems)
         setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
-
-        
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();

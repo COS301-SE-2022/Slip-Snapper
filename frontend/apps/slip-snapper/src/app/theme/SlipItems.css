@@ -44,8 +44,13 @@ ul.no-bullets {
    max-width: 200px;
 }
 
-
-
+.totalSlider{
+    margin-top: 30px;
+    width: 70%;
+    max-width: 85%;
+    margin-left: 40px;
+    display: none;
+}
 /* @media only screen and (max-width: 2200px) {
     .slip-item-col {
         min-width: 20%;

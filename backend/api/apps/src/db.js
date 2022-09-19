@@ -26,7 +26,7 @@ async function getUser(userName) {
 
         return {
             message: "User logged in successfully",
-            user: { 
+            user: {
                 username: user.username,
             },
             token: {
@@ -138,7 +138,7 @@ async function addUser(username, password, firstname, lastname) {
         //TODO return specific aspects of user and not all
         return {
             message: "User added successfully",
-            user: { 
+            user: {
                 username: user.username,
             },
             token: {
@@ -963,6 +963,7 @@ async function getUserStats(userId) {
         let month = await getMonthlyExpenditure(userId);
         let favouriteCategory = await getFavouriteCategory(userId);
 
+
         return {
             message: "User statistics retrieved",
             storeDetails: store,
@@ -1035,6 +1036,11 @@ async function getFavouriteCategory(userid) {
         const index = types.catNums.indexOf(max);
 
         types.catPrices[index] = Math.round((types.catPrices[index] + Number.EPSILON) * 100) / 100
+
+        if (isNaN(types.catPrices[index])) {
+            types.cat[index] = "N/A"
+            types.catPrices[index] = 0
+        }
 
         return {
             category: types.cat[index],
@@ -1202,13 +1208,18 @@ async function getMostSpentATStore(userid) {
 async function getWeeklyExpenditure(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 7);
-        let lastweek = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date1.setDate(date1.getDate())
+        var day = date1.getDay(),
+            diff = date1.getDate() - day + (day == 0 ? -6 : 1);
+        let monday = new Date(date1.setDate(diff));
+        let lastweek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 14)
-        let otherWeek = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-
+        date2.setDate(date2.getDate() - 7)
+        var day = date2.getDay(),
+            diff = date2.getDate() - day + (day == 0 ? -6 : 1);
+        monday = new Date(date2.setDate(diff));
+        let otherWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const weeklyExpenditure = await prisma.slip.findMany({
             where: {
@@ -1253,10 +1264,11 @@ async function getWeeklyExpenditure(userid) {
 async function getMonthlyExpenditure(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 30)
+        date1.setDate(1)
         let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 30 * 2)
+        date2.setMonth(date2.getMonth() - 1)
+        date2.setDate(1)
         let otherMonth = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const MonthlyExpenditure = await prisma.slip.findMany({
@@ -1377,14 +1389,20 @@ async function getAllReports(userid) {
 async function getDailyWeeklyMonthlyReports(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate())
         let daily = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const date2 = new Date()
-        date2.setDate(date2.getDate() - 7)
-        let weekly = date2.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date2.setDate(date2.getDate())
+        var day = date2.getDay(),
+            diff = date2.getDate() - day + (day == 0 ? -6 : 1);
+        let monday = new Date(date2.setDate(diff));
+        let weekly = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
         const date3 = new Date()
-        date3.setDate(date3.getDate() - 30)
+        date3.setDate(1)
         let monthly = date3.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
 
 
         const userReports = await prisma.reports.findMany({
@@ -1732,7 +1750,21 @@ async function getUserProfile(userId) {
  * @param {*} end the end date for the period
  * @returns json object with the user budgets
  */
-async function getUserGeneralBudgets(userId, start, end) {
+ async function getUserGeneralBudgets(userId, start, end) {
+    let date1 = new Date()
+    date1.setDate(date1.getDate())
+    var day = date1.getDay(),
+        diff = date1.getDate() - day + (day == 0 ? -6 : 1);
+    let monday = new Date(date1.setDate(diff));
+    let lastWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+    date1 = new Date()
+    date1.setDate(1)
+    let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+    let olderDate = lastMonth
+
+    if (lastWeek < lastMonth) {
+        olderDate = lastWeek
+    }
 
     try {
         const budgets = await prisma.user.findFirst({
@@ -1744,10 +1776,12 @@ async function getUserGeneralBudgets(userId, start, end) {
             }
         })
 
-
         const items = await prisma.slip.findMany({
             where: {
-                usersId: userId
+                usersId: userId,
+                transactionDate: {
+                    gte: olderDate
+                }
             },
             select: {
                 items: {
@@ -1761,15 +1795,7 @@ async function getUserGeneralBudgets(userId, start, end) {
             }
         })
 
-
-        // var date = new Date();
-        // date.setDate(date.getDate() - 7);
-        // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
-        // date = new Date();
-        // date.setDate(date.getMonth() - 1);
-        // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        let totals = {
+        let weekTotals = {
             Food: 0,
             Fashion: 0,
             Electronics: 0,
@@ -1780,60 +1806,142 @@ async function getUserGeneralBudgets(userId, start, end) {
             Vehicle: 0,
         }
 
+        let monthTotals = {
+            Food: 0,
+            Fashion: 0,
+            Electronics: 0,
+            Household: 0,
+            Other: 0,
+            Healthcare: 0,
+            Hobby: 0,
+            Vehicle: 0,
+        }
+        let total = 0;
 
         for (var itemL of items) {
 
             for (it of itemL.items) {
 
                 if (it.data[0].itemType === 'Food') {
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Food += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Food += it.itemPrice
+                        total += it.itemPrice
+                    }
 
-                    totals.Food += it.itemPrice
                 }
 
                 if (it.data[0].itemType === 'Fashion') {
-                    totals.Fashion += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Fashion += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Fashion += it.itemPrice
+                        total += it.itemPrice
+
+                    }
+
                 }
 
                 if (it.data[0].itemType === 'Electronics') {
-                    totals.Electronics += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Electronics += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Electronics += it.itemPrice
+                        total += it.itemPrice
+
+                    }
                 }
 
                 if (it.data[0].itemType === 'Household') {
-                    totals.Household += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Household += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Household += it.itemPrice
+                        total += it.itemPrice
+
+                    }
                 }
 
                 if (it.data[0].itemType === 'Other') {
-                    totals.Other += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Other += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Other += it.itemPrice
+                        total += it.itemPrice
+                    }
                 }
 
                 if (it.data[0].itemType === 'Healthcare') {
-                    totals.Healthcare += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Healthcare += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Healthcare += it.itemPrice
+                        total += it.itemPrice
+
+                    }
                 }
 
                 if (it.data[0].itemType === 'Hobby') {
-                    totals.Hobby += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Hobby += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Hobby += it.itemPrice
+                        total += it.itemPrice
+
+                    }
                 }
 
                 if (it.data[0].itemType === 'Vehicle') {
-                    totals.Vehicle += it.itemPrice
+                    if (itemL.transactionDate >= lastWeek) {
+                        weekTotals.Vehicle += it.itemPrice
+                    }
+                    if (itemL.transactionDate >= lastMonth) {
+                        monthTotals.Vehicle += it.itemPrice
+                        total += it.itemPrice
+                    }
                 }
             }
         }
+
+        let percentages = {
+            Food: (monthTotals.Food / total) * 100,
+            Fashion: (monthTotals.Fashion / total) * 100,
+            Electronics: (monthTotals.Electronics / total) * 100,
+            Household: (monthTotals.Household / total) * 100,
+            Other: (monthTotals.Other / total) * 100,
+            Healthcare: (monthTotals.Healthcare / total) * 100,
+            Hobby: (monthTotals.Hobby / total) * 100,
+            Vehicle: (monthTotals.Vehicle / total) * 100,
+        }
+
         return {
             message: "User budgets retrieved",
             budgets: budgets,
-            totals: totals
+            percentages: percentages,
+            weeklyTotal: weekTotals,
+            monthlyTotal: monthTotals
         };
     }
     catch (error) {
         return {
             message: "Error retrieving budgets",
             budgets: {},
-            totals: {}
+            percentages: {},
+            weeklyTotal: {},
+            monthlyTotal: {}
         };
     }
 
 }
+
 
 /**
  * Funtion to get the user budgets from the database
@@ -1842,6 +1950,21 @@ async function getUserGeneralBudgets(userId, start, end) {
  */
 async function getUserBudgets(userId) {
     try {
+        let date1 = new Date()
+        date1.setDate(date1.getDate())
+        var day = date1.getDay(),
+            diff = date1.getDate() - day + (day == 0 ? -6 : 1);
+        let monday = new Date(date1.setDate(diff));
+        let lastWeek = monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        date1 = new Date()
+        date1.setDate(1)
+        let lastMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+        let olderDate = lastMonth
+    
+        if (lastWeek < lastMonth) {
+            olderDate = lastWeek
+        }
+
         const user = await prisma.user.findFirst({
             where: {
                 id: userId
@@ -1850,34 +1973,27 @@ async function getUserBudgets(userId) {
 
         const items = await prisma.slip.findMany({
             where: {
-                usersId: userId
-                // transactionDate: {
-                //     gte: start,
-                //     lt:  end
-                //   }
+                usersId: userId,
+                transactionDate:{
+                    gte:olderDate
+                }
             },
         })
 
         let weeklyTotal = 0;
         let monthlyTotal = 0;
-        // var date = new Date();
-        // date.setDate(date.getDate() - 7);
-        // let week = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
-        // date = new Date();
-        // date.setDate(date.getMonth() - 1);
-        // let month = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-
+       
         for (var itemL of items) {
-            //let tDate = transactionDate;
-
-            //if(tDate > week){
-            weeklyTotal += itemL.total;
-            //}
-
-            //if(tDate > month){
-            monthlyTotal += itemL.total;
-            //}
+            
+            if(itemL.transactionDate>=lastWeek)
+            {
+              weeklyTotal += itemL.total;  
+            }
+            if(itemL.transactionDate>=lastMonth)
+            {
+                 monthlyTotal += itemL.total;
+            }
+            
         }
 
         return {
@@ -1943,14 +2059,12 @@ async function getUserAverageSpent(userId) {
  */
 async function getUserAnalysis(userId) {
 
-
-
     try {
         /**
-         * new month is set to the 01 of the current month
+         * new month is set to the 1 of the current month
          */
         const date1 = new Date()
-        date1.setDate(01)
+        date1.setDate(1)
         let newMonth = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         /**
          * query to get the top 5 most commonly bought items within a certain time frame
@@ -1973,7 +2087,7 @@ async function getUserAnalysis(userId) {
                     }
                 }
             },
-            take: 5,
+            take: 6,
             orderBy: {
                 _count: {
                     item: "desc"
@@ -2006,6 +2120,7 @@ async function getUserAnalysis(userId) {
         let analysisObject = []
 
         for (const i in listOfItems) {
+            let counter=0
             let locationArray = []
             let reliabilityTally = []
             let averagePerLocation = []
@@ -2030,7 +2145,8 @@ async function getUserAnalysis(userId) {
                         id: true
                     }
                 })
-                if (aggregates != null) {
+                if (aggregates._count.id != 0 && counter<5) {
+                    counter++
                     locationArray.push(groupedLocations[k].location)
                     reliabilityTally.push(aggregates._count)
                     averagePerLocation.push(aggregates._avg)
@@ -2042,19 +2158,20 @@ async function getUserAnalysis(userId) {
                 occurances: reliabilityTally,
                 amounts: averagePerLocation
             })
+            counter=0
         }
-        return{
-            
-                message: "Success retrieving User Analysis",
-                analysis:analysisObject
-            
+        return {
+
+            message: "Success retrieving User Analysis",
+            analysis: analysisObject
+
         }
 
     }
     catch (error) {
         return {
             message: "Error retrieving User Analysis",
-            analysis:[]
+            analysis: []
         }
     }
 }

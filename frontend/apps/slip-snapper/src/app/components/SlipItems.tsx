@@ -3,22 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/SlipItems.css';
 import { calendarOutline, idCard } from 'ionicons/icons';
+import { Slider } from '@mui/material';
 
 
 
 const SlipItems: React.FC = () => {
-    let user = JSON.parse(localStorage.getItem('user')!)
-
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
     const [slipItems, setSlipItems] = useState<any[]>([]);
     const [present, dismiss] = useIonToast();
 
 
     useEffect(() => {
-        if (user == null) {
-            user = { id: 24 }
-        }
-        getAllSlips(user.id)
+        getAllSlips()
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
@@ -39,6 +35,29 @@ const SlipItems: React.FC = () => {
         from: "",
         to: "",
     });
+
+    const [value, setValue] = React.useState<number[]>([0, 10000]);
+
+    const handleChange = (event: Event, newValue: number | number[]) => {
+        setValue(newValue as number[]);
+        filter()
+    };
+
+    const marks = [
+        {
+            value: 0,
+            label: 'R0',
+        },
+        {
+            value: 2500,
+            label: 'R2500',
+        },
+        {
+            value: 5000,
+            label: 'R5000+',
+        },
+    ];
+
     return (
         <div>
             <IonItem>
@@ -53,8 +72,22 @@ const SlipItems: React.FC = () => {
 
                     <IonItem color='primary'>
                         <IonLabel>Total Filter</IonLabel>
-                        <IonToggle color='secondary' />
+                        <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(e.detail.checked)} />
                     </IonItem>
+
+                    <div id='totalSlider' className='totalSlider'>
+                    <Slider
+                        getAriaLabel={() => 'Total range'}
+                        value={value}
+                        onChange={handleChange}
+                        valueLabelDisplay="auto"
+                        min={0}
+                        max={5000}
+                        step={100}
+                        marks={marks}
+                    // getAriaValueText={valuetext}
+                    />
+                    </div>
 
                     <IonItem color='primary'>
                         <IonLabel>Date Filter</IonLabel>
@@ -129,7 +162,7 @@ const SlipItems: React.FC = () => {
                                             cssClass: 'toasts',
                                             handler: async () => {
                                                 await deleteSlip(deleteAlert.id)
-                                                getAllSlips(user.id)
+                                                getAllSlips()
                                                     .then(
                                                         apiResponse => {
                                                             if (typeof (apiResponse.data) !== "string") {
@@ -166,6 +199,8 @@ const SlipItems: React.FC = () => {
             dateFilter()
         }
 
+        totalFilter()
+
     }
 
     function searchFilter(searchText: string | undefined) {
@@ -201,13 +236,26 @@ const SlipItems: React.FC = () => {
         }
     }
 
+    function toggleTotalFilter(state: any) {
+        const temp = document.getElementById('totalSlider')
+        if (state) {
+            if (temp !== null)
+                temp.style.display = "block";
+        }
+
+        if (!state) {
+            if (temp !== null)
+                temp.style.display = "none";
+            setSlipItems(originalSlips)
+        }
+    }
+
     function dateFilter() {
 
         const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
         const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
 
-        if (toDate !== "" && fromDate !== "" && toDate!==undefined&&fromDate!==undefined&&toDate<fromDate)
-        {
+        if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
             present('Please enter a valid Date interval.', 1200);
             return
 
@@ -234,6 +282,28 @@ const SlipItems: React.FC = () => {
         }
         if (fromDate !== undefined && toDate !== undefined)
             setFilterDates({ from: fromDate, to: toDate })
+    }
+
+    function totalFilter()
+    {
+        for (let i = 0; i < originalSlips.length; i++) {
+
+            if(value[1]===5000)
+            {
+                if (value[0] > originalSlips[i].total)
+                {
+                    const temp = document.getElementById("slipItem" + i)
+                    if (temp !== null)
+                        temp.style.display = "none";
+                }
+            }
+
+            else if (value[0] > originalSlips[i].total || value[1] < originalSlips[i].total) {
+                const temp = document.getElementById("slipItem" + i)
+                if (temp !== null)
+                    temp.style.display = "none";
+            }
+        }
     }
 
     function orderSlips(slips: any) {
