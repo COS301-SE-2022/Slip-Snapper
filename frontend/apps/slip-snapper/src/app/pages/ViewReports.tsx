@@ -275,11 +275,11 @@ const ViewReports: React.FC = () => {
             present('Error generating report, Try again.', 1200);
           }
         }else{
-          present("500 Internel Server Error", 1200)
+          present("500 Internal Server Error", 1200)
         }
       }
     ).catch(err =>{
-      present("500 Internel Server Error", 1200)
+      present("500 Internal Server Error", 1200)
     });
 
     getAllUserReports().then((apiResponse) => {
@@ -317,16 +317,22 @@ const ViewReports: React.FC = () => {
 
   async function getSpread(period: any) {
     await generateSpreadSheet(period).then( (apiResponseData) => {
-      const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const sheetUrl = URL.createObjectURL(sheet);
-      const sheetDownload = document.createElement("a");
-      sheetDownload.setAttribute("href", sheetUrl);
-      sheetDownload.setAttribute("download", "report.xlsx");
-      document.body.appendChild(sheetDownload);
-      sheetDownload.click();
-      
-      sheetDownload.remove();
-    })
+      if(apiResponseData.data.type !== "text/html"){
+        const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const sheetUrl = URL.createObjectURL(sheet);
+        const sheetDownload = document.createElement("a");
+        sheetDownload.setAttribute("href", sheetUrl);
+        sheetDownload.setAttribute("download", "report.xlsx");
+        document.body.appendChild(sheetDownload);
+        sheetDownload.click();
+        
+        sheetDownload.remove();
+      }else{
+        present("500 Internal Server Error", 1200)
+      }
+    }).catch(() => {
+      present("500 Internal Server Error", 1200)
+    });
   }
 };
 
