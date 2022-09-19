@@ -200,15 +200,14 @@ const Register: React.FC = () => {
         .then(apiResponse => {
           if(typeof(apiResponse.data) !== "string"){
             if(apiResponse.data.message !== "Error Creating User"){
-                localStorage.removeItem('user')
-                localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-                localStorage.removeItem('token')
-                localStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+              localStorage.removeItem('user')
+              localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+              sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
-                const button = document.getElementById("successRedirect")
-                if (button) {
-                  button.click();
-                }
+              const button = document.getElementById("successRedirect")
+              if (button) {
+                button.click();
+              }
             }else{
               setErrorMessage("Unable to create user, please try again.")
               setAlert(true)
