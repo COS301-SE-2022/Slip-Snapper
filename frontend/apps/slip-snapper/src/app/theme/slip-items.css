@@ -29,19 +29,29 @@ ul.no-bullets {
     min-width: 20rem;
 }
 
-.search-bar{
-    flex:2;
-    min-width: 20rem;
+.search-bar-header{
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar-receipts{
+    width: 50%;
+    padding-right: 10%;
 }
 
 .date-div {
-    max-width: 200px;
-    margin-left: 40px;
-    display: none;
+    display: flex;
+    flex-direction: column;
 }
 
 .date-item {
    max-width: 200px;
+   margin-top: 10px;
+   border-radius: 10px;
+}
+
+.date-picker {
+    border-radius: 10px;
 }
 
 .totalSlider{
@@ -51,10 +61,16 @@ ul.no-bullets {
     margin-left: 40px;
     display: none;
 }
-/* @media only screen and (max-width: 2200px) {
-    .slip-item-col {
-        min-width: 20%;
+
+@media only screen and (max-width: 700px) {
+    .search-bar-receipts{
+        min-width: 80%;
     }
 }
 
-*/
+@media only screen and (max-width: 350px) {
+    .search-bar-receipts{
+        min-width: 50%;
+    }
+}
+
