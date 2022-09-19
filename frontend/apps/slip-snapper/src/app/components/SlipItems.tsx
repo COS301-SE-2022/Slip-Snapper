@@ -5,8 +5,6 @@ import '../theme/slip-items.css';
 import { calendarOutline, filterOutline } from 'ionicons/icons';
 import { Slider } from '@mui/material';
 
-
-
 const SlipItems: React.FC = () => {
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
     const [slipItems, setSlipItems] = useState<any[]>([]);
@@ -14,6 +12,8 @@ const SlipItems: React.FC = () => {
 
     const [totalToggle, setTotalToggle] = useState(false);
     const [dateToggle, setDateToggle] = useState(false);
+
+    const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
         getAllSlips()
@@ -99,9 +99,9 @@ const SlipItems: React.FC = () => {
                             <div className='total-mobile'>
                                 {"Total: R" + item.total.toFixed(2)}
                             </div>
-                            <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
+                            <IonButton routerLink="/editreceipt"  id={item.id + "b"} color="secondary" slot="end" onClick={() => {
                                 localStorage.removeItem('editSlip')
-                                localStorage.setItem('editSlip', JSON.stringify(item))
+                                localStorage.setItem('editSlip', JSON.stringify(item))                             
                             }}>Edit</IonButton>
                             <IonButton
                                 onClick={() =>
@@ -148,7 +148,15 @@ const SlipItems: React.FC = () => {
                 })}
             </IonCard>
 
-            <IonModal isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false) }}>
+            <IonAlert
+                isOpen={showAlert}
+                onDidDismiss={() => setShowAlert(false)}
+                header="Oops..."
+                message={"Please enter a valid date interval."}
+                buttons={['Ok']}
+            />
+
+            <IonModal onDidPresent={() => { toggleTotalFilter(totalToggle); toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => {setIsOpenSearch(false); filter() }}>
                 <IonHeader>
                 <IonToolbar color="primary">
                     <IonTitle>Search Filter</IonTitle>
@@ -188,14 +196,14 @@ const SlipItems: React.FC = () => {
                         <IonItem>
                             <IonLabel>From:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
 
                             <IonLabel>To:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
@@ -219,11 +227,13 @@ const SlipItems: React.FC = () => {
             searchFilter(searchValue)
         }
 
-        if (document.getElementById("fromDate")?.getElementsByTagName("input")[0].value !== "" || document.getElementById("toDate")?.getElementsByTagName("input")[0].value !== "") {
-            dateFilter()
-        }
+        if (dateToggle && checkDates())
+            if (document.getElementById("fromDate")?.getElementsByTagName("input")[0].value !== "" || document.getElementById("toDate")?.getElementsByTagName("input")[0].value !== "") {
+                dateFilter()
+            }
 
-        totalFilter()
+        if (totalToggle)
+            totalFilter()
 
     }
 
@@ -279,12 +289,6 @@ const SlipItems: React.FC = () => {
         const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
         const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
 
-        if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
-            present('Please enter a valid Date interval.', 1200);
-            return
-
-        }
-
         if (fromDate !== "" && fromDate !== undefined) {
             for (let i = 0; i < originalSlips.length; i++) {
                 if (fromDate > originalSlips[i].transactionDate) {
@@ -306,6 +310,22 @@ const SlipItems: React.FC = () => {
         }
         if (fromDate !== undefined && toDate !== undefined)
             setFilterDates({ from: fromDate, to: toDate })
+    }
+
+    function checkDates()
+    {
+        const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+
+
+        if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
+            document.getElementById("fromDate")?.setAttribute("input","")
+            setFilterDates({ from: "", to: "" })
+            setShowAlert(true)
+            return false
+        }
+
+        return true;
     }
 
     function totalFilter()
@@ -343,7 +363,6 @@ const SlipItems: React.FC = () => {
         }
     }
 };
-
 
 export default SlipItems;
 

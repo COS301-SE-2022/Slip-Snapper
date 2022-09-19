@@ -8,16 +8,17 @@ import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
 import { updateSlipA} from '../../api/apiCall';
-
+import { useHistory } from "react-router-dom";
 
 const EditReceipt: React.FC = () => {
-    
-    const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
+
+    const history = useHistory();
+
+     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
     const originalItems = slipContents.items
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
-
 
     const handleCostsChange = (event: any) => {
         const _tempCosts = [...editReceiptItems];
@@ -152,7 +153,7 @@ const EditReceipt: React.FC = () => {
                         </IonItem>
                     </IonCardHeader>
                     <IonItem color="primary">
-                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" routerLink={'/receipts'} >Cancel</IonButton>
+                        <IonButton id='cancelButton' fill="solid" slot="end" color="medium" onClick={() => { history.push("/receipts"); window.location.reload(); }}   >Cancel</IonButton>
                         <IonButton onClick={() => { getData(); validateData(); }} fill="solid" slot="end" color="secondary">Submit</IonButton>
                     </IonItem>
                 </IonCard>
@@ -276,5 +277,4 @@ const EditReceipt: React.FC = () => {
 
     }
 }
-
 export default EditReceipt;
