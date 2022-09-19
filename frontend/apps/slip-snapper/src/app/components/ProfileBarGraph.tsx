@@ -30,7 +30,6 @@ function ProfileBarGraph({ graphData }: Props) {
             }
         ],
     };
-
     return (
         <Bar className="graph" options={graphSettings} data={graphStats} />
     );

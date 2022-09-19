@@ -87,7 +87,7 @@ describe('Profile', () => {
 
 
   test('Correctly renders user statitics', async () => {
-    document.addEventListener('DOMContentLoaded', function () {;
+    document.addEventListener('DOMContentLoaded', function () {
       const Component = render(<Profile />);
     
       Component.getByTestId("favoriteStore").setAttribute("value", "Woolworths");
