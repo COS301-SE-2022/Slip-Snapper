@@ -672,16 +672,16 @@ router.post('/spreadsheet', async (req, res) => {
     // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
     const spreadSheet = await generateSpreadsheet("Report",result.itemList)
-    // console.log(spreadSheet)
 
     let status = 200;
 
     //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            // spreadSheet: spreadSheet,
+    res.status(status)
+        .setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        .setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+    spreadSheet.xlsx.write(res)
+        .then(() => {
+            res.end();
         });
 });
 

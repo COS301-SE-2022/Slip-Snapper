@@ -38,6 +38,7 @@ class TokenFunctions{
             return jwt.verify(token, process.env.JWT_PRIVATE_KEY);
         }
         catch(error){
+            console.log(new Date())
             console.log(error)
             return "Error";
         }
