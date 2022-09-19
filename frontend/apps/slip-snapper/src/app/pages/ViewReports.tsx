@@ -319,13 +319,19 @@ const ViewReports: React.FC = () => {
 
   async function getSpread(){
     await generateSpreadSheet().then( (apiResponseData) => {
-      const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-      const sheetUrl = URL.createObjectURL(sheet);
-      const sheetDownload = document.createElement("a");
-      sheetDownload.setAttribute("href", sheetUrl);
-      sheetDownload.setAttribute("download", "report.xlsx");
-      document.body.appendChild(sheetDownload);
-      sheetDownload.click();
+      if(apiResponseData.data.type !== "text/html"){
+        const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const sheetUrl = URL.createObjectURL(sheet);
+        const sheetDownload = document.createElement("a");
+        sheetDownload.setAttribute("href", sheetUrl);
+        sheetDownload.setAttribute("download", "report.xlsx");
+        document.body.appendChild(sheetDownload);
+        sheetDownload.click();
+      }else{
+        present("500 Internel Server Error", 1200)
+      }
+    }).catch(() => {
+      present("500 Internel Server Error", 1200)
     })
   }
 };
