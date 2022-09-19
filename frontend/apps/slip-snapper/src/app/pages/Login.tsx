@@ -25,7 +25,7 @@ const Login: React.FC = () => {
             <img src="../../assets/icon/512px-tp-white.svg" width="200px" height="200px" alt="Slip Snapper Logo"/>
             
             <div>
-              <Chip label={"Log In"} sx={{ fontSize: 22, bgcolor: '#47505c', color: 'black' }}/>
+              <Chip label={"Log In"} sx={{ fontSize: 22, bgcolor: '#333C4A', color: 'white' }}/>
             </div>
 
             <IonItem color="tertiary" class="LRItems">
@@ -38,11 +38,11 @@ const Login: React.FC = () => {
               <IonInput title="passwordInput" type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" text-align="center" class="LRItems">
+            <IonItem color="tertiary" text-align="center" class="LRItems" lines="none">
               <IonButton type="submit" class="LRButtons" color="secondary" size="large" onClick={() => { login() }}>Login</IonButton>
             </IonItem>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines="none">
               <div className='register-link'>
                 <p style={{color:"#b5bab7"}}>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
               </div>

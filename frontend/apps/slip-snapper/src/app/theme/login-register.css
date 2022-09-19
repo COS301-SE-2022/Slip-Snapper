@@ -32,6 +32,24 @@
     font-size: small;
 }
 
+.center-items{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.full-name{
+    display: flex;
+}
+
+.fl-name{
+    padding: 1%;
+    font-size: 16px;
+    max-width: 50%;
+    text-align: center;
+}
+
 .reset-text{
     padding: 5px;
 }
