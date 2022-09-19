@@ -1,10 +1,11 @@
 import { IonCard, IonCardHeader, IonCardTitle, IonContent, IonIcon, IonItem, IonText } from "@ionic/react";
 import React, { useEffect, useState } from 'react';
-import { getStatsA } from "../../api/apiCall"
+import { getStatsA, getProfileData } from "../../api/apiCall"
 import '../theme/user-stats.css';
 import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
 import ProfileBarGraph from "./ProfileBarGraph";
+import ProfilePieChart from "./ProfilePieChart";
 
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
@@ -26,6 +27,16 @@ export const UserStats = () => {
         }
     });
 
+    const [percentages, setPercentages] = useState({
+        Food: 0,
+        Fashion: 0,
+        Electronics: 0,
+        Household: 0,
+        Other: 0,
+        Healthcare: 0,
+        Hobby: 0,
+        Vehicle: 0
+});
     useEffect(() => {
         getStatsA()
             .then(
@@ -34,12 +45,21 @@ export const UserStats = () => {
                         setUserStats(apiResponse.data)
                     }
                 })
+
+        getProfileData()
+            .then(apiResponse => {
+                if (typeof (apiResponse.data) !== "string") {
+                    if(apiResponse.data)
+                       setPercentages(apiResponse.data.otherBudgets.percentages)
+                }
+            })
     }, []);
 
     const [weekExPop, setWeekExPop] = useState(null);
     const [monthExPop, setMonthExPop] = useState(null);
     const [mostCategory, setMostCategory] = useState(null);
     const [mostExpensive, setMostExpensive] = useState(null);
+
 
     const openWeekExPop = (event: any) => { setWeekExPop(event.currentTarget); };
     const openMonthExPop = (event: any) => { setMonthExPop(event.currentTarget); };
@@ -56,7 +76,7 @@ export const UserStats = () => {
             {/* Weekly Expenditure */}
             <IonCard className="card weekly" color="primary">
                 <IonCardHeader>
-                    <IonItem className="headings" color="primary">
+                    <IonItem lines="none" className="headings" color="primary">
                         <IonCardTitle>Weekly Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openWeekExPop} className="info-icon" />
                         <Popover
@@ -83,7 +103,7 @@ export const UserStats = () => {
             {/* Monthly Expenditure */}
             <IonCard className="card monthly" color="primary">
                 <IonCardHeader>
-                    <IonItem className="headings" color="primary">
+                    <IonItem lines="none" className="headings" color="primary">
                         <IonCardTitle>Monthly Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openMonthExPop} className="info-icon" />
                         <Popover
@@ -109,8 +129,8 @@ export const UserStats = () => {
 
             <IonCard className="card most-purchased" color="primary">
                 <IonCardHeader>
-                    <IonItem className="headings" color="primary">
-                        <IonCardTitle>Most Purchased Category</IonCardTitle>
+                    <IonItem lines="none" className="headings" color="primary">
+                        <IonCardTitle>Category Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openMostCategory} className="info-icon" />
                         <Popover
                             open={Boolean(mostCategory)}
@@ -125,16 +145,10 @@ export const UserStats = () => {
                                 horizontal: 'left',
                             }}
                         >
-                            <p className="popover-text">The category of products that you purchase most frequently as well as
-                                the total amount spent on this category this month.</p>
+                            <p className="popover-text">Your categorized expenditure of the last month. </p>
                         </Popover>
                     </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='categoryName'>Category: {userStats.category.name}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='categoryTotal'>Total Spent: R{userStats.category.amount.toFixed(2)}</IonText>
-                    </IonItem>
+                    <ProfilePieChart graphData={[percentages]}></ProfilePieChart>
                 </IonCardHeader>
             </IonCard>
 
