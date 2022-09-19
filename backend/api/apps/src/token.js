@@ -15,7 +15,7 @@ class TokenFunctions{
                 { user: data },
                 process.env.JWT_PRIVATE_KEY,
                 { 
-                    expiresIn: '60min'
+                    expiresIn: '1h'
                 }
             );
         } catch (error) {
@@ -31,7 +31,7 @@ class TokenFunctions{
      */
     async verifyToken(token) {
         if(!token){
-            return new Error("Error! No Token Provided.");
+            return "Error";
         }
 
         try{

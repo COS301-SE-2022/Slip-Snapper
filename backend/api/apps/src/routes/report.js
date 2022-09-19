@@ -168,12 +168,12 @@ async function generateSpreadsheet(name, allItems){
     const workbook = new Excel.Workbook();
     const allItemSheet = workbook.addWorksheet('All Items');
     allItemSheet.columns = [
+        {header: 'Date', key:'date', width: 11},
         {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
         {header: 'Type', key:'type', width: 12},
         {header: 'Quantity', key:'quantity', width: 11},
         {header: 'Price', key:'price', width: 11},
-        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
-        {header: 'Date', key:'date', width: 11},
         {},{},
         {width: 15},
     ]
@@ -184,25 +184,25 @@ async function generateSpreadsheet(name, allItems){
     }
     
     allItems.map((item) => {
-        let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+        let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
         let row = allItemSheet.addRow(data);
     })
 
     allItemSheet.getCell('I2').value = "Total Quantity:"; 
-    allItemSheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
+    allItemSheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0.14 }; 
     allItemSheet.getCell('I3').value = "Total Price:"; 
-    allItemSheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
+    allItemSheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0.14 }; 
 
     for(const key in types.types){
         if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
             const sheet = workbook.addWorksheet(key);
             sheet.columns = [
+                {header: 'Date', key:'date', width: 11},
                 {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
                 {header: 'Type', key:'type', width: 12},
                 {header: 'Quantity', key:'quantity', width: 11},
                 {header: 'Price', key:'price', width: 11},
-                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
-                {header: 'Date', key:'date', width: 11},
                 {},{},
                 {width: 15},
             ]
@@ -213,18 +213,18 @@ async function generateSpreadsheet(name, allItems){
             }
 
             types.types[key].map((item) => {
-                let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
+                let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
                 let row = sheet.addRow(data);
             })
-
+            
             sheet.getCell('I2').value = "Total Quantity:"; 
-            sheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
+            sheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0.14 }; 
             sheet.getCell('I3').value = "Total Price:"; 
-            sheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
+            sheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0.14 }; 
         }
     }
 
-    await workbook.xlsx.writeFile(__dirname+'/'+name+'.xlsx');
+    await workbook.xlsx.writeFile(__dirname+'/'+name);
  
     return workbook;
 }
@@ -659,8 +659,6 @@ router.post('/spreadsheet', async (req, res) => {
         return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                title: "",
-                reportTotal: 0
             });
     }
 
@@ -669,8 +667,9 @@ router.post('/spreadsheet', async (req, res) => {
     const periodStart = await determinePeriodStart(period, periodEnd);
 
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    const name = "Report.xlsx"
 
-    const spreadSheet = await generateSpreadsheet("Report",result.itemList)
+    const spreadSheet = await generateSpreadsheet(name,result.itemList)
 
     let status = 200;
 
@@ -682,6 +681,10 @@ router.post('/spreadsheet', async (req, res) => {
         .then(() => {
             res.end();
         });
+
+    try {
+        await fsPromises.unlink(__dirname+"/"+name);
+    } catch (err) {}
 });
 
 module.exports.router = router;
