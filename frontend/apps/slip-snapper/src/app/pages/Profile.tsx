@@ -32,6 +32,7 @@ import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { float } from 'aws-sdk/clients/lightsail';
+import {destroySession} from "../../api/Session"
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -56,6 +57,7 @@ const Profile: React.FC = () => {
       .then(
         apiResponse => {
           if (typeof (apiResponse.data) !== "string") {
+            destroySession(apiResponse);
             //Budget amounts
             val.weekly = apiResponse.data.weekly;
             val.monthly = apiResponse.data.monthly;

@@ -28,7 +28,7 @@ import {
   getUserReport,
   removeReport,
 } from '../../api/apiCall';
-import { present } from '@ionic/core/dist/types/utils/overlays';
+import {destroySession} from "../../api/Session"
 
 export const mockTotals = [
   { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
@@ -60,6 +60,7 @@ const ViewReports: React.FC = () => {
   useEffect(() => {
     getAllUserReports().then((apiResponse) => {
       if (typeof apiResponse.data !== 'string') {
+        destroySession(apiResponse);
         setReports(apiResponse.data.reports);
         
       }
