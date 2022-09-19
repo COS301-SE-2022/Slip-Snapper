@@ -323,6 +323,8 @@ const ViewReports: React.FC = () => {
       sheetDownload.setAttribute("download", "report.xlsx");
       document.body.appendChild(sheetDownload);
       sheetDownload.click();
+      
+      sheetDownload.remove();
     })
   }
 };
