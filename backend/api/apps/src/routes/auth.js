@@ -7,13 +7,13 @@ const bcrypt = require('bcrypt');
  */
 router.post('/signup', async (req,res)=>{
     //TODO add input checking
-    let { firstname, lastname, username, password } = req.body;
+    let { firstname, lastname, username, password, email } = req.body;
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashed = bcrypt.hashSync(password,salt);
 
-    const result = await req.app.get('db').addUser(username, hashed, firstname, lastname);
+    const result = await req.app.get('db').addUser(username, hashed, firstname, lastname, email);
     const token = await req.app.get('token').generateToken(result.token);
 
     const path = `${username}/`
