@@ -1656,7 +1656,7 @@ async function retrieveAllSlips(userid) {
 async function todaysReports(userid) {
     try {
         const date1 = new Date()
-        date1.setDate(date1.getDate() - 1)
+        date1.setDate(date1.getDate())
         let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
 
         const todaysReport = await prisma.slip.findMany({
