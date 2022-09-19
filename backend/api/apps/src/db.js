@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { toProjectName } = require('nx/src/config/workspaces');
 
 const prisma = new PrismaClient()
 
@@ -58,7 +57,7 @@ async function getUser(userName) {
  * @param {*} lastname (String) the lastname
  * @returns (JSON Object) Contains a message and the user object || null
  */
-async function addUser(username, password, firstname, lastname,email) {
+async function addUser(username, password, firstname, lastname, email) {
     try {
         let budgetObject = {
             FoodBudget: {
@@ -121,7 +120,7 @@ async function addUser(username, password, firstname, lastname,email) {
                 password: password,
                 lastname: lastname,
                 firstname: firstname,
-                email:email,
+                email: email,
                 weeklyBudget: 0,
                 monthlyBudget: 0,
                 budgets: JSON.parse(budgetObjectString)
@@ -130,7 +129,7 @@ async function addUser(username, password, firstname, lastname,email) {
 
         if (user == null) {
             return {
-                message: "User failed to be added",
+                message: "Error Creating User",
                 user: null,
                 token: {},
             };
@@ -153,7 +152,6 @@ async function addUser(username, password, firstname, lastname,email) {
         };
     }
     catch (error) {
-        console.log(error)
         return {
             message: "Error Creating User",
             user: null,

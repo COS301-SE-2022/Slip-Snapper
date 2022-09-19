@@ -105,15 +105,17 @@ export async function loginA( userName, password){
  * @param {*} password the users password
  * @returns response from the server
  */
-export async function signupA( userName, email, password){
+export async function signupA( firstName, lastName, userName, password, email){
     return axios({
         headers: headers,
         method: 'post',
         url: baseUrl + 'user/signup',
         data: JSON.stringify({
-          email: email,
-          username: userName,
-          password: password,
+            firstname: firstName,
+            lastname: lastName,
+            username: userName,
+            password: password,
+            email: email,
         })
     })
 }
