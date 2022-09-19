@@ -96,7 +96,7 @@ const ViewReports: React.FC = () => {
                       fill="solid"
                       color="secondary"
                       onClick={() => {
-                        getSpread();
+                        getSpread(totals.call);
                       }}
                     >
                       Generate Excel
@@ -287,8 +287,7 @@ const ViewReports: React.FC = () => {
     });
   }
 
-  function getReportNumber()
-  {
+  function getReportNumber() {
     let maxReportNum:number
     maxReportNum=0
     for(let i = 0 ; i < reports?.length;i++)
@@ -302,8 +301,7 @@ const ViewReports: React.FC = () => {
 
   }
 
- async function setNewNames(reports:any)
-  {
+  async function setNewNames(reports:any) {
     if(reports!==undefined)
     {
       for (let i = 0; i < reports.length; i++) {
@@ -317,21 +315,17 @@ const ViewReports: React.FC = () => {
     return reports;
   }
 
-  async function getSpread(){
-    await generateSpreadSheet().then( (apiResponseData) => {
-      if(apiResponseData.data.type !== "text/html"){
-        const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-        const sheetUrl = URL.createObjectURL(sheet);
-        const sheetDownload = document.createElement("a");
-        sheetDownload.setAttribute("href", sheetUrl);
-        sheetDownload.setAttribute("download", "report.xlsx");
-        document.body.appendChild(sheetDownload);
-        sheetDownload.click();
-      }else{
-        present("500 Internel Server Error", 1200)
-      }
-    }).catch(() => {
-      present("500 Internel Server Error", 1200)
+  async function getSpread(period: any) {
+    await generateSpreadSheet(period).then( (apiResponseData) => {
+      const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const sheetUrl = URL.createObjectURL(sheet);
+      const sheetDownload = document.createElement("a");
+      sheetDownload.setAttribute("href", sheetUrl);
+      sheetDownload.setAttribute("download", "report.xlsx");
+      document.body.appendChild(sheetDownload);
+      sheetDownload.click();
+      
+      sheetDownload.remove();
     })
   }
 };
