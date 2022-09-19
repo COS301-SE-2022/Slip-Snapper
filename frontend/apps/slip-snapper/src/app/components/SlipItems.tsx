@@ -4,6 +4,8 @@ import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/slip-items.css';
 import { calendarOutline, filterOutline } from 'ionicons/icons';
 import { Slider } from '@mui/material';
+import {destroySession} from "../../api/Session"
+
 
 const SlipItems: React.FC = () => {
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
@@ -20,6 +22,7 @@ const SlipItems: React.FC = () => {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
+                        destroySession(apiResponse);
                         orderSlips(apiResponse.data.slips)
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)

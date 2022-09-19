@@ -26,6 +26,7 @@ import ReportItem from '../components/ReportItem';
 import Graph from '../components/Graph';
 import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
+import {destroySession} from "../../api/Session"
 
 import {
   Chart as ChartJS,
@@ -59,6 +60,7 @@ const Home: React.FC = () => {
     getRecentReports()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
+          destroySession(apiResponse);
           setR(apiResponse.data.reports);
         }
       });
