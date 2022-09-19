@@ -45,7 +45,6 @@ const Profile: React.FC = () => {
   
   const [present, dismiss] = useIonToast();
 
-  // let totalWeeklySpent: number, totalMonthlySpent: number
   useEffect(() => {
     let user = JSON.parse(localStorage.getItem('user')!)
     if (user == null) {
