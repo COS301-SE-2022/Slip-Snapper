@@ -6,6 +6,15 @@ type Props = {
     graphData: any;
 }
 function ProfileBarGraph({ graphData }: Props) {
+    const graphSettings = {
+
+        plugins: {
+            legend: {
+                position: 'bottom' as const,
+            },
+        },
+    };
+
     const data = {
         labels: ['Electronics', 'Fashion', 'Food', 'Healthcare', 'Hobby', 'Household','Other','Vehicle'],
         datasets: [
@@ -39,7 +48,7 @@ function ProfileBarGraph({ graphData }: Props) {
         ],
     };
     return (
-        <Pie data={data} />
+        <Pie data={data} options={graphSettings}/>
     );
 }
 

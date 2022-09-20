@@ -102,13 +102,14 @@ const ViewReports: React.FC = () => {
                   </IonCardHeader>
                   <IonItem color="tertiary">
                     <IonButton
+                      className='excel-desktop'
                       fill="solid"
                       color="secondary"
                       onClick={() => {
                         getSpread("Daily");
                       }}
                     >
-                      Generate Excel
+                      Generate XLSX
                     </IonButton>
 
                     <IonButton
@@ -120,7 +121,7 @@ const ViewReports: React.FC = () => {
                         generateReport('Daily');
                       }}
                     >
-                      Generate Report
+                      Generate PDF
                     </IonButton>
                   </IonItem>
                 </IonCard>
