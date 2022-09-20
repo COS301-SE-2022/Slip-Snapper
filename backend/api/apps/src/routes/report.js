@@ -252,7 +252,7 @@ router.post('/pdf', async (req,res)=>{
     }
 
     const today = new Date();
-    const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
+    const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     const periodStart = await determinePeriodStart(period, periodEnd);
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
