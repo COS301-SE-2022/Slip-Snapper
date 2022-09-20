@@ -98,7 +98,7 @@ const ViewReports: React.FC = () => {
               <IonCol className="generate-item-col" >
                 <IonCard color="primary">
                   <IonCardHeader>
-                <IonCardTitle>Daily</IonCardTitle>
+                <IonCardTitle>Daily Report</IonCardTitle>
                   </IonCardHeader>
                   <IonItem color="tertiary">
                     <IonButton
@@ -130,7 +130,7 @@ const ViewReports: React.FC = () => {
           <IonCol className="generate-item-col" >
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Weekly</IonCardTitle>
+                <IonCardTitle>Weekly Report</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
@@ -140,7 +140,7 @@ const ViewReports: React.FC = () => {
                     getSpread("Weekly");
                   }}
                 >
-                  Generate Excel
+                  Generate XLSX
                 </IonButton>
 
                 <IonButton
@@ -152,7 +152,7 @@ const ViewReports: React.FC = () => {
                     generateReport('Weekly');
                   }}
                 >
-                  Generate Report
+                  Generate PDF
                 </IonButton>
               </IonItem>
             </IonCard>
@@ -161,7 +161,7 @@ const ViewReports: React.FC = () => {
           <IonCol className="generate-item-col" >
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Monthly</IonCardTitle>
+                <IonCardTitle>Monthly Report</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
@@ -171,7 +171,7 @@ const ViewReports: React.FC = () => {
                     getSpread("Monthly");
                   }}
                 >
-                  Generate Excel
+                  Generate XLSX
                 </IonButton>
 
                 <IonButton
@@ -183,7 +183,7 @@ const ViewReports: React.FC = () => {
                     generateReport('Monthly');
                   }}
                 >
-                  Generate Report
+                  Generate PDF
                 </IonButton>
               </IonItem>
             </IonCard>

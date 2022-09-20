@@ -24,7 +24,7 @@ import { EditBudgets } from '../components/EditBudgets';
 import { ProfileImage } from '../components/ProfileImage';
 import '../theme/profile.css';
 import '../theme/toasts.css';
-import { setBudgetA, getProfileData } from "../../api/apiCall"
+import { setBudgetA, getProfileData, getStatsA } from "../../api/apiCall"
 import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
@@ -42,8 +42,25 @@ const Profile: React.FC = () => {
   const [userDetails, setUserDetails] = useState({ username: "" });
   const [expenditure, setExpenditure] = useState({ weekly: 0, monthly: 0 });
   const val = { weekly: 0, monthly: 0 };
+  const [userStats, setUserStats] = useState({
+    category: {
+      amount: 0,
+      name: ""
+    },
+    lastMonth: {
+      current: 0,
+      previous: 0
+    },
+    lastWeek: {
+      current: 0,
+      previous: 0
+    },
+    mostExpensive: {
+      name: "",
+      amount: 0
+    }
+  });
   const history = useHistory();
-  
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
@@ -72,6 +89,14 @@ const Profile: React.FC = () => {
             setProfile(apiResponse.data)
           }
         })
+
+    getStatsA()
+      .then(
+        apiResponse => {
+          if (typeof (apiResponse.data) !== "string") {
+            setUserStats(apiResponse.data)
+          }
+        })
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
@@ -81,6 +106,12 @@ const Profile: React.FC = () => {
   const [mostFrequent, setMostFrequent] = useState(null);
   const openMostFrequent = (event:any) => { setMostFrequent(event.currentTarget); };
   const closeMostFrequent = () => { setMostFrequent(null); };
+
+  const [mostExpensive, setMostExpensive] = useState(null);
+  const openMostExpensive = (event: any) => { setMostExpensive(event.currentTarget); };
+  const closeMostExpensive = () => { setMostExpensive(null); };
+
+
 
   return (
     <IonPage>
@@ -222,16 +253,31 @@ const Profile: React.FC = () => {
             </IonCardHeader>
 
             <IonCardHeader>
-              <IonItem className="headings" color="primary">
-                <IonCardTitle>Recent Receipts</IonCardTitle>
+              <IonItem lines='none' className="headings" color="primary">
+                <IonCardTitle>Most Expensive Recent Purchase</IonCardTitle>
+                <IonIcon src={helpCircleOutline} onClick={openMostExpensive} className="info-icon" />
+                <Popover
+                  open={Boolean(mostExpensive)}
+                  onClose={closeMostExpensive}
+                  anchorEl={mostExpensive}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
+                  <p className="popover-text">The most expensive purchase that you have made this month.</p>
+                </Popover>
               </IonItem>
-              {profile?.favouriteStore.receipts.map((item: any, index: number) => {
-                return (
-                  <IonItem key={index} className="center-items" color="tertiary">
-                    <IonText>Receipt #{item.slipNumber}: R{item.total.toFixed(2)}</IonText>
-                  </IonItem>
-                )
-              })}
+              <IonItem className="center-items" color="tertiary">
+                <IonText data-testid='storeName'>Item: {userStats.mostExpensive.name}</IonText>
+              </IonItem>
+              <IonItem className="center-items" color="tertiary">
+                <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount.toFixed(2)}</IonText>
+              </IonItem>
             </IonCardHeader>
           </IonCard>
         </div>

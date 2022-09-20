@@ -9,10 +9,29 @@ function ProfileBarGraph({ graphData }: Props) {
         barThickness: 43,
         borderWidth: 1,
         borderRadius: 10,
+        color: 'white',
+
 
         plugins: {
             legend: {
                 position: 'bottom' as const,
+            },
+        },
+
+        scales: {
+            yAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
+            xAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
             },
         },
     };
@@ -26,6 +45,7 @@ function ProfileBarGraph({ graphData }: Props) {
                 backgroundColor: "rgb(39, 165, 146, 0.8)",
                 width: 8,
                 hoverBackgroundColor: "rgb(47, 198, 176, 0.8)",
+                
             }
         ],
     };

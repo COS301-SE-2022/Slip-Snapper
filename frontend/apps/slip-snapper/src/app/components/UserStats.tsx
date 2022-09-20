@@ -50,7 +50,7 @@ export const UserStats = () => {
             .then(apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
                     if(apiResponse.data)
-                       setPercentages(apiResponse.data.otherBudgets.percentages)
+                        setPercentages(apiResponse.data.otherBudgets.monthlyTotal)
                 }
             })
     }, []);
