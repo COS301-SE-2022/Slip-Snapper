@@ -1,11 +1,4 @@
 import renderer from 'react-test-renderer';
-import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonLabel, IonSearchbar, IonToggle, IonDatetime, IonIcon, useIonToast, IonButtons, IonContent, IonHeader, IonModal, IonRadio, IonRadioGroup, IonToolbar, IonFab, IonFabButton, IonCardSubtitle } from '@ionic/react';
-import React, { useEffect, useState } from 'react';
-import { getAllSlips, deleteSlip } from '../../../api/apiCall';
-
-import { calendarOutline, filterOutline } from 'ionicons/icons';
-import { Slider } from '@mui/material';
-import { destroySession } from "../../../api/Session"
 import SlipItems from '../../components/SlipItems';
 
 jest.mock('../../api/apiCall');
