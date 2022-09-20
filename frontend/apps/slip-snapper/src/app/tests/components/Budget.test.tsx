@@ -16,10 +16,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { getProfileData, setGeneralBudget } from "../../../api/apiCall"
 import Budget, { updateBudgets } from "../../components/Budget";
 
-jest.mock('../theme/profile.css');
-jest.mock('ionicons/icons');
-jest.mock('@mui/icons-material/Filter7Outlined');
-jest.mock('@mui/icons-material/CalendarMonth');
 jest.mock("../../api/apiCall");
 
 const renderTree = (tree: JSX.Element) => renderer.create(tree);
