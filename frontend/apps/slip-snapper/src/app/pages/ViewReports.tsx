@@ -69,10 +69,9 @@ const ViewReports: React.FC = () => {
   }, []);
   orderReports(reports)
 
-  const [filterDates, setFilterDates] = useState({
-    from: "",
-    to: "",
-  });
+
+  const [filterDateFrom, setFilterDateFrom] = useState("");
+  const [filterDateTo, setFilterDateTo] = useState("");
 
   setNewNames(reports)
 
@@ -251,8 +250,14 @@ const ViewReports: React.FC = () => {
               </IonItem>
             );
           })}
-          
         </IonCard>
+        <IonAlert
+          isOpen={showAlert}
+          onDidDismiss={() => setShowAlert(false)}
+          header="Oops..."
+          message={"Please enter a valid date interval."}
+          buttons={['Ok']}
+        />
 
         <IonModal onDidPresent={() => { toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
           <IonHeader>
@@ -275,14 +280,14 @@ const ViewReports: React.FC = () => {
               <IonItem>
                 <IonLabel>From:
                   <IonItem className='date-item' color="tertiary">
-                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                    <IonDatetime onIonChange={e => setFilterDateFrom(e.detail.value!)} value={filterDateFrom} displayFormat='DD/MM/YYYY' id={"fromDate"} />
                     <IonIcon icon={calendarOutline} slot="end" />
                   </IonItem>
                 </IonLabel>
 
                 <IonLabel>To:
                   <IonItem className='date-item' color="tertiary">
-                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                    <IonDatetime onIonChange={e => setFilterDateTo(e.detail.value!)} value={filterDateTo} displayFormat='DD/MM/YYYY' id={"toDate"} />
                     <IonIcon icon={calendarOutline} slot="end" />
                   </IonItem>
                 </IonLabel>
@@ -475,11 +480,6 @@ const ViewReports: React.FC = () => {
           if (temp !== null)
             temp.style.display = "none";
         }
-        // else if (reports[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase())) {
-        //   const temp = document.getElementById("slipItem" + i)
-        //   if (temp !== null)
-        //     temp.style.display = "none";
-        // }
       }
     }
   }
@@ -498,14 +498,13 @@ const ViewReports: React.FC = () => {
   }
 
   function dateFilter() {
-
-    const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-    const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+    const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
+    const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
     if (fromDate !== "" && fromDate !== undefined) {
       for (let i = 0; i < reports.length; i++) {
-        if (fromDate > reports[i].transactionDate) {
-          const temp = document.getElementById("slipItem" + i)
+        if (fromDate > reports[i].reportDate) {
+          const temp = document.getElementById("reportItem" + i)
           if (temp !== null)
             temp.style.display = "none";
         }
@@ -514,25 +513,22 @@ const ViewReports: React.FC = () => {
 
     if (toDate !== "" && toDate !== undefined) {
       for (let i = 0; i < reports.length; i++) {
-        if (toDate < reports[i].transactionDate) {
-          const temp = document.getElementById("slipItem" + i)
+        if (toDate < reports[i].reportDate) {
+          const temp = document.getElementById("reportItem" + i)
           if (temp !== null)
             temp.style.display = "none";
         }
       }
     }
-    if (fromDate !== undefined && toDate !== undefined)
-      setFilterDates({ from: fromDate, to: toDate })
   }
 
   function checkDates() {
-    const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-    const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-
-
+    const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
+    const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
+    
     if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
-      document.getElementById("fromDate")?.setAttribute("input", "")
-      setFilterDates({ from: "", to: "" })
+      setFilterDateFrom("")
+      setFilterDateTo("")
       setShowAlert(true)
       return false
     }
@@ -551,8 +547,6 @@ const ViewReports: React.FC = () => {
         }
       }
     }
-    console.log(reports)
-
   }
 
 
