@@ -46,9 +46,9 @@ const Login: React.FC = () => {
               <div className='register-link'>
                 <p style={{color:"#b5bab7"}}>Don't have an account? &nbsp;<a href={"/register"}>Register</a></p>
               </div>
-              <div className='forgot-pass' slot="end">
+              {/* <div className='forgot-pass' slot="end">
                 <a href={"/forgotpass"}>Forgot Password</a>
-              </div>
+              </div> */}
             </IonItem>
 
             <IonAlert

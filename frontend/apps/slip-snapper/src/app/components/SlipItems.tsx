@@ -69,7 +69,7 @@ const SlipItems: React.FC = () => {
     ];
 
     const [isOpenSearch, setIsOpenSearch] = useState(false);
-
+    orderSlips(slipItems)
     return (
         <div>
             <IonItem>
@@ -136,6 +136,7 @@ const SlipItems: React.FC = () => {
                                                         }
                                                     })
                                             setDeleteAlert({ state: false, name: '', id: 0 });
+                                            orderSlips(slipItems)
                                         },
                                     },
                                 ]}

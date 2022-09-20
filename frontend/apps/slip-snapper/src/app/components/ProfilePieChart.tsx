@@ -7,7 +7,7 @@ type Props = {
 }
 function ProfileBarGraph({ graphData }: Props) {
     const graphSettings = {
-
+        color: 'white',
         plugins: {
             legend: {
                 position: 'bottom' as const,

@@ -41,6 +41,7 @@ router.get('/profile', async (req,res)=>{
                 receipts: result.storeDetails.slips,
             },
             otherBudgets: result.budgets,
+            user:result.user,
         });
     
 });
