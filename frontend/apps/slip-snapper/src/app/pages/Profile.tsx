@@ -39,7 +39,12 @@ const Profile: React.FC = () => {
   const [weeklyBudgetAlert, setWeeklyBudgetAlert] = useState(false);
   const [monthlyBudgetAlert, setMonthlyBudgetAlert] = useState(false);
 
-  const [userDetails, setUserDetails] = useState({ username: "" });
+  const [userDetails, setUserDetails] = useState({
+    username:"",
+    firstname: "",
+    lastname: "",
+    email: "",
+  });
   const [expenditure, setExpenditure] = useState({ weekly: 0, monthly: 0 });
   const val = { weekly: 0, monthly: 0 };
   const [userStats, setUserStats] = useState({
@@ -64,11 +69,6 @@ const Profile: React.FC = () => {
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
-    let user = JSON.parse(localStorage.getItem('user')!)
-    if (user == null) {
-      user = { id: 24 }
-    }
-    setUserDetails(user)
     getProfileData()
       .then(
         apiResponse => {
@@ -87,6 +87,7 @@ const Profile: React.FC = () => {
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
+            setUserDetails(apiResponse.data.user.user)
           }
         })
 
@@ -139,7 +140,13 @@ const Profile: React.FC = () => {
                       </IonCol>
                   <IonCol className='profile-elem'>
                     <IonItem className="center-items username" color="tertiary">
+                      <IonText>{userDetails.email}</IonText>
+                    </IonItem>
+                    <IonItem className="center-items username" color="tertiary">
                       <IonText>{userDetails.username}</IonText>
+                    </IonItem>
+                    <IonItem className="center-items username" color="tertiary">
+                      <IonText>{userDetails.firstname + " " + userDetails.lastname}</IonText>
                     </IonItem>
                   </IonCol>
                 </div>

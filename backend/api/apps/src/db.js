@@ -1723,12 +1723,14 @@ async function getUserProfile(userId) {
         let store = await getFavouriteStore(userId);
         let budget = await getUserBudgets(userId);
         let budgets = await getUserGeneralBudgets(userId);
-
+        let user = await  getUserInformation(userId);
+        
         return {
             message: "User profile statistics retrieved",
             storeDetails: store,
             budget: budget,
-            budgets: budgets
+            budgets: budgets,
+            user:user,
         };
     }
     catch (error) {
@@ -1736,7 +1738,8 @@ async function getUserProfile(userId) {
             message: "Error retrieving profile statistics",
             storeDetails: {},
             budget: {},
-            budgets: {}
+            budgets: {},
+            user:{}
         };
     }
 
@@ -2178,6 +2181,26 @@ async function getUserMode(userId) {
 
 }
 
+async function getUserInformation(userId) {
+
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userId
+        },
+        select: {
+            username: true,
+            firstname: true,
+            lastname: true,
+            email:true,
+        }
+    })
+
+    return {
+        user:user
+    }
+
+}
+
 module.exports = {
     getUser,
     addUser,
@@ -2204,5 +2227,6 @@ module.exports = {
     updateWeeklyMonthlyCategoryBudgets,
     getWeeklyMonthlyCategoryBudgets,
     deleteSlip,
-    getUserAnalysis
+    getUserAnalysis,
+    getUserInformation
 }
