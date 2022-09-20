@@ -560,7 +560,6 @@ const ViewReports: React.FC = () => {
     resetDate()
     setDateToggle(false)
   }
-
 };
 
 export default ViewReports;

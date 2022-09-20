@@ -812,7 +812,7 @@ async function updateAllItems(updateItems) {
  */
 async function updateSlip(userId, slipData, insertItems, updateItems, removeItems) {
     try {
-        const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[1])
+        const slip = await updateSlips(slipData[5], slipData[1], slipData[4], slipData[0])
         const update = await updateAllItems(updateItems)
         const remove = await deleteManyItems(removeItems)
         const insert = await insertAllItems(slipData[5], insertItems)
@@ -845,7 +845,7 @@ async function updateSlips(slipId, editLocation, editTotal, editDate) {
             data: {
                 location: editLocation,
                 total: editTotal,
-                // transactionDate: editDate
+                transactionDate: editDate
             },
         })
 

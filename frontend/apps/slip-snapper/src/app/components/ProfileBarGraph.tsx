@@ -4,7 +4,6 @@ type Props = {
     graphData: any;
 }
 function ProfileBarGraph({ graphData }: Props) {
-
     const graphSettings = {
         responsive: true,
         barThickness: 43,
