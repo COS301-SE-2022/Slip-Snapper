@@ -336,7 +336,7 @@ async function getItemsReport(userid, start, end) {
         }
 
         let itemList = [];
-        var i = 1;
+        var i = 0;
         for (var itemL of items) {
             let location = itemL.location;
             let date = itemL.transactionDate;
