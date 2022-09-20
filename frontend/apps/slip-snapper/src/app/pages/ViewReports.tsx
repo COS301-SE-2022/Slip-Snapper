@@ -31,15 +31,15 @@ import {
 import { present } from '@ionic/core/dist/types/utils/overlays';
 
 export const mockTotals = [
-  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
+  { timePeriod: 'Daily Report', total: 'R200.02', title: 'generateDR', call: 'Daily' },
   {
-    timePeriod: 'Weekly',
+    timePeriod: 'Weekly Report',
     total: 'R800.02',
     title: 'generateWR',
     call: 'Weekly',
   },
   {
-    timePeriod: 'Monthly',
+    timePeriod: 'Monthly Report',
     total: 'R1000.50',
     title: 'generateMR',
     call: 'Monthly',
@@ -92,13 +92,14 @@ const ViewReports: React.FC = () => {
                   </IonCardHeader>
                   <IonItem color="tertiary">
                     <IonButton
+                      className='excel-desktop'
                       fill="solid"
                       color="secondary"
                       onClick={() => {
                         getSpread();
                       }}
                     >
-                      Generate Excel
+                      Generate XLSX
                     </IonButton>
 
                     <IonButton
@@ -110,7 +111,7 @@ const ViewReports: React.FC = () => {
                         generateReport(totals.call);
                       }}
                     >
-                      Generate Report
+                      Generate PDF
                     </IonButton>
                   </IonItem>
                 </IonCard>
