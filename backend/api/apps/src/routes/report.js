@@ -166,9 +166,9 @@ async function generatePDF(name, object, today, period){
  * @param {*} allItems 
  * @returns the workbook object
  */
-async function generateSpreadsheet(name, allItems){
+async function generateSpreadsheet(name, allItems){    
     const types = await sortItemsIntoCategories(allItems);
-
+    
     const workbook = new Excel.Workbook();
     const allItemSheet = workbook.addWorksheet('All Items');
     allItemSheet.columns = [
@@ -187,47 +187,49 @@ async function generateSpreadsheet(name, allItems){
         horizontal: 'center'
     }
     
-    allItems.map((item) => {
-        let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
-        let row = allItemSheet.addRow(data);
-    })
+    if(allItems.length !== 0){
+        allItems.map((item) => {
+            let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
+            let row = allItemSheet.addRow(data);
+        })
+    
+        allItemSheet.getCell('I2').value = "Total Quantity:"; 
+        allItemSheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0 }; 
+        allItemSheet.getCell('I3').value = "Total Price:"; 
+        allItemSheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0 }; 
 
-    allItemSheet.getCell('I2').value = "Total Quantity:"; 
-    allItemSheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0.14 }; 
-    allItemSheet.getCell('I3').value = "Total Price:"; 
-    allItemSheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0.14 }; 
-
-    for(const key in types.types){
-        if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
-            const sheet = workbook.addWorksheet(key);
-            sheet.columns = [
-                {header: 'Date', key:'date', width: 11},
-                {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
-                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
-                {header: 'Type', key:'type', width: 12},
-                {header: 'Quantity', key:'quantity', width: 11},
-                {header: 'Price', key:'price', width: 11},
-                {},{},
-                {width: 15},
-            ]
-        
-            const titleRow = sheet.getRow(1);
-            titleRow.alignment = {
-                horizontal: 'center'
-            }
-
-            types.types[key].map((item) => {
-                let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
-                let row = sheet.addRow(data);
-            })
+        for(const key in types.types){
+            if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
+                const sheet = workbook.addWorksheet(key);
+                sheet.columns = [
+                    {header: 'Date', key:'date', width: 11},
+                    {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+                    {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+                    {header: 'Type', key:'type', width: 12},
+                    {header: 'Quantity', key:'quantity', width: 11},
+                    {header: 'Price', key:'price', width: 11},
+                    {},{},
+                    {width: 15},
+                ]
             
-            sheet.getCell('I2').value = "Total Quantity:"; 
-            sheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0.14 }; 
-            sheet.getCell('I3').value = "Total Price:"; 
-            sheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0.14 }; 
-        }
+                const titleRow = sheet.getRow(1);
+                titleRow.alignment = {
+                    horizontal: 'center'
+                }
+    
+                types.types[key].map((item) => {
+                    let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
+                    let row = sheet.addRow(data);
+                })
+                
+                sheet.getCell('I2').value = "Total Quantity:"; 
+                sheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0 }; 
+                sheet.getCell('I3').value = "Total Price:"; 
+                sheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0 }; 
+            }
+        }    
     }
-
+    
     await workbook.xlsx.writeFile(__dirname+'/'+name);
  
     return workbook;
@@ -656,24 +658,25 @@ router.get('/today', async (req, res) => {
  */
 router.post('/spreadsheet', async (req, res) => {
     let { period } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
+    // const token = req.headers.authorization.split(' ')[1];
+    // const tokenVerified = await req.app.get('token').verifyToken(token);
 
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-            });
-    }
-
+    // if(tokenVerified === "Error"){
+    //     return res.status(200)
+    //         .send({
+    //             message: "Token has expired Login again to continue using the application",
+    //         });
+    // }
+    // console.log(tokenVerified)
     const today = new Date();
     const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
     const periodStart = await determinePeriodStart(period, periodEnd);
 
-    const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
-    const name = "Report.xlsx"
+    // const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    const result = await req.app.get('db').getItemsReport(41, periodStart, periodEnd);
+    const name = "Report.xlsx";
 
-    const spreadSheet = await generateSpreadsheet(name,result.itemList)
+    const spreadSheet = await generateSpreadsheet(name,result.itemList);
 
     let status = 200;
 
@@ -686,9 +689,9 @@ router.post('/spreadsheet', async (req, res) => {
             res.end();
         });
 
-    try {
-        await fsPromises.unlink(__dirname+"/"+name);
-    } catch (err) {}
+    // try {
+    //     await fsPromises.unlink(__dirname+"/"+name);
+    // } catch (err) {}
 });
 
 module.exports.router = router;
