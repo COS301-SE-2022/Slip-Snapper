@@ -1,16 +1,16 @@
 import { fireEvent, render, cleanup  } from '@testing-library/react';
-import TakePictureButton from '../components/TakePictureButton';
+import TakePictureButton from '../../components/TakePictureButton';
 import { create } from 'react-test-renderer';
-import App from '../App';
-import Profile from '../pages/Profile';
-import ViewReports from '../pages/ViewReports';
-import Login from '../pages/Login';
+import App from '../../App';
+import Profile from '../../pages/Profile';
+import ViewReports from '../../pages/ViewReports';
+import Login from '../../pages/Login';
 import { ionFireEvent as fire } from '@ionic/react-test-utils';
-import Register from '../pages/Register';
+import Register from '../../pages/Register';
 //ReportTotal Imports
-import AddEntry from '../pages/AddEntry';
-import ForgotPass from '../pages/ForgotPass';
-import ProfileBarGraph from '../components/ProfileBarGraph';
+import AddEntry from '../../pages/AddEntry';
+import ForgotPass from '../../pages/ForgotPass';
+import ProfileBarGraph from '../../components/ProfileBarGraph';
 
 jest.mock('@ionic-native/file-opener/index', () => jest.fn());
 beforeEach(cleanup);
