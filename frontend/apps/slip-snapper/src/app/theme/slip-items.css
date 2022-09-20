@@ -48,6 +48,7 @@ ul.no-bullets {
    max-width: 200px;
    margin-top: 10px;
    border-radius: 10px;
+   padding: 1px;
 }
 
 .date-picker {
