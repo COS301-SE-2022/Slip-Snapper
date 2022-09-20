@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EditBudgets> should render component 1`] = `
+<ion-item
+  color="primary"
+  onClick={[Function]}
+>
+  <ion-button
+    color="secondary"
+    fill="solid"
+    onClick={[Function]}
+    slot="end"
+  >
+    Add/Remove
+  </ion-button>
+</ion-item>
+`;
