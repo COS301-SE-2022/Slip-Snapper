@@ -4,7 +4,7 @@ import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/slip-items.css';
 import { calendarOutline, filterOutline } from 'ionicons/icons';
 import { Slider } from '@mui/material';
-import {destroySession} from "../../api/Session"
+import { destroySession } from "../../api/Session"
 
 
 const SlipItems: React.FC = () => {
@@ -45,17 +45,14 @@ const SlipItems: React.FC = () => {
         filter()
     };
 
-    // const resetValue = () => {
-    //     setValue([0, 5000]);
-    // };
+    const resetValue = () => {
+        setValue([0, 5000]);
+    };
 
-    // const resetDate = () => {
-    //     setFilterDates({
-    //         from: "",
-    //         to: "",
-    //     });
-    // };
-
+    const resetDate = () => {
+        setFilterDateFrom("")
+        setFilterDateTo("")
+    };
     const marks = [
         {
             value: 0,
@@ -81,12 +78,12 @@ const SlipItems: React.FC = () => {
             <IonCard color="primary" className="receipts-table">
                 <IonCardHeader className='search-bar-header'>
                     <IonItem color='primary'>
-                    <IonSearchbar className='search-bar-receipts' color="tertiary" id='searchBar' onIonChange={filter}/>
-                    <IonFab horizontal="end">
-                        <IonFabButton onClick={() => setIsOpenSearch(true)} color="secondary" size="small">
-                            <IonIcon src={filterOutline}/>
-                        </IonFabButton>
-                    </IonFab>
+                        <IonSearchbar className='search-bar-receipts' color="tertiary" id='searchBar' onIonChange={filter} />
+                        <IonFab horizontal="end">
+                            <IonFabButton onClick={() => setIsOpenSearch(true)} color="secondary" size="small">
+                                <IonIcon src={filterOutline} />
+                            </IonFabButton>
+                        </IonFab>
                     </IonItem>
                 </IonCardHeader>
 
@@ -99,9 +96,9 @@ const SlipItems: React.FC = () => {
                             <div className='total-mobile'>
                                 {"Total: R" + item.total.toFixed(2)}
                             </div>
-                            <IonButton routerLink="/editreceipt"  id={item.id + "b"} color="secondary" slot="end" onClick={() => {
+                            <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
                                 localStorage.removeItem('editSlip')
-                                localStorage.setItem('editSlip', JSON.stringify(item))                             
+                                localStorage.setItem('editSlip', JSON.stringify(item))
                             }}>Edit</IonButton>
                             <IonButton
                                 onClick={() =>
@@ -158,51 +155,54 @@ const SlipItems: React.FC = () => {
 
             <IonModal onDidPresent={() => { toggleTotalFilter(totalToggle); toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
                 <IonHeader>
-                <IonToolbar color="primary">
-                    <IonTitle>Search Filter</IonTitle>
-                    <IonButtons slot="end">
-                    <IonButton onClick={() => {
-                        setIsOpenSearch(false); filter();
-                    }}>Apply</IonButton>
-                    </IonButtons>
-                </IonToolbar>
+                    <IonToolbar color="primary">
+                        <IonTitle>Search Filter</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => {
+                                returnToDefault()
+                            }}>restore to default</IonButton>
+                            <IonButton onClick={() => {
+                                setIsOpenSearch(false); filter();
+                            }}>Apply</IonButton>
+                        </IonButtons>
+                    </IonToolbar>
                 </IonHeader>
                 <IonContent>
-                <IonItem>
+                    <IonItem>
                         <IonLabel>Total Filter</IonLabel>
-                        <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(!totalToggle)} checked={totalToggle} onClick={() => setTotalToggle(!totalToggle)}/>
+                        <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(!totalToggle)} checked={totalToggle} onClick={() => setTotalToggle(!totalToggle)} />
                     </IonItem>
 
                     <div id='totalSlider' className='totalSlider'>
-                    <Slider
-                        getAriaLabel={() => 'Total range'}
-                        value={value}
-                        onChange={handleChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={5000}
-                        step={100}
-                        marks={marks}
-                        color={'secondary'}
-                    />
+                        <Slider
+                            getAriaLabel={() => 'Total range'}
+                            value={value}
+                            onChange={handleChange}
+                            valueLabelDisplay="auto"
+                            min={0}
+                            max={5000}
+                            step={100}
+                            marks={marks}
+                            color={'secondary'}
+                        />
                     </div>
 
                     <IonItem>
                         <IonLabel>Date Filter</IonLabel>
-                        <IonToggle color='secondary' onIonChange={e => toggleDates(!dateToggle)} checked={dateToggle} onClick={() => setDateToggle(!dateToggle)}/>
+                        <IonToggle color='secondary' onIonChange={e => toggleDates(!dateToggle)} checked={dateToggle} onClick={() => setDateToggle(!dateToggle)} />
                     </IonItem>
 
                     <div id='date-div' className='date-div' color="primary" >
                         <IonItem>
                             <IonLabel>From:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime onIonChange={e => {setFilterDateFrom(e.detail.value!)}} value={filterDateFrom} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                                    <IonDatetime onIonChange={e => { setFilterDateFrom(e.detail.value!) }} value={filterDateFrom} displayFormat='DD/MM/YYYY' id={"fromDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
                             <IonLabel>To:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime onIonChange={e => { setFilterDateTo(e.detail.value!)}} value={filterDateTo} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                                    <IonDatetime onIonChange={e => { setFilterDateTo(e.detail.value!) }} value={filterDateTo} displayFormat='DD/MM/YYYY' id={"toDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
@@ -306,8 +306,7 @@ const SlipItems: React.FC = () => {
         }
     }
 
-    function checkDates()
-    {
+    function checkDates() {
         const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
         const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
@@ -321,14 +320,11 @@ const SlipItems: React.FC = () => {
         return true;
     }
 
-    function totalFilter()
-    {
+    function totalFilter() {
         for (let i = 0; i < originalSlips.length; i++) {
 
-            if(value[1]===5000)
-            {
-                if (value[0] > originalSlips[i].total)
-                {
+            if (value[1] === 5000) {
+                if (value[0] > originalSlips[i].total) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
                         temp.style.display = "none";
@@ -354,6 +350,14 @@ const SlipItems: React.FC = () => {
                 }
             }
         }
+    }
+
+    function returnToDefault()
+    {
+        resetDate()
+        resetValue()
+        setTotalToggle(false)
+        setDateToggle(false)
     }
 };
 

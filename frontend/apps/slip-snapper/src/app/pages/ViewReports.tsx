@@ -73,6 +73,11 @@ const ViewReports: React.FC = () => {
   const [filterDateFrom, setFilterDateFrom] = useState("");
   const [filterDateTo, setFilterDateTo] = useState("");
 
+  const resetDate = () => {
+    setFilterDateFrom("")
+    setFilterDateTo("")
+  };
+
   setNewNames(reports)
 
   return (
@@ -264,6 +269,9 @@ const ViewReports: React.FC = () => {
             <IonToolbar color="primary">
               <IonTitle>Search Filter</IonTitle>
               <IonButtons slot="end">
+                <IonButton onClick={() => {
+                  returnToDefault()
+                }}>restore to default</IonButton>
                 <IonButton onClick={() => {
                   setIsOpenSearch(false); filter();
                 }}>Apply</IonButton>
@@ -525,7 +533,7 @@ const ViewReports: React.FC = () => {
   function checkDates() {
     const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
     const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
-    
+
     if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
       setFilterDateFrom("")
       setFilterDateTo("")
@@ -548,7 +556,10 @@ const ViewReports: React.FC = () => {
       }
     }
   }
-
+  function returnToDefault() {
+    resetDate()
+    setDateToggle(false)
+  }
 
 };
 
