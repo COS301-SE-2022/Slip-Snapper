@@ -277,7 +277,7 @@ export async function setGeneralBudget( budgets){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'stats/otherBudgets',
+        url: baseUrl + 'stats/categoryBudgets',
         data: JSON.stringify({
             budgets: budgets,
         })

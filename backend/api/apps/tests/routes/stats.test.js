@@ -5,13 +5,18 @@ const getUserStats = jest.fn();
 const getUserProfile = jest.fn();
 const getUserBudgets = jest.fn();
 const setUserBudgets = jest.fn();
-const verifyToken = jest.fn()
+const todaysReports = jest.fn();
+const updateWeeklyMonthlyCategoryBudgets = jest.fn();
+
+const verifyToken = jest.fn();
 
 const app = makeApp({
   getUserBudgets,
   setUserBudgets,
   getUserStats,
   getUserProfile,
+  updateWeeklyMonthlyCategoryBudgets,
+  todaysReports,
 },{},{
     verifyToken,
 })
@@ -170,7 +175,7 @@ describe('GET /stats', ()=>{
 /**
  * Test for the get budget
  */
- describe('Get /stats/profile', ()=>{
+describe('Get /stats/profile', ()=>{
     const token = ""
 
     beforeEach(()=>{
@@ -331,7 +336,7 @@ describe('GET /stats', ()=>{
 /**
  * Test for the update budget query
  */
- describe('POST /stats/budget', ()=>{
+describe('POST /stats/budget', ()=>{
     const token = ""
 
     beforeEach(()=>{
@@ -414,4 +419,178 @@ describe('GET /stats', ()=>{
         
         expect(res.statusCode).toEqual(200);
     })
+})
+
+/**
+ * Test for the update category budget query
+ */
+describe('POST /stats/categoryBudgets', ()=>{
+    const token = ""
+
+    beforeEach(()=>{
+        updateWeeklyMonthlyCategoryBudgets.mockReset();
+        verifyToken.mockReset();
+    })
+
+    test('Should Generate a report for the user', async ()=>{
+        const body = [
+            {userId:1, weeklyB: 1, monthlyB:1},
+            {userId:2, weeklyB: 2, monthlyB:2},
+            {userId:3, weeklyB: 3, monthlyB:3}
+        ]
+
+        const data = {}
+
+        for (const bod of body){
+            updateWeeklyMonthlyCategoryBudgets.mockReset();
+            updateWeeklyMonthlyCategoryBudgets.mockResolvedValue({
+                message: "User budget set",
+                weekly: 1,
+                monthly: 2,
+            });
+
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: bod.userId
+                }
+            });
+
+            const res = await request(app)
+                .post('/api/stats/categoryBudgets')
+                .send( bod )
+                .set({ "Authorization": "Bearer " + token })
+
+            expect(updateWeeklyMonthlyCategoryBudgets.mock.calls.length).toBe(1);
+            expect(updateWeeklyMonthlyCategoryBudgets.mock.calls[0][0]).toBe(bod.userId);
+        }
+    })
+
+    test('Should return a json object with the message', async ()=>{
+        updateWeeklyMonthlyCategoryBudgets.mockResolvedValue({
+            message: "User budget set",
+            weekly: 1,
+            monthly: 2,
+        });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
+        const res = await request(app)
+            .post('/api/stats/categoryBudgets')
+            .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .set({ "Authorization": "Bearer " + token })
+        
+        expect(res.body.message).toEqual("User budget set");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        updateWeeklyMonthlyCategoryBudgets.mockResolvedValue({
+            message: "User budget set",
+            weekly: 1,
+            monthly: 2,
+        });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
+        const res = await request(app)
+            .post('/api/stats/categoryBudgets')
+            .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .set({ "Authorization": "Bearer " + token })
+        
+        expect(res.statusCode).toEqual(200);
+    })
+})
+
+/**
+ * Test for the get budget
+ */
+describe('Get /stats/today', ()=>{
+    const token = ""
+
+    beforeEach(()=>{
+        todaysReports.mockReset();
+        verifyToken.mockReset();
+    })
+
+    test('Should get the user profile', async ()=>{
+        const userId = [
+            1,
+            2,
+            3
+        ]
+
+        for(const id of userId){
+            todaysReports.mockReset()
+            todaysReports.mockResolvedValue({
+                message: "Today's Stats retrieved",
+                sum: 0,
+                todaystotal: 0,
+            });
+
+            verifyToken.mockReset();
+            verifyToken.mockResolvedValue({
+                user: {
+                    id: id
+                }
+            });
+        
+            const res = await request(app)
+                .get('/api/stats/today')
+                .set({ "Authorization": "Bearer " + token })
+            
+            expect(todaysReports.mock.calls.length).toBe(1);
+            expect(todaysReports.mock.calls[0][0]).toBe(id);
+        }
+
+        
+    })
+
+    test('Should return a json object with the message', async ()=>{
+        todaysReports.mockResolvedValue({
+            message: "Today's Stats retrieved",
+            sum: 0,
+            todaystotal: 0,
+        });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
+        const res = await request(app)
+            .get('/api/stats/today')
+            .set({ "Authorization": "Bearer " + token })
+        
+        expect(res.body.message).toEqual("Today's Stats retrieved");
+    })
+
+    test('Should return a status code of 200', async ()=>{
+        todaysReports.mockResolvedValue({
+            message: "Today's Stats retrieved",
+            sum: 0,
+            todaystotal: 0,
+        });
+
+        verifyToken.mockResolvedValue({
+            user: {
+                id: 1
+            }
+        });
+
+        const res = await request(app)
+            .get('/api/stats/today')
+            .set({ "Authorization": "Bearer " + token })
+        
+        expect(res.statusCode).toEqual(200);
+    })
+
 })

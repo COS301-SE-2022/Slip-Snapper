@@ -88,7 +88,7 @@ router.post('/budget', async (req,res)=>{
  * Set the users budget
  * Uses the user id to get the items
  */
-router.post('/otherBudgets', async (req, res) => {
+router.post('/categoryBudgets', async (req, res) => {
     let { budgets } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
@@ -100,7 +100,7 @@ router.post('/otherBudgets', async (req, res) => {
                 budgets: {},
             });
     }
-
+    
     for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
             budgets[key].weeklyValue = parseFloat(budgets[key].weeklyValue)
@@ -117,7 +117,6 @@ router.post('/otherBudgets', async (req, res) => {
             budgets: result.budgets,
         });
 });
-
 
 /**
  * Get the user statistics
