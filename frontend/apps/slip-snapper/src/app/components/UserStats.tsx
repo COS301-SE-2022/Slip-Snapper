@@ -50,7 +50,7 @@ export const UserStats = () => {
             .then(apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
                     if(apiResponse.data)
-                       setPercentages(apiResponse.data.otherBudgets.percentages)
+                        setPercentages(apiResponse.data.otherBudgets.monthlyTotal)
                 }
             })
     }, []);
@@ -58,18 +58,18 @@ export const UserStats = () => {
     const [weekExPop, setWeekExPop] = useState(null);
     const [monthExPop, setMonthExPop] = useState(null);
     const [mostCategory, setMostCategory] = useState(null);
-    const [mostExpensive, setMostExpensive] = useState(null);
+    const [forecast, setForecast] = useState(null);
 
 
     const openWeekExPop = (event: any) => { setWeekExPop(event.currentTarget); };
     const openMonthExPop = (event: any) => { setMonthExPop(event.currentTarget); };
     const openMostCategory = (event: any) => { setMostCategory(event.currentTarget); };
-    const openMostExpensive = (event: any) => { setMostExpensive(event.currentTarget); };
+    const openForecast = (event: any) => { setForecast(event.currentTarget); };
 
     const closeWeekExPop = () => { setWeekExPop(null); };
     const closeMonthExPop = () => { setMonthExPop(null); };
     const closeMostCategory = () => { setMostCategory(null); };
-    const closeMostExpensive = () => { setMostExpensive(null); };
+    const closeForecast = () => { setForecast(null); };
 
     return (
         <div className="wrapper">
@@ -155,12 +155,12 @@ export const UserStats = () => {
             <IonCard className="card most-spent" color="primary">
                 <IonCardHeader>
                     <IonItem className="headings" color="primary">
-                        <IonCardTitle>Most Expensive Recent Purchase</IonCardTitle>
-                        <IonIcon src={helpCircleOutline} onClick={openMostExpensive} className="info-icon" />
+                        <IonCardTitle>Expenditure Forecasting</IonCardTitle>
+                        <IonIcon src={helpCircleOutline} onClick={openForecast} className="info-icon" />
                         <Popover
-                            open={Boolean(mostExpensive)}
-                            onClose={closeMostExpensive}
-                            anchorEl={mostExpensive}
+                            open={Boolean(forecast)}
+                            onClose={closeForecast}
+                            anchorEl={forecast}
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
@@ -170,15 +170,10 @@ export const UserStats = () => {
                                 horizontal: 'left',
                             }}
                         >
-                            <p className="popover-text">The most expensive purchase that you have made this month.</p>
+                            <p className="popover-text">Your forecasted expenditure over the next few weeks</p>
                         </Popover>
                     </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='storeName'>Item: {userStats.mostExpensive.name}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items" color="tertiary">
-                        <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount.toFixed(2)}</IonText>
-                    </IonItem>
+                   
                 </IonCardHeader>
             </IonCard>
         </div>
