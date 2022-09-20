@@ -14,6 +14,14 @@ import {
   IonAlert,
   IonCol,
   useIonToast,
+  IonSearchbar,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonLabel,
+  IonDatetime,
+  IonModal,
+  IonToggle,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { isPlatform } from '@ionic/core';
@@ -27,28 +35,21 @@ import {
   getAllUserReports,
   getUserReport,
   removeReport,
+  deleteSlip,
+  getAllSlips,
 } from '../../api/apiCall';
 import {destroySession} from "../../api/Session"
-
-export const mockTotals = [
-  { timePeriod: 'Daily', total: 'R200.02', title: 'generateDR', call: 'Daily' },
-  {
-    timePeriod: 'Weekly',
-    total: 'R800.02',
-    title: 'generateWR',
-    call: 'Weekly',
-  },
-  {
-    timePeriod: 'Monthly',
-    total: 'R1000.50',
-    title: 'generateMR',
-    call: 'Monthly',
-  },
-];
+import { calendarOutline, filter, filterOutline } from 'ionicons/icons';
+import { Slider } from '@mui/material';
 
 // day week month
 const ViewReports: React.FC = () => {
   const [reports, setReports] = useState<any[]>([]);
+  const [dateToggle, setDateToggle] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [isOpenSearch, setIsOpenSearch] = useState(false);
+
+
 
   const [deleteAlert, setDeleteAlert] = useState({
     state: false,
@@ -62,10 +63,16 @@ const ViewReports: React.FC = () => {
       if (typeof apiResponse.data !== 'string') {
         destroySession(apiResponse);
         setReports(apiResponse.data.reports);
-        
+        orderReports(reports)
       }
     });
   }, []);
+  orderReports(reports)
+
+  const [filterDates, setFilterDates] = useState({
+    from: "",
+    to: "",
+  });
 
   setNewNames(reports)
 
@@ -84,19 +91,17 @@ const ViewReports: React.FC = () => {
           <IonTitle>Create Reports</IonTitle>
         </IonItem>
         <IonRow>
-          {mockTotals.map((totals, index) => {
-            return (
-              <IonCol className="generate-item-col" key={index}>
+              <IonCol className="generate-item-col" >
                 <IonCard color="primary">
                   <IonCardHeader>
-                    <IonCardTitle>{totals.timePeriod}</IonCardTitle>
+                <IonCardTitle>Daily</IonCardTitle>
                   </IonCardHeader>
                   <IonItem color="tertiary">
                     <IonButton
                       fill="solid"
                       color="secondary"
                       onClick={() => {
-                        getSpread(totals.call);
+                        getSpread("Daily");
                       }}
                     >
                       Generate Excel
@@ -104,11 +109,11 @@ const ViewReports: React.FC = () => {
 
                     <IonButton
                       fill="solid"
-                      title={totals.title}
+                  title='generateDR'
                       slot="end"
                       color="secondary"
                       onClick={() => {
-                        generateReport(totals.call);
+                        generateReport('Daily');
                       }}
                     >
                       Generate Report
@@ -116,19 +121,88 @@ const ViewReports: React.FC = () => {
                   </IonItem>
                 </IonCard>
               </IonCol>
-            );
-          })}
+
+          <IonCol className="generate-item-col" >
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Weekly</IonCardTitle>
+              </IonCardHeader>
+              <IonItem color="tertiary">
+                <IonButton
+                  fill="solid"
+                  color="secondary"
+                  onClick={() => {
+                    getSpread("Weekly");
+                  }}
+                >
+                  Generate Excel
+                </IonButton>
+
+                <IonButton
+                  fill="solid"
+                  title='generateWR'
+                  slot="end"
+                  color="secondary"
+                  onClick={() => {
+                    generateReport('Weekly');
+                  }}
+                >
+                  Generate Report
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
+
+          <IonCol className="generate-item-col" >
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>Monthly</IonCardTitle>
+              </IonCardHeader>
+              <IonItem color="tertiary">
+                <IonButton
+                  fill="solid"
+                  color="secondary"
+                  onClick={() => {
+                    getSpread("Monthly");
+                  }}
+                >
+                  Generate Excel
+                </IonButton>
+
+                <IonButton
+                  fill="solid"
+                  title='generateMR'
+                  slot="end"
+                  color="secondary"
+                  onClick={() => {
+                    generateReport('Monthly');
+                  }}
+                >
+                  Generate Report
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
         </IonRow>
         <IonItem>
           <IonTitle>All Reports</IonTitle>
         </IonItem>
-        <IonCard color="primary" className="all-reports">
-          <IonCardHeader>
-            <IonCardTitle>Reports:</IonCardTitle>
+
+
+        <IonCard color="primary" className="receipts-table">
+          <IonCardHeader className='search-bar-header'>
+            <IonItem color='primary'>
+              <IonSearchbar className='search-bar-receipts' color="tertiary" id='searchBar' onIonChange={filter} />
+              <IonFab horizontal="end">
+                <IonFabButton onClick={() => setIsOpenSearch(true)} color="secondary" size="small">
+                  <IonIcon src={filterOutline} />
+                </IonFabButton>
+              </IonFab>
+            </IonItem> 
           </IonCardHeader>
           {reports?.map((report, index) => {
             return (
-              <IonItem key={index} color="tertiary">
+              <IonItem key={index} color="tertiary" id={'reportItem'+index}>
                 {report.otherName}
                 <IonButton
                   onClick={() => view(report.reportName)}
@@ -177,7 +251,45 @@ const ViewReports: React.FC = () => {
               </IonItem>
             );
           })}
+          
         </IonCard>
+
+        <IonModal onDidPresent={() => { toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
+          <IonHeader>
+            <IonToolbar color="primary">
+              <IonTitle>Search Filter</IonTitle>
+              <IonButtons slot="end">
+                <IonButton onClick={() => {
+                  setIsOpenSearch(false); filter();
+                }}>Apply</IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            <IonItem>
+              <IonLabel>Date Filter</IonLabel>
+              <IonToggle color='secondary' onIonChange={e => toggleDates(!dateToggle)} checked={dateToggle} onClick={() => setDateToggle(!dateToggle)} />
+            </IonItem>
+
+            <div id='date-div' className='date-div' color="primary" >
+              <IonItem>
+                <IonLabel>From:
+                  <IonItem className='date-item' color="tertiary">
+                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                    <IonIcon icon={calendarOutline} slot="end" />
+                  </IonItem>
+                </IonLabel>
+
+                <IonLabel>To:
+                  <IonItem className='date-item' color="tertiary">
+                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                    <IonIcon icon={calendarOutline} slot="end" />
+                  </IonItem>
+                </IonLabel>
+              </IonItem>
+            </div>
+          </IonContent>
+        </IonModal>
       </IonContent>
     </IonPage>
   );
@@ -334,6 +446,116 @@ const ViewReports: React.FC = () => {
       present("500 Internal Server Error", 1200)
     });
   }
+
+  function filter() {
+
+    for (let i = 0; i < reports.length; i++) {
+      const temp = document.getElementById("reportItem" + i)
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    const searchValue = document.getElementById("searchBar")?.getElementsByTagName("input")[0].value
+    if (searchValue !== "") {
+      searchFilter(searchValue)
+    }
+
+    if (dateToggle && checkDates())
+      if (document.getElementById("fromDate")?.getElementsByTagName("input")[0].value !== "" || document.getElementById("toDate")?.getElementsByTagName("input")[0].value !== "") {
+        dateFilter()
+      }
+  }
+
+  function searchFilter(searchText: string | undefined) {
+
+    if (searchText !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (!reports[i].otherName.toLowerCase().includes(searchText.toLowerCase())) {
+          const temp = document.getElementById("reportItem" + i)
+          if (temp !== null)
+            temp.style.display = "none";
+        }
+        // else if (reports[i].transactionDate.split('T')[0].replace(/-/gi, "/").split('/').reverse().join('/').includes(searchText.toLowerCase())) {
+        //   const temp = document.getElementById("slipItem" + i)
+        //   if (temp !== null)
+        //     temp.style.display = "none";
+        // }
+      }
+    }
+  }
+
+  function toggleDates(state: any) {
+    const temp = document.getElementById('date-div')
+    if (state) {
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    if (!state) {
+      if (temp !== null)
+        temp.style.display = "none";
+    }
+  }
+
+  function dateFilter() {
+
+    const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+    const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+
+    if (fromDate !== "" && fromDate !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (fromDate > reports[i].transactionDate) {
+          const temp = document.getElementById("slipItem" + i)
+          if (temp !== null)
+            temp.style.display = "none";
+        }
+      }
+    }
+
+    if (toDate !== "" && toDate !== undefined) {
+      for (let i = 0; i < reports.length; i++) {
+        if (toDate < reports[i].transactionDate) {
+          const temp = document.getElementById("slipItem" + i)
+          if (temp !== null)
+            temp.style.display = "none";
+        }
+      }
+    }
+    if (fromDate !== undefined && toDate !== undefined)
+      setFilterDates({ from: fromDate, to: toDate })
+  }
+
+  function checkDates() {
+    const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+    const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+
+
+    if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
+      document.getElementById("fromDate")?.setAttribute("input", "")
+      setFilterDates({ from: "", to: "" })
+      setShowAlert(true)
+      return false
+    }
+
+    return true;
+  }
+  function orderReports(reports: any) {
+    let temp: any;
+
+    for (let i = 0; i < reports.length; i++) {
+      for (let j = 1; j < (reports.length - i); j++) {
+        if (reports[j - 1].reportId < reports[j].reportId) {
+          temp = reports[j - 1]
+          reports[j - 1] = reports[j]
+          reports[j] = temp;
+        }
+      }
+    }
+    console.log(reports)
+
+  }
+
+
 };
 
 export default ViewReports;

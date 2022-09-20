@@ -35,7 +35,6 @@ const SlipItems: React.FC = () => {
         id: 0,
     });
 
-    const current = new Date();
     const [filterDates, setFilterDates] = useState({
         from: "",
         to: "",
