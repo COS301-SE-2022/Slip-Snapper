@@ -4,11 +4,12 @@ import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/slip-items.css';
 import { calendarOutline, filterOutline } from 'ionicons/icons';
 import { Slider } from '@mui/material';
+import { destroySession } from "../../api/Session"
+
 
 const SlipItems: React.FC = () => {
     const [originalSlips, setOriginalSlips] = useState<any[]>([]);
     const [slipItems, setSlipItems] = useState<any[]>([]);
-    const [present, dismiss] = useIonToast();
 
     const [totalToggle, setTotalToggle] = useState(false);
     const [dateToggle, setDateToggle] = useState(false);
@@ -20,6 +21,7 @@ const SlipItems: React.FC = () => {
             .then(
                 apiResponse => {
                     if (typeof (apiResponse.data) !== "string") {
+                        destroySession(apiResponse);
                         orderSlips(apiResponse.data.slips)
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)
@@ -32,11 +34,9 @@ const SlipItems: React.FC = () => {
         id: 0,
     });
 
-    const current = new Date();
-    const [filterDates, setFilterDates] = useState({
-        from: "",
-        to: "",
-    });
+    const [filterDateFrom, setFilterDateFrom] = useState("");
+    const [filterDateTo, setFilterDateTo] = useState("");
+
 
     const [value, setValue] = React.useState<number[]>([0, 5000]);
 
@@ -50,12 +50,9 @@ const SlipItems: React.FC = () => {
     };
 
     const resetDate = () => {
-        setFilterDates({
-            from: "",
-            to: "",
-        });
+        setFilterDateFrom("")
+        setFilterDateTo("")
     };
-
     const marks = [
         {
             value: 0,
@@ -81,12 +78,12 @@ const SlipItems: React.FC = () => {
             <IonCard color="primary" className="receipts-table">
                 <IonCardHeader className='search-bar-header'>
                     <IonItem color='primary'>
-                    <IonSearchbar className='search-bar-receipts' color="tertiary" id='searchBar' onIonChange={filter}/>
-                    <IonFab horizontal="end">
-                        <IonFabButton onClick={() => setIsOpenSearch(true)} color="secondary" size="small">
-                            <IonIcon src={filterOutline}/>
-                        </IonFabButton>
-                    </IonFab>
+                        <IonSearchbar className='search-bar-receipts' color="tertiary" id='searchBar' onIonChange={filter} />
+                        <IonFab horizontal="end">
+                            <IonFabButton onClick={() => setIsOpenSearch(true)} color="secondary" size="small">
+                                <IonIcon src={filterOutline} />
+                            </IonFabButton>
+                        </IonFab>
                     </IonItem>
                 </IonCardHeader>
 
@@ -99,9 +96,9 @@ const SlipItems: React.FC = () => {
                             <div className='total-mobile'>
                                 {"Total: R" + item.total.toFixed(2)}
                             </div>
-                            <IonButton routerLink="/editreceipt"  id={item.id + "b"} color="secondary" slot="end" onClick={() => {
+                            <IonButton routerLink="/editreceipt" id={item.id + "b"} color="secondary" slot="end" onClick={() => {
                                 localStorage.removeItem('editSlip')
-                                localStorage.setItem('editSlip', JSON.stringify(item))                             
+                                localStorage.setItem('editSlip', JSON.stringify(item))
                             }}>Edit</IonButton>
                             <IonButton
                                 onClick={() =>
@@ -156,54 +153,56 @@ const SlipItems: React.FC = () => {
                 buttons={['Ok']}
             />
 
-            <IonModal onDidPresent={() => { toggleTotalFilter(totalToggle); toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => {setIsOpenSearch(false); filter() }}>
+            <IonModal onDidPresent={() => { toggleTotalFilter(totalToggle); toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
                 <IonHeader>
-                <IonToolbar color="primary">
-                    <IonTitle>Search Filter</IonTitle>
-                    <IonButtons slot="end">
-                    <IonButton onClick={() => {
-                        setIsOpenSearch(false); filter();
-                    }}>Apply</IonButton>
-                    </IonButtons>
-                </IonToolbar>
+                    <IonToolbar color="primary">
+                        <IonTitle>Search Filter</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => {
+                                returnToDefault()
+                            }}>restore to default</IonButton>
+                            <IonButton onClick={() => {
+                                setIsOpenSearch(false); filter();
+                            }}>Apply</IonButton>
+                        </IonButtons>
+                    </IonToolbar>
                 </IonHeader>
                 <IonContent>
-                <IonItem>
+                    <IonItem>
                         <IonLabel>Total Filter</IonLabel>
-                        <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(!totalToggle)} checked={totalToggle} onClick={() => setTotalToggle(!totalToggle)}/>
+                        <IonToggle color='secondary' onIonChange={e => toggleTotalFilter(!totalToggle)} checked={totalToggle} onClick={() => setTotalToggle(!totalToggle)} />
                     </IonItem>
 
                     <div id='totalSlider' className='totalSlider'>
-                    <Slider
-                        getAriaLabel={() => 'Total range'}
-                        value={value}
-                        onChange={handleChange}
-                        valueLabelDisplay="auto"
-                        min={0}
-                        max={5000}
-                        step={100}
-                        marks={marks}
-                        color={'secondary'}
-                    />
+                        <Slider
+                            getAriaLabel={() => 'Total range'}
+                            value={value}
+                            onChange={handleChange}
+                            valueLabelDisplay="auto"
+                            min={0}
+                            max={5000}
+                            step={100}
+                            marks={marks}
+                            color={'secondary'}
+                        />
                     </div>
 
                     <IonItem>
                         <IonLabel>Date Filter</IonLabel>
-                        <IonToggle color='secondary' onIonChange={e => toggleDates(!dateToggle)} checked={dateToggle} onClick={() => setDateToggle(!dateToggle)}/>
+                        <IonToggle color='secondary' onIonChange={e => toggleDates(!dateToggle)} checked={dateToggle} onClick={() => setDateToggle(!dateToggle)} />
                     </IonItem>
 
                     <div id='date-div' className='date-div' color="primary" >
                         <IonItem>
                             <IonLabel>From:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.from} displayFormat='DD/MM/YYYY' id={"fromDate"} />
+                                    <IonDatetime onIonChange={e => { setFilterDateFrom(e.detail.value!) }} value={filterDateFrom} displayFormat='DD/MM/YYYY' id={"fromDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
-
                             <IonLabel>To:
                                 <IonItem className='date-item' color="tertiary">
-                                    <IonDatetime onIonChange={() => checkDates()} value={filterDates.to} displayFormat='DD/MM/YYYY' id={"toDate"} />
+                                    <IonDatetime onIonChange={e => { setFilterDateTo(e.detail.value!) }} value={filterDateTo} displayFormat='DD/MM/YYYY' id={"toDate"} />
                                     <IonIcon icon={calendarOutline} slot="end" />
                                 </IonItem>
                             </IonLabel>
@@ -265,8 +264,6 @@ const SlipItems: React.FC = () => {
         if (!state) {
             if (temp !== null)
                 temp.style.display = "none";
-
-            setSlipItems(originalSlips)
         }
     }
 
@@ -285,9 +282,8 @@ const SlipItems: React.FC = () => {
     }
 
     function dateFilter() {
-
-        const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-        const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
+        const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
         if (fromDate !== "" && fromDate !== undefined) {
             for (let i = 0; i < originalSlips.length; i++) {
@@ -308,19 +304,15 @@ const SlipItems: React.FC = () => {
                 }
             }
         }
-        if (fromDate !== undefined && toDate !== undefined)
-            setFilterDates({ from: fromDate, to: toDate })
     }
 
-    function checkDates()
-    {
-        const fromDate = document.getElementById("fromDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-        const toDate = document.getElementById("toDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-
+    function checkDates() {
+        const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
+        const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
         if (toDate !== "" && fromDate !== "" && toDate !== undefined && fromDate !== undefined && toDate < fromDate) {
-            document.getElementById("fromDate")?.setAttribute("input","")
-            setFilterDates({ from: "", to: "" })
+            setFilterDateFrom("")
+            setFilterDateTo("")
             setShowAlert(true)
             return false
         }
@@ -328,14 +320,11 @@ const SlipItems: React.FC = () => {
         return true;
     }
 
-    function totalFilter()
-    {
+    function totalFilter() {
         for (let i = 0; i < originalSlips.length; i++) {
 
-            if(value[1]===5000)
-            {
-                if (value[0] > originalSlips[i].total)
-                {
+            if (value[1] === 5000) {
+                if (value[0] > originalSlips[i].total) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
                         temp.style.display = "none";
@@ -361,6 +350,14 @@ const SlipItems: React.FC = () => {
                 }
             }
         }
+    }
+
+    function returnToDefault()
+    {
+        resetDate()
+        resetValue()
+        setTotalToggle(false)
+        setDateToggle(false)
     }
 };
 

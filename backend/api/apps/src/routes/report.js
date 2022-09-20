@@ -15,11 +15,15 @@ const router = require("express").Router();
         case "Daily":
             return periodEnd;
         case "Weekly":
-            date.setDate(date.getDate() - 7);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
-        case "Monthly":
-            date.setMonth(date.getMonth() - 1);
-            return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            date.setDate(date.getDate())
+            var day = date.getDay(),
+                diff = date.getDate() - day + (day == 0 ? -6 : 1);
+            let monday = new Date(date.setDate(diff));
+            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+               
+            case "Monthly":
+                date.setDate(1)
+                return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
         // case "Yearly":
         //     d.setFullYear(date.getFullYear() - 1);
         //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
@@ -162,18 +166,18 @@ async function generatePDF(name, object, today, period){
  * @param {*} allItems 
  * @returns the workbook object
  */
-async function generateSpreadsheet(name, allItems){
+async function generateSpreadsheet(name, allItems){    
     const types = await sortItemsIntoCategories(allItems);
-
+    
     const workbook = new Excel.Workbook();
     const allItemSheet = workbook.addWorksheet('All Items');
     allItemSheet.columns = [
+        {header: 'Date', key:'date', width: 11},
         {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
         {header: 'Type', key:'type', width: 12},
         {header: 'Quantity', key:'quantity', width: 11},
         {header: 'Price', key:'price', width: 11},
-        {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
-        {header: 'Date', key:'date', width: 11},
         {},{},
         {width: 15},
     ]
@@ -183,48 +187,50 @@ async function generateSpreadsheet(name, allItems){
         horizontal: 'center'
     }
     
-    allItems.map((item) => {
-        let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
-        let row = allItemSheet.addRow(data);
-    })
+    if(allItems.length !== 0){
+        allItems.map((item) => {
+            let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
+            let row = allItemSheet.addRow(data);
+        })
+    
+        allItemSheet.getCell('I2').value = "Total Quantity:"; 
+        allItemSheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0 }; 
+        allItemSheet.getCell('I3').value = "Total Price:"; 
+        allItemSheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0 }; 
 
-    allItemSheet.getCell('I2').value = "Total Quantity:"; 
-    allItemSheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
-    allItemSheet.getCell('I3').value = "Total Price:"; 
-    allItemSheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
-
-    for(const key in types.types){
-        if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
-            const sheet = workbook.addWorksheet(key);
-            sheet.columns = [
-                {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
-                {header: 'Type', key:'type', width: 12},
-                {header: 'Quantity', key:'quantity', width: 11},
-                {header: 'Price', key:'price', width: 11},
-                {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
-                {header: 'Date', key:'date', width: 11},
-                {},{},
-                {width: 15},
-            ]
-        
-            const titleRow = sheet.getRow(1);
-            titleRow.alignment = {
-                horizontal: 'center'
+        for(const key in types.types){
+            if(types.types.hasOwnProperty(key) && types.types[key].length > 0){
+                const sheet = workbook.addWorksheet(key);
+                sheet.columns = [
+                    {header: 'Date', key:'date', width: 11},
+                    {header: 'Item Name', key:'itemName', width: allItems.reduce((w,r) => Math.max(w, r.itemName.length), 10) +1},
+                    {header: 'Location', key:'location', width: allItems.reduce((w,r) => Math.max(w, r.location.length), 10) +1},
+                    {header: 'Type', key:'type', width: 12},
+                    {header: 'Quantity', key:'quantity', width: 11},
+                    {header: 'Price', key:'price', width: 11},
+                    {},{},
+                    {width: 15},
+                ]
+            
+                const titleRow = sheet.getRow(1);
+                titleRow.alignment = {
+                    horizontal: 'center'
+                }
+    
+                types.types[key].map((item) => {
+                    let data = [ item.date, item.itemName, item.location, item.type, item.quantity, parseFloat(item.price) ];
+                    let row = sheet.addRow(data);
+                })
+                
+                sheet.getCell('I2').value = "Total Quantity:"; 
+                sheet.getCell('J2').value = { formula: 'SUM(E2:'+allItemSheet.lastRow._cells[4]._address+")", result: 0 }; 
+                sheet.getCell('I3').value = "Total Price:"; 
+                sheet.getCell('J3').value = { formula: 'SUM(F2:'+allItemSheet.lastRow._cells[5]._address+")", result: 0 }; 
             }
-
-            types.types[key].map((item) => {
-                let data = [item.itemName, item.type, item.quantity, parseFloat(item.price), item.location, item.date];
-                let row = sheet.addRow(data);
-            })
-
-            sheet.getCell('I2').value = "Total Quantity:"; 
-            sheet.getCell('J2').value = { formula: 'SUM(C2:'+allItemSheet.lastRow._cells[2]._address+")", result: 0.14 }; 
-            sheet.getCell('I3').value = "Total Price:"; 
-            sheet.getCell('J3').value = { formula: 'SUM(D2:'+allItemSheet.lastRow._cells[3]._address+")", result: 0.14 }; 
-        }
+        }    
     }
-
-    await workbook.xlsx.writeFile(__dirname+'/'+name+'.xlsx');
+    
+    await workbook.xlsx.writeFile(__dirname+'/'+name);
  
     return workbook;
 }
@@ -248,7 +254,7 @@ router.post('/pdf', async (req,res)=>{
     }
 
     const today = new Date();
-    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     const periodStart = await determinePeriodStart(period, periodEnd);
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
@@ -349,183 +355,6 @@ router.delete('/pdf', async (req,res)=>{
 });
 
 /**
- * Get the users budget
- * Uses the user id to get the items
- */
-router.get('/profile', async (req,res)=>{
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-                weeklyTotal: 0,
-                weekly: 0,
-                monthlyTotal: 0,
-                monthly: 0,
-                favouriteStore: {
-                    name: "",
-                    receipts: [],
-                },
-                otherBudgets: {},
-            });
-    }
-    
-    const result = await req.app.get('db').getUserProfile(Number(tokenVerified.user.id));
-
-    let status = 200;
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            weeklyTotal: result.budget.weeklyTotal,
-            weekly: result.budget.weekly,
-            monthlyTotal: result.budget.monthlyTotal,
-            monthly: result.budget.monthly,
-            favouriteStore: {
-                name: result.storeDetails.storeLocation,
-                receipts: result.storeDetails.slips,
-            },
-            otherBudgets: result.budgets,
-        });
-    
-});
-
-/**
- * Set the users budget
- * Uses the user id to get the items
- */
-router.post('/budget', async (req,res)=>{
-    let { weekly, monthly } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-    
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-                weekly: 0,
-                monthly: 0,
-            });
-    }
-
-    let data = {}
-    if(weekly != null){
-        data.weeklyBudget = weekly
-    }
-
-    if(monthly != null){
-        data.monthlyBudget = monthly
-    }
-
-    const result = await req.app.get('db').setUserBudgets( Number(tokenVerified.user.id), data);
-
-    let status = 200;
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            weekly: result.weekly,
-            monthly: result.monthly,
-        });
-});
-
-/**
- * Set the users budget
- * Uses the user id to get the items
- */
-router.post('/otherBudgets', async (req, res) => {
-    let { budgets } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-
-    if (tokenVerified === "Error") {
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-                budgets: {},
-            });
-    }
-
-    for (const key in budgets) {
-        if (budgets.hasOwnProperty(key)) {
-            budgets[key].weeklyValue = parseFloat(budgets[key].weeklyValue)
-            budgets[key].monthlyValue = parseFloat(budgets[key].monthlyValue)
-        }
-    }
-
-    const result = await req.app.get('db').updateWeeklyMonthlyCategoryBudgets(Number(tokenVerified.user.id), budgets);
-    let status = 200;
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            budgets: result.budgets,
-        });
-});
-
-
-/**
- * Get the user statistics
- * Uses the user Id
- */
-router.get('/statistics', async (req,res)=>{
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-
-                category: {
-                    amount: 0,
-                    name: ""
-                },
-                mostExpensive: {
-                    amount: 0,
-                    name: ""
-                },
-                lastWeek:{
-                    current: 0,
-                    previous: 0
-                },
-                lastMonth:{
-                    current: 0,
-                    previous: 0
-                }
-            });
-    }
-
-    const result = await req.app.get('db').getUserStats( Number(tokenVerified.user.id) );
-    let status = 200;
-
-    return res.status(status)
-        .send({
-            message : result.message,
-
-            category: {
-                amount: result.category.amount,
-                name: result.category.category
-            },
-            mostExpensive: {
-                amount: result.expensiveItem.expensiveItem,
-                name: result.expensiveItem.dataItem
-            },
-            lastWeek:{
-                current: result.week.recentWeek,
-                previous: result.week.previousWeek
-            },
-            lastMonth:{
-                current: result.month.recentMonth,
-                previous: result.month.previousMonth
-            }
-        });
-});
-
-/**
  * Get all the reports for a particular user
  * Uses the user id to get all linked reports
  */
@@ -617,37 +446,6 @@ router.get('/thisweek', async (req, res) => {
 });
 
 /**
- * Get today's expenditure stats
- */
-router.get('/today', async (req, res) => {
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-
-    if(tokenVerified === "Error"){
-        return res.status(200)
-            .send({
-                message: "Token has expired Login again to continue using the application",
-                totalItems: 0,
-                totalSpent: 0
-            });
-    }
-
-    const result = await req.app.get("db").todaysReports(Number(tokenVerified.user.id));
-
-    let status = 200;
-
-    //TODO error checking
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            totalItems: result.sum,
-            totalSpent: result.todaystotal
-        });
-
-});
-
-/**
  * Generate a excel spreadsheet for a user
  */
 router.post('/spreadsheet', async (req, res) => {
@@ -659,18 +457,17 @@ router.post('/spreadsheet', async (req, res) => {
         return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                title: "",
-                reportTotal: 0
             });
     }
-
+    console.log(tokenVerified)
     const today = new Date();
-    const periodEnd = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate()
+    const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
     const periodStart = await determinePeriodStart(period, periodEnd);
 
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    const name = "Report.xlsx";
 
-    const spreadSheet = await generateSpreadsheet("Report",result.itemList)
+    const spreadSheet = await generateSpreadsheet(name,result.itemList);
 
     let status = 200;
 
@@ -682,6 +479,10 @@ router.post('/spreadsheet', async (req, res) => {
         .then(() => {
             res.end();
         });
+
+    try {
+        await fsPromises.unlink(__dirname+"/"+name);
+    } catch (err) {}
 });
 
 module.exports.router = router;
