@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import { Chip } from '@mui/material';
 
 const Login: React.FC = () => {
-
+  sessionStorage.removeItem('token')
   const [usernameInput, setUsernameInput] = useState<string>();
   const [passwordInput, setPasswordInput] = useState<string>();
   const [errorAlert, setAlert] = useState(false);
