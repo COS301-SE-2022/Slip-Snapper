@@ -1,3 +1,5 @@
+const { body, validationResult, oneOf } = require('express-validator');
+
 const router = require("express").Router();
 
 /**
@@ -50,38 +52,45 @@ router.get('/profile', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/budget', async (req,res)=>{
-    let { weekly, monthly } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
-    const tokenVerified = await req.app.get('token').verifyToken(token);
-    
-    if(tokenVerified === "Error"){
+        const token = req.headers.authorization.split(' ')[1];
+        const tokenVerified = await req.app.get('token').verifyToken(token);
+        
+        if(tokenVerified === "Error"){
+            return res.status(403)
+                .send({
+                    message: "Token has expired Login again to continue using the application",
+                    weekly: 0,
+                    monthly: 0,
+                });
+        }
+
+        let { weekly, monthly } = req.body;
+        if( (weekly == null && monthly == null) || 
+            (weekly != null && typeof(weekly) != 'number') ||
+            (monthly != null && typeof(monthly) != 'number') 
+        ){
+            return res.status(400)
+                .send({
+                    message: "Missing or Invalid input data",
+                });
+        }
+        
+        let data = {}
+        if(weekly != undefined){
+            data.weeklyBudget = weekly
+        }
+        if(monthly!= undefined){
+            data.monthlyBudget = monthly
+        }
+
+        const result = await req.app.get('db').setUserBudgets( Number(tokenVerified.user.id), data);
+
         return res.status(200)
             .send({
-                message: "Token has expired Login again to continue using the application",
-                weekly: 0,
-                monthly: 0,
+                message: result.message,
+                weekly: result.weekly,
+                monthly: result.monthly,
             });
-    }
-
-    let data = {}
-    if(weekly != null){
-        data.weeklyBudget = weekly
-    }
-
-    if(monthly != null){
-        data.monthlyBudget = monthly
-    }
-
-    const result = await req.app.get('db').setUserBudgets( Number(tokenVerified.user.id), data);
-
-    let status = 200;
-
-    return res.status(status)
-        .send({
-            message: result.message,
-            weekly: result.weekly,
-            monthly: result.monthly,
-        });
 });
 
 /**
@@ -89,7 +98,6 @@ router.post('/budget', async (req,res)=>{
  * Uses the user id to get the items
  */
 router.post('/categoryBudgets', async (req, res) => {
-    let { budgets } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -101,6 +109,17 @@ router.post('/categoryBudgets', async (req, res) => {
             });
     }
     
+    let { budgets } = req.body;
+    // if( (weekly == null && monthly == null) || 
+    //         (weekly != null && typeof(weekly) != 'number') ||
+    //         (monthly != null && typeof(monthly) != 'number') 
+    //     ){
+    //         return res.status(400)
+    //             .send({
+    //                 message: "Missing or Invalid input data",
+    //             });
+    //     }
+
     for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
             budgets[key].weeklyValue = parseFloat(budgets[key].weeklyValue)
