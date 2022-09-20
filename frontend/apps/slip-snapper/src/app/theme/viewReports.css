@@ -64,4 +64,8 @@
     .generate-item-col {
         min-width: 100%;
     }
+
+    .excel-desktop{
+        display: none;
+    }
 }
