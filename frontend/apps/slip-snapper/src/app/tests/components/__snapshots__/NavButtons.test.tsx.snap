@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavButtons> should render component 1`] = `
+<div>
+  <ion-button
+    onClick={[Function]}
+  >
+    Home
+  </ion-button>
+  <ion-button
+    onClick={[Function]}
+  >
+    Reports
+  </ion-button>
+  <ion-button
+    onClick={[Function]}
+  >
+    Profile
+  </ion-button>
+  <ion-button
+    onClick={[Function]}
+  >
+    Receipts
+  </ion-button>
+</div>
+`;

@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SlipItems> should render component 1`] = `
+<div>
+  <ion-item
+    onClick={[Function]}
+  >
+    <ion-title>
+      All Receipts
+    </ion-title>
+  </ion-item>
+  <ion-card
+    color="primary"
+    onClick={[Function]}
+  >
+    <ion-card-header>
+      <ion-item
+        color="primary"
+        onClick={[Function]}
+      >
+        <ion-searchbar
+          color="tertiary"
+          id="searchBar"
+        />
+        <ion-fab
+          horizontal="end"
+        >
+          <ion-fab-button
+            color="secondary"
+            onClick={[Function]}
+            size="small"
+          >
+            <ion-icon
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Filter</title><path stroke-linecap='round' stroke-linejoin='round' d='M32 144h448M112 256h288M208 368h96' class='ionicon-fill-none ionicon-stroke-width'/></svg>"
+            />
+          </ion-fab-button>
+        </ion-fab>
+      </ion-item>
+    </ion-card-header>
+  </ion-card>
+</div>
+`;

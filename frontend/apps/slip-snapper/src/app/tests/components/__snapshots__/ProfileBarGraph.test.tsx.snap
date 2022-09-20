@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Should render Graph component should render component with props 1`] = `
+exports[`<ProfileBarGraph> should render component with props 1`] = `
 <canvas
   className="graph"
   height={150}
