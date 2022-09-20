@@ -23,11 +23,13 @@ function makeApp( database, parser = {}, token = {}, bucket = {}){
     const itemRoute = require("./routes/item").router
     const reportRoute = require("./routes/report").router
     const ocrRoute = require("./routes/ocr").router
+    const statsRoute = require("./routes/stats").router
     //router middleware
     app.use("/api/user",authRoute);
     app.use("/api/item",itemRoute);
     app.use("/api/report",reportRoute);
     app.use("/api/ocr",ocrRoute);
+    app.use("/api/stats",statsRoute);
 
     return app;
 }

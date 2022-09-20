@@ -60,11 +60,17 @@ export async function getItemsA(){
     })
 }
 
+/**
+ * Set the users personal budgets
+ * @param {*} weekly the weekly value
+ * @param {*} monthly the monthly value
+ * @returns the reposnse from the server
+ */
 export async function setBudgetA( weekly, monthly){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'report/budget',
+        url: baseUrl + 'stats/budget',
         data: JSON.stringify({
             weekly: weekly,
             monthly: monthly
@@ -72,11 +78,15 @@ export async function setBudgetA( weekly, monthly){
     })
 }
 
+/**
+ * Get the user stats for the profile page
+ * @returns the reposnse from the server
+ */
 export async function getProfileData( ){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/profile',
+        url: baseUrl + 'stats/profile',
     })
 }
 
@@ -101,6 +111,8 @@ export async function loginA( userName, password){
 /**
  * To sign a user up
  * @param {*} userName the users username
+ * @param {*} firstName the user first name
+ * @param {*} lastName the user first name
  * @param {*} email the users email
  * @param {*} password the users password
  * @returns response from the server
@@ -133,11 +145,15 @@ export async function generateReportA( userName, period,newReportNumber ){
     })
 }
 
+/**
+ * To get the user statistics
+ * @returns response from the server
+ */
 export async function getStatsA(  ){
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/statistics',
+        url: baseUrl + 'stats',
       })
 }
 
@@ -240,19 +256,28 @@ export async function updateSlipA(  updateSlip, insertItems,updateItems, removeI
     })
 }
 
+/**
+ * Get the users expenditure stats for today
+ * @returns the response from the server
+ */
 export async function getTodayStats() {
     return axios({
         headers: headers,
         method: 'get',
-        url: baseUrl + 'report/today',
+        url: baseUrl + 'stats/today',
     })
 }
 
+/**
+ * Set the user category budgets
+ * @param {*} budgets the budgets to set
+ * @returns the response from the server
+ */
 export async function setGeneralBudget( budgets){
     return axios({
         headers: headers,
         method: 'post',
-        url: baseUrl + 'report/otherBudgets',
+        url: baseUrl + 'stats/categoryBudgets',
         data: JSON.stringify({
             budgets: budgets,
         })
