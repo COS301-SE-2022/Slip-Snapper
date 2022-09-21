@@ -106,6 +106,7 @@ async function sortItemsIntoCategories(itemList){
         totals
     }
 }
+
 /**
  * Function to generate a pdf
  * @param {*} name The name of the pdf
@@ -236,23 +237,42 @@ async function generateSpreadsheet(name, allItems){
 }
   
 /**
+ * Function to validate pdf file generation
+ * @param {*} period the period
+ * @param {*} newReportNumber the period
+ * @return boolean (true if invalid)
+ */
+function validateGeneratePDF(period, newReportNumber){
+    return (
+        ( period == null || newReportNumber == null) ||
+        ( typeof(period) != 'string' || !( ['Daily','Weekly','Monthly'].includes(period) ) ) ||
+        ( typeof(newReportNumber) != 'number' || newReportNumber < 0 )
+    )
+}
+
+/**
  * Generate the pdf report for a user
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
 router.post('/pdf', async (req,res)=>{
-    let { period, userName, newReportNumber } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                title: "",
-                reportTotal: 0
             });
     }
 
+    let { period, newReportNumber } = req.body;
+    if( validateGeneratePDF( period, newReportNumber )){  
+        return res.status(400)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+    
     const today = new Date();
     const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     const periodStart = await determinePeriodStart(period, periodEnd);
@@ -266,7 +286,7 @@ router.post('/pdf', async (req,res)=>{
     const report = await generatePDF(pdfName, types, today, period)
     
     if(report){
-        const path = `${userName}/${name}`
+        const path = `${tokenVerified.userName}/${name}`
         const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
         const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
@@ -285,8 +305,6 @@ router.post('/pdf', async (req,res)=>{
     return res.status(503)
         .send({
             message: "Report unable to uploaded",
-            title: "",
-            reportTotal: 0
         });
 });
  

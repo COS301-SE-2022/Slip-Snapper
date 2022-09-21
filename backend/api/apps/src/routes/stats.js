@@ -7,7 +7,7 @@ const router = require("express").Router();
  */
 function validateCategoryBudget(category){
     return ( 
-        (Object.keys(category).join() != ([ 'active', 'timeFrame', 'weeklyValue', 'monthlyValue' ]).join()) ||
+        (Object.keys(category).join() != [ 'active', 'timeFrame', 'weeklyValue', 'monthlyValue' ].join()) ||
         (category.weeklyValue == null || category.monthlyValue == null || category.active == null || category.timeFrame == null) || 
         (category.active != null && typeof(category.active) != 'boolean') ||
         (category.timeFrame != null && typeof(category.timeFrame) != 'boolean') ||
@@ -114,7 +114,6 @@ router.post('/categoryBudgets', async (req, res) => {
     let { budgets } = req.body;
     for (const key in budgets) {
         if (budgets.hasOwnProperty(key)) {
-            console.log(validateCategoryBudget(budgets[key]))
             if( (!(['FoodBudget', 'FashionBudget', 'ElectronicsBudget', 'HouseholdBudget', 'OtherBudget', 'HobbyBudget', 'HealthcareBudget', 'VehicleBudget'].includes(key))) ||
                 validateCategoryBudget(budgets[key])
             ){  

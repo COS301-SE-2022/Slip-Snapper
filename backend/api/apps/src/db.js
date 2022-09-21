@@ -19,7 +19,8 @@ async function getUser(userName) {
             return {
                 message: "Error validating user Details",
                 user: null,
-                token: { password: "" },
+                token: null,
+                password: "",
             };
         }
 
@@ -34,8 +35,8 @@ async function getUser(userName) {
                 email: user.email,
                 weeklyBudget: user.weeklyBudget,
                 monthlyBudget: user.weeklyBudget,
-                password: user.password,
             },
+            password: user.password,
         };
     }
     catch (error) {
@@ -43,7 +44,8 @@ async function getUser(userName) {
         return {
             message: "Error validating user Details",
             user: null,
-            token: { password: "" },
+            token: null,
+            password: "",
         };
     }
 
@@ -147,11 +149,11 @@ async function addUser(username, password, firstname, lastname, email) {
                 email: user.email,
                 weeklyBudget: user.weeklyBudget,
                 monthlyBudget: user.weeklyBudget,
-                password: user.password,
             },
         };
     }
     catch (error) {
+        console.log(error)
         return {
             message: "Error Creating User",
             user: null,
