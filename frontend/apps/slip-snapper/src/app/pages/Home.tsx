@@ -37,6 +37,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { async } from 'rxjs/internal/scheduler/async';
 
 ChartJS.register(
   CategoryScale,
@@ -55,9 +56,9 @@ const Home: React.FC = () => {
   const [reports, setR] = useState<any[]>([]);
 
   const [graphData, setGraphData] = useState<any[]>([])
-  useEffect(() => {
+   useEffect(() => {
     
-    getRecentReports()
+      getRecentReports()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           destroySession(apiResponse);
@@ -139,7 +140,7 @@ const Home: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>This Week's Reports:</IonCardTitle>
               </IonCardHeader>
-              {thisWeeksReports?.map((item, index) => {
+              {thisWeeksReports ? thisWeeksReports?.map((item, index) => {
                 return (
                   <IonItem key={index} color="tertiary">
                     {item.otherName}
@@ -158,10 +159,12 @@ const Home: React.FC = () => {
                     </IonButton>
                   </IonItem>
                 );
-              })}
-              <IonItem id='emptyWeekReports' className='emptyWeekReports' color="tertiary">
+              }) : <IonItem  color="tertiary">
                 You currently have no reports for this week.
-                </IonItem>
+              </IonItem>}
+              {/* <IonItem id='emptyWeekReports' className='emptyWeekReports' color="tertiary">
+                You currently have no reports for this week.
+                </IonItem> */}
             </IonCard>
           </IonCol>
 
@@ -174,7 +177,7 @@ const Home: React.FC = () => {
         <div className="graph-wrapper">
           {graphData? graphData.map((item,index) => {
                 return (
-                  <IonCard key={index} className='graph-card'>
+                  <IonCard color='primary' key={index} className='graph-card'>
                     <Graph graphData={item}></Graph>
                   </IonCard>
                 )

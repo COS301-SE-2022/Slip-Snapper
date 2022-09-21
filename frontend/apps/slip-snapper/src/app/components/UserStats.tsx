@@ -6,6 +6,8 @@ import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
 import ProfileBarGraph from "./ProfileBarGraph";
 import ProfilePieChart from "./ProfilePieChart";
+import ProfileLineGraph from "./ProfileLineGraph";
+
 
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
@@ -173,7 +175,7 @@ export const UserStats = () => {
                             <p className="popover-text">Your forecasted expenditure over the next few weeks</p>
                         </Popover>
                     </IonItem>
-                   
+                 <ProfileLineGraph graphData={[]}></ProfileLineGraph>
                 </IonCardHeader>
             </IonCard>
         </div>
