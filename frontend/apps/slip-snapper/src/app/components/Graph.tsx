@@ -13,22 +13,41 @@ function Graph({ graphData }: Props) {
         frequency[i] = graphData.occurances[i].id
     }
 
-
      const graphSettings = {
         responsive: true,
         barThickness: 43,
         borderWidth: 1,
         borderRadius: 10,
-        
+        color: 'white',
+
         plugins: {
             legend: {
                 position: 'bottom' as const,
+
             },
             title: {
                 display: true,
                 text: graphData.itemName+' prices across various stores',
+                color: 'white',
             },
         },
+
+        scales: {
+            yAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
+            xAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
+         },
     };
 
      const graphStats = {

@@ -11,7 +11,6 @@ function ProfileBarGraph({ graphData }: Props) {
         borderRadius: 10,
         color: 'white',
 
-
         plugins: {
             legend: {
                 position: 'bottom' as const,
@@ -21,16 +20,14 @@ function ProfileBarGraph({ graphData }: Props) {
         scales: {
             yAxes: {
                 ticks: {
-                    beginAtZero: true,
                     color: 'white',
-                    fontSize: 12,
+                    fontSize: 15,
                 }
             },
             xAxes: {
                 ticks: {
-                    beginAtZero: true,
                     color: 'white',
-                    fontSize: 12,
+                    fontSize: 15,
                 }
             },
         },
@@ -50,7 +47,7 @@ function ProfileBarGraph({ graphData }: Props) {
         ],
     };
     return (
-        <Bar className="graph" options={graphSettings} data={graphStats} />
+        <Bar className="graph" options={graphSettings} data={graphStats} height={250} />
     );
 }
 

@@ -6,6 +6,8 @@ import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
 import ProfileBarGraph from "./ProfileBarGraph";
 import ProfilePieChart from "./ProfilePieChart";
+import ProfileLineGraph from "./ProfileLineGraph";
+
 
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
@@ -96,7 +98,9 @@ export const UserStats = () => {
                                 and the previous week to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
+                    <div className="profileGraph">
                     <ProfileBarGraph graphData={userStats.lastWeek}></ProfileBarGraph>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 
@@ -123,7 +127,9 @@ export const UserStats = () => {
                                 and the previous month to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
-                    <ProfileBarGraph graphData={userStats.lastMonth}></ProfileBarGraph>
+                    <div className="profileGraph">
+                        <ProfileBarGraph graphData={userStats.lastMonth} ></ProfileBarGraph>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 
@@ -148,7 +154,9 @@ export const UserStats = () => {
                             <p className="popover-text">Your categorized expenditure of the last month. </p>
                         </Popover>
                     </IonItem>
-                    <ProfilePieChart graphData={[percentages]}></ProfilePieChart>
+                    <div className="profileGraph">
+                        <ProfilePieChart graphData={[percentages]}></ProfilePieChart>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 
@@ -173,7 +181,7 @@ export const UserStats = () => {
                             <p className="popover-text">Your forecasted expenditure over the next few weeks</p>
                         </Popover>
                     </IonItem>
-                   
+                 <ProfileLineGraph graphData={[]}></ProfileLineGraph>
                 </IonCardHeader>
             </IonCard>
         </div>

@@ -15,13 +15,10 @@ import {
   IonIcon,
   IonText,
   useIonToast,
-  IonGrid,
-  IonCol,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { NavButtons } from '../components/NavButtons';
 import { EditBudgets } from '../components/EditBudgets';
-import { ProfileImage } from '../components/ProfileImage';
 import '../theme/profile.css';
 import '../theme/toasts.css';
 import { setBudgetA, getProfileData, getStatsA } from "../../api/apiCall"
@@ -133,40 +130,40 @@ const Profile: React.FC = () => {
                 <IonCardTitle>User details</IonCardTitle>
               </IonItem>
 
-              <IonGrid>
-                <div className="wrapper">
-                  <IonCol className='profile-elem'>
-                        {/* <ProfileImage/> TO-DO */}
-                      </IonCol>
-                  <IonCol className='profile-elem'>
-                    <IonItem className="center-items username" color="tertiary">
-                      <IonText>{userDetails.email}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items username" color="tertiary">
-                      <IonText>{userDetails.username}</IonText>
-                    </IonItem>
-                    <IonItem className="center-items username" color="tertiary">
-                      <IonText>{userDetails.firstname + " " + userDetails.lastname}</IonText>
-                    </IonItem>
-                  </IonCol>
-                </div>
-              </IonGrid>
+              <div>
+                  <IonItem className="center-items" color="tertiary">
+                    <IonText>Username: </IonText>
+                    <IonText slot='end'>{userDetails.username}</IonText>
+                  </IonItem>
 
-              <IonCardHeader>
+                  <IonItem className="center-items" color="tertiary">
+                    <IonText>Full Name: </IonText>
+                    <IonText slot='end'>{userDetails.firstname + " " + userDetails.lastname}</IonText>
+                  </IonItem>
+
+                  <IonItem className="center-items" color="tertiary">
+                    <IonText>Email Address</IonText>
+                    <IonText slot='end'>{userDetails.email}</IonText>
+                  </IonItem>
+              </div>
+              
               <IonItem className="headings" color="primary">
                 <IonCardTitle>Personal Budget</IonCardTitle>
               </IonItem>
-              <IonItem id="weekly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
+
+              <div>
+                <IonItem id="weekly-budget" className="center-items" color="tertiary">
+                  <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
                   <IonText>Weekly: R{weeklyBudgetValue.toFixed(2)}</IonText>
-                <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
-              </IonItem>
-              <IonItem id="monthly-budget" className="center-items" color="tertiary">
-                <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
+                  <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
+                </IonItem>
+
+                <IonItem id="monthly-budget" className="center-items" color="tertiary">
+                  <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
                   <IonText>Monthly: R{monthlyBudgetValue.toFixed(2)}</IonText>
-                <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
-              </IonItem>
-            </IonCardHeader>
+                  <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
+                </IonItem>
+              </div>
 
             {/* Weekly Budget */}
             <IonAlert
