@@ -5,12 +5,14 @@
 
 .center-items {
     vertical-align: middle;
+    width: 100%;
     --border-radius: 10px;
     padding: 2px;
 }
 
 .categoryBudgets {
     vertical-align: middle;
+    width: 100%;
     --border-radius: 10px;
     padding: 2px;
     display: none;
@@ -32,21 +34,6 @@
 .edit-budget:hover {
     color: #5AD8C5;
     cursor: pointer;
-}
-
-.profilePhoto {
-    margin: auto;
-    border-radius: 20px;
-}
-
-.profile-elem {
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-}
-
-.profile-photo-fab {
-    bottom: 0%;
 }
 
 .progressBar {
@@ -131,8 +118,6 @@
         --border-radius: 10px;
         padding: 2px;
         display: none;
-        width: 90%;
-        margin-left: 3%;
     }
 
     .categoryProgressBar {

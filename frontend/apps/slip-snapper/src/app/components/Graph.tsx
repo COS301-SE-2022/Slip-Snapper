@@ -32,19 +32,21 @@ function Graph({ graphData }: Props) {
             },
         },
 
-         scales: {
-             yAxes: {
-                 ticks: {
-                     color: 'white',
-                     fontSize: 12,
-                 }
-             },
-             xAxes: {
-                 ticks: {
-                     color: 'white',
-                     fontSize: 12,
-                 }
-             },
+        scales: {
+            yAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
+            xAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
          },
     };
 

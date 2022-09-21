@@ -98,7 +98,9 @@ export const UserStats = () => {
                                 and the previous week to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
+                    <div className="profileGraph">
                     <ProfileBarGraph graphData={userStats.lastWeek}></ProfileBarGraph>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 
@@ -125,7 +127,9 @@ export const UserStats = () => {
                                 and the previous month to manage your spending habits.</p>
                         </Popover>
                     </IonItem>
-                    <ProfileBarGraph graphData={userStats.lastMonth}></ProfileBarGraph>
+                    <div className="profileGraph">
+                        <ProfileBarGraph graphData={userStats.lastMonth} ></ProfileBarGraph>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 

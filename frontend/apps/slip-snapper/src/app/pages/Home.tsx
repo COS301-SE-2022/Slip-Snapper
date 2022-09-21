@@ -177,7 +177,7 @@ const Home: React.FC = () => {
         <div className="graph-wrapper">
           {graphData ? graphData.map((item, index) => {
             return (
-              <IonCard color='primary' key={index} className='graph-card'>
+              <IonCard color='primary' key={index} className='graph-card' color='primary'>
                 <Graph graphData={item}></Graph>
               </IonCard>
             )
@@ -191,9 +191,6 @@ const Home: React.FC = () => {
       <IonFooter>
         <TakePictureButton />
       </IonFooter>
-      {/* <IonFooter>
-        <IonToolbar color="primary"></IonToolbar>
-      </IonFooter> */}
     </IonPage>
   );
 
