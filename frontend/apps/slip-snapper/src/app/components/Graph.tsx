@@ -19,6 +19,7 @@ function Graph({ graphData }: Props) {
         barThickness: 43,
         borderWidth: 1,
         borderRadius: 10,
+        color: 'white',
         
         plugins: {
             legend: {
@@ -27,6 +28,24 @@ function Graph({ graphData }: Props) {
             title: {
                 display: true,
                 text: graphData.itemName+' prices across various stores',
+                color: "white",
+            },
+        },
+
+        scales: {
+            yAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
+            },
+            xAxes: {
+                ticks: {
+                    beginAtZero: true,
+                    color: 'white',
+                    fontSize: 12,
+                }
             },
         },
     };
