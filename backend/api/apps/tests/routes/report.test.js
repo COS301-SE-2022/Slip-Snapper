@@ -158,7 +158,7 @@ describe('GET /report/user', ()=>{
 /**
  * Test for the get recent reports query
  */
- describe('GET /report/recent', ()=>{
+describe('GET /report/recent', ()=>{
     const token = ""
 
     beforeEach(()=>{
@@ -237,6 +237,8 @@ describe('GET /report/user', ()=>{
         expect(res.statusCode).toEqual(200);
     })
 })
+
+
 
 /** 
  * TODO TEST for delete from S3 bucket folder

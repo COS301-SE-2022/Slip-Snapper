@@ -39,20 +39,20 @@ router.post('/login', async (req, res)=>{
     let { username, password } = req.body;
 
     const result = await req.app.get('db').getUser(username);
-    const correctPassword = bcrypt.compareSync(password, result.token.password)
-    if (!correctPassword || result.user == null) {
-        result.message = "Error validating user Details";
-        result.user = null;
-        result.token = "";
+    if (result.token == null || result.user == null || !bcrypt.compareSync(password, result.password)) {
+        return res.status(403)
+            .send({
+                message: "Error validating user Details",
+                userData: null,
+                token: "",
+            });
     }
-
-    let status = 200;
     //TODO checking for errors
     if(result.token != ""){
         result.token = await req.app.get('token').generateToken(result.token)
     }
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             userData: result.user,
