@@ -72,7 +72,6 @@ describe('Post /user/signup', ()=>{
                 .send(
                     body
                 )
-                .set({ "Authorization": "Bearer " + token })
 
             expect(addUser.mock.calls.length).toBe(1);
             expect(addUser.mock.calls[0][0]).toBe(body.username);
@@ -117,7 +116,6 @@ describe('Post /user/signup', ()=>{
                 .send(
                     { username: "username1", password: "password1"}
                 )
-                .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.userData).toEqual(data);
             expect(res.body.message).toEqual("User added succesfully")
@@ -190,7 +188,8 @@ describe('Post /user/login', ()=>{
                     password: '20042',
                     weeklyBudget: 0,
                     monthlyBudget: 0,
-                }
+                },
+                password: 'password1',
             });
 
 
@@ -206,7 +205,6 @@ describe('Post /user/login', ()=>{
                 .send(
                     body
                 )
-                .set({ "Authorization": "Bearer " + token })
 
             expect(getUser.mock.calls.length).toBe(1);
             expect(getUser.mock.calls[0][0]).toBe(body.username);
@@ -232,7 +230,8 @@ describe('Post /user/login', ()=>{
                     password: '20042',
                     weeklyBudget: 0,
                     monthlyBudget: 0,
-                }
+                },
+                password: 'password1'
             });
 
             generateToken.mockReset();
@@ -247,7 +246,6 @@ describe('Post /user/login', ()=>{
             .send(
                 { username: "username1", password: "password1"}
             )
-            .set({ "Authorization": "Bearer " + token })
 
             expect(res.body.userData).toEqual(data);
             expect(res.body.message).toEqual("Error validating user Details");
@@ -267,7 +265,8 @@ describe('Post /user/login', ()=>{
                 password: '20042',
                 weeklyBudget: 0,
                 monthlyBudget: 0,
-            }
+            },
+            password: 'password1'
         });
 
         generateToken.mockResolvedValue({
@@ -281,9 +280,8 @@ describe('Post /user/login', ()=>{
             .send(
                 { username: "username1", password: "password1"}
             )
-            .set({ "Authorization": "Bearer " + token })
 
-        expect(res.statusCode).toEqual(200);
+        expect(res.statusCode).toEqual(403);
     })
 
 })
@@ -291,6 +289,7 @@ describe('Post /user/login', ()=>{
 /**
  * Test for the update user query
  */
+
 describe('Patch /user', ()=>{
     const token = ""
 

@@ -346,12 +346,10 @@ describe('POST /stats/budget', ()=>{
 
     test('Should Generate a report for the user', async ()=>{
         const body = [
-            {userId:1, weeklyB: 1, monthlyB:1},
-            {userId:2, weeklyB: 2, monthlyB:2},
-            {userId:3, weeklyB: 3, monthlyB:3}
+            { userId:1, weekly: 1, monthly:1 },
+            { userId:2, weekly: 2, monthly:2 },
+            { userId:3, weekly: 3, monthly:3 }
         ]
-
-        const data = {}
 
         for (const bod of body){
             setUserBudgets.mockReset();
@@ -393,7 +391,7 @@ describe('POST /stats/budget', ()=>{
 
         const res = await request(app)
             .post('/api/stats/budget')
-            .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .send( { weekly: 1, monthly:1 } )
             .set({ "Authorization": "Bearer " + token })
         
         expect(res.body.message).toEqual("User budget set");
@@ -414,7 +412,7 @@ describe('POST /stats/budget', ()=>{
 
         const res = await request(app)
             .post('/api/stats/budget')
-            .send( {userId:1, weeklyB: 1, monthlyB:1} )
+            .send( { weekly: 1, monthly:1 } )
             .set({ "Authorization": "Bearer " + token })
         
         expect(res.statusCode).toEqual(200);
