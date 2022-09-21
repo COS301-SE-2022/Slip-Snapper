@@ -64,6 +64,7 @@ const ViewReports: React.FC = () => {
       if (typeof apiResponse.data !== 'string') {
         destroySession(apiResponse);
         setReports(apiResponse.data.reports);
+        checkEmptyReports(apiResponse.data.reports)
         orderReports(reports)
       }
     });
@@ -267,6 +268,8 @@ const ViewReports: React.FC = () => {
               </IonItem>
             );
           })}
+
+          <IonItem className='emptyReports' id='emptyReports' color="tertiary">Your PDF reports will be displayed here.</IonItem>
         </IonCard>
         <IonAlert
           isOpen={showAlert}
@@ -414,6 +417,7 @@ const ViewReports: React.FC = () => {
 
     getAllUserReports().then((apiResponse) => {
       setReports(apiResponse.data.reports);
+      checkEmptyReports(apiResponse.data.reports)
     });
   }
 
@@ -441,6 +445,7 @@ const ViewReports: React.FC = () => {
 
     getAllUserReports().then((apiResponse) => {
       setReports(apiResponse.data.reports);
+      checkEmptyReports(apiResponse.data.reports)
     });
   }
 
@@ -626,6 +631,21 @@ const ViewReports: React.FC = () => {
     resetTimeFrames()
     setDateToggle(false)
     setTimeFrameToggle(false)
+  }
+
+  function checkEmptyReports(reports: any) {
+
+    if (reports.length === 0) {
+      const temp = document.getElementById('emptyReports')
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    else {
+      const temp = document.getElementById('emptyReports')
+      if (temp !== null)
+        temp.style.display = "none";
+    }
   }
 };
 

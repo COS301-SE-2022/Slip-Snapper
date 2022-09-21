@@ -57,6 +57,10 @@
     display: none;
 }
 
+.emptyReports{
+    display: none;
+}
+
 @media only screen and (max-width: 830px) {
     .generate-item-col {
         min-width: 50%;

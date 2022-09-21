@@ -25,6 +25,7 @@ const SlipItems: React.FC = () => {
                         orderSlips(apiResponse.data.slips)
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)
+                        checkEmptySlips(apiResponse.data.slips)
                     }
                 })
     }, []);
@@ -133,6 +134,7 @@ const SlipItems: React.FC = () => {
                                                     apiResponse => {
                                                         if (typeof (apiResponse.data) !== "string") {
                                                             setSlipItems(apiResponse.data.slips)
+                                                            checkEmptySlips(apiResponse.data.slips)
                                                         }
                                                     })
                                             setDeleteAlert({ state: false, name: '', id: 0 });
@@ -144,6 +146,8 @@ const SlipItems: React.FC = () => {
                         </IonItem>
                     )
                 })}
+
+                <IonItem className='emptySlips' id='emptySlips' color="tertiary">Your scanned slips will be displayed here.</IonItem>
             </IonCard>
 
             <IonAlert
@@ -359,6 +363,21 @@ const SlipItems: React.FC = () => {
         resetValue()
         setTotalToggle(false)
         setDateToggle(false)
+    }
+
+    function checkEmptySlips(reports: any) {
+
+        if (reports.length === 0) {
+            const temp = document.getElementById('emptySlips')
+            if (temp !== null)
+                temp.style.display = "block";
+        }
+
+        else {
+            const temp = document.getElementById('emptySlips')
+            if (temp !== null)
+                temp.style.display = "none";
+        }
     }
 };
 
