@@ -66,7 +66,7 @@ const ViewReports: React.FC = () => {
         setReports(apiResponse.data.reports);
         orderReports(reports)
       }
-    });
+    }).catch();
   }, []);
   orderReports(reports)
 

@@ -89,7 +89,7 @@ const Profile: React.FC = () => {
             setProfile(apiResponse.data)
             setUserDetails(apiResponse.data.user.user)
           }
-        })
+        }).catch();
 
     getStatsA()
       .then(
@@ -97,7 +97,7 @@ const Profile: React.FC = () => {
           if (typeof (apiResponse.data) !== "string") {
             setUserStats(apiResponse.data)
           }
-        })
+        }).catch();
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);

@@ -63,14 +63,14 @@ const Home: React.FC = () => {
           destroySession(apiResponse);
           setR(apiResponse.data.reports);
         }
-      });
+      }).catch();
 
     getThisWeeksReports()
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setThisWeeksReports(apiResponse.data.reports)
         }
-      });
+      }).catch();
 
     getTodayStats()
       .then(apiResponse => {
@@ -78,13 +78,13 @@ const Home: React.FC = () => {
           setTodayItem(apiResponse.data.totalItems)
           setTodayTotal(Number(apiResponse.data.totalSpent))
         }
-      });
+      }).catch();
     getGraphStats()
       .then(apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
           setGraphData(apiResponse.data.data)
         }
-      });
+      }).catch();
   }, []);
   setNewNames(reports)
   setNewNames(thisWeeksReports)

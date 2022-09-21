@@ -1,40 +1,5 @@
 describe('Home page integration', () => {
   beforeEach(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/recent*',
-      },
-      { fixture: '../fixtures/RecentReports.json' }
-    );
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/user/login*',
-      },
-      { fixture: '../fixtures/Login.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/pdf*',
-      },
-      { fixture: '../fixtures/getReport.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/thisweek*',
-      },
-      { fixture: '../fixtures/RecentReports.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/today*',
-      },
-      { fixture: '../fixtures/TodayHomePage.json' }
-    );
     cy.clearCookies();
     cy.visit('http://localhost:4200');
     cy.get('input[ title="usernameInput"]').clear();
@@ -61,41 +26,6 @@ describe('Home page integration', () => {
 
 describe('Edit Page integration from Home', () => {
   beforeEach(() => {
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/recent*',
-      },
-      { fixture: '../fixtures/RecentReports.json' }
-    );
-    cy.intercept(
-      {
-        method: 'POST',
-        url: '/api/user/login*',
-      },
-      { fixture: '../fixtures/Login.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/pdf*',
-      },
-      { fixture: '../fixtures/getReport.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/thisweek*',
-      },
-      { fixture: '../fixtures/RecentReports.json' }
-    );
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/report/today*',
-      },
-      { fixture: '../fixtures/TodayHomePage.json' }
-    );
     cy.clearCookies();
     cy.visit('http://localhost:4200');
     cy.get('input[ title="usernameInput"]').clear();
