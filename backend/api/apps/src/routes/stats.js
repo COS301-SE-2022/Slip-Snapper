@@ -1,5 +1,3 @@
-const { body, validationResult, oneOf } = require('express-validator');
-
 const router = require("express").Router();
 
 /**
@@ -135,9 +133,8 @@ router.post('/categoryBudgets', async (req, res) => {
 
     return res.status(200)
         .send({
-            // message: result.message,
-            // budgets: result.budgets,
-            message: "hello"
+            message: result.message,
+            budgets: result.budgets,
         });
 });
 
