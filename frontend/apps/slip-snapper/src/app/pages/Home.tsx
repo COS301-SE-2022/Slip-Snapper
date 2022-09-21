@@ -26,7 +26,7 @@ import ReportItem from '../components/ReportItem';
 import Graph from '../components/Graph';
 import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
-import {destroySession} from "../../api/Session"
+import { destroySession } from "../../api/Session"
 
 import {
   Chart as ChartJS,
@@ -37,7 +37,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { async } from 'rxjs/internal/scheduler/async';
 
 ChartJS.register(
   CategoryScale,
@@ -56,28 +55,26 @@ const Home: React.FC = () => {
   const [reports, setR] = useState<any[]>([]);
 
   const [graphData, setGraphData] = useState<any[]>([])
-   useEffect(() => {
-    
-      getRecentReports()
+  useEffect(() => {
+
+    getRecentReports()
       .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
+        if (typeof (apiResponse.data) !== "string") {
           destroySession(apiResponse);
           setR(apiResponse.data.reports);
-          checkEmptyRecentReports(apiResponse.data.reports);
         }
       });
 
     getThisWeeksReports()
       .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
+        if (typeof (apiResponse.data) !== "string") {
           setThisWeeksReports(apiResponse.data.reports)
-          checkEmptyWeekReports(apiResponse.data.reports)
         }
       });
 
     getTodayStats()
       .then(apiResponse => {
-        if(typeof(apiResponse.data) !== "string"){
+        if (typeof (apiResponse.data) !== "string") {
           setTodayItem(apiResponse.data.totalItems)
           setTodayTotal(Number(apiResponse.data.totalSpent))
         }
@@ -107,17 +104,19 @@ const Home: React.FC = () => {
         </IonItem>
 
         <IonRow>
-          {reports?.map((reps, index) => {
-            return (
-              <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
-            )
-          })
+          {reports?.length === 0 || reports?.length === undefined ?
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>You currently have no recent reports.</IonCardTitle>
+              </IonCardHeader>
+            </IonCard>
+            :
+            reports.map((reps, index) => {
+              return (
+                <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
+              )
+            })
           }
-          <IonCard id='emptyRecentReports' className='emptyRecentReports' color="primary">
-            <IonCardHeader>
-              <IonCardTitle>You currently have no recent reports.</IonCardTitle>
-            </IonCardHeader>
-          </IonCard>
         </IonRow>
 
         <IonItem>
@@ -140,31 +139,32 @@ const Home: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>This Week's Reports:</IonCardTitle>
               </IonCardHeader>
-              {thisWeeksReports ? thisWeeksReports?.map((item, index) => {
-                return (
-                  <IonItem key={index} color="tertiary">
-                    {item.otherName}
-                    <IonButton onClick={() => {view(item.reportName)}} color="secondary" slot="end" class="viewButton" >
-                      View
-                    </IonButton>
-                    <IonButton
-                      onClick={() =>
-                        deleteReport(item.reportName, item.reportId.toString())
-                      }
-                      fill="solid"
-                      slot="end"
-                      color="medium"
-                    >
-                      Delete
-                    </IonButton>
-                  </IonItem>
-                );
-              }) : <IonItem  color="tertiary">
-                You currently have no reports for this week.
-              </IonItem>}
-              {/* <IonItem id='emptyWeekReports' className='emptyWeekReports' color="tertiary">
-                You currently have no reports for this week.
-                </IonItem> */}
+
+              {thisWeeksReports?.length === 0 || thisWeeksReports?.length === undefined ?
+                <IonItem color="tertiary">
+                  You currently have no reports for this week.
+                </IonItem>
+                :
+                thisWeeksReports?.map((item, index) => {
+                  return (
+                    <IonItem key={index} color="tertiary">
+                      {item.otherName}
+                      <IonButton onClick={() => { view(item.reportName) }} color="secondary" slot="end" class="viewButton" >
+                        View
+                      </IonButton>
+                      <IonButton
+                        onClick={() =>
+                          deleteReport(item.reportName, item.reportId.toString())
+                        }
+                        fill="solid"
+                        slot="end"
+                        color="medium"
+                      >
+                        Delete
+                      </IonButton>
+                    </IonItem>
+                  );
+                })}
             </IonCard>
           </IonCol>
 
@@ -175,17 +175,17 @@ const Home: React.FC = () => {
         </IonItem>
 
         <div className="graph-wrapper">
-          {graphData? graphData.map((item,index) => {
-                return (
-                  <IonCard color='primary' key={index} className='graph-card'>
-                    <Graph graphData={item}></Graph>
-                  </IonCard>
-                )
-              })
-          : <IonText>No Graph Data</IonText>}  
+          {graphData ? graphData.map((item, index) => {
+            return (
+              <IonCard color='primary' key={index} className='graph-card'>
+                <Graph graphData={item}></Graph>
+              </IonCard>
+            )
+          })
+            : <IonText>No Graph Data</IonText>}
         </div>
-          
-      <div className='footer-home'/>
+
+        <div className='footer-home' />
 
       </IonContent>
       <IonFooter>
@@ -273,14 +273,12 @@ const Home: React.FC = () => {
     getRecentReports()
       .then(apiResponse => {
         setR(apiResponse.data.reports);
-        checkEmptyRecentReports(apiResponse.data.reports)
 
       });
 
-     getThisWeeksReports()
+    getThisWeeksReports()
       .then(apiResponse => {
         setThisWeeksReports(apiResponse.data.reports)
-        checkEmptyWeekReports(apiResponse.data.reports)
       });
 
   }
@@ -298,37 +296,6 @@ const Home: React.FC = () => {
     return reports;
   }
 
-  function checkEmptyRecentReports(reports:any)
-  {
-
-    if(reports.length===0)
-    {
-      const temp = document.getElementById('emptyRecentReports')
-      if (temp !== null)
-        temp.style.display = "block";
-    }
-
-    else{
-      const temp = document.getElementById('emptyRecentReports')
-      if (temp !== null)
-        temp.style.display = "none";
-    }
-  }
-
-  function checkEmptyWeekReports(reports: any) {
-
-    if (reports.length === 0) {
-      const temp = document.getElementById('emptyWeekReports')
-      if (temp !== null)
-        temp.style.display = "block";
-    }
-
-    else {
-      const temp = document.getElementById('emptyWeekReports')
-      if (temp !== null)
-        temp.style.display = "none";
-    }
-  }
 };
 
 export default Home;
