@@ -62,6 +62,7 @@ const Home: React.FC = () => {
         if(typeof(apiResponse.data) !== "string"){
           destroySession(apiResponse);
           setR(apiResponse.data.reports);
+          checkEmptyRecentReports(apiResponse.data.reports);
         }
       });
 
@@ -69,6 +70,7 @@ const Home: React.FC = () => {
       .then(apiResponse => {
         if(typeof(apiResponse.data) !== "string"){
           setThisWeeksReports(apiResponse.data.reports)
+          checkEmptyWeekReports(apiResponse.data.reports)
         }
       });
 
@@ -110,6 +112,11 @@ const Home: React.FC = () => {
             )
           })
           }
+          <IonCard id='emptyRecentReports' className='emptyRecentReports' color="primary">
+            <IonCardHeader>
+              <IonCardTitle>You currently have no recent reports.</IonCardTitle>
+            </IonCardHeader>
+          </IonCard>
         </IonRow>
 
         <IonItem>
@@ -152,6 +159,9 @@ const Home: React.FC = () => {
                   </IonItem>
                 );
               })}
+              <IonItem id='emptyWeekReports' className='emptyWeekReports' color="tertiary">
+                You currently have no reports for this week.
+                </IonItem>
             </IonCard>
           </IonCol>
 
@@ -260,12 +270,16 @@ const Home: React.FC = () => {
     getRecentReports()
       .then(apiResponse => {
         setR(apiResponse.data.reports);
+        checkEmptyRecentReports(apiResponse.data.reports)
+
       });
 
-    getThisWeeksReports()
+     getThisWeeksReports()
       .then(apiResponse => {
         setThisWeeksReports(apiResponse.data.reports)
+        checkEmptyWeekReports(apiResponse.data.reports)
       });
+
   }
 
   async function setNewNames(reports: any) {
@@ -279,6 +293,38 @@ const Home: React.FC = () => {
       }
     }
     return reports;
+  }
+
+  function checkEmptyRecentReports(reports:any)
+  {
+
+    if(reports.length===0)
+    {
+      const temp = document.getElementById('emptyRecentReports')
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    else{
+      const temp = document.getElementById('emptyRecentReports')
+      if (temp !== null)
+        temp.style.display = "none";
+    }
+  }
+
+  function checkEmptyWeekReports(reports: any) {
+
+    if (reports.length === 0) {
+      const temp = document.getElementById('emptyWeekReports')
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    else {
+      const temp = document.getElementById('emptyWeekReports')
+      if (temp !== null)
+        temp.style.display = "none";
+    }
   }
 };
 

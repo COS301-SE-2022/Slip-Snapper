@@ -26,3 +26,11 @@
 .footer-home{
     padding-top: 60px;
 }
+
+.emptyRecentReports{
+    display: none;
+}
+
+.emptyWeekReports {
+    display: none;
+}
