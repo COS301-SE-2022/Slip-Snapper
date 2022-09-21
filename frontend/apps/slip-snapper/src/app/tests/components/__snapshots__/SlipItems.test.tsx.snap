@@ -37,6 +37,13 @@ exports[`<SlipItems> should render component 1`] = `
         </ion-fab>
       </ion-item>
     </ion-card-header>
+    <ion-item
+      color="tertiary"
+      id="emptySlips"
+      onClick={[Function]}
+    >
+      Your scanned slips will be displayed here.
+    </ion-item>
   </ion-card>
 </div>
 `;
