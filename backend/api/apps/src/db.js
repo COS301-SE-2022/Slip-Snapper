@@ -2179,10 +2179,6 @@ async function getUserAnalysis(userId) {
 }
 
 
-async function getUserMode(userId) {
-
-}
-
 async function getUserInformation(userId) {
 
     const user = await prisma.user.findFirst({
@@ -2202,6 +2198,21 @@ async function getUserInformation(userId) {
     }
 
 }
+
+async function getForecast(userId) {
+
+    try {
+
+    }
+    catch (error) {
+        return {
+            message: "Failure retrieving User Forecasting",
+            averagesArray:[],
+            futureDateArray:[]
+        }
+    }
+}
+
 
 module.exports = {
     getUser,
