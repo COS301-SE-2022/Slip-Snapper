@@ -5,18 +5,17 @@ class ItemCategoriser{
 
     async getData(){
         const fileLocation = "file://"+__dirname.replaceAll('\\','/')+"/dataSet_Generation/fullDataSet.csv";
-        const columns = ['Date', 'Item', 'Location', 'Quantity', 'Price', 'Category'];
+        const columns = ['Item', 'Category'];
         const dataset = tf.data.csv(fileLocation, {
             hasHeader:true,
             columnNames: columns,
         })
         const arr = await dataset.toArray()
         const numElements = arr.length;
-
         const dataSet = dataset.shuffle(1024)
-        const train = dataSet.take(numElements*0.8)
-        const valid = dataSet.skip(numElements*0.8).take(numElements*0.1)
-        const test = dataSet.skip(numElements*0.9).take(numElements*0.1)
+        const train = dataSet.take(Math.floor(numElements*0.8))
+        const valid = dataSet.skip(Math.floor(numElements*0.8)).take(Math.floor(numElements*0.1))
+        const test = dataSet.skip(Math.floor(numElements*0.9)).take(Math.floor(numElements*0.1))
 
         return {
             train: train,
@@ -58,7 +57,7 @@ class ItemCategoriser{
         const sets = await this.getData();
         const model = await this.compile(sets);
         const encoder = await vector.load();
-        const items = await sets.train.take(2000).toArray()
+        const items = await sets.train.toArray()
         const inputs = [];
         const outputs = [];
         items.map((element) =>{ 
@@ -141,16 +140,21 @@ class ItemCategoriser{
     }
 }
 
-// const categoriser = new ItemCategoriser();
+const categoriser = new ItemCategoriser();
+
 async function setup(){
-    categoriser.run();
+    await categoriser.run();
+    await categoriser.loadModel();
+    console.log(await categoriser.predict('phone'))
 }
+
 async function test(){
     await categoriser.loadModel();
     console.log(await categoriser.predict('phone'))
 }
+
 // setup();
-// test();
+test();
 
 module.exports = {
     ItemCategoriser
