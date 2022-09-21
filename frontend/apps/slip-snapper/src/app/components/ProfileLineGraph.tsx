@@ -74,7 +74,7 @@ function ProfileLineGraph({ graphData }: Props) {
         ],
     };
     return (
-        <Line className="graph" options={graphSettings} data={graphStats} />
+        <Line className="graph" options={graphSettings} data={graphStats} height={250} />
     );
 }
 

@@ -154,7 +154,9 @@ export const UserStats = () => {
                             <p className="popover-text">Your categorized expenditure of the last month. </p>
                         </Popover>
                     </IonItem>
-                    <ProfilePieChart graphData={[percentages]}></ProfilePieChart>
+                    <div className="profileGraph">
+                        <ProfilePieChart graphData={[percentages]}></ProfilePieChart>
+                    </div>
                 </IonCardHeader>
             </IonCard>
 

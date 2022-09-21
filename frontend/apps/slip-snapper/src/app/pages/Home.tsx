@@ -177,7 +177,7 @@ const Home: React.FC = () => {
         <div className="graph-wrapper">
           {graphData ? graphData.map((item, index) => {
             return (
-              <IonCard color='primary' key={index} className='graph-card' color='primary'>
+              <IonCard color='primary' key={index} className='graph-card'>
                 <Graph graphData={item}></Graph>
               </IonCard>
             )
