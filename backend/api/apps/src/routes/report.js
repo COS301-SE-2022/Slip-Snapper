@@ -106,6 +106,7 @@ async function sortItemsIntoCategories(itemList){
         totals
     }
 }
+
 /**
  * Function to generate a pdf
  * @param {*} name The name of the pdf
@@ -236,20 +237,39 @@ async function generateSpreadsheet(name, allItems){
 }
   
 /**
+ * Function to validate pdf file generation
+ * @param {*} period the period
+ * @param {*} newReportNumber the period
+ * @return boolean (true if invalid)
+ */
+function validateGeneratePDF(period, newReportNumber){
+    return (
+        ( period == null || newReportNumber == null) ||
+        ( typeof(period) != 'string' || !( ['Daily','Weekly','Monthly'].includes(period) ) ) ||
+        ( typeof(newReportNumber) != 'number' || newReportNumber < 0 )
+    )
+}
+
+/**
  * Generate the pdf report for a user
  * Uses the user id to get the items, userName to get the right folder, and period to determine the timeframe
  */
 router.post('/pdf', async (req,res)=>{
-    let { period, userName, newReportNumber } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1]
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                title: "",
-                reportTotal: 0
+            });
+    }
+
+    let { period, newReportNumber } = req.body;
+    if( validateGeneratePDF( period, newReportNumber )){  
+        return res.status(400)
+            .send({
+                message: "Missing or Invalid input data",
             });
     }
 
@@ -264,9 +284,8 @@ router.post('/pdf', async (req,res)=>{
     const dir = __dirname + "/"
     const pdfName = dir + name
     const report = await generatePDF(pdfName, types, today, period)
-    
-    if(report){
-        const path = `${userName}/${name}`
+    if(report){  
+        const path = `${tokenVerified.user.username}/${name}`
         const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
         const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
@@ -285,8 +304,6 @@ router.post('/pdf', async (req,res)=>{
     return res.status(503)
         .send({
             message: "Report unable to uploaded",
-            title: "",
-            reportTotal: 0
         });
 });
  
@@ -295,29 +312,39 @@ router.post('/pdf', async (req,res)=>{
  * Uses the report name and UserName
  */
  router.get('/pdf', async (req,res)=>{
-    let { userName, fileName } = req.query;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                report: ""
             });
     }
 
-    const path = `${userName}/${fileName}`
+    let { fileName } = req.query;
+    if(
+        (fileName == null) || 
+        (typeof(fileName) != 'string') ||
+        (fileName.split('_')[0].length > 10) ||
+        (fileName.split('_')[1] == undefined || !( ['Daily','Weekly','Monthly'].includes(fileName.split('_')[1]) )) ||
+        (fileName.split('_')[2] == undefined || (fileName.split('_')[2].split('.')[1] == undefined || fileName.split('_')[2].split('.')[1] != 'pdf'))
+    ){
+        return res.status(400)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+
+    const path = `${tokenVerified.user.username}/${fileName}`
     const bucket = await req.app.get('bucket').getFile(path)
-    
-    let status = 200;
 
-    //TODO error checking
+    // //TODO error checking
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: bucket.message,
-            report: bucket.data
+            report: bucket.data,
         });
     
 });
@@ -327,27 +354,40 @@ router.post('/pdf', async (req,res)=>{
  * Uses the report name and UserName and the reportID
  */
 router.delete('/pdf', async (req,res)=>{
-    let { userName, fileName, reportID } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
     }
 
-    const path = `${userName}/${fileName}`
+    let { fileName, reportID } = req.body;
+    if(
+        (fileName == null || reportID == null) || 
+        (typeof(fileName) != 'string') ||
+        (fileName.split('_')[0].length > 10) ||
+        (fileName.split('_')[1] == undefined || !( ['Daily','Weekly','Monthly'].includes(fileName.split('_')[1]) )) ||
+        (fileName.split('_')[2] == undefined || (fileName.split('_')[2].split('.')[1] == undefined || fileName.split('_')[2].split('.')[1] != 'pdf')) ||
+        (typeof(reportID) != 'number' && reportID < 0)
+    ){
+        return res.status(400)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+
+
+    const path = `${tokenVerified.user.username}/${fileName}`
     const bucket = await req.app.get('bucket').deleteFile(path)
 
     await req.app.get("db").deleteReportRecord(Number(reportID))
-    
-    let status = 200;
 
     //TODO error checking
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: bucket.message,
         });
@@ -363,21 +403,17 @@ router.get('/user', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
-                numReports: 0,
-                reports: []
             });
     }
     
     const result = await req.app.get("db").getAllReports(Number(tokenVerified.user.id));
 
-    let status = 200;
-
     //TODO error checking
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             numReports: result.numReports,
@@ -395,7 +431,7 @@ router.get('/recent', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
                 reports: []
@@ -403,12 +439,9 @@ router.get('/recent', async (req,res)=>{
     }
 
     const result = await req.app.get("db").getRecentReports(Number(tokenVerified.user.id));
-
-    let status = 200;
-
     //TODO error checking
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             reports: result.reportsList
@@ -424,7 +457,7 @@ router.get('/thisweek', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
                 reports: []
@@ -433,11 +466,9 @@ router.get('/thisweek', async (req, res) => {
 
     const result = await req.app.get("db").getDailyWeeklyMonthlyReports(Number(tokenVerified.user.id));
 
-    let status = 200;
-
     //TODO error checking
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             reports: result.weeklyReportsList
@@ -449,17 +480,26 @@ router.get('/thisweek', async (req, res) => {
  * Generate a excel spreadsheet for a user
  */
 router.post('/spreadsheet', async (req, res) => {
-    let { period } = req.body;
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization.split(' ')[1]
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(200)
+        return res.status(403)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
     }
-    console.log(tokenVerified)
+
+    let { period } = req.body;
+    if( ( period == null ) ||
+        ( typeof(period) != 'string' || !( ['Daily','Weekly','Monthly'].includes(period) ) )
+    ){
+        return res.status(400)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+
     const today = new Date();
     const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
     const periodStart = await determinePeriodStart(period, periodEnd);
@@ -469,10 +509,8 @@ router.post('/spreadsheet', async (req, res) => {
 
     const spreadSheet = await generateSpreadsheet(name,result.itemList);
 
-    let status = 200;
-
     //TODO error checking
-    res.status(status)
+    res.status(200)
         .setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         .setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
     spreadSheet.xlsx.write(res)

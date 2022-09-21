@@ -6,7 +6,6 @@ const processImage = require('../imageProcessor').processImage
  * Request to have text extracted to be processed by the ML
  */
 router.post('/process', async (req,res)=>{
-    let { image } = req.body;
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -18,6 +17,7 @@ router.post('/process', async (req,res)=>{
             });
     }
 
+    let { image } = req.body;
     const processedImage = await processImage(image);
 
     const worker =  createWorker({
