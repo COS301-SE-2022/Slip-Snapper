@@ -264,7 +264,7 @@ router.post('/pdf', async (req,res)=>{
                 message: "Token has expired Login again to continue using the application",
             });
     }
-
+    
     let { period, newReportNumber } = req.body;
     if( validateGeneratePDF( period, newReportNumber )){  
         return res.status(400)
@@ -272,7 +272,7 @@ router.post('/pdf', async (req,res)=>{
                 message: "Missing or Invalid input data",
             });
     }
-    
+
     const today = new Date();
     const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     const periodStart = await determinePeriodStart(period, periodEnd);
@@ -284,9 +284,8 @@ router.post('/pdf', async (req,res)=>{
     const dir = __dirname + "/"
     const pdfName = dir + name
     const report = await generatePDF(pdfName, types, today, period)
-    
-    if(report){
-        const path = `${tokenVerified.userName}/${name}`
+    if(report){  
+        const path = `${tokenVerified.user.username}/${name}`
         const bucket = await req.app.get('bucket').uploadFile(path, report.fileContent)
         const resultDB = await req.app.get('db').createReportRecord(Number(tokenVerified.user.id), name, report.total);
 
