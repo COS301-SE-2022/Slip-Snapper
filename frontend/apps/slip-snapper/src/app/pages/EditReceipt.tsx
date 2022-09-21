@@ -15,8 +15,15 @@ const EditReceipt: React.FC = () => {
     const history = useHistory();
 
      const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
+     for(let i=0; i<slipContents.items.length;i++)
+     {
+         slipContents.items[i].itemPrice = Number(slipContents.items[i].itemPrice).toFixed(2)
+     }
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
     const originalItems = slipContents.items
+    const [location, setLocation] = useState(slipContents.location);
+    const [date, setDate] = useState(slipContents.transactionDate);
+    
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
 
@@ -51,14 +58,14 @@ const EditReceipt: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput value={slipContents.location} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput onIonChange={e => setLocation(e.detail.value!)} value={location} id={"Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
                         <div color="primary">
                         <IonCardTitle className="date elem">Date:
                             <IonItem className='addEntry' color="tertiary">
-                                <IonDatetime value={slipContents.transactionDate} displayFormat='DD/MM/YYYY' id={"date"}/>
+                                    <IonDatetime onIonChange={e => setDate(e.detail.value!)} value={date} displayFormat='DD/MM/YYYY' id={"date"}/>
                                 <IonIcon icon={calendarOutline} slot="end"/>
                             </IonItem>
                         </IonCardTitle>
@@ -172,6 +179,7 @@ const EditReceipt: React.FC = () => {
     function removeItem(index: number) {
         getData()
         const data = [...editReceiptItems];
+
         if (data.length === 1) {
             setAlertMes("A receipt needs to have at least one item.")
             setShowAlert(true);
@@ -267,6 +275,7 @@ const EditReceipt: React.FC = () => {
             text: [date, storeName, "", "", total, slipContents.id]
         };
 
+
         await updateSlipA(data, insertItems, updateItems, removeItems)
         setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
         const button = document.getElementById("cancelButton")
@@ -274,7 +283,6 @@ const EditReceipt: React.FC = () => {
             button.click();
             window.location.reload()
         }
-
     }
 }
 export default EditReceipt;

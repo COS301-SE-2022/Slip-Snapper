@@ -236,15 +236,17 @@ const AddEntry: React.FC = () => {
         const data = {
             text: [date, storeName, "", "", total]
         };
+        for(let a = 0 ; a<items.length;a++)
+        {
+            items[a].price = Number(items[a].price).toFixed(2)
+        }
         addItemsA(data, items)
         clearData()
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
             window.location.reload()
-            present('Deleted ', 1200);
         }
-
     }
 
     function clearData() {

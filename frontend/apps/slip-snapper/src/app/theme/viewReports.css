@@ -32,10 +32,17 @@
     display: none;
 }
 
+.time-frame-div {
+    flex-direction: column;
+    display: none;
+    padding: 15px;
+}
+
 .date-item {
     max-width: 200px;
     margin-top: 10px;
     border-radius: 10px;
+    padding: 1px;
 }
 
 .date-picker {
@@ -63,5 +70,9 @@
 @media only screen and (max-width: 540px) {
     .generate-item-col {
         min-width: 100%;
+    }
+
+    .excel-desktop{
+        display: none;
     }
 }

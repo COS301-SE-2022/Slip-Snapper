@@ -40,12 +40,13 @@ import {
 } from '../../api/apiCall';
 import {destroySession} from "../../api/Session"
 import { calendarOutline, filter, filterOutline } from 'ionicons/icons';
-import { Slider } from '@mui/material';
+import { createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 // day week month
 const ViewReports: React.FC = () => {
   const [reports, setReports] = useState<any[]>([]);
   const [dateToggle, setDateToggle] = useState(false);
+  const [timeFrameToggle, setTimeFrameToggle] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [isOpenSearch, setIsOpenSearch] = useState(false);
 
@@ -78,6 +79,16 @@ const ViewReports: React.FC = () => {
     setFilterDateTo("")
   };
 
+  const resetTimeFrames = () => {
+    setTimeFrames(['Daily', 'Weekly', 'Monthly'])
+  };
+
+  const [timeFrames, setTimeFrames] = useState(() => ['Daily', 'Weekly', 'Monthly']);
+
+  const currentTimeFrames = (e: any, newTimeFrames: React.SetStateAction<string[]>) => {
+    setTimeFrames(newTimeFrames);
+  };
+
   setNewNames(reports)
 
   return (
@@ -98,17 +109,18 @@ const ViewReports: React.FC = () => {
               <IonCol className="generate-item-col" >
                 <IonCard color="primary">
                   <IonCardHeader>
-                <IonCardTitle>Daily</IonCardTitle>
+                <IonCardTitle>Daily Report</IonCardTitle>
                   </IonCardHeader>
                   <IonItem color="tertiary">
                     <IonButton
+                      className='excel-desktop'
                       fill="solid"
                       color="secondary"
                       onClick={() => {
                         getSpread("Daily");
                       }}
                     >
-                      Generate Excel
+                      Generate XLSX
                     </IonButton>
 
                     <IonButton
@@ -120,7 +132,7 @@ const ViewReports: React.FC = () => {
                         generateReport('Daily');
                       }}
                     >
-                      Generate Report
+                      Generate PDF
                     </IonButton>
                   </IonItem>
                 </IonCard>
@@ -129,7 +141,7 @@ const ViewReports: React.FC = () => {
           <IonCol className="generate-item-col" >
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Weekly</IonCardTitle>
+                <IonCardTitle>Weekly Report</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
@@ -139,7 +151,7 @@ const ViewReports: React.FC = () => {
                     getSpread("Weekly");
                   }}
                 >
-                  Generate Excel
+                  Generate XLSX
                 </IonButton>
 
                 <IonButton
@@ -151,7 +163,7 @@ const ViewReports: React.FC = () => {
                     generateReport('Weekly');
                   }}
                 >
-                  Generate Report
+                  Generate PDF
                 </IonButton>
               </IonItem>
             </IonCard>
@@ -160,7 +172,7 @@ const ViewReports: React.FC = () => {
           <IonCol className="generate-item-col" >
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Monthly</IonCardTitle>
+                <IonCardTitle>Monthly Report</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
@@ -170,7 +182,7 @@ const ViewReports: React.FC = () => {
                     getSpread("Monthly");
                   }}
                 >
-                  Generate Excel
+                  Generate XLSX
                 </IonButton>
 
                 <IonButton
@@ -182,7 +194,7 @@ const ViewReports: React.FC = () => {
                     generateReport('Monthly');
                   }}
                 >
-                  Generate Report
+                  Generate PDF
                 </IonButton>
               </IonItem>
             </IonCard>
@@ -264,7 +276,7 @@ const ViewReports: React.FC = () => {
           buttons={['Ok']}
         />
 
-        <IonModal onDidPresent={() => { toggleDates(dateToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
+        <IonModal onDidPresent={() => { toggleDates(dateToggle); toggleTimeFrames(timeFrameToggle) }} isOpen={isOpenSearch} onDidDismiss={() => { setIsOpenSearch(false); filter() }}>
           <IonHeader>
             <IonToolbar color="primary">
               <IonTitle>Search Filter</IonTitle>
@@ -301,6 +313,26 @@ const ViewReports: React.FC = () => {
                 </IonLabel>
               </IonItem>
             </div>
+
+            <IonItem>
+              <IonLabel>Time Frame Filter</IonLabel>
+              <IonToggle color='secondary' onIonChange={e => toggleTimeFrames(!timeFrameToggle)} checked={timeFrameToggle} onClick={() => setTimeFrameToggle(!timeFrameToggle)} />
+            </IonItem>
+
+            <div id='time-frame-div' className='time-frame-div' color="primary">
+              <ToggleButtonGroup value={timeFrames} onChange={currentTimeFrames} aria-label="text formatting">
+                <ToggleButton color="primary" id="daily-toggle" value="Daily">
+                  Daily
+                </ToggleButton>
+                <ToggleButton color="primary" id="weekly-toggle" value="Weekly">
+                  Weekly
+                </ToggleButton>
+                <ToggleButton color="primary" id="monthly-toggle" value="Monthly">
+                  Monthly
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </div>
+
           </IonContent>
         </IonModal>
       </IonContent>
@@ -505,6 +537,19 @@ const ViewReports: React.FC = () => {
     }
   }
 
+  function toggleTimeFrames(state: any) {
+    const temp = document.getElementById('time-frame-div')
+    if (state) {
+      if (temp !== null)
+        temp.style.display = "block";
+    }
+
+    if (!state) {
+      if (temp !== null)
+        temp.style.display = "none";
+    }
+  }
+
   function dateFilter() {
     const fromDate = filterDateFrom.split('T')[0].replace(/-/gi, "/")
     const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
@@ -558,9 +603,10 @@ const ViewReports: React.FC = () => {
   }
   function returnToDefault() {
     resetDate()
+    resetTimeFrames()
     setDateToggle(false)
+    setTimeFrameToggle(false)
   }
-
 };
 
 export default ViewReports;
