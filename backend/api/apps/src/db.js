@@ -337,7 +337,7 @@ async function getItemsReport(userid, start, end) {
             };
         }
 
-        let itemList = []; 
+        let itemList = [];
         var i = 0;
         for (var itemL of items) {
             let location = itemL.location;
@@ -1725,14 +1725,14 @@ async function getUserProfile(userId) {
         let store = await getFavouriteStore(userId);
         let budget = await getUserBudgets(userId);
         let budgets = await getUserGeneralBudgets(userId);
-        let user = await  getUserInformation(userId);
-        
+        let user = await getUserInformation(userId);
+
         return {
             message: "User profile statistics retrieved",
             storeDetails: store,
             budget: budget,
             budgets: budgets,
-            user:user,
+            user: user,
         };
     }
     catch (error) {
@@ -1741,7 +1741,7 @@ async function getUserProfile(userId) {
             storeDetails: {},
             budget: {},
             budgets: {},
-            user:{}
+            user: {}
         };
     }
 
@@ -2189,12 +2189,12 @@ async function getUserInformation(userId) {
             username: true,
             firstname: true,
             lastname: true,
-            email:true,
+            email: true,
         }
     })
 
     return {
-        user:user
+        user: user
     }
 
 }
@@ -2203,12 +2203,19 @@ async function getForecast(userId) {
 
     try {
 
+        let week = []
+        for (let index = 0; index < 4; index++) {
+            week[index] = []
+        }
+        let date = new Date()
+        let futureDateArray = []
+
     }
     catch (error) {
         return {
             message: "Failure retrieving User Forecasting",
-            averagesArray:[],
-            futureDateArray:[]
+            averagesArray: [],
+            futureDateArray: []
         }
     }
 }
