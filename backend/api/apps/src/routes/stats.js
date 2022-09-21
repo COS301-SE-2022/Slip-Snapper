@@ -167,12 +167,13 @@ router.get('', async (req,res)=>{
                 name: result.expensiveItem.dataItem
             },
             lastWeek:{
-                current: result.week.recentWeek,
-                previous: result.week.previousWeek
+                previous: result.week.previousWeek,
+                current: result.week.recentWeek
+
             },
             lastMonth:{
-                current: result.month.recentMonth,
-                previous: result.month.previousMonth
+                previous: result.month.previousMonth,
+                 current: result.month.recentMonth,
             }
         });
 });

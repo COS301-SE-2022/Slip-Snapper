@@ -38,7 +38,7 @@ import {
   deleteSlip,
   getAllSlips,
 } from '../../api/apiCall';
-import {destroySession} from "../../api/Session"
+import { destroySession } from "../../api/Session"
 import { calendarOutline, filter, filterOutline } from 'ionicons/icons';
 import { createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
@@ -106,37 +106,37 @@ const ViewReports: React.FC = () => {
           <IonTitle>Create Reports</IonTitle>
         </IonItem>
         <IonRow>
-              <IonCol className="generate-item-col" >
-                <IonCard color="primary">
-                  <IonCardHeader>
+          <IonCol className="generate-item-col" >
+            <IonCard color="primary">
+              <IonCardHeader>
                 <IonCardTitle>Daily Report</IonCardTitle>
-                  </IonCardHeader>
-                  <IonItem color="tertiary">
-                    <IonButton
-                      className='excel-desktop'
-                      fill="solid"
-                      color="secondary"
-                      onClick={() => {
-                        getSpread("Daily");
-                      }}
-                    >
-                      Generate XLSX
-                    </IonButton>
+              </IonCardHeader>
+              <IonItem color="tertiary">
+                <IonButton
+                  className='excel-desktop'
+                  fill="solid"
+                  color="secondary"
+                  onClick={() => {
+                    getSpread("Daily");
+                  }}
+                >
+                  Generate XLSX
+                </IonButton>
 
-                    <IonButton
-                      fill="solid"
+                <IonButton
+                  fill="solid"
                   title='generateDR'
-                      slot="end"
-                      color="secondary"
-                      onClick={() => {
-                        generateReport('Daily');
-                      }}
-                    >
-                      Generate PDF
-                    </IonButton>
-                  </IonItem>
-                </IonCard>
-              </IonCol>
+                  slot="end"
+                  color="secondary"
+                  onClick={() => {
+                    generateReport('Daily');
+                  }}
+                >
+                  Generate PDF
+                </IonButton>
+              </IonItem>
+            </IonCard>
+          </IonCol>
 
           <IonCol className="generate-item-col" >
             <IonCard color="primary">
@@ -214,11 +214,11 @@ const ViewReports: React.FC = () => {
                   <IonIcon src={filterOutline} />
                 </IonFabButton>
               </IonFab>
-            </IonItem> 
+            </IonItem>
           </IonCardHeader>
           {reports?.map((report, index) => {
             return (
-              <IonItem key={index} color="tertiary" id={'reportItem'+index}>
+              <IonItem key={index} color="tertiary" id={'reportItem' + index}>
                 {report.otherName}
                 <IonButton
                   onClick={() => view(report.reportName)}
@@ -423,19 +423,19 @@ const ViewReports: React.FC = () => {
       userS = { username: 'demoUser' };
     }
     // demoUser_31 - 08 - 2022Weekly_1.pdf 
-    await generateReportA(userS.username, period, getReportNumber()+1).then(
+    await generateReportA(userS.username, period, getReportNumber() + 1).then(
       (apiResponse) => {
-        if(typeof(apiResponse.data) !== "string"){
+        if (typeof (apiResponse.data) !== "string") {
           if (apiResponse.data.message === 'Report Generated and uploaded') {
             present('Generated ' + period + ' Report', 1200);
           } else {
             present('Error generating report, Try again.', 1200);
           }
-        }else{
+        } else {
           present("500 Internal Server Error", 1200)
         }
       }
-    ).catch(err =>{
+    ).catch(err => {
       present("500 Internal Server Error", 1200)
     });
 
@@ -445,12 +445,10 @@ const ViewReports: React.FC = () => {
   }
 
   function getReportNumber() {
-    let maxReportNum:number
-    maxReportNum=0
-    for(let i = 0 ; i < reports?.length;i++)
-    {
-      if(reports[i].reportNumber>maxReportNum)
-      {
+    let maxReportNum: number
+    maxReportNum = 0
+    for (let i = 0; i < reports?.length; i++) {
+      if (reports[i].reportNumber > maxReportNum) {
         maxReportNum = reports[i].reportNumber;
       }
     }
@@ -458,9 +456,8 @@ const ViewReports: React.FC = () => {
 
   }
 
-  async function setNewNames(reports:any) {
-    if(reports!==undefined)
-    {
+  async function setNewNames(reports: any) {
+    if (reports !== undefined) {
       for (let i = 0; i < reports.length; i++) {
         if (typeof reports[i].otherName === 'string') {
           reports[i].otherName = reports[i].otherName.replace(/-/g, '/');
@@ -473,18 +470,18 @@ const ViewReports: React.FC = () => {
   }
 
   async function getSpread(period: any) {
-    await generateSpreadSheet(period).then( (apiResponseData) => {
-      if(apiResponseData.data.type !== "text/html"){
-        const sheet = new Blob([apiResponseData.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+    await generateSpreadSheet(period).then((apiResponseData) => {
+      if (apiResponseData.data.type !== "text/html") {
+        const sheet = new Blob([apiResponseData.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const sheetUrl = URL.createObjectURL(sheet);
         const sheetDownload = document.createElement("a");
         sheetDownload.setAttribute("href", sheetUrl);
         sheetDownload.setAttribute("download", "report.xlsx");
         document.body.appendChild(sheetDownload);
         sheetDownload.click();
-        
+
         sheetDownload.remove();
-      }else{
+      } else {
         present("500 Internal Server Error", 1200)
       }
     }).catch(() => {
@@ -509,6 +506,10 @@ const ViewReports: React.FC = () => {
       if (document.getElementById("fromDate")?.getElementsByTagName("input")[0].value !== "" || document.getElementById("toDate")?.getElementsByTagName("input")[0].value !== "") {
         dateFilter()
       }
+
+    if (timeFrameToggle) {
+      timeFrameFilter()
+    }
   }
 
   function searchFilter(searchText: string | undefined) {
@@ -520,6 +521,25 @@ const ViewReports: React.FC = () => {
           if (temp !== null)
             temp.style.display = "none";
         }
+      }
+    }
+  }
+
+  function timeFrameFilter() {
+
+    for (let j = 0; j < reports.length; j++) {
+      let foundFlag = false;
+      for (let i = 0; i < timeFrames.length; i++) {
+        if (reports[j].otherName.includes(timeFrames[i])) {
+          foundFlag=true
+        }
+      }
+
+      if (foundFlag===false)
+      {
+        const temp = document.getElementById("reportItem" + j)
+        if (temp !== null)
+          temp.style.display = "none";
       }
     }
   }
