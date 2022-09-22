@@ -30,6 +30,7 @@ import { Popover } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { float } from 'aws-sdk/clients/lightsail';
 import {destroySession} from "../../api/Session"
+import { globalSetWeeklyBudget } from "../components/UserStats"
 
 const Profile: React.FC = () => {
   const [logoutAlert, setLogoutAlert] = useState(false);
@@ -330,7 +331,7 @@ const Profile: React.FC = () => {
         present("New weekly budget applied", 1200)
 
         setBudgetA(weeklyBudget, NaN)
-
+        globalSetWeeklyBudget(weeklyBudget)
       }
 
     }

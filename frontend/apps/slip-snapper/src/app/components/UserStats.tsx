@@ -8,7 +8,7 @@ import ProfileBarGraph from "./ProfileBarGraph";
 import ProfilePieChart from "./ProfilePieChart";
 import ProfileLineGraph from "./ProfileLineGraph";
 
-
+export let globalSetWeeklyBudget:any;
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
         category: {
@@ -46,6 +46,7 @@ export const UserStats = () => {
     });
 
     const [weeklyBudget, setWeeklyBudget] = useState(0);
+    globalSetWeeklyBudget=setWeeklyBudget;
     useEffect(() => {
         getStatsA()
             .then(
