@@ -59,13 +59,13 @@ function ProfileLineGraph({ graphData }: Props) {
         labels: graphData[0].futureDateArray,
         datasets: [
             {
-                label: 'Forecasted Expenditure',
+                label: 'Forecasted Expenditure (R)',
                 data: graphData[0].averagesArray,
                 borderColor: "rgb(39, 165, 146)",
                 backgroundColor: "rgb(39, 165, 146)",
             },
             {
-                label: 'Weekly Budget',
+                label: 'Weekly Budget (R)',
                 data: [graphData[1], graphData[1], graphData[1], graphData[1]],
                 borderColor: 'rgb(255, 99, 132)',
                 backgroundColor: 'rgba(255, 99, 132)',

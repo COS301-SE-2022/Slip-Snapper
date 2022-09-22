@@ -18,7 +18,7 @@ import {
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { isPlatform } from '@ionic/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@ionic-native/file-opener';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
@@ -37,6 +37,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { async } from 'rxjs/internal/scheduler/async';
 
 ChartJS.register(
   CategoryScale,
@@ -49,8 +50,14 @@ ChartJS.register(
 
 const Home: React.FC = () => {
   const [thisWeeksReports, setThisWeeksReports] = useState<any[]>([]);
-  const [todayItems, setTodayItem] = useState(0);
-  const [todayTotal, setTodayTotal] = useState(0);
+  const [todayItems, setTodayItem] = useState({
+    message:"",
+    totalItems:0,
+    totalSpent:0,
+    weekItemCount:0,
+    weekTotal:0
+  });
+  // const [todayTotal, setTodayTotal] = useState(0);
   const [present, dismiss] = useIonToast();
   const [reports, setR] = useState<any[]>([]);
 
@@ -72,11 +79,11 @@ const Home: React.FC = () => {
         }
       }).catch();
 
-    getTodayStats()
-      .then(apiResponse => {
+     getTodayStats()
+      .then(async apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
-          setTodayItem(apiResponse.data.totalItems)
-          setTodayTotal(Number(apiResponse.data.totalSpent))
+            await setTodayItem(apiResponse.data)
+            console.log(apiResponse.data)
         }
       }).catch();
     getGraphStats()
@@ -120,7 +127,7 @@ const Home: React.FC = () => {
         </IonRow>
 
         <IonItem>
-          <IonTitle>Report Summary</IonTitle>
+          <IonTitle>Expense Summary</IonTitle>
         </IonItem>
         <IonRow>
           <IonCol>
@@ -128,8 +135,8 @@ const Home: React.FC = () => {
               <IonCardHeader>
                 <IonCardTitle>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
-              <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R {todayTotal.toFixed(2)}</IonItem>
+              <IonItem color="tertiary">Items Bought: {todayItems.totalItems}</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R {todayItems.totalSpent.toFixed(2)}</IonItem>
               <IonItem color="tertiary"></IonItem>
             </IonCard>
           </IonCol>
@@ -137,34 +144,11 @@ const Home: React.FC = () => {
           <IonCol>
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>This Week's Reports:</IonCardTitle>
+                <IonCardTitle>This Week's Expenditure:</IonCardTitle>
               </IonCardHeader>
-
-              {thisWeeksReports?.length === 0 || thisWeeksReports?.length === undefined ?
-                <IonItem color="tertiary">
-                  You currently have no reports for this week.
-                </IonItem>
-                :
-                thisWeeksReports?.map((item, index) => {
-                  return (
-                    <IonItem key={index} color="tertiary">
-                      {item.otherName}
-                      <IonButton onClick={() => { view(item.reportName) }} color="secondary" slot="end" class="viewButton" >
-                        View
-                      </IonButton>
-                      <IonButton
-                        onClick={() =>
-                          deleteReport(item.reportName, item.reportId.toString())
-                        }
-                        fill="solid"
-                        slot="end"
-                        color="medium"
-                      >
-                        Delete
-                      </IonButton>
-                    </IonItem>
-                  );
-                })}
+              <IonItem color="tertiary">Items Bought: {todayItems.weekItemCount}</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R {todayItems.weekTotal}</IonItem>
+              <IonItem color="tertiary"></IonItem>
             </IonCard>
           </IonCol>
 
