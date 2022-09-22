@@ -386,3 +386,55 @@ describe('setGeneralBudget', () => {
         });
     });
 });
+
+describe('deleteSlip', () => {
+    it('should expose a function', () => {
+        expect(deleteSlip).toBeDefined();
+    });
+
+    it('deleteSlip should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Slip has been deleted",
+        };
+        mock.onDelete( baseUrl + 'item/slip').reply(200, data);
+
+        await deleteSlip("1").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getGraphStats', () => {
+    it('should expose a function', () => {
+        expect(getGraphStats).toBeDefined();
+    });
+
+    it('getGraphStats should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+           data: []
+        };
+        mock.onGet( baseUrl + 'item/graph').reply(200, data);
+
+        await getGraphStats().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('generateSpreadSheet', () => {
+    it('should expose a function', () => {
+        expect(generateSpreadSheet).toBeDefined();
+    });
+
+    it('generateSpreadSheet should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+           message: "SpreadSheet generated."
+        };
+        mock.onPost( baseUrl + 'report/spreadsheet').reply(200, data);
+
+        await generateSpreadSheet("Daily").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
