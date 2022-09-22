@@ -1,24 +1,3 @@
-// const { getDataItems } = require("../../apps/src/db")
-
-// let items;
-
-// async function setItems(){
-//     items = await getDataItems()
-//     console.log(items)
-// }
-
-// setItems()
-
-// function categorize( text ){
-//     for(var item of items.items){
-//         if (item.item == text){
-//             return item.itemType
-//         }
-//     }
-
-//     return "other";
-// }
-
 const fs = require('fs');
 const csv = require('csv');
 const tf = require('@tensorflow/tfjs-node');
@@ -75,7 +54,6 @@ class Layer{
         console.log(this.numNeurons, this.allNeurons);
     }
 }
-
 class Categoriser{
     constructor(){
         this.modelDescription = [512,8,8];
@@ -94,7 +72,7 @@ class Categoriser{
     
         ////////////////////////////////////
         let ret = [];
-        for(let i = 0; i < 2000; i++){
+        for(let i = 0; i < 100; i++){
             ret[i] = items[i];
         }
         ////////////////////////////////////
@@ -116,39 +94,64 @@ class Categoriser{
     }
 
     async initParams(){
-        const W1 = Math.random();
-        const B1 = Math.random();
-        const W2 = Math.random();
-        const B2 = Math.random();
+        const W1 = [];
+        for(let i = 0; i < 8; i++){
+            W1[i] = [];
+            for (let j = 0; j < 512; j++){
+                W1[i][j] = Math.random();
+            }
+        }
+
+        const B1 = [];
+        for(let i = 0; i < 8; i++){
+            B1[i] = Math.random();
+        }
+
+        const W2 = [];
+        for(let i = 0; i < 8; i++){
+            W2[i] = [];
+            for (let j = 0; j < 8; j++){
+                W2[i][j] = Math.random();
+            }
+        }
+
+        const B2 = [];
+        for(let i = 0; i < 8; i++){
+            B2[i] = Math.random();
+        }
+
         return {
             W1, B1, W2, B2,
         }
     }
 
-    async relu(Z){
+    async relu( Z ){
         return Math.max(0,Z);
     }
 
-    async softmax(Z){
+    async softmax( Z ){
         return 0;
         // exp(Z) / sum(exp(Z))
     }
 
-    async forwardProp(W1, B1, W2, B2, X){
-        let Z1 // = (W1 dotProduct X) + B1
-        let A1 // = Relu(Z1)
-        let Z2 // = (W@ dotProduct A1) + B2
+    async forwardProp( W1, B1, W2, B2, X ){
+        let Z1 = await this.matrixMul(W1,X)// + B1;
+        console.log(Z1);
+        console.log(B1.length, B1[0].length, Z1.length, Z1[0].length);
+        return;
+        let A1 // = await Relu(Z1);
+        let Z2 // = (W2 dotProduct A1) + B2
         let A2 // = softmax(Z1)
         return {
             Z1, A1, Z2, A2,
         }
     }
 
-    async derivativeRelu(Z){
+    async derivativeRelu( Z ){
         return Z > 0;
     }
 
-    async backwardProp(Z1, A1, Z2, A2, W2, X, Y){
+    async backwardProp( Z1, A1, Z2, A2, W2, X, Y ){
         const m = Y.length;
 
         const dZ2 = A2 - Y;
@@ -164,7 +167,7 @@ class Categoriser{
         }
     }
 
-    async updateParams( W1, B1, W2, B2, backProp, alpha){
+    async updateParams( W1, B1, W2, B2, backProp, alpha ){
         W1 = W1 - (alpha * backProp.dW1);
         B1 = B1 - (alpha * backProp.dB1);
         W2 = W2 - (alpha * backProp.dW2);
@@ -175,23 +178,62 @@ class Categoriser{
         }
     }
 
-    getPredictions(A2){
+    async matrixMul( a, b ){
+        const m1 = a.length;
+        const m2 = a[0].length;
+        const n2 = b[0].length;
+
+        let x;
+        let i;
+        let j;
+        let res = new Array(m1);
+        for (i = 0; i < m1; i++){
+            res[i] = new Array(n2);
+        }
+            
+        for (i = 0; i < m1; i++){
+            for (j = 0; j < n2; j++){
+                res[i][j] = 0;
+                for (x = 0; x < m2; x++) {
+                    res[i][j] += a[i][x] * b[x][j];
+                }
+            }
+        }
+
+        return res;
+    }
+
+    async matrixAdd(a,b){
+        return 1;
+    }
+
+    getPredictions( A2 ){
         return 1;
         // argmax(A2,0)
     }
 
-    getAccuracy(Y){
+    getAccuracy( Y ){
         return 1;
         // sum(predictions == Y)/ Y.size
     }
 
-    async gradientDescent(X, Y, iterations, alpha){
-        let { W1, B1, W2, B2 } = this.initParams();
-
+    async gradientDescent( X, Y, iterations, alpha ){
+        //X = n with 512 sub array
+        //Y = 8 element array 
+        //iterations = num of iterations
+        //alpha = predefined val
+        // console.log(X.length, X[0].length, X[0][0])
+        const params = await this.initParams();
+        // console.log( params.W1 /*Array: 512 with 8 subarrays*/, params.B1 /*Array: 8 by 1*/, 
+        // params.W2 /*Array: 8 with 8 subarrays*/, params.B2 /*Array: 8 by 1 */ )
+        let W1 = params.W1;
+        let B1 = params.B1;
+        let W2 = params.W2;
+        let B2 = params.B2;
         for(let i = 0; i < iterations; i++){
-            const { Z1, A1, Z2, A2 } = await this.forwardProp(W1, B1, W2, B2);
-            const backword = await this.backwardProp(Z1, A1, Z2, A2, W2, X, Y);
-            let updates = await this.updateParams(W1, B1, W2, B2, backword , alpha)
+            const forward = await this.forwardProp(W1, B1, W2, B2, X);
+            const backword = await this.backwardProp(forward.Z1, forward.A1, forward.Z2, forward.A2, params.W2, X, Y);
+            let updates = await this.updateParams(params.W1, params.B1, params.W2, params.B2, backword , alpha)
             W1 = updates.W1;
             B1 = updates.B1;
             W2 = updates.W2;
@@ -242,13 +284,27 @@ class Categoriser{
                     break;
             }
         });
-        // const inputsEmbed = await(await encoder.embed(inputs)).array();
-        // console.log(inputsEmbed[0])
 
-        const train = this.gradientDescent(inputsEmbed, outputs, 100, 0.1)
+        const inputsEmbed = []
+        for(let i = 0; i< inputs.length; i++){
+            inputsEmbed[i] = (await(await encoder.embed(inputs[i])).array())[0];
+        }
 
-        console.log(model);
-        console.log('Layers: %d, Neurons: %d, Connections: %d', numLayers, numNeurons, numConnections);
+        let embeddings = new Array(512);
+        for(let i = 0; i < 512; i++){
+            embeddings[i] = [];
+        }
+
+        for(let j = 0; j < inputs.length; j++){
+            for(let i = 0; i < 512; i++){
+                embeddings[i][j] = inputsEmbed[j][i];
+            }
+        }
+
+        const train = await this.gradientDescent(embeddings, outputs, 5, 0.1)
+        console.log(train)
+        // console.log(model);
+        // console.log('Layers: %d, Neurons: %d, Connections: %d', numLayers, numNeurons, numConnections);
     }
 
 }

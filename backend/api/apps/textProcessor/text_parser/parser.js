@@ -1,4 +1,4 @@
-const { categorize } = require("../../itemCategoriser/categorizer");
+// const { categorize } = require("../../itemCategoriser/categorizer");
 const { ItemCategoriser } = require('../../itemCategoriser/itemCategoriser')
 
 const category = new ItemCategoriser();
