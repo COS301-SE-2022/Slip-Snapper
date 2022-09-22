@@ -15,14 +15,14 @@ const EditReceipt: React.FC = () => {
     const history = useHistory();
 
      const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
-     for(let i=0; i<slipContents.items.length;i++)
+     for(let i=0; i<slipContents?.items.length;i++)
      {
          slipContents.items[i].itemPrice = Number(slipContents.items[i].itemPrice).toFixed(2)
      }
-    const [editReceiptItems, setEditReceiptItems] = useState(slipContents.items);
-    const originalItems = slipContents.items
-    const [location, setLocation] = useState(slipContents.location);
-    const [date, setDate] = useState(slipContents.transactionDate);
+    const [editReceiptItems, setEditReceiptItems] = useState(slipContents?.items);
+    const originalItems = slipContents?.items
+    const [location, setLocation] = useState(slipContents?.location);
+    const [date, setDate] = useState(slipContents?.transactionDate);
     
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
@@ -36,7 +36,7 @@ const EditReceipt: React.FC = () => {
         setEditReceiptItems(_tempCosts);
     };
     const getTotalCosts = () => {
-        return editReceiptItems.reduce((total: number, item: { itemPrice: any; }) => {
+        return editReceiptItems?.reduce((total: number, item: { itemPrice: any; }) => {
             return total + Number(item.itemPrice);
 
         }, 0);
@@ -76,7 +76,7 @@ const EditReceipt: React.FC = () => {
                         <IonCardTitle>Edit Details</IonCardTitle>
                     </IonCardHeader>
 
-                    {editReceiptItems.map((item: any, index: number) => {
+                    {editReceiptItems?.map((item: any, index: number) => {
                         return (
                             <IonGrid key={index} >
                                 <div className='wrapper small-chip'>
@@ -156,7 +156,7 @@ const EditReceipt: React.FC = () => {
 
                     <IonCardHeader className="wrapper">
                         <IonItem id={"total"} className='addEntry' color="tertiary" >
-                            {getTotalCosts().toFixed(2)}
+                            {getTotalCosts()?.toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
                     <IonItem color="primary">
