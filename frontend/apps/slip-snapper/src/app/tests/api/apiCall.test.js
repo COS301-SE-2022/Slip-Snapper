@@ -59,3 +59,71 @@ describe('getItemsA', () => {
         });
     });
 });
+
+describe('setBudgetA', () => {
+    it('should expose a function', () => {
+        expect(setBudgetA).toBeDefined();
+    });
+
+    it('setBudgetA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "User budget set",
+            weekly: "0",
+            monthly: "0"
+        };
+        mock.onPost(baseUrl + 'stats/budget').reply(200, data);
+
+        await setBudgetA(0,0).then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getProfileData', () => {
+    it('should expose a function', () => {
+        expect(getProfileData).toBeDefined();
+    });
+
+    it('getProfileData should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "User profile statistics retrieved",
+            weeklyTotal: 0,
+            weekly: 0,
+            monthlyTotal: 0,
+            monthly: 0,
+            favouriteStore: {
+                name: "",
+                receipts: "",
+            },
+            otherBudgets: {},
+            user: "",
+        };
+        mock.onGet(baseUrl + 'stats/profile').reply(200, data);
+
+        await getProfileData().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('loginA', () => {
+    it('should expose a function', () => {
+        expect(loginA).toBeDefined();
+    });
+
+    it('loginA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "User logged in successfully",
+            userData: {
+                username: "testUser",
+            },
+            token: "",
+        };
+        mock.onPost(baseUrl + 'user/login').reply(200, data);
+
+        await loginA("testUser", "password1").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
