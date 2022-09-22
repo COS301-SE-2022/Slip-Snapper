@@ -278,3 +278,111 @@ describe('getRecentReports', () => {
         });
     });
 });
+
+describe('removeReport', () => {
+    it('should expose a function', () => {
+        expect(removeReport).toBeDefined();
+    });
+
+    it('removeReport should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Report deleted Succesfully",
+        };
+        mock.onDelete( baseUrl + 'report/pdf').reply(200, data);
+
+        await removeReport("testUser", "31-01-2022Weekly#3.pdf" , "3").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getAllSlips', () => {
+    it('should expose a function', () => {
+        expect(getAllSlips).toBeDefined();
+    });
+
+    it('getAllSlips should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "All slips retrieved",
+            slips: []
+        };
+        mock.onGet( baseUrl + 'item/slip').reply(200, data);
+
+        await getAllSlips().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getThisWeeksReports', () => {
+    it('should expose a function', () => {
+        expect(getThisWeeksReports).toBeDefined();
+    });
+
+    it('getThisWeeksReports should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: undefined,
+            monthlyReportsList: []
+        };
+        mock.onGet( baseUrl + 'report/thisweek').reply(200, data);
+
+        await getThisWeeksReports().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('updateSlipA', () => {
+    it('should expose a function', () => {
+        expect(updateSlipA).toBeDefined();
+    });
+
+    it('updateSlipA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Error updating the slip",
+        };
+        mock.onPatch( baseUrl + 'item/slip').reply(200, data);
+
+        await updateSlipA([], [], [], []).then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getTodayStats', () => {
+    it('should expose a function', () => {
+        expect(getTodayStats).toBeDefined();
+    });
+
+    it('getTodayStats should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Today's Stats retrieved",
+            totalItems: 0,
+            totalSpent: 0
+        };
+        mock.onGet( baseUrl + 'stats/today').reply(200, data);
+
+        await getTodayStats().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('setGeneralBudget', () => {
+    it('should expose a function', () => {
+        expect(setGeneralBudget).toBeDefined();
+    });
+
+    it('setGeneralBudget should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "User budget/s set",
+            budgets: undefined,
+        };
+        mock.onPost( baseUrl + 'stats/categoryBudgets').reply(200, data);
+
+        await setGeneralBudget().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
