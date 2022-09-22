@@ -910,13 +910,24 @@ async function updateWeeklyMonthlyCategoryBudgets(userId, data) {
             }
         })
 
+        const budgetObject = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                budgets: true
+            }
+        })
+
         return {
-            message: "User budget/s set",
+            message: "User budget/s set and retrieved",
+            budgets: budgetObject
         };
     }
     catch (error) {
         return {
             message: "Error updating the budget/s",
+            budgets: {}
         };
     }
 
@@ -2334,7 +2345,6 @@ async function getForecast(userId) {
             futureDateArray: futureDateArray.reverse()
         }
 
-
     }
     catch (error) {
         return {
@@ -2343,8 +2353,6 @@ async function getForecast(userId) {
             futureDateArray: []
         }
     }
-
-
 }
 
 
