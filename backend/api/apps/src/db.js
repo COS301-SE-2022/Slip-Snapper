@@ -2217,12 +2217,11 @@ async function getForecast(userId) {
                     date = new Date()
                     date.setMonth(date.getMonth() - index)
                     date.setDate(date.getDate() - (7 * weeks) - count + 1)
-                    if (count == 1 && index==0) {
+                    if (count == 1 && index == 0) {
                         let futureDate = new Date()
                         futureDate.setDate(date.getDate())
-                        if(date.getDate()==31)
-                        {
-                            futureDate.setDate(date.getDate()-1)
+                        if (date.getDate() == 31) {
+                            futureDate.setDate(date.getDate() - 1)
                         }
                         futureDate.setMonth(date.getMonth() + 1)
                         futureDateArray.push(futureDate.toISOString().substring(0, 10).replace("-", "/").replace("-", "/"))
@@ -2293,5 +2292,6 @@ module.exports = {
     getWeeklyMonthlyCategoryBudgets,
     deleteSlip,
     getUserAnalysis,
-    getUserInformation
+    getUserInformation,
+    getForecast
 }
