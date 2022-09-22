@@ -1674,17 +1674,25 @@ async function todaysReports(userid) {
                     select: {
                         items: true,
                     }
-                }
+                },
+
+                items:true,
             }
 
         })
 
+
         let sum = 0
         let counter = 0
         for (const numItems in todaysReport) {
-            sum += todaysReport.at(counter)._count.items
+            
+            for (const i in todaysReport.at(counter).items)
+            {
+                sum += todaysReport.at(counter).items.at(i).itemQuantity
+            }
             counter++
         }
+
         const todaystotal = await prisma.slip.aggregate({
             where: {
                 usersId: userid,
@@ -1735,16 +1743,19 @@ async function thisWeeksExpenditure(userid) {
                     select: {
                         items: true
                     }
-                }
+                },
+
+                items:true,
             }
         })
 
         let itemCount = 0
         let counter = 0
         for (const numItems in weeksItems) {
-            itemCount += weeksItems.at(counter)._count.items
-            // console.log(weeksItems.at(counter))
 
+            for (const i in weeksItems.at(counter).items) {
+                itemCount += weeksItems.at(counter).items.at(i).itemQuantity
+            }
             counter++
         }
 

@@ -37,6 +37,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { async } from 'rxjs/internal/scheduler/async';
 
 ChartJS.register(
   CategoryScale,
@@ -78,12 +79,11 @@ const Home: React.FC = () => {
         }
       }).catch();
 
-    getTodayStats()
-      .then(apiResponse => {
+     getTodayStats()
+      .then(async apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
-          setTodayItem(apiResponse.data)
-          // setTodayTotal(Number(apiResponse.data.totalSpent))
-          console.log(apiResponse.data)
+            await setTodayItem(apiResponse.data)
+            console.log(apiResponse.data)
         }
       }).catch();
     getGraphStats()
