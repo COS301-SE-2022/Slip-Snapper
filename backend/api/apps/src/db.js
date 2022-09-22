@@ -2253,6 +2253,12 @@ async function getForecast(userId) {
             }
         }
 
+        return {
+            message: "Success retrieving User Forecasting",
+            averagesArray: avgArray,
+            futureDateArray: futureDateArray
+        }
+
 
     }
     catch (error) {
@@ -2262,6 +2268,8 @@ async function getForecast(userId) {
             futureDateArray: []
         }
     }
+
+
 }
 
 
