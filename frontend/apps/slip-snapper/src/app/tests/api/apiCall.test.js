@@ -202,3 +202,79 @@ describe('getStatsA', () => {
         });
     });
 });
+
+describe('addItemsA', () => {
+    it('should expose a function', () => {
+        expect(addItemsA).toBeDefined();
+    });
+
+    it('addItemsA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Item/s could not be added",
+            numItems: 0,
+        };
+        mock.onPost(baseUrl + 'item').reply(200, data);
+
+        await addItemsA({text: ["Spar", "2022/01/31", "0", {}, "0"]}, []).then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getAllUserReports', () => {
+    it('should expose a function', () => {
+        expect(getAllUserReports).toBeDefined();
+    });
+
+    it('getAllUserReports should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "All user reports Retrieved",
+            numReports: 0,
+            reports: []
+        };
+        mock.onGet(baseUrl + 'report/user').reply(200, data);
+
+        await getAllUserReports().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getUserReport', () => {
+    it('should expose a function', () => {
+        expect(getUserReport).toBeDefined();
+    });
+
+    it('getUserReport should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        var userName = "testUser";
+        var fileName = "31-01-2022Weekly#3.pdf";
+        const data = { 
+            message: "Report retrieved Succesfully",
+            report: {},
+        };
+        mock.onGet( baseUrl + 'report/pdf?userName=' + userName + '&fileName=' + fileName).reply(200, data);
+
+        await getUserReport("testUser", "31-01-2022Weekly#3.pdf").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getRecentReports', () => {
+    it('should expose a function', () => {
+        expect(getRecentReports).toBeDefined();
+    });
+
+    it('getRecentReports should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Recent Reports retrieved",
+            reportsList: []
+        };
+        mock.onGet( baseUrl + 'report/recent').reply(200, data);
+
+        await getRecentReports().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
