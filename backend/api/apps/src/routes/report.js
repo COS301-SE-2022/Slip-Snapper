@@ -259,7 +259,7 @@ router.post('/pdf', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -267,7 +267,7 @@ router.post('/pdf', async (req,res)=>{
 
     let { period, newReportNumber } = req.body;
     if( validateGeneratePDF( period, newReportNumber )){  
-        return res.status(400)
+        return res.status(200)
             .send({
                 message: "Missing or Invalid input data",
             });
@@ -301,7 +301,7 @@ router.post('/pdf', async (req,res)=>{
             });
     }
 
-    return res.status(503)
+    return res.status(200)
         .send({
             message: "Report unable to uploaded",
         });
@@ -316,7 +316,7 @@ router.post('/pdf', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -330,7 +330,7 @@ router.post('/pdf', async (req,res)=>{
         (fileName.split('_')[1] == undefined || !( ['Daily','Weekly','Monthly'].includes(fileName.split('_')[1]) )) ||
         (fileName.split('_')[2] == undefined || (fileName.split('_')[2].split('.')[1] == undefined || fileName.split('_')[2].split('.')[1] != 'pdf'))
     ){
-        return res.status(400)
+        return res.status(200)
             .send({
                 message: "Missing or Invalid input data",
             });
@@ -358,7 +358,7 @@ router.delete('/pdf', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -373,7 +373,7 @@ router.delete('/pdf', async (req,res)=>{
         (fileName.split('_')[2] == undefined || (fileName.split('_')[2].split('.')[1] == undefined || fileName.split('_')[2].split('.')[1] != 'pdf')) ||
         (typeof(reportID) != 'number' && reportID < 0)
     ){
-        return res.status(400)
+        return res.status(200)
             .send({
                 message: "Missing or Invalid input data",
             });
@@ -403,7 +403,7 @@ router.get('/user', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -431,7 +431,7 @@ router.get('/recent', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
     
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
                 reports: []
@@ -457,7 +457,7 @@ router.get('/thisweek', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
                 reports: []
@@ -484,7 +484,7 @@ router.post('/spreadsheet', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -494,7 +494,7 @@ router.post('/spreadsheet', async (req, res) => {
     if( ( period == null ) ||
         ( typeof(period) != 'string' || !( ['Daily','Weekly','Monthly'].includes(period) ) )
     ){
-        return res.status(400)
+        return res.status(200)
             .send({
                 message: "Missing or Invalid input data",
             });

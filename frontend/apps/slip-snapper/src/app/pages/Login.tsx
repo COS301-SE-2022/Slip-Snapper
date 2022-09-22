@@ -123,7 +123,7 @@ const Login: React.FC = () => {
           }
           
         }).catch(err => {
-          setErrorMessage("Username or Password is incorrect.")
+          setErrorMessage("500 Internel Server Error.")
           setAlert(true)
         })
     }

@@ -143,7 +143,7 @@ const Profile: React.FC = () => {
                   </IonItem>
 
                   <IonItem className="center-items" color="tertiary">
-                    <IonText>Email Address</IonText>
+                    <IonText>Email Address:</IonText>
                     <IonText slot='end'>{userDetails.email}</IonText>
                   </IonItem>
               </div>

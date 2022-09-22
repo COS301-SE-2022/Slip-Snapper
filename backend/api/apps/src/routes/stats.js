@@ -25,7 +25,7 @@ router.get('/profile', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -62,7 +62,7 @@ router.post('/budget', async (req,res)=>{
         const tokenVerified = await req.app.get('token').verifyToken(token);
         
         if(tokenVerified === "Error"){
-            return res.status(403)
+            return res.status(200)
                 .send({
                     message: "Token has expired Login again to continue using the application",
                 });
@@ -73,7 +73,7 @@ router.post('/budget', async (req,res)=>{
             (weekly != null && (typeof(weekly) != 'number' || weekly < 0)) ||
             (monthly != null && (typeof(monthly) != 'number' || monthly < 0)) 
         ){
-            return res.status(400)
+            return res.status(200)
                 .send({
                     message: "Missing or Invalid input data",
                 });
@@ -106,7 +106,7 @@ router.post('/categoryBudgets', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if (tokenVerified === "Error") {
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -118,7 +118,7 @@ router.post('/categoryBudgets', async (req, res) => {
             if( (!(['FoodBudget', 'FashionBudget', 'ElectronicsBudget', 'HouseholdBudget', 'OtherBudget', 'HobbyBudget', 'HealthcareBudget', 'VehicleBudget'].includes(key))) ||
                 validateCategoryBudget(budgets[key])
             ){  
-                return res.status(400)
+                return res.status(200)
                     .send({
                         message: "Missing or Invalid input data",
                     });
@@ -147,7 +147,7 @@ router.get('', async (req,res)=>{
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -187,7 +187,7 @@ router.get('/today', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if(tokenVerified === "Error"){
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -214,7 +214,7 @@ router.get('/today', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if (tokenVerified === "Error") {
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
@@ -241,7 +241,7 @@ router.get('/forecast', async (req, res) => {
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
     if (tokenVerified === "Error") {
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Token has expired Login again to continue using the application",
             });
