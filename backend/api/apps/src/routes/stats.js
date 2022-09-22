@@ -206,4 +206,58 @@ router.get('/today', async (req, res) => {
 
 });
 
+/**
+ * Get today's expenditure stats
+ */
+router.get('/today', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if (tokenVerified === "Error") {
+        return res.status(403)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
+    const result = await req.app.get("db").todaysReports(Number(tokenVerified.user.id));
+
+    //TODO error checking
+
+    return res.status(200)
+        .send({
+            message: result.message,
+            totalItems: result.sum,
+            totalSpent: result.todaystotal
+        });
+
+});
+
+/**
+ * Get today's expenditure stats
+ */
+router.get('/forecast', async (req, res) => {
+    const token = req.headers.authorization.split(' ')[1];
+    const tokenVerified = await req.app.get('token').verifyToken(token);
+
+    if (tokenVerified === "Error") {
+        return res.status(403)
+            .send({
+                message: "Token has expired Login again to continue using the application",
+            });
+    }
+
+    const result = await req.app.get("db").getForecast(Number(tokenVerified.user.id));
+
+    //TODO error checking
+
+    return res.status(200)
+        .send({
+            message: result.message,
+            averagesArray: result.averagesArray,
+            futureDateArray: result.futureDateArray
+        });
+
+});
+
 module.exports.router = router;

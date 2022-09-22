@@ -80,6 +80,7 @@ exports[`<UserStats> should render component 1`] = `
     <ion-card-header>
       <ion-item
         color="primary"
+        lines="none"
         onClick={[Function]}
       >
         <ion-card-title>
@@ -90,12 +91,16 @@ exports[`<UserStats> should render component 1`] = `
           src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Help Circle</title><path d='M256 80a176 176 0 10176 176A176 176 0 00256 80z' stroke-miterlimit='10' class='ionicon-fill-none ionicon-stroke-width'/><path d='M200 202.29s.84-17.5 19.57-32.57C230.68 160.77 244 158.18 256 158c10.93-.14 20.69 1.67 26.53 4.45 10 4.76 29.47 16.38 29.47 41.09 0 26-17 37.81-36.37 50.8S251 281.43 251 296' stroke-linecap='round' stroke-miterlimit='10' stroke-width='28' class='ionicon-fill-none'/><circle cx='250' cy='348' r='20'/></svg>"
         />
       </ion-item>
-      <canvas
-        className="graph"
-        height={250}
-        role="img"
-        width={300}
-      />
+      <div
+        className="profileGraph"
+      >
+        <canvas
+          className="graph"
+          height={250}
+          role="img"
+          width={300}
+        />
+      </div>
     </ion-card-header>
   </ion-card>
 </div>

@@ -337,7 +337,7 @@ async function getItemsReport(userid, start, end) {
             };
         }
 
-        let itemList = []; 
+        let itemList = [];
         var i = 0;
         for (var itemL of items) {
             let location = itemL.location;
@@ -1725,14 +1725,14 @@ async function getUserProfile(userId) {
         let store = await getFavouriteStore(userId);
         let budget = await getUserBudgets(userId);
         let budgets = await getUserGeneralBudgets(userId);
-        let user = await  getUserInformation(userId);
-        
+        let user = await getUserInformation(userId);
+
         return {
             message: "User profile statistics retrieved",
             storeDetails: store,
             budget: budget,
             budgets: budgets,
-            user:user,
+            user: user,
         };
     }
     catch (error) {
@@ -1741,7 +1741,7 @@ async function getUserProfile(userId) {
             storeDetails: {},
             budget: {},
             budgets: {},
-            user:{}
+            user: {}
         };
     }
 
@@ -2179,10 +2179,6 @@ async function getUserAnalysis(userId) {
 }
 
 
-async function getUserMode(userId) {
-
-}
-
 async function getUserInformation(userId) {
 
     const user = await prisma.user.findFirst({
@@ -2193,15 +2189,89 @@ async function getUserInformation(userId) {
             username: true,
             firstname: true,
             lastname: true,
-            email:true,
+            email: true,
         }
     })
 
     return {
-        user:user
+        user: user
     }
 
 }
+
+async function getForecast(userId) {
+
+    try {
+
+        let week = []
+        for (let index = 0; index < 4; index++) {
+            week[index] = []
+        }
+        let date = new Date()
+        let futureDateArray = []
+
+        for (let index = 0; index < 3; index++) {
+
+            for (let count = 1; count <= 7; count++) {
+                for (let weeks = 0; weeks < 4; weeks++) {
+                    date = new Date()
+                    date.setMonth(date.getMonth() - index)
+                    date.setDate(date.getDate() - (7 * weeks) - count + 1)
+                    if (count == 1 && index == 0) {
+                        let futureDate = new Date()
+                        futureDate.setDate(date.getDate())
+                        if (date.getDate() == 31) {
+                            futureDate.setDate(date.getDate() - 1)
+                        }
+                        futureDate.setMonth(date.getMonth() + 1)
+                        futureDateArray.push(futureDate.toISOString().substring(0, 10).replace("-", "/").replace("-", "/"))
+                    }
+                    let tempDate = date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+                    week[weeks].push(tempDate)
+                }
+            }
+        }
+
+        let avgArray = []
+        for (let counter = 0; counter < week.length; counter++) {
+            let forecast = await prisma.slip.aggregate({
+                where: {
+                    usersId: userId,
+                    transactionDate: {
+                        in: week[counter]
+                    }
+                },
+                _avg: {
+                    total: true
+                }
+            })
+            if (forecast._avg.total != null) {
+                avgArray.push(forecast._avg.total)
+            }
+            else {
+                avgArray.push(0)
+            }
+        }
+
+        return {
+            message: "Success retrieving User Forecasting",
+            averagesArray: avgArray,
+            futureDateArray: futureDateArray
+        }
+
+
+    }
+    catch (error) {
+        return {
+            message: "Failure retrieving User Forecasting",
+            averagesArray: [],
+            futureDateArray: []
+        }
+    }
+
+
+}
+
 
 module.exports = {
     getUser,
@@ -2230,5 +2300,6 @@ module.exports = {
     getWeeklyMonthlyCategoryBudgets,
     deleteSlip,
     getUserAnalysis,
-    getUserInformation
+    getUserInformation,
+    getForecast
 }

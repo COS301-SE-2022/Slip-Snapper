@@ -54,22 +54,22 @@ function ProfileLineGraph({ graphData }: Props) {
         },
     };
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
     const graphStats = {
-        labels,
+        labels: graphData[0].futureDateArray,
         datasets: [
             {
-                label: 'Dataset 1',
-                data: [1,2,3,4,5],
-                borderColor: 'rgb(255, 99, 132)',
-                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                label: 'Forecasted Expenditure',
+                data: graphData[0].averagesArray,
+                borderColor: "rgb(39, 165, 146)",
+                backgroundColor: "rgb(39, 165, 146)",
             },
             {
-                label: 'Dataset 2',
-                data: [10,9,8,7,6],
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                label: 'Weekly Budget',
+                data: [graphData[1], graphData[1], graphData[1], graphData[1]],
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132)',
+
             },
         ],
     };

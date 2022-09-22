@@ -149,7 +149,7 @@ export async function generateReportA( userName, period,newReportNumber ){
  * To get the user statistics
  * @returns response from the server
  */
-export async function getStatsA(  ){
+export async function getStatsA(){
     return axios({
         headers: headers,
         method: 'get',
@@ -327,5 +327,13 @@ export async function generateSpreadSheet(period) {
         data: JSON.stringify({
             period: period,
         })
+    })
+}
+
+export async function getUserForecast() {
+    return axios({
+        headers: headers,
+        method: 'get',
+        url: baseUrl + 'stats/forecast',
     })
 }
