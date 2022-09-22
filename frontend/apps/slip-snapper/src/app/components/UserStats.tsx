@@ -59,7 +59,7 @@ export const UserStats = () => {
         getProfileData()
             .then(apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
-                    if (apiResponse.data)
+                    if (apiResponse.data.otherBudgets?.monthlyTotal)
                         setPercentages(apiResponse.data.otherBudgets.monthlyTotal)
                         setWeeklyBudget(apiResponse.data.weekly)
                 }

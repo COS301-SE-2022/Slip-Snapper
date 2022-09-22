@@ -10,24 +10,28 @@ category.loadModel();
  * @returns array of slip date, location, total amount and items
  */
 async function parse(lines) {
-    let text = lines.split('\n');
-    let correctedText = textCorrection(text)
-    let dateOfPurchase = dateParser(correctedText);
-    let locationOfSlip = locationParser(correctedText);
-    let totalSlip = totalParser(correctedText);
-    let slipItems = await itemsParser(correctedText);
+    try{
+        let text = lines.split('\n');
+        let correctedText = textCorrection(text)
+        let dateOfPurchase = dateParser(correctedText);
+        let locationOfSlip = locationParser(correctedText);
+        let totalSlip = totalParser(correctedText);
+        let slipItems = await itemsParser(correctedText);
 
-    let numItems = slipItems.length
+        let numItems = slipItems.length
 
-    const slip = [
-        dateOfPurchase,
-        locationOfSlip,
-        slipItems,
-        numItems,
-        totalSlip,
-    ]
+        const slip = [
+            dateOfPurchase,
+            locationOfSlip,
+            slipItems,
+            numItems,
+            totalSlip,
+        ]
 
-    return slip;
+        return slip;
+    }catch{
+        return undefined;
+    }
 }
 
 

@@ -281,7 +281,7 @@ describe('Post /user/login', ()=>{
                 { username: "username1", password: "password1"}
             )
 
-        expect(res.statusCode).toEqual(403);
+        expect(res.statusCode).toEqual(200);
     })
 
 })

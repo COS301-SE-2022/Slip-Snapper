@@ -85,9 +85,9 @@ const Profile: React.FC = () => {
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
-            setUserDetails(apiResponse.data.user.user)
+            setUserDetails(apiResponse.data.user?.user)
           }
-        })
+        }).catch();
 
     getStatsA()
       .then(
@@ -95,7 +95,7 @@ const Profile: React.FC = () => {
           if (typeof (apiResponse.data) !== "string") {
             setUserStats(apiResponse.data)
           }
-        })
+        }).catch();
   }, []);
   const [weeklyBudgetValue, setWeeklyBudget] = useState<number>(val.weekly);
   const [monthlyBudgetValue, setMonthlyBudget] = useState<number>(val.monthly);
@@ -134,17 +134,17 @@ const Profile: React.FC = () => {
               <div>
                   <IonItem className="center-items" color="tertiary">
                     <IonText>Username: </IonText>
-                    <IonText slot='end'>{userDetails.username}</IonText>
+                    <IonText slot='end'>{userDetails?.username}</IonText>
                   </IonItem>
 
                   <IonItem className="center-items" color="tertiary">
                     <IonText>Full Name: </IonText>
-                    <IonText slot='end'>{userDetails.firstname + " " + userDetails.lastname}</IonText>
+                    <IonText slot='end'>{userDetails?.firstname + " " + userDetails?.lastname}</IonText>
                   </IonItem>
 
                   <IonItem className="center-items" color="tertiary">
-                    <IonText>Email Address</IonText>
-                    <IonText slot='end'>{userDetails.email}</IonText>
+                    <IonText>Email Address:</IonText>
+                    <IonText slot='end'>{userDetails?.email}</IonText>
                   </IonItem>
               </div>
               
@@ -155,13 +155,13 @@ const Profile: React.FC = () => {
               <div>
                 <IonItem id="weekly-budget" className="center-items" color="tertiary">
                   <IonIcon data-testid="weekly-budget-icon" className="edit-budget" src={create} onClick={() => setWeeklyBudgetAlert(true)} />
-                  <IonText>Weekly: R{weeklyBudgetValue.toFixed(2)}</IonText>
+                  <IonText>Weekly: R{weeklyBudgetValue?.toFixed(2)}</IonText>
                   <IonProgressBar id='weeklyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
                 </IonItem>
 
                 <IonItem id="monthly-budget" className="center-items" color="tertiary">
                   <IonIcon data-testid="monthly-budget-icon" className="edit-budget" src={create} onClick={() => setMonthlyBudgetAlert(true)} />
-                  <IonText>Monthly: R{monthlyBudgetValue.toFixed(2)}</IonText>
+                  <IonText>Monthly: R{monthlyBudgetValue?.toFixed(2)}</IonText>
                   <IonProgressBar id='monthlyProgressBar' class='progressBar' slot="end"></IonProgressBar><br />
                 </IonItem>
               </div>
@@ -253,7 +253,7 @@ const Profile: React.FC = () => {
                         </Popover>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText data-testid='favoriteStore'>{profile.favouriteStore.name}</IonText>
+                <IonText data-testid='favoriteStore'>{profile.favouriteStore?.name}</IonText>
               </IonItem>
             </IonCardHeader>
 
@@ -278,10 +278,10 @@ const Profile: React.FC = () => {
                 </Popover>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText data-testid='storeName'>Item: {userStats.mostExpensive.name}</IonText>
+                <IonText data-testid='storeName'>Item: {userStats.mostExpensive?.name}</IonText>
               </IonItem>
               <IonItem className="center-items" color="tertiary">
-                <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive.amount.toFixed(2)}</IonText>
+                <IonText data-testid='storeTotal'>Amount: R{userStats.mostExpensive?.amount.toFixed(2)}</IonText>
               </IonItem>
             </IonCardHeader>
           </IonCard>

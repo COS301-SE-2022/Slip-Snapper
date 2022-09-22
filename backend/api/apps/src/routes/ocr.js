@@ -43,6 +43,13 @@ router.post('/process', async (req,res)=>{
     await worker.terminate();
 
     const processedText = await req.app.get('parser').parse(text);
+    
+    if(!processedText){
+        return res.status(200).send({
+            message : "Error processing image",
+            text : []
+        });
+    }
 
     return res.status(200).send({
             message : "Text has been processed",
