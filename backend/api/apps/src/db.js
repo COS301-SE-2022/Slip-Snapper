@@ -2229,6 +2229,27 @@ async function getForecast(userId) {
             }
         }
 
+        let avgArray = []
+        for (let counter = 0; counter < week.length; counter++) {
+            let forecast = await prisma.slip.aggregate({
+                where: {
+                    usersId: userId,
+                    transactionDate: {
+                        in: week[counter]
+                    }
+                },
+                _avg: {
+                    total: true
+                }
+            })
+            if (forecast._avg.total != null) {
+                avgArray.push(forecast._avg.total)
+            }
+            else {
+                avgArray.push(0)
+            }
+        }
+
 
     }
     catch (error) {
