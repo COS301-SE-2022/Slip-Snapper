@@ -2210,6 +2210,26 @@ async function getForecast(userId) {
         let date = new Date()
         let futureDateArray = []
 
+        for (let index = 0; index < 3; index++) {
+
+            for (let count = 1; count <= 7; count++) {
+                for (let weeks = 0; weeks < 4; weeks++) {
+                    date = new Date()
+                    date.setMonth(date.getMonth() - index)
+                    date.setDate(date.getDate() - (7 * weeks) - count + 1)
+                    if (count == 1 && index==0) {
+                        let futureDate = new Date()
+                        futureDate.setDate(date.getDate())
+                        futureDate.setMonth(date.getMonth() + 1)
+                        futureDateArray.push(futureDate.toISOString().substring(0, 10).replace("-", "/").replace("-", "/"))
+                    }
+                    let tempDate = date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+                    week[weeks].push(tempDate)
+                }
+            }
+        }
+
+
     }
     catch (error) {
         return {
