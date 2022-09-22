@@ -1,6 +1,6 @@
 import { IonCard, IonCardHeader, IonCardTitle, IonContent, IonIcon, IonItem, IonText } from "@ionic/react";
 import React, { useEffect, useState } from 'react';
-import { getStatsA, getProfileData } from "../../api/apiCall"
+import { getStatsA, getProfileData, getUserForecast } from "../../api/apiCall"
 import '../theme/user-stats.css';
 import { helpCircleOutline } from 'ionicons/icons';
 import { Popover } from '@mui/material';
@@ -8,7 +8,7 @@ import ProfileBarGraph from "./ProfileBarGraph";
 import ProfilePieChart from "./ProfilePieChart";
 import ProfileLineGraph from "./ProfileLineGraph";
 
-
+export let globalSetWeeklyBudget:any;
 export const UserStats = () => {
     const [userStats, setUserStats] = useState({
         category: {
@@ -38,7 +38,15 @@ export const UserStats = () => {
         Healthcare: 0,
         Hobby: 0,
         Vehicle: 0
-});
+    });
+
+    const [userForecast, setUserForecast] = useState({
+        averagesArray: [],
+        futureDateArray: []
+    });
+
+    const [weeklyBudget, setWeeklyBudget] = useState(0);
+    globalSetWeeklyBudget=setWeeklyBudget;
     useEffect(() => {
         getStatsA()
             .then(
@@ -51,10 +59,20 @@ export const UserStats = () => {
         getProfileData()
             .then(apiResponse => {
                 if (typeof (apiResponse.data) !== "string") {
-                    if(apiResponse.data)
+                    if (apiResponse.data)
                         setPercentages(apiResponse.data.otherBudgets.monthlyTotal)
+                        setWeeklyBudget(apiResponse.data.weekly)
                 }
             })
+        getUserForecast()
+            .then(apiResponse => {
+                if (typeof (apiResponse.data) !== "string") {
+                    if (apiResponse.data)
+                        setUserForecast(apiResponse.data)
+                }
+            })
+
+
     }, []);
 
     const [weekExPop, setWeekExPop] = useState(null);
@@ -99,7 +117,7 @@ export const UserStats = () => {
                         </Popover>
                     </IonItem>
                     <div className="profileGraph">
-                    <ProfileBarGraph graphData={userStats.lastWeek}></ProfileBarGraph>
+                        <ProfileBarGraph graphData={userStats.lastWeek}></ProfileBarGraph>
                     </div>
                 </IonCardHeader>
             </IonCard>
@@ -162,7 +180,7 @@ export const UserStats = () => {
 
             <IonCard className="card most-spent" color="primary">
                 <IonCardHeader>
-                    <IonItem className="headings" color="primary">
+                    <IonItem lines="none" className="headings" color="primary">
                         <IonCardTitle>Expenditure Forecasting</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openForecast} className="info-icon" />
                         <Popover
@@ -181,7 +199,9 @@ export const UserStats = () => {
                             <p className="popover-text">Your forecasted expenditure over the next few weeks</p>
                         </Popover>
                     </IonItem>
-                 <ProfileLineGraph graphData={[]}></ProfileLineGraph>
+                    <div className="profileGraph">
+                        <ProfileLineGraph graphData={[userForecast, weeklyBudget] }></ProfileLineGraph>
+                    </div>
                 </IonCardHeader>
             </IonCard>
         </div>
