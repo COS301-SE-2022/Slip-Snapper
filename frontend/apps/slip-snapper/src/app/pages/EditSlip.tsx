@@ -17,8 +17,7 @@ const EditSlip: React.FC = () => {
     const photo = JSON.parse(localStorage.getItem('photo')!);
     const [items, setItems] = useState(data.text[2]);
     const [location, setLocation] = useState(data.text[1]);
-
-
+    const [slipDate, setSlipDate] = useState(data.text[0]);
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
@@ -35,7 +34,6 @@ const EditSlip: React.FC = () => {
     const getTotalCosts = () => {
         return items.reduce((total: number, item: { price: any; }) => {
             return total + Number(item.price);
-
         }, 0);
     };
     
@@ -55,7 +53,7 @@ const EditSlip: React.FC = () => {
                     <IonCardHeader className="wrapper">
                         <div>
                             <IonFab id="desktop-fab" title="Receipt" horizontal='start' vertical='top'>
-                                <IonFabButton color='secondary' onClick={() => { setShowImage(true) }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
+                                <IonFabButton color='secondary' onClick={() => { getData(); setShowImage(true) }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
                             </IonFab>
                         </div>
                         <div color="primary">
@@ -68,7 +66,7 @@ const EditSlip: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonDatetime value={data.text[0]} displayFormat='DD/MM/YYYY' id={"date"}/>
+                                    <IonDatetime value={slipDate} onIonChange={e => setSlipDate(e.detail.value!) } displayFormat='DD/MM/YYYY' id={"date"}/>
                                     <IonIcon icon={calendarOutline} slot="end"/>
                                 </IonItem>
                             </IonCardTitle>
@@ -225,6 +223,7 @@ const EditSlip: React.FC = () => {
                 items[i].type = t
             }
         }
+
     }
 
     function validateData() {
@@ -276,7 +275,6 @@ const EditSlip: React.FC = () => {
             window.location.reload()
         }
     }
-
 }
 
 export default EditSlip;
