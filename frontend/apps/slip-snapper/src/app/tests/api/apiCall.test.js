@@ -127,3 +127,78 @@ describe('loginA', () => {
         });
     });
 });
+
+describe('signupA', () => {
+    it('should expose a function', () => {
+        expect(signupA).toBeDefined();
+    });
+
+    it('signupA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "User added successfully",
+            userData: {
+                username: "testUser",
+            },
+            token: "",
+        };
+        mock.onPost(baseUrl + 'user/signup').reply(200, data);
+
+        await signupA("test", "user", "testUser", "password1", "testUser@gmail.com").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('generateReportA', () => {
+    it('should expose a function', () => {
+        expect(generateReportA).toBeDefined();
+    });
+
+    it('generateReportA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message: "Report Generated and uploaded",
+                title: "31-01-2022Weekly#3.pdf",
+                reportTotal: 0
+        };
+        mock.onPost(baseUrl + 'report/pdf').reply(200, data);
+
+        await generateReportA("testUser", "weekly","1").then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
+describe('getStatsA', () => {
+    it('should expose a function', () => {
+        expect(getStatsA).toBeDefined();
+    });
+
+    it('getStatsA should return expected output', async () => {
+        var mock = new MockAdapter(axios);
+        const data = { 
+            message : "User statistics retrieved",
+            category: {
+                amount: 0,
+                name: "Other"
+            },
+            mostExpensive: {
+                amount: 500,
+                name: "burger"
+            },
+            lastWeek:{
+                previous: 0,
+                current: 500
+
+            },
+            lastMonth:{
+                previous: 0,
+                 current: 500,
+            }
+        };
+        mock.onGet(baseUrl + 'stats').reply(200, data);
+
+        await getStatsA().then(response => {
+            expect(response.data).toEqual(data);
+        });
+    });
+});
