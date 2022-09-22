@@ -2220,6 +2220,10 @@ async function getForecast(userId) {
                     if (count == 1 && index==0) {
                         let futureDate = new Date()
                         futureDate.setDate(date.getDate())
+                        if(date.getDate()==31)
+                        {
+                            futureDate.setDate(date.getDate()-1)
+                        }
                         futureDate.setMonth(date.getMonth() + 1)
                         futureDateArray.push(futureDate.toISOString().substring(0, 10).replace("-", "/").replace("-", "/"))
                     }
