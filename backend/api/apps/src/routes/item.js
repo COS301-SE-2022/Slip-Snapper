@@ -18,12 +18,9 @@ router.get('', async (req,res)=>{
     }
 
     const result = await req.app.get('db').getItem(Number(tokenVerified.user.id));
-
-    let status = 200;
-
     //TODO checking for errors
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             numItems: result.numItems,
@@ -61,11 +58,9 @@ router.post('', async (req,res)=>{
 
     const result = await req.app.get('db').addItem(Number(tokenVerified.user.id), location, date, total, values);
 
-    let status = 200;
-
     //TODO checking for errors
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             numItems: result.numItems,
@@ -91,11 +86,9 @@ router.delete('', async (req,res)=>{
 
     const result = await req.app.get('db').deleteItem(itemId);
 
-    let status = 200;
-
     //TODO checking for errors
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             item: result.item,

@@ -19,10 +19,9 @@ router.post('/signup', async (req,res)=>{
     const path = `${username}/`
     const bucket = await req.app.get('bucket').createFolder(path)
 
-    let status = 200;
     //TODO checking for errors
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             userData: result.user,
@@ -40,7 +39,7 @@ router.post('/login', async (req, res)=>{
 
     const result = await req.app.get('db').getUser(username);
     if (result.token == null || result.user == null || !bcrypt.compareSync(password, result.password)) {
-        return res.status(403)
+        return res.status(200)
             .send({
                 message: "Error validating user Details",
                 userData: null,
@@ -130,11 +129,9 @@ router.delete('', async (req,res)=>{
 
     const result = await req.app.get('db').updateUser(Number(tokenVerified.user.id), data);
 
-    let status = 200;
-
     //TODO checking for errors
 
-    return res.status(status)
+    return res.status(200)
         .send({
             message: result.message,
             userData: result.user,

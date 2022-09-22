@@ -68,6 +68,7 @@
     "@mui/material": "^5.10.1",
     "aws-sdk": "^2.1174.0",
     "axios": "^0.27.2",
+    "axios-mock-adapter": "^1.21.2",
     "chart.js": "^3.9.1",
     "cordova-plugin-file-opener2": "^3.0.5",
     "core-js": "^3.6.5",

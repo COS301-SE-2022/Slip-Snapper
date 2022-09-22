@@ -67,7 +67,7 @@ const ViewReports: React.FC = () => {
         checkEmptyReports(apiResponse.data.reports)
         orderReports(reports)
       }
-    });
+    }).catch();
   }, []);
   orderReports(reports)
 
@@ -616,8 +616,8 @@ const ViewReports: React.FC = () => {
   function orderReports(reports: any) {
     let temp: any;
 
-    for (let i = 0; i < reports.length; i++) {
-      for (let j = 1; j < (reports.length - i); j++) {
+    for (let i = 0; i < reports?.length; i++) {
+      for (let j = 1; j < (reports?.length - i); j++) {
         if (reports[j - 1].reportId < reports[j].reportId) {
           temp = reports[j - 1]
           reports[j - 1] = reports[j]
@@ -635,7 +635,7 @@ const ViewReports: React.FC = () => {
 
   function checkEmptyReports(reports: any) {
 
-    if (reports.length === 0) {
+    if (reports?.length === 0) {
       const temp = document.getElementById('emptyReports')
       if (temp !== null)
         temp.style.display = "block";
