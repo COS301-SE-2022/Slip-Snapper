@@ -7,14 +7,14 @@ exports[`<ReportItem> should render component with props 1`] = `
     onClick={[Function]}
   >
     <ion-card-header>
-      <ion-card-subtitle>
+      <ion-card-title>
         Report 
         18
-         :
-      </ion-card-subtitle>
-      <ion-card-title>
-        19/9/2022 Weekly #18.pdf
+        :
       </ion-card-title>
+      <ion-text>
+        19/9/2022 Weekly #18.pdf
+      </ion-text>
     </ion-card-header>
     <ion-item
       color="tertiary"

@@ -3,6 +3,7 @@
 exports[`<EditBudgets> should render component 1`] = `
 <ion-item
   color="primary"
+  lines="none"
   onClick={[Function]}
 >
   <ion-button
