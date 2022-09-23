@@ -77,6 +77,19 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     //TODO add input checking
     let { username, password } = req.body;
+   /**
+    * general input validation
+    */
+    if (
+        (username == null || password == null) ||
+        (typeof (username) != 'string') ||
+        (typeof (password) != 'string')
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
 
     const result = await req.app.get('db').getUser(username);
     if (result.token == null || result.user == null || !bcrypt.compareSync(password, result.password)) {
