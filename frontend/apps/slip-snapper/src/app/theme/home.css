@@ -1,12 +1,15 @@
 .takePicture{
     left:50%;
 }
+
 .addEntry{
     left: 53%;
 }
+
 .successRedirect {
     display: none;
 }
+
 .graph-card{
     min-width: 30%;
     padding: 2%;
@@ -25,4 +28,18 @@
 
 .footer-home{
     padding-top: 60px;
+}
+
+.home-card-title{
+    font-size: x-large;
+}
+
+.home-info-text{
+    padding: 2px;
+}
+
+@media screen and (max-width: 400px) {
+    .home-card-title{
+        font-size: large;
+    }
 }

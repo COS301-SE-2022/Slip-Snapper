@@ -100,7 +100,7 @@ const Home: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen>
         <IonItem>
-          <IonTitle>Recent Reports</IonTitle>
+          <IonTitle className='home-card-title'>Recent Reports</IonTitle>
         </IonItem>
 
         <IonRow>
@@ -120,13 +120,13 @@ const Home: React.FC = () => {
         </IonRow>
 
         <IonItem>
-          <IonTitle>Report Summary</IonTitle>
+          <IonTitle className='home-card-title'>Report Summary</IonTitle>
         </IonItem>
         <IonRow>
           <IonCol>
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>Today's Expenditure:</IonCardTitle>
+                <IonCardTitle className='home-card-title'>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems}</IonItem>
               <IonItem color="tertiary">Total Expenditure: R {todayTotal.toFixed(2)}</IonItem>
@@ -137,12 +137,12 @@ const Home: React.FC = () => {
           <IonCol>
             <IonCard color="primary">
               <IonCardHeader>
-                <IonCardTitle>This Week's Reports:</IonCardTitle>
+                <IonCardTitle className='home-card-title'>This Week's Reports:</IonCardTitle>
               </IonCardHeader>
 
               {thisWeeksReports?.length === 0 || thisWeeksReports?.length === undefined ?
                 <IonItem color="tertiary">
-                  You currently have no reports for this week.
+                  <IonText className='home-info-text'>You currently have no reports for this week.</IonText>
                 </IonItem>
                 :
                 thisWeeksReports?.map((item, index) => {
@@ -171,7 +171,7 @@ const Home: React.FC = () => {
         </IonRow>
 
         <IonItem>
-          <IonTitle>Frequent Purchase Analysis</IonTitle>
+          <IonTitle className='home-card-title'>Frequent Purchase Analysis</IonTitle>
         </IonItem>
 
         <div className="graph-wrapper">
@@ -182,7 +182,12 @@ const Home: React.FC = () => {
               </IonCard>
             )
           })
-            : <IonText>No Graph Data</IonText>}
+            : 
+            <IonCard color="primary">
+              <IonCardHeader>
+                <IonCardTitle>There is currently no data for graphs to be generated.</IonCardTitle>
+              </IonCardHeader>
+            </IonCard>}
         </div>
 
         <div className='footer-home' />
