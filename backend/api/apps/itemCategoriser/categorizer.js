@@ -11,7 +11,7 @@ class Connection{
     constructor(neuronA, neuronB){
         this.neuronA = neuronA;
         this.neuronB = neuronB;
-        this.weight = 0;
+        this.weight = Math.random();
         numConnections++;
     }
 
@@ -23,8 +23,13 @@ class Connection{
 class Neuron {
     constructor(){
         this.connections = [];
-        this.bias = 0;
+        this.bias = Math.random();
+        this.value = 0;
         numNeurons++;
+    }
+
+    assignValue(val){
+        this.value = val;
     }
 
     print(){
@@ -54,6 +59,7 @@ class Layer{
         console.log(this.numNeurons, this.allNeurons);
     }
 }
+
 class Categoriser{
     constructor(){
         this.modelDescription = [512,8,8];
@@ -93,62 +99,21 @@ class Categoriser{
         return layers;
     }
 
-    async initParams(){
-        const W1 = [];
-        for(let i = 0; i < 8; i++){
-            W1[i] = [];
-            for (let j = 0; j < 512; j++){
-                W1[i][j] = Math.random();
-            }
-        }
-
-        const B1 = [];
-        for(let i = 0; i < 8; i++){
-            B1[i] = Math.random();
-        }
-
-        const W2 = [];
-        for(let i = 0; i < 8; i++){
-            W2[i] = [];
-            for (let j = 0; j < 8; j++){
-                W2[i][j] = Math.random();
-            }
-        }
-
-        const B2 = [];
-        for(let i = 0; i < 8; i++){
-            B2[i] = Math.random();
-        }
-
-        return {
-            W1, B1, W2, B2,
-        }
+    async relu( value ){
+        return Math.max(0, value);
     }
 
-    async relu( Z ){
-        return Math.max(0,Z);
-    }
-
-    async softmax( Z ){
-        return 0;
-        // exp(Z) / sum(exp(Z))
-    }
-
-    async forwardProp( W1, B1, W2, B2, X ){
-        let Z1 = await this.matrixMul(W1,X)// + B1;
-        console.log(Z1);
-        console.log(B1.length, B1[0].length, Z1.length, Z1[0].length);
-        return;
-        let A1 // = await Relu(Z1);
-        let Z2 // = (W2 dotProduct A1) + B2
-        let A2 // = softmax(Z1)
-        return {
-            Z1, A1, Z2, A2,
+    async softmax( num, den ){
+        let denom = 0;
+        for(let i = 0; i < den.length; i++){
+            denom += den[i];
         }
+
+        return num/denom;
     }
 
-    async derivativeRelu( Z ){
-        return Z > 0;
+    async derivativeRelu( value ){
+        return value > 0;
     }
 
     async backwardProp( Z1, A1, Z2, A2, W2, X, Y ){
@@ -178,35 +143,6 @@ class Categoriser{
         }
     }
 
-    async matrixMul( a, b ){
-        const m1 = a.length;
-        const m2 = a[0].length;
-        const n2 = b[0].length;
-
-        let x;
-        let i;
-        let j;
-        let res = new Array(m1);
-        for (i = 0; i < m1; i++){
-            res[i] = new Array(n2);
-        }
-            
-        for (i = 0; i < m1; i++){
-            for (j = 0; j < n2; j++){
-                res[i][j] = 0;
-                for (x = 0; x < m2; x++) {
-                    res[i][j] += a[i][x] * b[x][j];
-                }
-            }
-        }
-
-        return res;
-    }
-
-    async matrixAdd(a,b){
-        return 1;
-    }
-
     getPredictions( A2 ){
         return 1;
         // argmax(A2,0)
@@ -222,7 +158,6 @@ class Categoriser{
         //Y = 8 element array 
         //iterations = num of iterations
         //alpha = predefined val
-        // console.log(X.length, X[0].length, X[0][0])
         const params = await this.initParams();
         // console.log( params.W1 /*Array: 512 with 8 subarrays*/, params.B1 /*Array: 8 by 1*/, 
         // params.W2 /*Array: 8 with 8 subarrays*/, params.B2 /*Array: 8 by 1 */ )
@@ -247,12 +182,63 @@ class Categoriser{
         return { W1, B1, W2, B2 }
     }
 
+    async train(model, inputs, outputs, iterations, alpha){
+        let i,j,k,l;
+        // for(k = 0; k < iterations; k++){
+            //inputs.length
+            
+            for(i = 0; i < 1; i++){
+                /*Forward Propagation*/
+                //Populate first Layer
+                for(j = 0; j < 512; j++){
+                    model[0].allNeurons[j].assignValue(inputs[i][j]);
+                }
+
+                //Calculate second Layer
+                for(j = 0; j < model[1].allNeurons.length; j++){
+                    let sum = model[1].allNeurons[j].bias;
+                    for(l = 0; l < model[1].allNeurons[j].connections.length; l++){
+                        sum += model[1].allNeurons[j].connections[l].neuronA.value * model[1].allNeurons[j].connections[l].weight;
+                    }
+
+                    let activated = await this.relu(sum);
+                    model[1].allNeurons[j].assignValue(activated)
+                }
+
+                // Calculate output Layer
+                let values = [];
+                for(j = 0; j < model[2].allNeurons.length; j++){
+                    let sum = 0;
+                    for(l = 0; l < model[2].allNeurons[j].connections.length; l++){
+                        sum += Math.exp(model[2].allNeurons[j].connections[l].neuronA.value * model[2].allNeurons[j].connections[l].weight + model[2].allNeurons[j].bias);
+                    }
+                    
+                    values[j] = sum
+                }
+
+                for(j = 0; j < model[2].allNeurons.length; j++){ 
+                    let activated = await this.softmax(values[j],values);
+                    model[2].allNeurons[j].assignValue(activated)
+                    console.log(activated);
+                }
+
+                
+
+                /*Back Propagation*/
+
+            }
+        // }
+        console.log(model[2].allNeurons);
+        // console.log(model[1].allNeurons[0].connections[0].neuronA.value);
+        // console.log(model[1].allNeurons[0].connections.length);
+    }
+
     async run(){
         const items = await this.getData();
-        // const model = await this.createModel();
+        const model = await this.createModel();
         const params = await this.initParams();
         const encoder = await vector.load();
-    
+        
         const inputs = [];
         const outputs = [];
         items.map((element) =>{ 
@@ -290,20 +276,22 @@ class Categoriser{
             inputsEmbed[i] = (await(await encoder.embed(inputs[i])).array())[0];
         }
 
-        let embeddings = new Array(512);
-        for(let i = 0; i < 512; i++){
-            embeddings[i] = [];
-        }
+        this.train(model, inputsEmbed, outputs, 5, 0.1)
+        // let embeddings = new Array(512);
+        // for(let i = 0; i < 512; i++){
+        //     embeddings[i] = [];
+        // }
 
-        for(let j = 0; j < inputs.length; j++){
-            for(let i = 0; i < 512; i++){
-                embeddings[i][j] = inputsEmbed[j][i];
-            }
-        }
+        // for(let j = 0; j < inputs.length; j++){
+        //     for(let i = 0; i < 512; i++){
+        //         embeddings[i][j] = inputsEmbed[j][i];
+        //     }
+        // }
 
-        const train = await this.gradientDescent(embeddings, outputs, 5, 0.1)
-        console.log(train)
+        // const train = await this.gradientDescent(embeddings, outputs, 5, 0.1)
+        // console.log(train)
         // console.log(model);
+        // console.log(model[2].allNeurons[0])
         // console.log('Layers: %d, Neurons: %d, Connections: %d', numLayers, numNeurons, numConnections);
     }
 
