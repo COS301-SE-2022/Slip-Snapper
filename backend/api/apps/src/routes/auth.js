@@ -8,6 +8,19 @@ const bcrypt = require('bcrypt');
 router.post('/signup', async (req,res)=>{
     //TODO add input checking
     let { firstname, lastname, username, password, email } = req.body;
+    /**
+     * check that the password is minimum eight characters, 
+     * at least one uppercase letter, one lowercase letter,
+     * one number and one special character:
+     */
+    let strongPasswordChecker = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/;
+    
+    if (!password.match(strongPasswordChecker)) {
+        return res.status(200)
+            .send({
+                message: "Weak password",
+            });
+    }
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
