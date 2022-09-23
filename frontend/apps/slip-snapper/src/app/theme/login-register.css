@@ -3,6 +3,7 @@
 /* Components */
 .LRCard {
     width: 35%;
+    z-index: 1;
 }
 
 .LRItems {
@@ -35,8 +36,7 @@
 .center-items{
     display: flex;
     justify-content: center;
-    align-content: center;
-    align-items: center;
+    
 }
 
 .full-name{
@@ -46,12 +46,57 @@
 .fl-name{
     padding: 1%;
     font-size: 16px;
-    max-width: 50%;
     text-align: center;
+    width: 100%;
 }
 
 .reset-text{
     padding: 5px;
+}
+
+/* Password Strength  */
+
+.password-strength-popover{
+    padding: 10px;
+}
+
+#min-accepted{
+    display: none;
+}
+#min-denied{
+    display: none;
+}
+#low-accepted{
+    display: none;
+}
+#low-denied{
+    display: none;
+}
+#up-accepted{
+    display: none;
+}
+#up-denied{
+    display: none;
+}
+#num-accepted{
+    display: none;
+}
+#num-denied{
+    display: none;
+}
+#spec-accepted{
+    display: none;
+}
+#spec-denied{
+    display: none;
+}
+
+#match-accepted{
+    display: none;
+}
+
+#match-denied{
+    display: none;
 }
 
 

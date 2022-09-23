@@ -1,5 +1,5 @@
-.recent-item-col {
-    max-width: 25%;
+.report-cards{
+    min-width: 18.5%;
 }
 
 .report-card-title{
@@ -7,13 +7,13 @@
 }
 
 @media only screen and (max-width: 700px) {
-    .recent-item-col {
-        min-width: 50%;
+    .report-cards{
+        min-width: 90%;
     }
 }
 
 @media only screen and (max-width: 350px) {
-    .recent-item-col {
+    .report-cards{
         min-width: 100%;
     }
 }

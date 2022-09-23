@@ -119,42 +119,37 @@ const Home: React.FC = () => {
               </IonCardHeader>
             </div>
           :
-            <IonRow>{
+            <div className='reports-wrapper'>{
               reports.map((reps, index) => {
                 return (
-                  <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
+                  <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]}/>
                 )
               })}
-            </IonRow>
+            </div>
           }
 
         <IonItem>
           <IonTitle className='home-card-title'>Expense Summary</IonTitle>
         </IonItem>
-        <IonRow>
-          <IonCol>
-            <IonCard color="primary">
+        <div className='expense-wrapper'>
+            <IonCard color="primary" className='expense-cards'>
               <IonCardHeader>
                 <IonCardTitle className='home-card-title'>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems.totalItems}</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R {todayItems.totalSpent?.toFixed(2)}</IonItem>
-              <IonItem color="tertiary"></IonItem>
+              <IonItem color="tertiary" lines='none'>Total Expenditure: R {todayItems.totalSpent?.toFixed(2)}</IonItem>
             </IonCard>
-          </IonCol>
 
-          <IonCol>
-            <IonCard color="primary">
+
+            <IonCard color="primary" className='expense-cards'>
               <IonCardHeader>
                 <IonCardTitle className='home-card-title'>This Week's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems.weekItemCount}</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R {todayItems.weekTotal}</IonItem>
-              <IonItem color="tertiary"></IonItem>
+              <IonItem color="tertiary" lines='none'>Total Expenditure: R {todayItems.weekTotal}</IonItem>
             </IonCard>
-          </IonCol>
 
-        </IonRow>
+        </div>
 
         <IonItem>
           <IonTitle className='home-card-title'>Frequent Purchase Analysis</IonTitle>
