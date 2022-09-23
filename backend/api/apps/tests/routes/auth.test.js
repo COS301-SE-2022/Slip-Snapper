@@ -25,7 +25,6 @@ const app = makeApp({
  * Test for the signup query
  */
 describe('Post /user/signup', ()=>{
-    const token = ""
 
     beforeEach(()=>{
         addUser.mockReset();
@@ -35,9 +34,9 @@ describe('Post /user/signup', ()=>{
 
     test('should save the username and password to the database', async ()=>{
         const bodydata = [
-            { username: "username1", password: "password1"},
-            { username: "username2", password: "password2"},
-            { username: "username3", password: "password3"}
+            { firstname:"firstname1", lastname:"surname1", username: "username1", password: "P@ssword1", email:"ab@gmail.com"},
+            { firstname:"firstname2", lastname:"surname2", username: "username2", password: "P@ssword1", email:"ab@gmail.com"},
+            { firstname:"firstname3", lastname:"surname3", username: "username3", password: "P@ssword3", email:"ab@gmail.com"},
         ]
 
         for (const body of bodydata){
@@ -114,7 +113,7 @@ describe('Post /user/signup', ()=>{
             const res = await request(app)
                 .post('/api/user/signup')
                 .send(
-                    { username: "username1", password: "password1"}
+                    { firstname:"firstname1", lastname:"surname1", username: "username1", password: "P@ssword1", email:"ab@gmail.com"}
                 )
 
             expect(res.body.userData).toEqual(data);
@@ -149,7 +148,7 @@ describe('Post /user/signup', ()=>{
         const res = await request(app)
             .post('/api/user/signup')
             .send(
-                { username: "username1", password: "password1"}
+                { firstname:"firstname1", lastname:"surname1", username: "username1", password: "P@ssword1", email:"ab@gmail.com"}
             )
 
         expect(res.statusCode).toEqual(200);
@@ -160,7 +159,6 @@ describe('Post /user/signup', ()=>{
  * Test for login query
  */
 describe('Post /user/login', ()=>{
-    const token = ""
 
     beforeEach(()=>{
         getUser.mockReset();
@@ -169,9 +167,9 @@ describe('Post /user/login', ()=>{
 
     test('should check the username and password are in the database', async ()=>{
         const bodydata = [
-            { username: "username1", password: "password1"},
-            { username: "username2", password: "password2"},
-            { username: "username3", password: "password3"}
+            { username: "username1", password: "P@ssword1"},
+            { username: "username2", password: "P@ssword2"},
+            { username: "username3", password: "P@ssword3"}
         ]
 
         for (const body of bodydata){
