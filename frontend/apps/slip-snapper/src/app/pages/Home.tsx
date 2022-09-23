@@ -83,7 +83,6 @@ const Home: React.FC = () => {
       .then(async apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
             await setTodayItem(apiResponse.data)
-            console.log(apiResponse.data)
         }
       }).catch();
     getGraphStats()
