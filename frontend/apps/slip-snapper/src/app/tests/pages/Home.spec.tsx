@@ -30,6 +30,5 @@ describe('Home', () => {
     expect(Component.getByText('Reports'));
     expect(Component.getByText('Profile'));
     expect(Component.getByText('Receipts'));
-    expect(Component.getByText('Report Summary'));
   });
 });

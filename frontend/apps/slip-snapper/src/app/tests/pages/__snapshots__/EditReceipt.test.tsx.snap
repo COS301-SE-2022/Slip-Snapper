@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EditReceipt> should render component 1`] = `
+<div
+  className="ion-page"
+>
+  <ion-header>
+    <ion-toolbar
+      color="primary"
+    >
+      <ion-title>
+        Edit Receipt
+      </ion-title>
+      <ion-buttons
+        slot="end"
+      >
+        <div>
+          <ion-button
+            onClick={[Function]}
+          >
+            Home
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Reports
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Profile
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Receipts
+          </ion-button>
+        </div>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content
+    fullscreen={true}
+  >
+    <ion-card
+      color="primary"
+      onClick={[Function]}
+    >
+      <ion-card-header>
+        <div
+          color="primary"
+        >
+          <ion-card-title>
+            Location:
+            <ion-item
+              color="tertiary"
+              onClick={[Function]}
+            >
+              <ion-input
+                content-editable="true"
+                id="Store_Name"
+              />
+            </ion-item>
+          </ion-card-title>
+        </div>
+        <div
+          color="primary"
+        >
+          <ion-card-title>
+            Date:
+            <ion-item
+              color="tertiary"
+              onClick={[Function]}
+            >
+              <ion-datetime
+                display-format="DD/MM/YYYY"
+                id="date"
+              />
+              <ion-icon
+                icon="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Calendar</title><rect stroke-linejoin='round' x='48' y='80' width='416' height='384' rx='48' class='ionicon-fill-none ionicon-stroke-width'/><circle cx='296' cy='232' r='24'/><circle cx='376' cy='232' r='24'/><circle cx='296' cy='312' r='24'/><circle cx='376' cy='312' r='24'/><circle cx='136' cy='312' r='24'/><circle cx='216' cy='312' r='24'/><circle cx='136' cy='392' r='24'/><circle cx='216' cy='392' r='24'/><circle cx='296' cy='392' r='24'/><path stroke-linejoin='round' stroke-linecap='round' d='M128 48v32M384 48v32' class='ionicon-fill-none ionicon-stroke-width'/><path stroke-linejoin='round' d='M464 160H48' class='ionicon-fill-none ionicon-stroke-width'/></svg>"
+                slot="end"
+              />
+            </ion-item>
+          </ion-card-title>
+        </div>
+      </ion-card-header>
+      <ion-card-header>
+        <ion-card-title>
+          Edit Details
+        </ion-card-title>
+      </ion-card-header>
+      <div
+        className="wrapper"
+      >
+        <div
+          className="MuiButtonBase-root MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorSecondary MuiChip-clickable MuiChip-clickableColorSecondary MuiChip-filledSecondary css-1nukl5-MuiButtonBase-root-MuiChip-root"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDragLeave={[Function]}
+          onFocus={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          onMouseDown={[Function]}
+          onMouseLeave={[Function]}
+          onMouseUp={[Function]}
+          onTouchEnd={[Function]}
+          onTouchMove={[Function]}
+          onTouchStart={[Function]}
+          role="button"
+          tabIndex={0}
+        >
+          <svg
+            aria-hidden={true}
+            className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiChip-icon MuiChip-iconMedium MuiChip-iconColorSecondary css-i4bv87-MuiSvgIcon-root"
+            data-testid="AddCircleOutlineIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+            />
+          </svg>
+          <span
+            className="MuiChip-label MuiChip-labelMedium css-6od3lo-MuiChip-label"
+          >
+            New Item
+          </span>
+        </div>
+      </div>
+      <ion-card-header>
+        <ion-card-title>
+          Total Amount:
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-header>
+        <ion-item
+          color="tertiary"
+          id="total"
+          onClick={[Function]}
+        />
+      </ion-card-header>
+      <ion-item
+        color="primary"
+        onClick={[Function]}
+      >
+        <ion-button
+          color="medium"
+          fill="solid"
+          id="cancelButton"
+          onClick={[Function]}
+          slot="end"
+        >
+          Cancel
+        </ion-button>
+        <ion-button
+          color="secondary"
+          fill="solid"
+          onClick={[Function]}
+          slot="end"
+        >
+          Submit
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </ion-content>
+  <ion-footer>
+    <ion-toolbar
+      color="primary"
+    />
+  </ion-footer>
+</div>
+`;
