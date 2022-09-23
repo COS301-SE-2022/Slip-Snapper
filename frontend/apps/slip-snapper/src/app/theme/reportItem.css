@@ -2,6 +2,10 @@
     max-width: 25%;
 }
 
+.report-card-title{
+    font-size: x-large;
+}
+
 @media only screen and (max-width: 700px) {
     .recent-item-col {
         min-width: 50%;
@@ -11,5 +15,11 @@
 @media only screen and (max-width: 350px) {
     .recent-item-col {
         min-width: 100%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .report-card-title{
+        font-size: large;
     }
 }

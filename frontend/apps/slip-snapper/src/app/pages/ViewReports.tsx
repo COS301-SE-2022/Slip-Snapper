@@ -146,6 +146,7 @@ const ViewReports: React.FC = () => {
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
+                  className='excel-desktop'
                   fill="solid"
                   color="secondary"
                   onClick={() => {
@@ -177,6 +178,7 @@ const ViewReports: React.FC = () => {
               </IonCardHeader>
               <IonItem color="tertiary">
                 <IonButton
+                  className='excel-desktop'
                   fill="solid"
                   color="secondary"
                   onClick={() => {

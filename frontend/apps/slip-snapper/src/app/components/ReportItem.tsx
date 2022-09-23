@@ -6,6 +6,7 @@ import {
   IonCardTitle,
   IonCol,
   IonItem,
+  IonText,
 } from '@ionic/react';
 import { isPlatform } from '@ionic/core';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
@@ -21,8 +22,8 @@ function ReportItem({ reportData }: Props) {
         <IonCol className="recent-item-col">
             <IonCard color="primary">
                 <IonCardHeader>
-                    <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
-                    <IonCardTitle>{reportData[2]}</IonCardTitle>
+                    <IonCardTitle className='report-card-title'>Report {reportData[0]}:</IonCardTitle>
+                    <IonText>{reportData[2]}</IonText>
                 </IonCardHeader>
                 <IonItem color="tertiary">
                     <IonButton onClick={() => view(reportData[1])} fill="solid" slot="end" color="secondary">
