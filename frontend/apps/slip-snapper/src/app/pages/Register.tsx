@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert, IonContent, IonPopover } from '@ionic/react';
+import { IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert, IonContent, IonPopover, IonIcon } from '@ionic/react';
 import '../theme/login-register.css';
 import { signupA } from "../../api/apiCall"
 import { Chip, Popover } from '@mui/material';
+import { checkmarkCircleOutline } from 'ionicons/icons';
+import { closeCircleOutline } from 'ionicons/icons';
+
 
 
 const Register: React.FC = () => {
@@ -37,7 +40,7 @@ const Register: React.FC = () => {
               <Chip label={"Register"} sx={{ fontSize: 22, bgcolor: '#333C4A', color: 'white' }} />
             </div>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Username</IonLabel>
               <IonInput
                 title="Input Username"
@@ -49,43 +52,40 @@ const Register: React.FC = () => {
             </IonItem>
 
             <div className='center-items'>
-              <IonItem color="tertiary" className="full-name" lines="none">
-                <IonItem color="tertiary" className="fl-name">
-                  <IonLabel position="floating">First Name</IonLabel>
-                  <IonInput
-                    title="Input First Name"
-                    type="text"
-                    value={firstNameInput}
-                    onIonChange={(e) => setFirstNameInput(e.detail.value!)}
-                    required
-                  ></IonInput>
-                </IonItem>
+              <IonItem color="tertiary" className="fl-name" lines='inset'>
+                <IonLabel position="floating">First Name</IonLabel>
+                <IonInput
+                  title="Input First Name"
+                  type="text"
+                  value={firstNameInput}
+                  onIonChange={(e) => setFirstNameInput(e.detail.value!)}
+                  required
+                ></IonInput>
+              </IonItem>
 
-                <IonItem color="tertiary" className="fl-name">
-                  <IonLabel position="floating">Last Name</IonLabel>
-                  <IonInput
-                    title="Input Last Name"
-                    type="text"
-                    value={lastNameInput}
-                    onIonChange={(e) => setLastNameInput(e.detail.value!)}
-                    required
-                  ></IonInput>
-                </IonItem>
+              <IonItem color="tertiary" className="fl-name" lines='inset'>
+                <IonLabel position="floating">Last Name</IonLabel>
+                <IonInput
+                  title="Input Last Name"
+                  type="text"
+                  value={lastNameInput}
+                  onIonChange={(e) => setLastNameInput(e.detail.value!)}
+                  required
+                ></IonInput>
               </IonItem>
             </div>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Email Address</IonLabel>
               <IonInput
                 title="Input Email"
                 type="text"
                 value={emailInput}
                 onIonChange={(e) => setEmailInput(e.detail.value!)}
-                clearOnEdit
               ></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
                 title="Input Password"
@@ -112,15 +112,37 @@ const Register: React.FC = () => {
                 horizontal: 'left',
               }}
             >
-              <p id='min'>Minimum of 8 characters.</p>
-              <p id='low'>At least 1 lowercase character.</p>
-              <p id='up'>At least 1 uppercase character.</p>
-              <p id='num'>At least 1 number.</p>
-              <p id='spec'>At least 1 special character such as @$!%*?&</p>
+              <div className='password-strength-popover'>
+                <p id='min'>
+                  <IonIcon id='min-accepted' src={checkmarkCircleOutline}/>
+                  <IonIcon id='min-denied' src={closeCircleOutline}/>
+                  Minimum of 8 characters.
+                </p>
+                <p id='low'>
+                  <IonIcon id='low-accepted' src={checkmarkCircleOutline}/>
+                  <IonIcon id='low-denied' src={closeCircleOutline}/>
+                  At least 1 lowercase character.
+                </p>
+                <p id='up'>
+                  <IonIcon id='up-accepted' src={checkmarkCircleOutline}/>
+                  <IonIcon id='up-denied' src={closeCircleOutline}/>
+                  At least 1 uppercase character.
+                </p>
+                <p id='num'>
+                  <IonIcon id='num-accepted' src={checkmarkCircleOutline}/>
+                  <IonIcon id='num-denied' src={closeCircleOutline}/>
+                  At least 1 number.
+                </p>
+                <p id='spec'>
+                  <IonIcon id='spec-accepted' src={checkmarkCircleOutline}/>
+                  <IonIcon id='spec-denied' src={closeCircleOutline}/>
+                  At least 1 special character.
+                </p>
+              </div>
             </Popover>
 
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Confirm Password</IonLabel>
               <IonInput
                 onClick={(e) => { openConfirmPop(e); }}
@@ -147,7 +169,11 @@ const Register: React.FC = () => {
                 horizontal: 'left',
               }}
             >
-              <p id='match'>Passwords Match.</p>
+              <p id='match' className='password-strength-popover'>
+                <IonIcon id='match-accepted' src={checkmarkCircleOutline}/>
+                <IonIcon id='match-denied' src={closeCircleOutline}/>
+                Matching Passwords
+              </p>
             </Popover>
 
             <IonItem color="tertiary" text-align="center" class="LRItems" lines="none">
@@ -297,6 +323,11 @@ const Register: React.FC = () => {
   }
 
   function validatePassword(password: string|undefined) {
+    const uppercaseRegex = /[A-Z]/;
+    const lowercaseRegex = /[a-z]/;
+    const numberRegex = /[0-9]/;
+    const specialCharacter = /[@$!%*?&]/;
+  
     const min = document.getElementById("min")
     if (min !== null)
       min.style.color = "red"
@@ -318,33 +349,63 @@ const Register: React.FC = () => {
     if (password!==undefined&&password?.length > 7) {
       if (min !== null)
         min.style.color = "green"
+        document.getElementById("min-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("min-denied")?.setAttribute("style", "display:none")
+    } 
+    else { 
+        correctPasswordFlag = false 
+        document.getElementById("min-denied")?.setAttribute("style", "display:inline-block")
+        document.getElementById("min-accepted")?.setAttribute("style", "display:none")
     }
-
-    const uppercaseRegex = /[A-Z]/;
-    const lowercaseRegex = /[a-z]/;
-    const numberRegex = /[0-9]/;
-    const specialCharacter = /[@$!%*?&]/;
 
     if (password !== undefined &&lowercaseRegex.test(password)) {
       if (low !== null)
         low.style.color = "green"
-    } else { correctPasswordFlag = false }
+        document.getElementById("low-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("low-denied")?.setAttribute("style", "display:none")
+    } 
+    else { 
+        correctPasswordFlag = false 
+        document.getElementById("low-denied")?.setAttribute("style", "display:inline-block")
+        document.getElementById("low-accepted")?.setAttribute("style", "display:none")
+    }
 
     if (password !== undefined &&uppercaseRegex.test(password))
     {
       if (up !== null)
         up.style.color = "green"
-    } else { correctPasswordFlag = false }
+        document.getElementById("up-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("up-denied")?.setAttribute("style", "display:none")
+    } 
+    else { 
+        correctPasswordFlag = false 
+        document.getElementById("up-denied")?.setAttribute("style", "display:inline-block")
+        document.getElementById("up-accepted")?.setAttribute("style", "display:none")
+    }
 
     if (password !== undefined &&numberRegex.test(password)) {
       if (num !== null)
         num.style.color = "green"
-    } else { correctPasswordFlag = false }
+        document.getElementById("num-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("num-denied")?.setAttribute("style", "display:none")
+    } 
+    else { 
+        correctPasswordFlag = false 
+        document.getElementById("num-denied")?.setAttribute("style", "display:inline-block")
+        document.getElementById("num-accepted")?.setAttribute("style", "display:none")
+    }
 
     if (password !== undefined &&specialCharacter.test(password)) {
       if (spec !== null)
         spec.style.color = "green"
-    } else { correctPasswordFlag = false }
+        document.getElementById("spec-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("spec-denied")?.setAttribute("style", "display:none")
+    } 
+    else { 
+        correctPasswordFlag = false 
+        document.getElementById("spec-denied")?.setAttribute("style", "display:inline-block")
+        document.getElementById("spec-accepted")?.setAttribute("style", "display:none")
+    }
 
     return correctPasswordFlag
   }
@@ -359,6 +420,12 @@ const Register: React.FC = () => {
     {
       if(match !== null)
         match.style.color = "green" 
+        document.getElementById("match-accepted")?.setAttribute("style", "display:inline-block")
+        document.getElementById("match-denied")?.setAttribute("style", "display:none")
+    }
+    else { 
+      document.getElementById("match-accepted")?.setAttribute("style", "display:none")
+      document.getElementById("match-denied")?.setAttribute("style", "display:inline-block")
     }
   }
 };

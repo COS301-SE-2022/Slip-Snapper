@@ -28,12 +28,12 @@ const Login: React.FC = () => {
               <Chip label={"Log In"} sx={{ fontSize: 22, bgcolor: '#333C4A', color: 'white' }}/>
             </div>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Username</IonLabel>
               <IonInput title="usernameInput" type="text" value={usernameInput} onIonChange={e => setUsernameInput(e.detail.value!)} required></IonInput>
             </IonItem>
 
-            <IonItem color="tertiary" class="LRItems">
+            <IonItem color="tertiary" class="LRItems" lines='inset'>
               <IonLabel position="floating">Password</IonLabel>
               <IonInput title="passwordInput" type="password" value={passwordInput} onIonChange={e => setPasswordInput(e.detail.value!)} required></IonInput>
             </IonItem>
