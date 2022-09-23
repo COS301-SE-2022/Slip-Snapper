@@ -101,7 +101,7 @@ router.post('/login', async (req, res) => {
             });
     }
     //TODO checking for errors
-    
+
     if (result.token != "") {
         result.token = await req.app.get('token').generateToken(result.token)
     }
@@ -148,7 +148,6 @@ router.patch('', async (req, res) => {
     let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
     if (
         (firstname == null || lastname == null || username == null || password == null || weeklyBudget== null || monthlyBudget==null) ||
-        (firstname == undefined || lastname == undefined || username == undefined || password == undefined || weeklyBudget== undefined || monthlyBudget==undefined) ||
         (typeof (firstname) != 'string') ||
         (typeof (lastname) != 'string') ||
         (typeof (username) != 'string') ||
