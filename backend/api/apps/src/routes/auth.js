@@ -8,6 +8,24 @@ const bcrypt = require('bcrypt');
 router.post('/signup', async (req, res) => {
     //TODO add input checking
     let { firstname, lastname, username, password, email } = req.body;
+
+    /**
+     * general input validation
+     */
+    if (
+        (firstname == null || lastname == null || username == null || password == null || email == null) ||
+        (typeof (firstname) != 'string') ||
+        (typeof (lastname) != 'string') ||
+        (typeof (username) != 'string') ||
+        (typeof (password) != 'string') ||
+        (typeof (email) != 'string')
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+
     /**
      * check that the password is minimum eight characters, 
      * at least one uppercase letter, one lowercase letter,
@@ -32,24 +50,6 @@ router.post('/signup', async (req, res) => {
                 message: "Invalid email format",
             });
     }
-
-    /**
-     * general input validation
-     */
-    if (
-        (firstname == null || lastname == null || username == null || password == null || email == null) ||
-        (typeof (firstname) != 'string') ||
-        (typeof (lastname) != 'string') ||
-        (typeof (username) != 'string') ||
-        (typeof (password) != 'string') ||
-        (typeof (email) != 'string')
-    ) {
-        return res.status(200)
-            .send({
-                message: "Missing or Invalid input data",
-            });
-    }
-
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
     const hashed = bcrypt.hashSync(password, salt);
@@ -77,9 +77,9 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     //TODO add input checking
     let { username, password } = req.body;
-   /**
-    * general input validation
-    */
+    /**
+     * general input validation
+     */
     if (
         (username == null || password == null) ||
         (typeof (username) != 'string') ||
@@ -146,21 +146,21 @@ router.delete('', async (req, res) => {
  */
 router.patch('', async (req, res) => {
     let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
-    if (
-        (firstname == null || lastname == null || username == null || password == null || weeklyBudget== null || monthlyBudget==null) ||
-        (typeof (firstname) != 'string') ||
-        (typeof (lastname) != 'string') ||
-        (typeof (username) != 'string') ||
-        (typeof (password) != 'string') ||
-        (typeof (weeklyBudget) != 'number')||
-        (typeof (monthlyBudget) != 'number')
-
-    ) {
-        return res.status(200)
-            .send({
-                message: "Missing or Invalid input data",
-            });
-    }
+    /*  if (
+          (firstname == null || lastname == null || username == null || password == null || weeklyBudget== null || monthlyBudget==null) ||
+          (typeof (firstname) != 'string') ||
+          (typeof (lastname) != 'string') ||
+          (typeof (username) != 'string') ||
+          (typeof (password) != 'string') ||
+          (typeof (weeklyBudget) != 'number')||
+          (typeof (monthlyBudget) != 'number')
+  
+      ) {
+          return res.status(200)
+              .send({
+                  message: "Missing or Invalid input data",
+              });
+      }*/
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
