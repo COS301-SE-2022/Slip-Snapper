@@ -15,6 +15,7 @@ import {
   IonItem,
   useIonToast,
   IonText,
+  IonIcon,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { isPlatform } from '@ionic/core';
@@ -24,6 +25,7 @@ import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
 import Graph from '../components/Graph';
+import { alertCircleOutline } from 'ionicons/icons';
 import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
 import { destroySession } from "../../api/Session"
@@ -110,21 +112,22 @@ const Home: React.FC = () => {
           <IonTitle className='home-card-title'>Recent Reports</IonTitle>
         </IonItem>
 
-        <IonRow>
           {reports?.length === 0 || reports?.length === undefined ?
-            <IonCard color="primary">
-              <IonCardHeader>
+            <div className="error-wrapper">
+              <IonCardHeader className='home-error-message'>
+                <IonIcon src={alertCircleOutline} size="large"/>
                 <IonCardTitle>You currently have no recent reports.</IonCardTitle>
               </IonCardHeader>
-            </IonCard>
-            :
-            reports.map((reps, index) => {
-              return (
-                <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
-              )
-            })
+            </div>
+          :
+            <IonRow>{
+              reports.map((reps, index) => {
+                return (
+                  <ReportItem key={index} reportData={[reps?.reportNumber, reps?.reportName, reps?.otherName]} />
+                )
+              })}
+            </IonRow>
           }
-        </IonRow>
 
         <IonItem>
           <IonTitle className='home-card-title'>Expense Summary</IonTitle>
@@ -136,7 +139,7 @@ const Home: React.FC = () => {
                 <IonCardTitle className='home-card-title'>Today's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems.totalItems}</IonItem>
-              <IonItem color="tertiary">Total Expenditure: R {todayItems.totalSpent.toFixed(2)}</IonItem>
+              <IonItem color="tertiary">Total Expenditure: R {todayItems.totalSpent?.toFixed(2)}</IonItem>
               <IonItem color="tertiary"></IonItem>
             </IonCard>
           </IonCol>
@@ -158,21 +161,24 @@ const Home: React.FC = () => {
           <IonTitle className='home-card-title'>Frequent Purchase Analysis</IonTitle>
         </IonItem>
 
-        <div className="graph-wrapper">
-          {graphData ? graphData.map((item, index) => {
-            return (
-              <IonCard color='primary' key={index} className='graph-card'>
-                <Graph graphData={item}></Graph>
-              </IonCard>
-            )
-          })
-            : 
-            <IonCard color="primary">
-              <IonCardHeader>
+          {graphData?.length === 0 || graphData?.length === undefined ? 
+            <div className="error-wrapper">
+              <IonCardHeader className='home-error-message'>
+                <IonIcon src={alertCircleOutline} size="large"/>
                 <IonCardTitle>There is currently no data for graphs to be generated.</IonCardTitle>
               </IonCardHeader>
-            </IonCard>}
-        </div>
+            </div>
+          :
+            <div className="graph-wrapper">
+              {graphData.map((item, index) => {
+                return (
+                  <IonCard color='primary' key={index} className='graph-card'>
+                    <Graph graphData={item}></Graph>
+                  </IonCard>
+                )})
+              }
+            </div>
+          }
 
         <div className='footer-home' />
 

@@ -38,8 +38,28 @@
     padding: 2px;
 }
 
-@media screen and (max-width: 400px) {
+.home-error-message{
+    text-align: center;
+}
+
+.error-wrapper {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+@media screen and (max-width: 420px) {
     .home-card-title{
+        font-size: large;
+    }
+
+    .graph-card{
+        width: 90%;
+    }
+
+    .home-error-message{
         font-size: large;
     }
 }
