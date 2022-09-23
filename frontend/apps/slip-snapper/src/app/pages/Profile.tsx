@@ -26,6 +26,8 @@ import Budget from '../components/Budget';
 import { UserStats } from '../components/UserStats';
 import { create } from 'ionicons/icons';
 import { helpCircleOutline } from 'ionicons/icons';
+import Filter7Icon from '@mui/icons-material/Filter7Outlined';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { Popover } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 import { float } from 'aws-sdk/clients/lightsail';
@@ -102,6 +104,10 @@ const Profile: React.FC = () => {
   const [profile, setProfile] = useState({ favouriteStore: { name: "", receipts: [{ id: 0, total: 0 }] }, weeklyTotal: 0, monthlyTotal: 0 });
   let weeklyBudget: number, monthlyBudget: number
 
+  const [categoryBudgetsPop, setCategoryBudgetsPop] = useState(null);
+  const openCategoryBudgetsPop = (event:any) => { setCategoryBudgetsPop(event.currentTarget); };
+  const closeCategoryBudgetsPop = () => { setCategoryBudgetsPop(null); };
+
   const [mostFrequent, setMostFrequent] = useState(null);
   const openMostFrequent = (event:any) => { setMostFrequent(event.currentTarget); };
   const closeMostFrequent = () => { setMostFrequent(null); };
@@ -128,7 +134,7 @@ const Profile: React.FC = () => {
           <IonCard className="card profile" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
-                <IonCardTitle>User details</IonCardTitle>
+                <IonCardTitle className='profile-card-title'>User Details</IonCardTitle>
               </IonItem>
 
               <div>
@@ -149,7 +155,7 @@ const Profile: React.FC = () => {
               </div>
               
               <IonItem className="headings" color="primary">
-                <IonCardTitle>Personal Budget</IonCardTitle>
+                <IonCardTitle className='profile-card-title'>Personal Budget</IonCardTitle>
               </IonItem>
 
               <div>
@@ -224,7 +230,27 @@ const Profile: React.FC = () => {
           <IonCard className="card budget" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
-                <IonCardTitle>Category Budgets</IonCardTitle>
+                <IonCardTitle className='profile-card-title'>Category Budgets</IonCardTitle>
+                <IonIcon src={helpCircleOutline} onClick={openCategoryBudgetsPop} className="info-icon" />
+                <Popover
+                  open={Boolean(categoryBudgetsPop)}
+                  onClose={closeCategoryBudgetsPop}
+                  anchorEl={categoryBudgetsPop}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                >
+                  <p className="popover-text">
+                    Set budgets for each category of products to track your spending more accurately.<br/>
+                    A weekly budget is indicated by <Filter7Icon />.<br/>
+                    A monthly budget is indicated by <CalendarMonthIcon />.
+                  </p>
+                </Popover>
               </IonItem>
               <Budget />
               <EditBudgets />
@@ -234,7 +260,7 @@ const Profile: React.FC = () => {
           <IonCard className="card favourite" color="primary">
             <IonCardHeader>
               <IonItem className="headings" color="primary">
-                <IonCardTitle>Most Frequent Store</IonCardTitle>
+                <IonCardTitle className='profile-card-title'>Most Frequent Store</IonCardTitle>
                 <IonIcon src={helpCircleOutline} onClick={openMostFrequent} className="info-icon"/>
                         <Popover
                             open={Boolean(mostFrequent)}
@@ -259,7 +285,7 @@ const Profile: React.FC = () => {
 
             <IonCardHeader>
               <IonItem lines='none' className="headings" color="primary">
-                <IonCardTitle>Most Expensive Recent Purchase</IonCardTitle>
+                <IonCardTitle className='profile-card-title'>Most Expensive Recent Purchase</IonCardTitle>
                 <IonIcon src={helpCircleOutline} onClick={openMostExpensive} className="info-icon" />
                 <Popover
                   open={Boolean(mostExpensive)}

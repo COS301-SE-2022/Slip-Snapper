@@ -86,7 +86,7 @@ export const EditBudgets = () => {
 
 
   return (
-    <IonItem color="primary">
+    <IonItem color="primary" lines="none">
       <IonButton fill="solid" slot="end" color="secondary" onClick={() => setIsOpen(true)}>Add/Remove</IonButton>
       <IonModal isOpen={isOpen} onDidDismiss={() => { setStates(budgetIntervals, categoryStates); updateBudgets(); hideData(categoryStates); setIsOpen(false) }}>
         <IonHeader>

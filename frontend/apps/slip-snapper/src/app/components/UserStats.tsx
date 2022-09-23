@@ -97,7 +97,7 @@ export const UserStats = () => {
             <IonCard className="card weekly" color="primary">
                 <IonCardHeader>
                     <IonItem lines="none" className="headings" color="primary">
-                        <IonCardTitle>Weekly Expenditure</IonCardTitle>
+                        <IonCardTitle className='stats-card-title'>Weekly Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openWeekExPop} className="info-icon" />
                         <Popover
                             open={Boolean(weekExPop)}
@@ -126,7 +126,7 @@ export const UserStats = () => {
             <IonCard className="card monthly" color="primary">
                 <IonCardHeader>
                     <IonItem lines="none" className="headings" color="primary">
-                        <IonCardTitle>Monthly Expenditure</IonCardTitle>
+                        <IonCardTitle className='stats-card-title'>Monthly Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openMonthExPop} className="info-icon" />
                         <Popover
                             open={Boolean(monthExPop)}
@@ -154,7 +154,7 @@ export const UserStats = () => {
             <IonCard className="card most-purchased" color="primary">
                 <IonCardHeader>
                     <IonItem lines="none" className="headings" color="primary">
-                        <IonCardTitle>Category Expenditure</IonCardTitle>
+                        <IonCardTitle className='stats-card-title'>Category Expenditure</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openMostCategory} className="info-icon" />
                         <Popover
                             open={Boolean(mostCategory)}
@@ -181,7 +181,7 @@ export const UserStats = () => {
             <IonCard className="card most-spent" color="primary">
                 <IonCardHeader>
                     <IonItem lines="none" className="headings" color="primary">
-                        <IonCardTitle>Expenditure Forecasting</IonCardTitle>
+                        <IonCardTitle className='stats-card-title'>Expenditure Forecasting</IonCardTitle>
                         <IonIcon src={helpCircleOutline} onClick={openForecast} className="info-icon" />
                         <Popover
                             open={Boolean(forecast)}
