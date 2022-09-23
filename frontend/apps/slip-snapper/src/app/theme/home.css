@@ -10,6 +10,15 @@
     display: none;
 }
 
+.reports-wrapper{
+    padding: 5px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: center;
+}
+
 .graph-card{
     min-width: 30%;
     padding: 2%;
@@ -50,6 +59,20 @@
     justify-content: center;
 }
 
+.expense-wrapper {
+    min-width: 30%;
+    padding: 5px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.expense-cards{
+    min-width: 48%;
+}
+
 @media screen and (max-width: 420px) {
     .home-card-title{
         font-size: large;
@@ -61,5 +84,13 @@
 
     .home-error-message{
         font-size: large;
+    }
+
+    .expense-cards{
+        width: 90%;
+    }
+
+    .reports-wrapper{
+        flex-wrap: wrap;
     }
 }

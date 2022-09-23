@@ -2,9 +2,7 @@ import {
   IonButton,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
-  IonCol,
   IonItem,
   IonText,
 } from '@ionic/react';
@@ -19,19 +17,17 @@ type Props = {
 }
 function ReportItem({ reportData }: Props) {
     return (
-        <IonCol className="recent-item-col">
-            <IonCard color="primary">
+            <IonCard color="primary" className='report-cards'>
                 <IonCardHeader>
                     <IonCardTitle className='report-card-title'>Report {reportData[0]}:</IonCardTitle>
                     <IonText>{reportData[2]}</IonText>
                 </IonCardHeader>
-                <IonItem color="tertiary">
+                <IonItem color="tertiary" lines='none'>
                     <IonButton onClick={() => view(reportData[1])} fill="solid" slot="end" color="secondary">
                         View
                     </IonButton>
                 </IonItem>
             </IonCard>
-        </IonCol>
     );
 }
 function view(data: any) {
