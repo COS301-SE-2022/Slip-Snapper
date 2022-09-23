@@ -21,6 +21,17 @@ router.post('/signup', async (req,res)=>{
                 message: "Weak password",
             });
     }
+    /**
+     * email format validation
+     */
+    let emailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    
+    if (!email.match(emailformat)) {
+        return res.status(200)
+            .send({
+                message: "Invalid email format",
+            });
+    }
 
     const saltRounds = 10;
     const salt = bcrypt.genSaltSync(saltRounds);
