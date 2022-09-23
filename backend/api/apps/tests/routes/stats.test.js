@@ -6,6 +6,9 @@ const getUserProfile = jest.fn();
 const getUserBudgets = jest.fn();
 const setUserBudgets = jest.fn();
 const todaysReports = jest.fn();
+const thisWeeksExpenditure = jest.fn();
+
+
 const updateWeeklyMonthlyCategoryBudgets = jest.fn();
 
 const verifyToken = jest.fn();
@@ -17,6 +20,7 @@ const app = makeApp({
   getUserProfile,
   updateWeeklyMonthlyCategoryBudgets,
   todaysReports,
+  thisWeeksExpenditure,
 },{},{
     verifyToken,
 })
@@ -515,6 +519,7 @@ describe('Get /stats/today', ()=>{
 
     beforeEach(()=>{
         todaysReports.mockReset();
+        thisWeeksExpenditure.mockReset();
         verifyToken.mockReset();
     })
 
@@ -531,6 +536,13 @@ describe('Get /stats/today', ()=>{
                 message: "Today's Stats retrieved",
                 sum: 0,
                 todaystotal: 0,
+            });
+
+            thisWeeksExpenditure.mockReset()
+            thisWeeksExpenditure.mockResolvedValue({
+                message: "This Weeks Expenditure Retrieved",
+                itemCount: 0,
+                weekTotal: 0
             });
 
             verifyToken.mockReset();
@@ -557,6 +569,11 @@ describe('Get /stats/today', ()=>{
             sum: 0,
             todaystotal: 0,
         });
+        thisWeeksExpenditure.mockResolvedValue({
+            message: "This Weeks Expenditure Retrieved",
+            itemCount: 0,
+            weekTotal: 0
+        });
 
         verifyToken.mockResolvedValue({
             user: {
@@ -576,6 +593,12 @@ describe('Get /stats/today', ()=>{
             message: "Today's Stats retrieved",
             sum: 0,
             todaystotal: 0,
+        });
+
+        thisWeeksExpenditure.mockResolvedValue({
+            message: "This Weeks Expenditure Retrieved",
+            itemCount: 0,
+            weekTotal: 0
         });
 
         verifyToken.mockResolvedValue({

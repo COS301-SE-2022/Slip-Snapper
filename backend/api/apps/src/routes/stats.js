@@ -194,6 +194,7 @@ router.get('/today', async (req, res) => {
     }
 
     const result = await req.app.get("db").todaysReports(Number(tokenVerified.user.id));
+    const lastWeeksResult = await req.app.get("db").thisWeeksExpenditure(Number(tokenVerified.user.id));
 
     //TODO error checking
 
@@ -201,9 +202,10 @@ router.get('/today', async (req, res) => {
         .send({
             message: result.message,
             totalItems: result.sum,
-            totalSpent: result.todaystotal
+            totalSpent: result.todaystotal,
+            weekItemCount: lastWeeksResult.itemCount,
+            weekTotal: lastWeeksResult.weekTotal
         });
-
 });
 
 /**

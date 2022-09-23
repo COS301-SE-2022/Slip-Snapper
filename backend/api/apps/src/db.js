@@ -910,13 +910,24 @@ async function updateWeeklyMonthlyCategoryBudgets(userId, data) {
             }
         })
 
+        const budgetObject = await prisma.user.findFirst({
+            where: {
+                id: userId
+            },
+            select: {
+                budgets: true
+            }
+        })
+
         return {
-            message: "User budget/s set",
+            message: "User budget/s set and retrieved",
+            budgets: budgetObject
         };
     }
     catch (error) {
         return {
             message: "Error updating the budget/s",
+            budgets: {}
         };
     }
 
@@ -1668,19 +1679,28 @@ async function todaysReports(userid) {
                     gte: todaysDate
                 }
             },
+
             select: {
                 _count: {
                     select: {
-                        items: true
+                        items: true,
                     }
-                }
+                },
+
+                items:true,
             }
+
         })
+
 
         let sum = 0
         let counter = 0
         for (const numItems in todaysReport) {
-            sum += todaysReport.at(counter)._count.items
+            
+            for (const i in todaysReport.at(counter).items)
+            {
+                sum += todaysReport.at(counter).items.at(i).itemQuantity
+            }
             counter++
         }
 
@@ -1710,6 +1730,72 @@ async function todaysReports(userid) {
             message: "Error retrieving todays statistics",
             sum: 0,
             todaystotal: 0
+        }
+    }
+
+}
+
+async function thisWeeksExpenditure(userid) {
+    try {
+        const date1 = new Date()
+        date1.setDate(date1.getDate() - 7)
+        let todaysDate = date1.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
+
+        const weeksItems = await prisma.slip.findMany({
+
+            where: {
+                usersId: userid,
+                transactionDate: {
+                    gte: todaysDate
+                }
+            },
+            select: {
+                _count: {
+                    select: {
+                        items: true
+                    }
+                },
+
+                items:true,
+            }
+        })
+
+        let itemCount = 0
+        let counter = 0
+        for (const numItems in weeksItems) {
+
+            for (const i in weeksItems.at(counter).items) {
+                itemCount += weeksItems.at(counter).items.at(i).itemQuantity
+            }
+            counter++
+        }
+
+        const weeksTotal = await prisma.slip.aggregate({
+            where: {
+                usersId: userid,
+                transactionDate: {
+                    gte: todaysDate
+                }
+            },
+            _sum: {
+                total: true,
+            },
+        })
+
+        if (weeksTotal._sum.total === null)
+            weeksTotal._sum.total = 0;
+
+        return {
+            message: "This Weeks Expenditure Retrieved",
+            itemCount: itemCount,
+            weekTotal: weeksTotal._sum.total
+        }
+    }
+    catch (error) {
+        return {
+            message: "Error retrieving Weeks Expenditure",
+            itemCount: 0,
+            weeksTotal: 0
         }
     }
 
@@ -2255,10 +2341,9 @@ async function getForecast(userId) {
 
         return {
             message: "Success retrieving User Forecasting",
-            averagesArray: avgArray,
-            futureDateArray: futureDateArray
+            averagesArray: avgArray.reverse(),
+            futureDateArray: futureDateArray.reverse()
         }
-
 
     }
     catch (error) {
@@ -2268,8 +2353,6 @@ async function getForecast(userId) {
             futureDateArray: []
         }
     }
-
-
 }
 
 
@@ -2294,6 +2377,7 @@ module.exports = {
     createReportRecord,
     retrieveAllSlips,
     todaysReports,
+    thisWeeksExpenditure,
     getUserProfile,
     updateSlip,
     updateWeeklyMonthlyCategoryBudgets,
@@ -2301,5 +2385,5 @@ module.exports = {
     deleteSlip,
     getUserAnalysis,
     getUserInformation,
-    getForecast
+    getForecast,
 }

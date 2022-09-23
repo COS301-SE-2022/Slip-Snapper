@@ -359,7 +359,9 @@ describe('getTodayStats', () => {
         const data = { 
             message: "Today's Stats retrieved",
             totalItems: 0,
-            totalSpent: 0
+            totalSpent: 0,
+            weekItemCount: 0,
+            weekTotal: 0
         };
         mock.onGet( baseUrl + 'stats/today').reply(200, data);
 
