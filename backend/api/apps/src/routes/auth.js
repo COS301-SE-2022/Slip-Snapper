@@ -101,6 +101,7 @@ router.post('/login', async (req, res) => {
             });
     }
     //TODO checking for errors
+    
     if (result.token != "") {
         result.token = await req.app.get('token').generateToken(result.token)
     }
