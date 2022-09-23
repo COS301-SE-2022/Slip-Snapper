@@ -15,9 +15,14 @@ const Register: React.FC = () => {
   const [errorAlert, setAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [mostFrequent, setMostFrequent] = useState(null);
-  const openMostFrequent = (event: any) => { setMostFrequent(event.currentTarget); };
-  const closeMostFrequent = () => { setMostFrequent(null); };
+  const [passwordPop, setPasswordPop] = useState(null);
+  const openPasswordPop = (event: any) => { setPasswordPop(event.currentTarget); };
+  const closePasswordPop = () => { setPasswordPop(null); };
+
+
+  const [confirmPop, setConfirmPop] = useState(null);
+  const openConfirmPop = (event: any) => { setConfirmPop(event.currentTarget); };
+  const closeConfirmPop = () => { setConfirmPop(null); };
 
 
 
@@ -35,7 +40,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Username</IonLabel>
               <IonInput
-                // title="username_Input"
+                title="Input Username"
                 type="text"
                 value={userInput}
                 onIonChange={(e) => setUserInput(e.detail.value!)}
@@ -48,7 +53,7 @@ const Register: React.FC = () => {
                 <IonItem color="tertiary" className="fl-name">
                   <IonLabel position="floating">First Name</IonLabel>
                   <IonInput
-                    // title="firstname_Input"
+                    title="Input First Name"
                     type="text"
                     value={firstNameInput}
                     onIonChange={(e) => setFirstNameInput(e.detail.value!)}
@@ -59,7 +64,7 @@ const Register: React.FC = () => {
                 <IonItem color="tertiary" className="fl-name">
                   <IonLabel position="floating">Last Name</IonLabel>
                   <IonInput
-                    title="lastname_Input"
+                    title="Input Last Name"
                     type="text"
                     value={lastNameInput}
                     onIonChange={(e) => setLastNameInput(e.detail.value!)}
@@ -72,7 +77,7 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Email Address</IonLabel>
               <IonInput
-                title="email_Input"
+                title="Input Email"
                 type="text"
                 value={emailInput}
                 onIonChange={(e) => setEmailInput(e.detail.value!)}
@@ -83,8 +88,8 @@ const Register: React.FC = () => {
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Password</IonLabel>
               <IonInput
-                title="password_Input"
-                onClick={(e) => { openMostFrequent(e);validatePassword(passwordInput) }}
+                title="Input Password"
+                onClick={(e) => { openPasswordPop(e);validatePassword(passwordInput) }}
                 type="password"
                 value={passwordInput}
                 onIonChange={(e) => { setPasswordInput(e.detail.value!); validatePassword(e.detail.value!) }}
@@ -93,9 +98,9 @@ const Register: React.FC = () => {
             </IonItem>
 
             <Popover
-              open={Boolean(mostFrequent)}
-              onClose={closeMostFrequent}
-              anchorEl={mostFrequent}
+              open={Boolean(passwordPop)}
+              onClose={closePasswordPop}
+              anchorEl={passwordPop}
               disableAutoFocus={true}
               disableEnforceFocus={true}
               anchorOrigin={{
@@ -111,20 +116,39 @@ const Register: React.FC = () => {
               <p id='low'>At least 1 lowercase character.</p>
               <p id='up'>At least 1 uppercase character.</p>
               <p id='num'>At least 1 number.</p>
-              <p id='spec'>At least 1 special character</p>
+              <p id='spec'>At least 1 special character such as @$!%*?&</p>
             </Popover>
 
 
             <IonItem color="tertiary" class="LRItems">
               <IonLabel position="floating">Confirm Password</IonLabel>
               <IonInput
-                title="confirmPassword_Input"
+                onClick={(e) => { openConfirmPop(e); }}
+                title="Input Confirmation"
                 type="password"
                 value={confirmPasswordInput}
-                onIonChange={(e) => setConfirmPasswordInput(e.detail.value!)}
+                onIonChange={(e) => {setConfirmPasswordInput(e.detail.value!);validateConfirm(e.detail.value!)}}
                 required
               ></IonInput>
             </IonItem>
+
+            <Popover
+              open={Boolean(confirmPop)}
+              onClose={closeConfirmPop}
+              anchorEl={confirmPop}
+              disableAutoFocus={true}
+              disableEnforceFocus={true}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <p id='match'>Passwords Match.</p>
+            </Popover>
 
             <IonItem color="tertiary" text-align="center" class="LRItems" lines="none">
               <IonButton
@@ -202,6 +226,10 @@ const Register: React.FC = () => {
 
   function register() {
 
+    const emailformat = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+    const strongPasswordChecker = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/;
+
+
     if (emailInput === undefined || emailInput === "") {
       setErrorMessage("Please fill in all fields.")
       setAlert(true)
@@ -221,37 +249,50 @@ const Register: React.FC = () => {
       setErrorMessage("Please fill in all fields.")
       setAlert(true)
     }
+    else if (emailInput !== undefined && !emailInput.match(emailformat))
+    {
+      setErrorMessage("Please input a valid Email address.")
+      setAlert(true)
+    }
+    else if (!validatePassword(passwordInput))
+    {
+      setErrorMessage("Password does not meet the criteria.")
+      setAlert(true)
+    }
+    else if (passwordInput !== undefined && !strongPasswordChecker.test(passwordInput)) {
+      setErrorMessage("Password may not be secure, please try another one.")
+      setAlert(true)
+    }
     else if (confirmPasswordInput !== passwordInput) {
       setErrorMessage("Passwords do not match.")
       setAlert(true)
     }
-
+  
     else {
-      console.log("I SIGNED UP")
-      //   signupA(firstNameInput, lastNameInput, userInput, passwordInput, emailInput)
-      //     .then(apiResponse => {
-      //       if(typeof(apiResponse.data) !== "string"){
-      //         if(apiResponse.data.message !== "Error Creating User"){
-      //           localStorage.removeItem('user')
-      //           localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
-      //           sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
+        signupA(firstNameInput, lastNameInput, userInput, passwordInput, emailInput)
+          .then(apiResponse => {
+            if(typeof(apiResponse.data) !== "string"){
+              if(apiResponse.data.message !== "Error Creating User"){
+                localStorage.removeItem('user')
+                localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
+                sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
-      //           const button = document.getElementById("successRedirect")
-      //           if (button) {
-      //             button.click();
-      //           }
-      //         }else{
-      //           setErrorMessage("Unable to create user, please try again.")
-      //           setAlert(true)
-      //         }
-      //       }else{
-      //         setErrorMessage("500 Internal Service Error.")
-      //         setAlert(true)
-      //       } 
-      //     }).catch(err => {
-      //       setErrorMessage("500 Internal Service Error.")
-      //       setAlert(true)
-      //     });
+                const button = document.getElementById("successRedirect")
+                if (button) {
+                  button.click();
+                }
+              }else{
+                setErrorMessage("Unable to create user, please try again.")
+                setAlert(true)
+              }
+            }else{
+              setErrorMessage("500 Internal Service Error.")
+              setAlert(true)
+            } 
+          }).catch(err => {
+            setErrorMessage("500 Internal Service Error.")
+            setAlert(true)
+          });
     }
   }
 
@@ -272,6 +313,8 @@ const Register: React.FC = () => {
     if (spec !== null)
       spec.style.color = "red"
 
+    let correctPasswordFlag = true;
+
     if (password!==undefined&&password?.length > 7) {
       if (min !== null)
         min.style.color = "green"
@@ -280,32 +323,44 @@ const Register: React.FC = () => {
     const uppercaseRegex = /[A-Z]/;
     const lowercaseRegex = /[a-z]/;
     const numberRegex = /[0-9]/;
-    const specialCharacter = /[$&+,:;=?@#|'<>.^*()%!-]/;
-
+    const specialCharacter = /[@$!%*?&]/;
 
     if (password !== undefined &&lowercaseRegex.test(password)) {
       if (low !== null)
         low.style.color = "green"
-    }
+    } else { correctPasswordFlag = false }
 
     if (password !== undefined &&uppercaseRegex.test(password))
     {
       if (up !== null)
         up.style.color = "green"
-    }
+    } else { correctPasswordFlag = false }
 
     if (password !== undefined &&numberRegex.test(password)) {
       if (num !== null)
         num.style.color = "green"
-    }
+    } else { correctPasswordFlag = false }
 
     if (password !== undefined &&specialCharacter.test(password)) {
       if (spec !== null)
         spec.style.color = "green"
-    }
-    // Check for incorrect email format
+    } else { correctPasswordFlag = false }
+
+    return correctPasswordFlag
   }
 
+  function validateConfirm(confirmed: string | undefined)
+  {
+    const match = document.getElementById("match")
+    if (match !== null)
+      match.style.color = "red"
+
+    if(passwordInput===confirmed)
+    {
+      if(match !== null)
+        match.style.color = "green" 
+    }
+  }
 };
 
 export default Register;
