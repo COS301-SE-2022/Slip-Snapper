@@ -145,6 +145,22 @@ router.delete('', async (req, res) => {
  */
 router.patch('', async (req, res) => {
     let { username, password, firstname, lastname, weeklyBudget, monthlyBudget } = req.body;
+    if (
+        (firstname == null || lastname == null || username == null || password == null || weeklyBudget== null || monthlyBudget==null) ||
+        (firstname == undefined || lastname == undefined || username == undefined || password == undefined || weeklyBudget== undefined || monthlyBudget==undefined) ||
+        (typeof (firstname) != 'string') ||
+        (typeof (lastname) != 'string') ||
+        (typeof (username) != 'string') ||
+        (typeof (password) != 'string') ||
+        (typeof (weeklyBudget) != 'number')||
+        (typeof (monthlyBudget) != 'number')
+
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
