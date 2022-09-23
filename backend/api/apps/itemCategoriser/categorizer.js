@@ -23,7 +23,7 @@ class Connection{
 class Neuron {
     constructor(){
         this.connections = [];
-        this.bias = Math.random();
+        this.bias = 0;
         this.value = 0;
         numNeurons++;
     }
@@ -182,61 +182,80 @@ class Categoriser{
         return { W1, B1, W2, B2 }
     }
 
+    async inputLayer(model, inputs){
+        for(let j = 0; j < 512; j++){
+            model[0].allNeurons[j].assignValue(inputs[j]);
+        }
+
+        return model;
+    }
+
+    async middleLayer(model){
+        for(let j = 0; j < model[1].allNeurons.length; j++){
+            let sum = model[1].allNeurons[j].bias;
+            for(let l = 0; l < model[1].allNeurons[j].connections.length; l++){
+                sum += model[1].allNeurons[j].connections[l].neuronA.value * model[1].allNeurons[j].connections[l].weight;
+            }
+
+            let activated = await this.relu(sum);
+            model[1].allNeurons[j].assignValue(activated)
+        }
+
+        return model;
+    }
+
+    async ouputLayer(model){
+        let values = [];
+        for(let j = 0; j < model[2].allNeurons.length; j++){
+            let sum = 0;
+            for(let l = 0; l < model[2].allNeurons[j].connections.length; l++){
+                sum += Math.exp(model[2].allNeurons[j].connections[l].neuronA.value * model[2].allNeurons[j].connections[l].weight + model[2].allNeurons[j].bias);
+            }
+            
+            values[j] = sum
+        }
+
+        for(let j = 0; j < model[2].allNeurons.length; j++){ 
+            let activated = await this.softmax(values[j],values);
+            model[2].allNeurons[j].assignValue(activated)
+            console.log(activated)
+        }
+
+        return model;
+    }
+
     async train(model, inputs, outputs, iterations, alpha){
         let i,j,k,l;
         // for(k = 0; k < iterations; k++){
-            //inputs.length
+            // inputs.length
             
             for(i = 0; i < 1; i++){
                 /*Forward Propagation*/
                 //Populate first Layer
-                for(j = 0; j < 512; j++){
-                    model[0].allNeurons[j].assignValue(inputs[i][j]);
-                }
+                model = await this.inputLayer(model,inputs[i]);
 
                 //Calculate second Layer
-                for(j = 0; j < model[1].allNeurons.length; j++){
-                    let sum = model[1].allNeurons[j].bias;
-                    for(l = 0; l < model[1].allNeurons[j].connections.length; l++){
-                        sum += model[1].allNeurons[j].connections[l].neuronA.value * model[1].allNeurons[j].connections[l].weight;
-                    }
-
-                    let activated = await this.relu(sum);
-                    model[1].allNeurons[j].assignValue(activated)
-                }
+                model = await this.middleLayer(model);
 
                 // Calculate output Layer
-                let values = [];
-                for(j = 0; j < model[2].allNeurons.length; j++){
-                    let sum = 0;
-                    for(l = 0; l < model[2].allNeurons[j].connections.length; l++){
-                        sum += Math.exp(model[2].allNeurons[j].connections[l].neuronA.value * model[2].allNeurons[j].connections[l].weight + model[2].allNeurons[j].bias);
-                    }
-                    
-                    values[j] = sum
-                }
+                model = await this.ouputLayer(model);
 
-                for(j = 0; j < model[2].allNeurons.length; j++){ 
-                    let activated = await this.softmax(values[j],values);
-                    model[2].allNeurons[j].assignValue(activated)
-                    console.log(activated);
-                }
-
+                //Calculate loss
                 
 
                 /*Back Propagation*/
-
+                // let residual = (observed - predicted);
             }
         // }
-        console.log(model[2].allNeurons);
+        // console.log(model[2].allNeurons);
         // console.log(model[1].allNeurons[0].connections[0].neuronA.value);
         // console.log(model[1].allNeurons[0].connections.length);
+        return model;
     }
 
     async run(){
         const items = await this.getData();
         const model = await this.createModel();
-        const params = await this.initParams();
         const encoder = await vector.load();
         
         const inputs = [];
