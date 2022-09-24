@@ -1,5 +1,202 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Reports should render component 1`] = `
+<div
+  className="ion-page"
+>
+  <ion-header>
+    <ion-toolbar
+      color="primary"
+    >
+      <ion-title>
+        View Reports
+      </ion-title>
+      <ion-buttons
+        slot="end"
+      >
+        <div>
+          <ion-button
+            onClick={[Function]}
+          >
+            Home
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Reports
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Profile
+          </ion-button>
+          <ion-button
+            onClick={[Function]}
+          >
+            Receipts
+          </ion-button>
+        </div>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content
+    fullscreen={true}
+  >
+    <ion-item
+      onClick={[Function]}
+    >
+      <ion-title>
+        Create Reports
+      </ion-title>
+    </ion-item>
+    <ion-row>
+      <ion-col>
+        <ion-card
+          color="primary"
+          onClick={[Function]}
+        >
+          <ion-card-header>
+            <ion-card-title>
+              Daily Report
+            </ion-card-title>
+          </ion-card-header>
+          <ion-item
+            color="tertiary"
+            onClick={[Function]}
+          >
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+            >
+              Generate XLSX
+            </ion-button>
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+              slot="end"
+              title="generateDR"
+            >
+              Generate PDF
+            </ion-button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card
+          color="primary"
+          onClick={[Function]}
+        >
+          <ion-card-header>
+            <ion-card-title>
+              Weekly Report
+            </ion-card-title>
+          </ion-card-header>
+          <ion-item
+            color="tertiary"
+            onClick={[Function]}
+          >
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+            >
+              Generate XLSX
+            </ion-button>
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+              slot="end"
+              title="generateWR"
+            >
+              Generate PDF
+            </ion-button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card
+          color="primary"
+          onClick={[Function]}
+        >
+          <ion-card-header>
+            <ion-card-title>
+              Monthly Report
+            </ion-card-title>
+          </ion-card-header>
+          <ion-item
+            color="tertiary"
+            onClick={[Function]}
+          >
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+            >
+              Generate XLSX
+            </ion-button>
+            <ion-button
+              color="secondary"
+              fill="solid"
+              onClick={[Function]}
+              slot="end"
+              title="generateMR"
+            >
+              Generate PDF
+            </ion-button>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-item
+      onClick={[Function]}
+    >
+      <ion-title>
+        All Reports
+      </ion-title>
+    </ion-item>
+    <ion-card
+      color="primary"
+      onClick={[Function]}
+    >
+      <ion-card-header>
+        <ion-item
+          color="primary"
+          onClick={[Function]}
+        >
+          <ion-searchbar
+            color="tertiary"
+            id="searchBar"
+          />
+          <ion-fab
+            horizontal="end"
+          >
+            <ion-fab-button
+              color="secondary"
+              onClick={[Function]}
+              size="small"
+            >
+              <ion-icon
+                src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><title>Filter</title><path stroke-linecap='round' stroke-linejoin='round' d='M32 144h448M112 256h288M208 368h96' class='ionicon-fill-none ionicon-stroke-width'/></svg>"
+              />
+            </ion-fab-button>
+          </ion-fab>
+        </ion-item>
+      </ion-card-header>
+      <ion-item
+        color="tertiary"
+        id="emptyReports"
+        onClick={[Function]}
+      >
+        Your PDF reports will be displayed here.
+      </ion-item>
+    </ion-card>
+  </ion-content>
+</div>
+`;
+
 exports[`TakePicture Button component Matches the snapshot of the TakePicture button 1`] = `
 <ion-content>
   <ion-fab

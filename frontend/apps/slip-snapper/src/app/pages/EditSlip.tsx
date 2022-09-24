@@ -226,7 +226,7 @@ const EditSlip: React.FC = () => {
 
     }
 
-    function validateData() {
+    async function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
@@ -266,9 +266,22 @@ const EditSlip: React.FC = () => {
         }
         const data = {
             text: [date, storeName, "", "", total]
-        };
+        };  
 
-        addItemsA(data, items)
+        const loading = document.createElement('ion-loading');
+        loading.spinner = "crescent";
+        loading.cssClass = "loading";
+        loading.mode = "ios";
+        document.body.appendChild(loading);
+        loading.present();
+        
+        await addItemsA(data, items).then(apiResponse => {
+            loading.dismiss();
+            loading.remove();
+        }).catch(err =>{
+            loading.dismiss();
+            loading.remove();
+        })
         const button = document.getElementById("successRedirect")
         if (button) {
             button.click();

@@ -69,6 +69,12 @@ const Profile: React.FC = () => {
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
     getProfileData()
       .then(
         apiResponse => {
@@ -88,8 +94,16 @@ const Profile: React.FC = () => {
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
             setUserDetails(apiResponse.data.user?.user)
+            loading.dismiss();
+            loading.remove();
+          }else{
+            loading.dismiss();
+            loading.remove();
           }
-        }).catch();
+        }).catch(err =>{
+          loading.dismiss();
+          loading.remove();
+        });
 
     getStatsA()
       .then(

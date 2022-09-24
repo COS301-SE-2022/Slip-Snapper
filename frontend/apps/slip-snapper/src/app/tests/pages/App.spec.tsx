@@ -10,9 +10,10 @@ import Register from '../../pages/Register';
 //ReportTotal Imports
 import AddEntry from '../../pages/AddEntry';
 import ForgotPass from '../../pages/ForgotPass';
-import ProfileBarGraph from '../../components/ProfileBarGraph';
+import renderer from 'react-test-renderer';
 
 jest.mock('@ionic-native/file-opener/index', () => jest.fn());
+
 beforeEach(cleanup);
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -43,14 +44,10 @@ describe('Reports', () => {
     });
   });
 
-  it('Correctly renders the Reports page', () => {
-    const Component = render(<ViewReports />);
-
-    expect(Component.getByText('Profile'));
-    expect(Component.getByText('Home'));
-    expect(Component.getByText('Reports'));
-    expect(Component.getByText('Receipts'));
-    expect(Component.getByText('View Reports'));
+  const renderTree = (tree: JSX.Element) => renderer.create(tree);
+  it('should render component', () => {
+    expect(renderTree(<ViewReports 
+    />).toJSON()).toMatchSnapshot();
   });
 });
 

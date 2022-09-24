@@ -35,6 +35,13 @@ function view(data: any) {
   if (user == null) {
     user = { username: 'demoUser' };
   }
+  const loading = document.createElement('ion-loading');
+  loading.spinner = "crescent";
+  loading.cssClass = "loading";
+  loading.mode = "ios";
+  document.body.appendChild(loading);
+  loading.present();
+
   getUserReport(user.username, data).then((apiResponse) => {
     if (apiResponse.data.report.data !== undefined) {
       const arr = new Uint8Array(apiResponse.data.report.data);
@@ -43,6 +50,8 @@ function view(data: any) {
 
       if (!isPlatform('android') && !isPlatform('ios')) {
         window.open(docUrl);
+        loading.dismiss();
+        loading.remove();
       } else {
         //view for mobile, might need name
         const reader = new FileReader();
@@ -54,6 +63,8 @@ function view(data: any) {
               const result = reader.result as string;
               const pdfData = result.split(',')[1];
               downloadPDF(pdfData);
+              loading.dismiss();
+              loading.remove();
             }
           },
           false
@@ -61,6 +72,9 @@ function view(data: any) {
 
         reader.readAsDataURL(blob);
       }
+    }else{
+      loading.dismiss();
+      loading.remove();
     }
   });
 }

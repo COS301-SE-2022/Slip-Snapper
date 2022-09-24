@@ -17,6 +17,13 @@ const SlipItems: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
+        const loading = document.createElement('ion-loading');
+        loading.spinner = "crescent";
+        loading.cssClass = "loading";
+        loading.mode = "ios";
+        document.body.appendChild(loading);
+        loading.present();
+
         getAllSlips()
             .then(
                 apiResponse => {
@@ -26,6 +33,11 @@ const SlipItems: React.FC = () => {
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)
                         checkEmptySlips(apiResponse.data.slips)
+                        loading.dismiss();
+                        loading.remove();
+                    }else{
+                        loading.dismiss();
+                        loading.remove();
                     }
                 })
     }, []);
@@ -128,7 +140,20 @@ const SlipItems: React.FC = () => {
                                         text: 'Delete',
                                         cssClass: 'toasts',
                                         handler: async () => {
-                                            await deleteSlip(deleteAlert.id)
+                                            const loading = document.createElement('ion-loading');
+                                            loading.spinner = "crescent";
+                                            loading.cssClass = "loading";
+                                            loading.mode = "ios";
+                                            document.body.appendChild(loading);
+                                            loading.present();
+
+                                            await deleteSlip(deleteAlert.id).then(apiResonse =>{
+                                                loading.dismiss();
+                                                loading.remove();
+                                            }).catch(err => {
+                                                loading.dismiss();
+                                                loading.remove();
+                                            })
                                             getAllSlips()
                                                 .then(
                                                     apiResponse => {
