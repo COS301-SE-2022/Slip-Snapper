@@ -2,7 +2,7 @@ import { doProcessing, updateItemA, getItemsA, setBudgetA, getProfileData, login
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3000/api/'
+const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
 describe('doProcessing', () => {
     it('should expose a function', () => {
         expect(doProcessing).toBeDefined();
