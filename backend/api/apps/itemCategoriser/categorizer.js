@@ -21,15 +21,23 @@ class Connection{
 }
 
 class Neuron {
-    constructor(){
+    constructor( i ){
         this.connections = [];
         this.bias = 0;
-        this.value = 0;
+        this.inValue = 0;
+        this.outValue = 0;
+        this.gradient = 0;
+        this.index = i;
+        this.previousDelta = 0;
         numNeurons++;
     }
 
-    assignValue(val){
-        this.value = val;
+    assignInValue(val){
+        this.inValue = val;
+    }
+
+    assignOutValue(val){
+        this.outValue = val;
     }
 
     print(){
@@ -42,7 +50,7 @@ class Layer{
         this.numNeurons = numberOfNeurons;
         this.allNeurons = [];
         for(let i = 0; i < this.numNeurons; i++){
-            this.allNeurons[i] = new Neuron();
+            this.allNeurons[i] = new Neuron( i );
         }
         numLayers++;
     }
@@ -62,7 +70,7 @@ class Layer{
 
 class Categoriser{
     constructor(){
-        this.modelDescription = [512,16,8,8];
+        this.modelDescription = [512,16,8];
         this.model = [];
     }
 
@@ -106,14 +114,14 @@ class Categoriser{
     }
 
     async argmax( ){
-        let highest = 0;
+        let highestP = 0;
         for(let i =0; i <8; i++){
-            if(this.model[3].allNeurons[i].value > this.model[3].allNeurons[highest].value){
-                highest = i;
+            if(this.model[2].allNeurons[i].outValue > this.model[2].allNeurons[highestP].outValue){
+                highestP = i;
             }
         }
 
-        return highest;
+        return highestP;
     }
 
     async argmaxOut( output ){
@@ -127,65 +135,30 @@ class Categoriser{
         return highest;
     }
 
-    async crossEntropy( output ){
-        let loss = 0;
+    async loss( output ){
+        let lossV = [];
         for(let j = 0; j < 8; j++){
-            loss += (Math.log(this.model[3].allNeurons[j].value) * output[j]);
+            lossV[j] = output[j] - this.model[2].allNeurons[j].outValue;
         }
 
-        return (-1*loss);
+        return lossV;
     }
 
     async derivativeRelu( value ){
-        return value > 0;
+        if(value > 0){
+            return 1;
+        }
+        return 0;
     }
 
     async derivativeSoftmax( value ){
         return value - 1;
     }
 
-    getPrediction( A2 ){
-        return 1;
-        // argmax(A2,0)
-    }
-
-    getAccuracy( Y ){
-        return 1;
-        // sum(predictions == Y)/ Y.size
-    }
-
-    async gradientDescent( X, Y, iterations, alpha ){
-        //X = n with 512 sub array
-        //Y = 8 element array 
-        //iterations = num of iterations
-        //alpha = predefined val
-        const params = await this.initParams();
-        // console.log( params.W1 /*Array: 512 with 8 subarrays*/, params.B1 /*Array: 8 by 1*/, 
-        // params.W2 /*Array: 8 with 8 subarrays*/, params.B2 /*Array: 8 by 1 */ )
-        let W1 = params.W1;
-        let B1 = params.B1;
-        let W2 = params.W2;
-        let B2 = params.B2;
-        for(let i = 0; i < iterations; i++){
-            const forward = await this.forwardProp(W1, B1, W2, B2, X);
-            const backword = await this.backwardProp(forward.Z1, forward.A1, forward.Z2, forward.A2, params.W2, X, Y);
-            let updates = await this.updateParams(params.W1, params.B1, params.W2, params.B2, backword , alpha)
-            W1 = updates.W1;
-            B1 = updates.B1;
-            W2 = updates.W2;
-            B2 = updates.B2;
-            if (i % 50 == 0){
-                console.log('Iteration: %d', i);
-                console.log('Accuracy: %d', this.getAccuracy())
-            }
-        }
-
-        return { W1, B1, W2, B2 }
-    }
-
     async inputLayer( inputs ){
         for(let j = 0; j < 512; j++){
-            this.model[0].allNeurons[j].assignValue(inputs[j]);
+            this.model[0].allNeurons[j].assignInValue(inputs[j]);
+            this.model[0].allNeurons[j].assignOutValue(inputs[j]);
         }
     }
 
@@ -193,11 +166,12 @@ class Categoriser{
         for(let j = 0; j < this.model[1].allNeurons.length; j++){
             let sum = this.model[1].allNeurons[j].bias;
             for(let l = 0; l < this.model[1].allNeurons[j].connections.length; l++){
-                sum += this.model[1].allNeurons[j].connections[l].neuronA.value * this.model[1].allNeurons[j].connections[l].weight;
+                sum += this.model[1].allNeurons[j].connections[l].neuronA.outValue * this.model[1].allNeurons[j].connections[l].weight;
             }
 
+            this.model[1].allNeurons[j].assignInValue(sum)
             let activated = await this.relu(sum);
-            this.model[1].allNeurons[j].assignValue(activated)
+            this.model[1].allNeurons[j].assignOutValue(activated)
         }
     }
 
@@ -207,32 +181,69 @@ class Categoriser{
         for(let j = 0; j < this.model[2].allNeurons.length; j++){
             let sum = 0;
             for(let l = 0; l < this.model[2].allNeurons[j].connections.length; l++){
-                sum += Math.exp(this.model[2].allNeurons[j].connections[l].neuronA.value * this.model[2].allNeurons[j].connections[l].weight + this.model[2].allNeurons[j].bias);
+                sum += Math.exp(this.model[2].allNeurons[j].connections[l].neuronA.outValue * this.model[2].allNeurons[j].connections[l].weight + this.model[2].allNeurons[j].bias);
             }
             
+            this.model[2].allNeurons[j].assignInValue(sum)
+
             values[j] = sum;
             denom += sum;
         }
 
-        return {
-            values, denom
-        }
-    }
-
-    async softmaxLayer( values, denom ){
         for(let j = 0; j < this.model[2].allNeurons.length; j++){ 
             let activated = await this.softmax(values[j],denom);
-            this.model[3].allNeurons[j].assignValue(activated)
+            this.model[2].allNeurons[j].assignOutValue(activated)
         }
     }
 
+    async outputLayerBack( loss ){
+        let totalLoss = 0.0;
+        for(let l = 0; l < this.model[2].allNeurons.length; l++) {
+            let output = this.model[2].allNeurons[l].outValue;
+            this.model[2].allNeurons[l].gradient = (await this.derivativeSoftmax(output)) * loss[l];
+            totalLoss += Math.pow(loss[l], 2);
+        }
+
+        return totalLoss;
+    }
+
+    async hiddenLayerBack(){
+        for(let j = 0; j < this.model[1].allNeurons.length; j++) {
+            let neuron = this.model[1].allNeurons[j].index;
+            let error = 0.0;
+
+            for(let l = 0; l < this.model[2].allNeurons.length; l++) {
+                for(let m = 0; m < this.model[2].allNeurons[l].connections.length; m++){
+                    if(this.model[2].allNeurons[l].connections[m].neuronA.index == neuron){
+                        error += this.model[2].allNeurons[l].connections[m].weight * this.model[2].allNeurons[l].gradient;
+                    }
+                }
+            }
+
+            this.model[1].allNeurons[j].gradient = (await this.derivativeRelu(this.model[1].allNeurons[j].outValue)) * error;
+        }
+    }
+
+    async updateWandB( index, alpha ){
+        for(let j = 0; j < this.model[index].allNeurons.length; j++) {
+            let neuron = this.model[index].allNeurons[j];
+            neuron.bias += alpha * neuron.gradient;
+            let delta = 0;
+            for(let m = 0; m < neuron.connections.length; m++) {
+                delta = alpha * neuron.gradient * neuron.connections[m].neuronA.outValue;
+                neuron.connections[m].weight = neuron.connections[m].weight + delta + neuron.previousDelta;
+            }
+            neuron.previousDelta = delta;
+        }
+    }
+
+
     async train( inputs, outputs, iterations, alpha ){
-        let i,j,k,l;
-        // for(k = 0; k < iterations; k++){
+        let i, k; 
+        for(k = 0; k < iterations; k++){
             // inputs.length
-            let losses = [];
             let accuracies = [];
-            for(i = 0; i < 1; i++){
+            for(i = 0; i < 100; i++){
                 /*Forward Propagation*/
                 //Populate first Layer
                 await this.inputLayer( inputs[i] );
@@ -241,35 +252,30 @@ class Categoriser{
                 await this.middleLayer( );
 
                 // Calculate output Layer
-                const softmaxIn = await this.ouputLayer( );
-
-                // Calculate softmax Layer
-                await this.softmaxLayer( softmaxIn.values, softmaxIn.denom );
-
-                //Calculate loss
-                losses[i] = await this.crossEntropy( outputs[i] );
+                await this.ouputLayer( );
 
                 //Calculate accuracy
-                accuracies[i] = (await this.argmax()) == (await this.argmaxOut(outputs[i]))
+                accuracies[i] = (await this.argmax()) == (await this.argmaxOut(outputs[i]));
 
-                /*Back Propagation*/
+                /*Backward Propagation*/
+                //Calculate loss
+                let loss = await this.loss( outputs[i] );
 
-                // let biases = [];
-                // for(j = 0; j < 8; j++){
-                //     biases[j] = 
-                // }
-                // let derivCE = await this.derivativeSoftmax(highest);
+                //Last layer
+                let totalLoss = await this.outputLayerBack( loss );
 
-                //for bias b1 { sum of derivative of CrosssEntropy with relation to b1 }
+                //Hidden layer
+                await this.hiddenLayerBack();
 
-                // let stepSize = deriveBias * alpha;
-                // let bias = oldbias + stepSize;
-                
+                await this.updateWandB(1, alpha);
+
+                await this.updateWandB(2, alpha);
             }
-        // }
-        // console.log(model[2].allNeurons);
-        // console.log(model[1].allNeurons[0].connections[0].neuronA.value);
-        // console.log(model[1].allNeurons[0].connections.length);
+
+            let totalAccuracy = accuracies.filter( a => a==true).length;
+            let accuracy = totalAccuracy/accuracies.length;
+            console.log("Accuracy: %d",accuracy)
+        }
     }
 
     async run(){
@@ -314,7 +320,7 @@ class Categoriser{
             inputsEmbed[i] = (await(await encoder.embed(inputs[i])).array())[0];
         }
 
-        this.train( inputsEmbed, outputs, 5, 0.1 )
+        this.train( inputsEmbed, outputs, 10, 0.1 )
         // let embeddings = new Array(512);
         // for(let i = 0; i < 512; i++){
         //     embeddings[i] = [];

@@ -140,7 +140,7 @@ class ItemCategoriser{
     }
 }
 
-const categoriser = new ItemCategoriser();
+// const categoriser = new ItemCategoriser();
 
 async function setup(){
     await categoriser.run();
@@ -154,7 +154,7 @@ async function test(){
 }
 
 // setup();
-test();
+// test();
 
 module.exports = {
     ItemCategoriser
