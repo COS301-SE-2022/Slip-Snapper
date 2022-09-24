@@ -29,7 +29,6 @@ import { alertCircleOutline } from 'ionicons/icons';
 import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
 import '../theme/home.css';
 import { destroySession } from "../../api/Session"
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,7 +38,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { async } from 'rxjs/internal/scheduler/async';
 
 ChartJS.register(
   CategoryScale,
@@ -64,12 +62,18 @@ const Home: React.FC = () => {
   const [reports, setR] = useState<any[]>([]);
 
   const [graphData, setGraphData] = useState<any[]>([])
+
   useEffect(() => {
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
 
     getRecentReports()
       .then(apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
-          destroySession(apiResponse);
           setR(apiResponse.data.reports);
         }
       }).catch();
@@ -85,14 +89,23 @@ const Home: React.FC = () => {
       .then(async apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
             await setTodayItem(apiResponse.data)
+            destroySession(apiResponse);
         }
       }).catch();
     getGraphStats()
       .then(apiResponse => {
         if (typeof (apiResponse.data) !== "string") {
           setGraphData(apiResponse.data.data)
+          loading.dismiss();
+          loading.remove();
+        }else{
+          loading.dismiss();
+          loading.remove();
         }
-      }).catch();
+      }).catch(err =>{
+        loading.dismiss();
+        loading.remove();
+      });
   }, []);
   setNewNames(reports)
   setNewNames(thisWeeksReports)
@@ -182,92 +195,6 @@ const Home: React.FC = () => {
       </IonFooter>
     </IonPage>
   );
-
-  function view(data: any) {
-    let user = JSON.parse(localStorage.getItem('user')!);
-    if (user == null) {
-      user = { username: 'demoUser' };
-    }
-    getUserReport(user.username, data).then((apiResponse) => {
-      if (apiResponse.data.report.data !== undefined) {
-        const arr = new Uint8Array(apiResponse.data.report.data);
-        const blob = new Blob([arr], { type: 'application/pdf' });
-        const docUrl = URL.createObjectURL(blob);
-
-        if (!isPlatform('android') && !isPlatform('ios')) {
-          window.open(docUrl);
-        } else {
-          //view for mobile, might need name
-          const reader = new FileReader();
-
-          reader.addEventListener(
-            'load',
-            () => {
-              if (reader.result) {
-                const result = reader.result as string;
-                const pdfData = result.split(',')[1];
-                downloadPDF(pdfData);
-              }
-            },
-            false
-          );
-
-          reader.readAsDataURL(blob);
-        }
-      }
-    });
-  }
-
-  function downloadPDF(pdfBase64: string) {
-    try {
-      Filesystem.writeFile({
-        path: 'report.pdf',
-        data: pdfBase64,
-        directory: Directory.External,
-      }).then((writeFileResult) => {
-        Filesystem.getUri({
-          directory: Directory.External,
-          path: 'report.pdf',
-        }).then(
-          (getUriResult) => {
-            const path = getUriResult.uri;
-            FileOpener.open(path, 'application/pdf').then(() =>
-              console.log('File is opened')
-            );
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      });
-    } catch (error) {
-      console.error('Unable to write file', error);
-    }
-  }
-
-  async function deleteReport(fileName: string, reportId: string) {
-    let userS = JSON.parse(localStorage.getItem('user')!);
-    if (userS == null) {
-      userS = { username: 'demoUser' };
-    }
-    await removeReport(userS.username, fileName, reportId).then(
-      (apiResponse) => {
-        present('Deleted ' + fileName, 1200);
-      }
-    );
-
-    getRecentReports()
-      .then(apiResponse => {
-        setR(apiResponse.data.reports);
-
-      });
-
-    getThisWeeksReports()
-      .then(apiResponse => {
-        setThisWeeksReports(apiResponse.data.reports)
-      });
-
-  }
 
   async function setNewNames(reports: any) {
     if (reports !== undefined) {
