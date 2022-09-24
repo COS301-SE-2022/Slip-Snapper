@@ -275,8 +275,16 @@ const EditReceipt: React.FC = () => {
             text: [date, storeName, "", "", total, slipContents.id]
         };
 
-
-        await updateSlipA(data, insertItems, updateItems, removeItems)
+        const loading = document.createElement('ion-loading');
+        loading.spinner = "crescent";
+        loading.cssClass = "loading";
+        loading.mode = "ios";
+        document.body.appendChild(loading);
+        loading.present();
+        await updateSlipA(data, insertItems, updateItems, removeItems).then((apiResponse) =>{
+            loading.dismiss();
+            loading.remove();
+        })
         setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
         const button = document.getElementById("cancelButton")
         if (button) {

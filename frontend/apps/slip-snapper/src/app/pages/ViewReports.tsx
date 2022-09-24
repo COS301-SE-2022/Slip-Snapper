@@ -60,14 +60,30 @@ const ViewReports: React.FC = () => {
   const [present, dismiss] = useIonToast();
 
   useEffect(() => {
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
+
     getAllUserReports().then((apiResponse) => {
       if (typeof apiResponse.data !== 'string') {
         destroySession(apiResponse);
         setReports(apiResponse.data.reports);
         checkEmptyReports(apiResponse.data.reports)
         orderReports(reports)
+        loading.dismiss();
+        loading.remove();
+      }else{
+        loading.dismiss();
+        loading.remove();
       }
-    }).catch();
+    }).catch(err =>{
+      loading.dismiss();
+      loading.remove();
+    }
+    );
   }, []);
   orderReports(reports)
 
@@ -349,6 +365,13 @@ const ViewReports: React.FC = () => {
     if (user == null) {
       user = { username: 'demoUser' };
     }
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
+
     getUserReport(user.username, data).then((apiResponse) => {
       if (apiResponse.data.report.data !== undefined) {
         const arr = new Uint8Array(apiResponse.data.report.data);
@@ -357,6 +380,8 @@ const ViewReports: React.FC = () => {
 
         if (!isPlatform('android') && !isPlatform('ios')) {
           window.open(docUrl);
+          loading.dismiss();
+          loading.remove();
         } else {
           //view for mobile, might need name
           const reader = new FileReader();
@@ -368,6 +393,8 @@ const ViewReports: React.FC = () => {
                 const result = reader.result as string;
                 const pdfData = result.split(',')[1];
                 downloadPDF(pdfData);
+                loading.dismiss();
+                loading.remove();
               }
             },
             false
@@ -375,6 +402,9 @@ const ViewReports: React.FC = () => {
 
           reader.readAsDataURL(blob);
         }
+      }else{
+        loading.dismiss();
+        loading.remove();
       }
     });
   }
@@ -411,9 +441,18 @@ const ViewReports: React.FC = () => {
     if (userS == null) {
       userS = { username: 'demoUser' };
     }
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
+
     await removeReport(userS.username, fileName, reportId).then(
       (apiResponse) => {
         present('Deleted ' + deleteAlert.name, 1200);
+        loading.dismiss();
+        loading.remove();
       }
     );
 
@@ -428,21 +467,35 @@ const ViewReports: React.FC = () => {
     if (userS == null) {
       userS = { username: 'demoUser' };
     }
-    // demoUser_31 - 08 - 2022Weekly_1.pdf 
+    const loading = document.createElement('ion-loading');
+    loading.spinner = "crescent";
+    loading.cssClass = "loading";
+    loading.mode = "ios";
+    document.body.appendChild(loading);
+    loading.present();
+
     await generateReportA(userS.username, period, getReportNumber() + 1).then(
       (apiResponse) => {
         if (typeof (apiResponse.data) !== "string") {
           if (apiResponse.data.message === 'Report Generated and uploaded') {
             present('Generated ' + period + ' Report', 1200);
+            loading.dismiss();
+            loading.remove();
           } else {
             present('Error generating report, Try again.', 1200);
+            loading.dismiss();
+            loading.remove();
           }
         } else {
           present("500 Internal Server Error", 1200)
+          loading.dismiss();
+          loading.remove();
         }
       }
     ).catch(err => {
       present("500 Internal Server Error", 1200)
+      loading.dismiss();
+      loading.remove();
     });
 
     getAllUserReports().then((apiResponse) => {
