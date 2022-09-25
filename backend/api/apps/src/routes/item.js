@@ -136,6 +136,23 @@ router.delete('', async (req, res) => {
  */
 router.patch('', async (req, res) => {
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
+      //general validation
+      if (
+        (itemId == null || itemname == null || itemprice == null || itemquantity == null || itemtype == null) ||
+        (typeof (itemId) != 'number') ||
+        (typeof (itemname) != 'string') ||
+        (typeof (itemprice) != 'string')
+        (typeof (itemquantity) != 'number') ||
+        (typeof (itemtype) != 'string')
+
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
+    
+
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
