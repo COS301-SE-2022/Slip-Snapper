@@ -42,11 +42,11 @@ router.post('', async (req, res) => {
     let { location, date, total, data } = req.body;
     //general validation
     if (
-        (location == null || date == null || total == null || data == null || data == []) ||
+        (location == null || date == null || total == null || data == null) ||
         (typeof (location) != 'string') ||
         (typeof (date) != 'string') ||
         (typeof (total) != 'number')
-
+        
     ) {
         return res.status(200)
             .send({
@@ -111,7 +111,7 @@ router.delete('', async (req, res) => {
     //general validation
     if (
         (itemId == null) ||
-        (typeof (slipId) != 'number')
+        (typeof (itemId) != 'number')
 
     ) {
         return res.status(200)
@@ -147,13 +147,14 @@ router.delete('', async (req, res) => {
  */
 router.patch('', async (req, res) => {
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
+    
     //general validation
     if (
         (itemId == null || itemname == null || itemprice == null || itemquantity == null || itemtype == null) ||
         (typeof (itemId) != 'number') ||
         (typeof (itemname) != 'string') ||
-        (typeof (itemprice) != 'string')
-            (typeof (itemquantity) != 'number') ||
+        (typeof (itemprice) != 'string') ||
+        (typeof (itemquantity) != 'number') ||
         (typeof (itemtype) != 'string')
 
     ) {
@@ -254,6 +255,7 @@ router.patch('/slip', async (req, res) => {
     }));
 
     let { updateSlip, insertItems, updateItems, removeItems } = req.body;
+
     updateSlip.text[1] = updateSlip.text[1].replace(/[^a-zA-Z0-9 ]/g, "").trim()
     if (updateSlip.text[1] == '') {
         updateSlip.text[1] = "Store"
