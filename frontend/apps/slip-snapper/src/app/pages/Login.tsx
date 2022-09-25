@@ -118,12 +118,12 @@ const Login: React.FC = () => {
               window.location.reload();
             }
           }else{
-            setErrorMessage("500 Internel Server Error.")
+            setErrorMessage("Unable to process request.")
             setAlert(true)
           }
           
         }).catch(err => {
-          setErrorMessage("500 Internel Server Error.")
+          setErrorMessage("Unable to process request.")
           setAlert(true)
         })
     }
