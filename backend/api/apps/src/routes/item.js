@@ -213,7 +213,35 @@ router.get('/slip', async (req, res) => {
  * Uses the userid
  */
 router.patch('/slip', async (req, res) => {
+    req.body = JSON.parse(JSON.stringify(req.body, function (a, b) {
+
+        let result = typeof b === "string" ? b.toLowerCase() : b
+        return typeof result === "string" ? result.charAt(0).toUpperCase() + result.slice(1) : result
+
+    }));
+
     let { updateSlip, insertItems, updateItems, removeItems } = req.body;
+    updateSlip.text[1] = updateSlip.text[1].replace(/[^a-zA-Z0-9 ]/g, "").trim()
+    if (updateSlip.text[1] == '') {
+        updateSlip.text[1] = "Store"
+    }
+    updateSlip.text[1] = updateSlip.text[1].charAt(0).toUpperCase() + updateSlip.text[1].slice(1)
+
+    for (let item in insertItems) {
+        insertItems[item].data[0].item = insertItems[item].data[0].item.replace(/[^a-zA-Z0-9 ]/g, "").trim()
+        if (insertItems[item].data[0].item == '') {
+            insertItems[item].data[0].item = "Item"
+        }
+        insertItems[item].data[0].item = insertItems[item].data[0].item.charAt(0).toUpperCase() + insertItems[item].data[0].item.slice(1)
+    }
+    for (let item in updateItems) {
+        updateItems[item].data[0].item = updateItems[item].data[0].item.replace(/[^a-zA-Z0-9 ]/g, "").trim()
+        if (updateItems[item].data[0].item == '') {
+            updateItems[item].data[0].item = "Item"
+        }
+        updateItems[item].data[0].item = updateItems[item].data[0].item.charAt(0).toUpperCase() + updateItems[item].data[0].item.slice(1)
+    }
+
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
     if (tokenVerified === "Error") {
