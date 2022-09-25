@@ -108,6 +108,17 @@ router.post('', async (req, res) => {
  */
 router.delete('', async (req, res) => {
     let { itemId } = req.body;
+    //general validation
+    if (
+        (itemId == null) ||
+        (typeof (slipId) != 'number')
+
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -136,13 +147,13 @@ router.delete('', async (req, res) => {
  */
 router.patch('', async (req, res) => {
     let { itemId, itemname, itemprice, itemquantity, itemtype } = req.body;
-      //general validation
-      if (
+    //general validation
+    if (
         (itemId == null || itemname == null || itemprice == null || itemquantity == null || itemtype == null) ||
         (typeof (itemId) != 'number') ||
         (typeof (itemname) != 'string') ||
         (typeof (itemprice) != 'string')
-        (typeof (itemquantity) != 'number') ||
+            (typeof (itemquantity) != 'number') ||
         (typeof (itemtype) != 'string')
 
     ) {
@@ -152,10 +163,12 @@ router.patch('', async (req, res) => {
             });
     }
 
-   itemname = itemname.replace(/[^a-zA-Z0-9 ]/g, "").trim()
+    itemname = itemname.replace(/[^a-zA-Z0-9 ]/g, "").trim()
     if (itemname == '') {
         itemname = "Item"
     }
+    itemname = itemname.charAt(0).toUpperCase() + itemname.slice(1)
+
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
@@ -289,6 +302,17 @@ router.patch('/slip', async (req, res) => {
  */
 router.delete('/slip', async (req, res) => {
     let { slipId } = req.body;
+    //general validation
+    if (
+        (slipId == null) ||
+        (typeof (slipId) != 'number')
+
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
