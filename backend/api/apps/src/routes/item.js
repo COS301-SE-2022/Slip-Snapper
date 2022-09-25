@@ -34,14 +34,25 @@ router.get('', async (req,res)=>{
  */
 router.post('', async (req,res)=>{
         req.body = JSON.parse(JSON.stringify(req.body, function (a, b) {
-
-        // return 
+        
         let result = typeof b === "string" ? b.toLowerCase() : b
         return typeof result === "string" ? result.charAt(0).toUpperCase() + result.slice(1) : result
 
     }));
     let { location, date, total, data } = req.body;
-  
+  //general validation
+    if (
+        (location == null || date == null || total == null || data == null || data == []) ||
+        (typeof (location) != 'string') ||
+        (typeof (date) != 'string') ||
+        (typeof (total) != 'number')
+
+    ) {
+        return res.status(200)
+            .send({
+                message: "Missing or Invalid input data",
+            });
+    }
 
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
