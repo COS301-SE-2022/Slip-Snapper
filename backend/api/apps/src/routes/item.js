@@ -33,7 +33,16 @@ router.get('', async (req,res)=>{
  * Uses the user id to add the item\s
  */
 router.post('', async (req,res)=>{
+        req.body = JSON.parse(JSON.stringify(req.body, function (a, b) {
+
+        // return 
+        let result = typeof b === "string" ? b.toLowerCase() : b
+        return typeof result === "string" ? result.charAt(0).toUpperCase() + result.slice(1) : result
+
+    }));
     let { location, date, total, data } = req.body;
+  
+
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
     if(tokenVerified === "Error"){
@@ -43,7 +52,7 @@ router.post('', async (req,res)=>{
                 numItems: 0,
             });
     }
-
+  
     //TODO make use actual date
     let values = []
     for (var item of data){
