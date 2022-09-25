@@ -151,8 +151,11 @@ router.patch('', async (req, res) => {
                 message: "Missing or Invalid input data",
             });
     }
-    
 
+   itemname = itemname.replace(/[^a-zA-Z0-9 ]/g, "").trim()
+    if (itemname == '') {
+        itemname = "Item"
+    }
     const token = req.headers.authorization.split(' ')[1];
     const tokenVerified = await req.app.get('token').verifyToken(token);
 
