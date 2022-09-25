@@ -25,7 +25,7 @@ import {
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { isPlatform } from '@ionic/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@ionic-native/file-opener';
 import { NavButtons } from '../components/NavButtons';
 import '../theme/viewReports.css';
@@ -35,12 +35,10 @@ import {
   getAllUserReports,
   getUserReport,
   removeReport,
-  deleteSlip,
-  getAllSlips,
 } from '../../api/apiCall';
 import { destroySession } from "../../api/Session"
-import { calendarOutline, filter, filterOutline } from 'ionicons/icons';
-import { createTheme, Slider, ThemeProvider, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { calendarOutline, filterOutline } from 'ionicons/icons';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 
 // day week month
 const ViewReports: React.FC = () => {
@@ -487,13 +485,13 @@ const ViewReports: React.FC = () => {
             loading.remove();
           }
         } else {
-          present("500 Internal Server Error", 1200)
+          present("Unable to process request.", 1200)
           loading.dismiss();
           loading.remove();
         }
       }
     ).catch(err => {
-      present("500 Internal Server Error", 1200)
+      present("Unable to process request.", 1200)
       loading.dismiss();
       loading.remove();
     });
@@ -542,10 +540,10 @@ const ViewReports: React.FC = () => {
 
         sheetDownload.remove();
       } else {
-        present("500 Internal Server Error", 1200)
+        present("Unable to process request.", 1200)
       }
     }).catch(() => {
-      present("500 Internal Server Error", 1200)
+      present("Unable to process request.", 1200)
     });
   }
 

@@ -1,5 +1,5 @@
-import { IonCard, IonCardHeader, IonCardTitle, IonContent, IonIcon, IonItem, IonText } from "@ionic/react";
-import React, { useEffect, useState } from 'react';
+import { IonCard, IonCardHeader, IonCardTitle, IonIcon, IonItem } from "@ionic/react";
+import { useEffect, useState } from 'react';
 import { getStatsA, getProfileData, getUserForecast } from "../../api/apiCall"
 import '../theme/user-stats.css';
 import { helpCircleOutline } from 'ionicons/icons';

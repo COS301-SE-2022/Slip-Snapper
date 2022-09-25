@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert, IonContent, IonPopover, IonIcon } from '@ionic/react';
+import { IonItem, IonLabel, IonButton, IonCard, IonInput, IonAlert, IonIcon } from '@ionic/react';
 import '../theme/login-register.css';
 import { signupA } from "../../api/apiCall"
 import { Chip, Popover } from '@mui/material';
@@ -312,11 +312,11 @@ const Register: React.FC = () => {
                 setAlert(true)
               }
             }else{
-              setErrorMessage("500 Internal Service Error.")
+              setErrorMessage("Unable to process request.")
               setAlert(true)
             } 
           }).catch(err => {
-            setErrorMessage("500 Internal Service Error.")
+            setErrorMessage("Unable to process request.")
             setAlert(true)
           });
     }
