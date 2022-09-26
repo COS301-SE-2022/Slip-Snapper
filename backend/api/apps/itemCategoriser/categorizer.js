@@ -4,64 +4,69 @@ const tf = require('@tensorflow/tfjs-node');
 const vector = require('@tensorflow-models/universal-sentence-encoder');
 
 function randn_bm() {
-    return Math.sqrt( -2.0 * Math.log( 1 - Math.random() ) ) * Math.cos( 2.0 * Math.PI * Math.random() );
-}
-
-class Connection{
-    constructor(neuronA, neuronB){
-        this.neuronA = neuronA;
-        this.neuronB = neuronB;
-        this.weight = randn_bm();
-    }
-
-    print(){
-        console.log(this.neuronA, this.neuronB, this.weight)
-    }
+    return Math.floor( Math.random() * 6) - 3;
 }
 
 class Neuron {
     constructor( i ){
-        this.connections = [];
+        this.inConnections = [];
+        this.outConnections = [];
         this.bias = 0;
-        this.inValue = 0;
         this.outValue = 0;
-        this.gradient = 0;
+        this.delta = 0;
+        this.error = 0;
         this.index = i;
-        this.previousDelta = 0;
     }
 
-    assignInValue(val){
-        this.inValue = val;
+    addInConnection(connection){
+        this.inConnections.push(connection);
     }
 
-    assignOutValue(val){
+    addOutConnection(connection){
+        this.outConnections.push(connection);
+    }
+
+    setValue(val){
         this.outValue = val;
     }
 
-    print(){
-        console.log(this.connections, this.bias)
+    setBias(val){
+        this.bias = val;
+    }
+
+    setError(val){
+        this.error = val;
+    }
+
+    setDelta(val){
+        this.delta = val;
+    }
+}
+
+class Connection{
+    constructor(neuronA, neuronB){
+        this.from = neuronA;
+        this.to = neuronB;
+        this.weight = randn_bm();
+        this.change = 0;
+    }
+
+    setWeight(val) {
+        this.weight = val;
+    }
+    
+    setChange(val) {
+        this.change = val;
     }
 }
 
 class Layer{
     constructor(numberOfNeurons){
         this.numNeurons = numberOfNeurons;
-        this.allNeurons = [];
+        this.neurons = [];
         for(let i = 0; i < this.numNeurons; i++){
             this.allNeurons[i] = new Neuron( i );
         }
-    }
-
-    createConnections(previousLayer){
-        for(let i = 0; i < this.numNeurons; i++){
-            for(let j = 0; j < previousLayer.numNeurons; j++){
-                this.allNeurons[i].connections[j] = new Connection(previousLayer.allNeurons[j], this.allNeurons[i]);
-            }
-        }
-    }
-
-    print(){
-        console.log(this.numNeurons, this.allNeurons);
     }
 }
 
@@ -70,6 +75,8 @@ class Categoriser{
         this.modelDescription = [512,16,8];
         this.model = [];
         this.encoder = 0;
+        this.momentum = 0.1;
+        this.learningRate = 0.2;
     }
 
     async getData(){
@@ -98,17 +105,160 @@ class Categoriser{
             this.model[i] = new Layer(this.modelDescription[i]);
         }
         
-        for(let i = 1; i < this.model.length; i++){
-            this.model[i].createConnections(this.model[(i-1)]);
+        for(let layer = 1; layer < this.model.length; layer++){
+            const currentLayer = this.model[layer];
+            const previousLayer = this.model[layer-1];
+
+            for(let neuron = 0; neuron < previousLayer.neurons.length; neuron++){
+                for(let neuronInLayer = 0; neuronInLayer < currentLayer.neurons.length; neuronInLayer++){
+                    const connection = new Connection(previousLayer.neurons[neuron], currentLayer.neurons[neuronInLayer])
+                    previousLayer.neurons[neuron].addOutConnection(connection);
+                    currentLayer.neurons[neuron].addInConnection(connection);
+                }
+            }
         }
     }
 
-    async relu( value ){
+    activateInput( input ){
+        this.model[0].neurons.forEach((neuron,i)=>{
+            neuron.setValue( input[i] )
+        })
+    }
+
+    relu( value ){
         return Math.max(0, value);
     }
 
-    async softmax( num, den ){
+    softmax( num, den ){
         return num/den;
+    }
+
+    forwardPropogate(){
+        for(let layer = 0; layer < this.model.length; layer++){
+            const currentLayer = this.model[layer]
+            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
+                const currentNeuron = currentLayer.neurons[neuron];
+                const bias = currentNeuron.bias;
+
+                const output = currentNeuron.inConnections.reduce((previous, current) => previous + current.weight * current.from.outValue, 0);
+
+                let activatedOutput = 0;
+                if(layer == this.model.length - 1){
+                    activatedOutput = this.relu( output + bias );
+                    currentNeuron.setValue( output );
+                    continue;
+                }
+
+                activatedOutput = this.relu( output + bias );
+                currentNeuron.setValue( activatedOutput );
+            }
+
+            if(layer == this.model.length - 1){
+                const total = currentLayer.neurons.reduce((previous, current) => previous + Math.pow(Math.E,(current.outValue + current.bias)), 0)
+                for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
+                    const currentNeur = currentLayer.neurons[neuron]
+                    const output = (currentNeur.outValue + currentNeur.bias)/ total;
+
+                    currentNeur.setValue( output );
+                }
+            }
+        }
+    }
+
+    backwardPropogate( targets ){
+        for(let layer = this.model.length - 1; layer > -1; layer--){
+            const currentLayer = this.model[layer]
+            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
+                const currentNeuron = currentLayer.neurons[neuron]
+                const output = currentNeuron.outValue;
+                
+                let error = 0;
+                let delta = 0;
+                if(layer == this.model.length - 1){
+                    error = targets[neuron] - output;
+                    delta = (error * output * (1 - output))
+                    currentNeuron.setError( error );
+                    currentNeuron.setDelta( delta );
+                    continue;
+                }
+
+                for(let connection = 0; connection < currentNeuron.outConnections.length; connection++){
+                    const currentConnection = currentNeuron.outConnections[connection];
+                    error += currentConnection.to.delta * currentConnection.weight;
+                }
+                delta = (error * output * (1 - output))
+                currentNeuron.setError( error );
+                currentNeuron.setDelta( delta );
+            }
+        }
+    }
+
+    adjustWeightsAndBiases(){
+        for(let layer = 1; layer < this.model.length; layer++){
+            const currentLayer = this.model[layer];
+
+            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
+                const currentNeuron = currentLayer.neurons[neuron];
+                const delta = currentNeuron.delta;
+
+                for(let connection = 0; connection < currentNeuron.inConnections.length; connection++){
+                    const currentConnection = currentNeuron.inConnections[connection];
+                    let change = currentConnection.change;
+
+                    change = (this.learningRate * delta * currentConnection.from.output) + (this.momentum * change);
+                    currentConnection.setChange(change);
+
+                    const newWeight = currentConnection.weight + change;
+                    currentConnection.setWeight( newWeight )
+                }
+
+                const newBias = currentNeuron.bias + (this.learningRate * delta)
+                currentNeuron.setBias( newBias );
+            }
+        }
+    }
+
+    async train( inputs, outputs, epochs ){
+        for(let currentEpoch; currentEpoch < epochs; currentEpoch++){
+            for(let inputNumber = 0; inputNumber < inputs.length; inputNumber++){
+                this.activateInput( inputs[inputNumber] );
+
+                this.forwardPropogate();
+
+                this.backwardPropogate( outputs[inputNumber] );
+
+                this.adjustWeightsAndBiases();
+            }
+        }
+        
+        // let i, k; 
+        // let accuracies = [];
+        // let totalLoss = 0;
+        // let losses = 0;
+        // for(k = 0; k < epochs; k++){
+        //     accuracies = [];
+        //     totalLoss = 0;
+        //     for(i = 0; i < inputs.length; i++){
+        //         /*Forward Propagation*/
+        //         await this.inputLayer( inputs[i] );
+        //         await this.middleLayer( );
+        //         await this.ouputLayer( );
+        //         accuracies[i] = (await this.argmax()) == (await this.argmaxOut(outputs[i]));
+
+        //         /*Backward Propagation*/
+        //         losses = await this.loss( outputs[i] );
+        //         totalLoss = await this.outputLayerBack( losses );
+        //         await this.hiddenLayerBack(  );
+        //         await this.updateWandB(1, alpha );
+        //         await this.updateWandB(2, alpha );
+        //     }
+
+        //     let totalAccuracy = accuracies.filter( a => a==true).length;
+        //     let accuracy = totalAccuracy/accuracies.length;
+        //     console.log("Accuracy: %d, Total Loss: %d",accuracy, totalLoss)
+        // }
+
+        // this.saveWandB();
     }
 
     async argmax( ){
@@ -159,165 +309,6 @@ class Categoriser{
         return value*(1-value);
     }
 
-    async inputLayer( inputs ){
-        let output = [];
-        for(let j = 0; j < 512; j++){
-            this.model[0].allNeurons[j].assignInValue(inputs[j]);
-            this.model[0].allNeurons[j].assignOutValue(inputs[j]);
-            output[j] = inputs[j];
-        }
-        return output;
-    }
-
-    async middleLayer( ){
-        let output = []
-        for(let j = 0; j < this.model[1].allNeurons.length; j++){
-            let sum = this.model[1].allNeurons[j].bias;
-            for(let l = 0; l < this.model[1].allNeurons[j].connections.length; l++){
-                sum += this.model[1].allNeurons[j].connections[l].neuronA.outValue * this.model[1].allNeurons[j].connections[l].weight;
-            }
-
-            this.model[1].allNeurons[j].assignInValue(sum)
-            let activated = await this.relu(sum);
-            this.model[1].allNeurons[j].assignOutValue(activated)
-            output[j] = activated;
-        }
-
-        return output;
-    }
-
-    async ouputLayer( ){
-        let values = [];
-        let denom = 0;
-        for(let j = 0; j < this.model[2].allNeurons.length; j++){
-            let sum = 0;
-            for(let l = 0; l < this.model[2].allNeurons[j].connections.length; l++){
-                sum += Math.exp(this.model[2].allNeurons[j].connections[l].neuronA.outValue * this.model[2].allNeurons[j].connections[l].weight + this.model[2].allNeurons[j].bias);
-            }
-            
-            this.model[2].allNeurons[j].assignInValue(sum)
-
-            values[j] = sum;
-            denom += sum;
-        }
-
-        let output = [];
-        for(let j = 0; j < this.model[2].allNeurons.length; j++){ 
-            let activated = await this.softmax(values[j],denom);
-            this.model[2].allNeurons[j].assignOutValue(activated);
-            if(isNaN(activated)){
-                this.model[2].allNeurons[j].assignOutValue(0.2);
-            }
-            output[j] = activated; 
-        }
-
-        return output;
-    }
-
-    async outputLayerBack( loss ){
-        // let updateLosses = new Array(loss[0].length).fill(0);
-        // for(let j = 0; j < loss.length; j++){
-        //     for(let i = 0; i < loss[j].length; i++){
-        //         updateLosses[i] += loss[j][i]; 
-        //     }
-        // }  
-
-        // let updateOutputs = new Array(output[0].length).fill(0);
-        // for(let j = 0; j < output.length; j++){
-        //     for(let i = 0; i < output[j].length; i++){
-        //         updateOutputs[i] += (await this.derivativeSoftmax(output[j][i]));
-        //     }
-        // } 
-
-        // for(let j = 0; j < 8; j++){
-        //     updateOutputs[j] = updateOutputs[j]/output.length;
-        //     updateLosses[j] = updateLosses[j]/loss.length;
-        // }
-
-        let totalLoss = 0.0;
-        for(let l = 0; l < this.model[2].allNeurons.length; l++) {
-            this.model[2].allNeurons[l].gradient = this.model[1].allNeurons[l].outValue * loss;
-            totalLoss += Math.pow( loss, 2);
-        }
-
-        return totalLoss;
-    }
-
-    async hiddenLayerBack(  ){
-        // let updateOutput = new Array(output[0].length).fill(0);
-        // for(let j = 0; j < output.length; j++){
-        //     for(let i = 0; i < output[j].length; i++){
-        //         updateOutput[i] += (await this.derivativeRelu(output[j][i]));
-        //     }
-        // }  
-
-        // for(let j = 0; j < output[0].length; j++){
-        //     updateOutput[j] = updateOutput[j]/output.length;
-        // }
-
-        for(let j = 0; j < this.model[1].allNeurons.length; j++) {
-            let neuron = this.model[1].allNeurons[j].index;
-            let error = 0.0;
-
-            for(let l = 0; l < this.model[2].allNeurons.length; l++) {
-                for(let m = 0; m < this.model[2].allNeurons[l].connections.length; m++){
-                    if(this.model[2].allNeurons[l].connections[m].neuronA.index == neuron){
-                        error += this.model[2].allNeurons[l].connections[m].weight * this.model[2].allNeurons[l].gradient;
-                    }
-                }
-            }
-            this.model[1].allNeurons[j].gradient = this.model[1].allNeurons[j].outValue * error;
-        }
-    }
-
-    async updateWandB( index, alpha, output){
-        // let updateOutput = new Array(output[0].length).fill(0);
-        // for(let j = 0; j < output.length; j++){
-        //     for(let i = 0; i < output[j].length; i++){
-        //         updateOutput[i] += output[j][i]; 
-        //     }
-        // }  
-
-        // for(let j = 0; j < output[0].length; j++){
-        //     updateOutput[j] = updateOutput[j]/output.length;
-        // }
-        let weights = []
-        for(let j = 0; j < this.model[index].allNeurons.length; j++) {
-            let neuron = this.model[index].allNeurons[j];
-            neuron.bias += alpha * neuron.gradient;
-            if(neuron.bias > 50 || neuron.bias < -50){
-                neuron.bias = neuron.bias/50;
-            }
-            let delta = 0;
-            weights = [];
-            let total = 0;
-            for(let m = 0; m < neuron.connections.length; m++) {
-                delta = alpha * neuron.gradient * neuron.outValue;
-                neuron.connections[m].weight = neuron.connections[m].weight + delta + neuron.previousDelta;
-                weights[m] = neuron.connections[m].weight;
-                total += weights[m];
-            }
-
-            for(let m = 0; m < weights.length; m++){
-                if(weights[m] > 20 || weights[m] < -20){
-                    neuron.connections[m].weight = weights[m]/total;
-                }
-            }
-            neuron.previousDelta = delta;
-        }
-
-        // for(let j = 0; j < this.model[index].allNeurons.length; j++) {
-        //     let neuron = this.model[index].allNeurons[j];
-        //     neuron.bias += alpha * neuron.gradient;
-        //     let delta = 0;
-        //     for(let m = 0; m < neuron.connections.length; m++) {
-        //         delta = alpha * neuron.gradient * neuron.outValue;
-        //         neuron.connections[m].weight = neuron.connections[m].weight + delta + neuron.previousDelta;
-        //     }
-        //     neuron.previousDelta = delta;
-        // }
-    }
-
     async saveWandB(){
         let data = { layer2: {}, layer3: {}}
 
@@ -352,77 +343,7 @@ class Categoriser{
         });
     }
 
-    async train( inputs, outputs, epochs, alpha ){
-        let i, k; 
-        // let batch = 100;
-        let accuracies = [];
-        let totalLoss = 0;
-        let losses = 0;
-        // let output = [];
-        // let outputMid = [];
-        // let outputIn = []
-        for(k = 0; k < epochs; k++){
-            accuracies = [];
-            totalLoss = 0;
-            // losses = [];
-            // output = [];
-            // outputMid = [];
-            // outputIn = []
-            for(i = 0; i < inputs.length; i++){
-                /*Forward Propagation*/
-                //Populate first Layer
-                // outputIn[i%batch] = await this.inputLayer( inputs[i] );
-                await this.inputLayer( inputs[i] );
-
-                //Calculate second Layer
-                // outputMid[i%batch] = await this.middleLayer( );
-                await this.middleLayer( );
-
-                // Calculate output Layer
-                // output[i%batch] = await this.ouputLayer( );
-                await this.ouputLayer( );
-
-                //Calculate accuracy
-                accuracies[i] = (await this.argmax()) == (await this.argmaxOut(outputs[i]));
-
-                /*Backward Propagation*/
-                //calculate losses
-                // losses[i%batch] = await this.loss( outputs[i] );
-                losses = await this.loss( outputs[i] );
-                //Batch size of 10
-                // if(i % batch == 0){
-
-                    //Last layer 
-                    // totalLoss = await this.outputLayerBack( losses, output );
-                    totalLoss = await this.outputLayerBack( losses );
-
-                    //Hidden layer
-                    // await this.hiddenLayerBack( outputMid );
-                    await this.hiddenLayerBack(  );
-
-                    //update weigths and biases layer 2
-                    // await this.updateWandB(1, alpha, outputIn );
-                    await this.updateWandB(1, alpha );
-
-                    // //update weigths and biases layer 3
-                    // await this.updateWandB(2, alpha, outputMid );
-                    await this.updateWandB(2, alpha );
-
-                    // losses = [];
-                    // output = [];
-                    // outputMid = [];
-                    // outputIn = [];
-                // }
-                //Calculate loss
-            }
-
-            let totalAccuracy = accuracies.filter( a => a==true).length;
-            let accuracy = totalAccuracy/accuracies.length;
-            console.log("Accuracy: %d, Total Loss: %d",accuracy, totalLoss)
-        }
-
-        this.saveWandB();
-    }
+    
 
     async run(){
         const items = await this.getData();
