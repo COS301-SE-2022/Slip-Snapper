@@ -12,8 +12,12 @@ export function usePhotoGallery() {
     try {
       const p = await Camera.getPhoto({
         resultType: CameraResultType.DataUrl,
-        quality: 100,
-        allowEditing: true,
+        quality: 85,
+        allowEditing: false,
+        saveToGallery: true,
+        correctOrientation: true,
+        width: 1280,
+        height: 1280,
         source: CameraSource.Prompt,
       });
       
@@ -42,8 +46,8 @@ function ScanSlip(photo) {
 
     (async () => {
 
-      localStorage.removeItem('photo')
-      localStorage.setItem('photo', JSON.stringify(photo))
+      localStorage.removeItem('photo');
+      localStorage.setItem('photo', JSON.stringify(photo));
 
       await doProcessing(photo)
         .then(apiResponse => {

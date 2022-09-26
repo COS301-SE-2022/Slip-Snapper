@@ -33,9 +33,10 @@ async function processImage(image) {
 
     await Jimp.read(bufferOfImg)
         .then(imageProcess => {
-            imageProcess.threshold({ max: 255, autoGreyscale: true })
-                .contrast(+1)
+            imageProcess.greyscale()
                 .normalize()
+                .contrast(0.7)
+                .quality(90)
                 .getBase64(Jimp.AUTO, async (err, img) => {
                 if (err) {
                     returnImage = "Error processing image";
