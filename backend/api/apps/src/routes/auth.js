@@ -22,7 +22,7 @@ router.post('/signup', async (req, res) => {
     ) {
         return res.status(200)
             .send({
-                message: "Missing or Invalid input data",
+                message: "Error Creating User",
             });
     }
 
@@ -36,7 +36,7 @@ router.post('/signup', async (req, res) => {
     if (!password.match(strongPasswordChecker)) {
         return res.status(200)
             .send({
-                message: "Weak password",
+                message: "Error Creating User",
             });
     }
     /**
@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
     if (!email.match(emailformat)) {
         return res.status(200)
             .send({
-                message: "Invalid email format",
+                message: "Error Creating User",
             });
     }
     const saltRounds = 10;
@@ -87,7 +87,7 @@ router.post('/login', async (req, res) => {
     ) {
         return res.status(200)
             .send({
-                message: "Missing or Invalid input data",
+                message: "Error validating user Details",
             });
     }
 
