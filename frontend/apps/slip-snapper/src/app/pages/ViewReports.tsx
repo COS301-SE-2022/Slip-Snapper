@@ -302,7 +302,7 @@ const ViewReports: React.FC = () => {
               <IonButtons slot="end">
                 <IonButton onClick={() => {
                   returnToDefault()
-                }}>restore to default</IonButton>
+                }}>set to default</IonButton>
                 <IonButton onClick={() => {
                   setIsOpenSearch(false); filter();
                 }}>Apply</IonButton>
@@ -376,12 +376,11 @@ const ViewReports: React.FC = () => {
         const blob = new Blob([arr], { type: 'application/pdf' });
         const docUrl = URL.createObjectURL(blob);
 
-        if (!isPlatform('android') && !isPlatform('ios')) {
+        if ((isPlatform('desktop') && !isPlatform("cordova")) || isPlatform('mobileweb')) {
           window.open(docUrl);
           loading.dismiss();
           loading.remove();
         } else {
-          //view for mobile, might need name
           const reader = new FileReader();
 
           reader.addEventListener(
@@ -549,7 +548,7 @@ const ViewReports: React.FC = () => {
 
   function filter() {
 
-    for (let i = 0; i < reports.length; i++) {
+    for (let i = 0; i < reports?.length; i++) {
       const temp = document.getElementById("reportItem" + i)
       if (temp !== null)
         temp.style.display = "block";
@@ -573,7 +572,7 @@ const ViewReports: React.FC = () => {
   function searchFilter(searchText: string | undefined) {
 
     if (searchText !== undefined) {
-      for (let i = 0; i < reports.length; i++) {
+      for (let i = 0; i < reports?.length; i++) {
         if (!reports[i].otherName.toLowerCase().includes(searchText.toLowerCase())) {
           const temp = document.getElementById("reportItem" + i)
           if (temp !== null)
@@ -585,9 +584,9 @@ const ViewReports: React.FC = () => {
 
   function timeFrameFilter() {
 
-    for (let j = 0; j < reports.length; j++) {
+    for (let j = 0; j < reports?.length; j++) {
       let foundFlag = false;
-      for (let i = 0; i < timeFrames.length; i++) {
+      for (let i = 0; i < timeFrames?.length; i++) {
         if (reports[j].otherName.includes(timeFrames[i])) {
           foundFlag=true
         }
@@ -633,7 +632,7 @@ const ViewReports: React.FC = () => {
     const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
     if (fromDate !== "" && fromDate !== undefined) {
-      for (let i = 0; i < reports.length; i++) {
+      for (let i = 0; i < reports?.length; i++) {
         if (fromDate > reports[i].reportDate) {
           const temp = document.getElementById("reportItem" + i)
           if (temp !== null)
@@ -643,7 +642,7 @@ const ViewReports: React.FC = () => {
     }
 
     if (toDate !== "" && toDate !== undefined) {
-      for (let i = 0; i < reports.length; i++) {
+      for (let i = 0; i < reports?.length; i++) {
         if (toDate < reports[i].reportDate) {
           const temp = document.getElementById("reportItem" + i)
           if (temp !== null)

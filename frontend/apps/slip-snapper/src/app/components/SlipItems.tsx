@@ -190,7 +190,7 @@ const SlipItems: React.FC = () => {
                         <IonButtons slot="end">
                             <IonButton onClick={() => {
                                 returnToDefault()
-                            }}>restore to default</IonButton>
+                            }}>set to default</IonButton>
                             <IonButton onClick={() => {
                                 setIsOpenSearch(false); filter();
                             }}>Apply</IonButton>
@@ -245,7 +245,7 @@ const SlipItems: React.FC = () => {
 
     function filter() {
 
-        for (let i = 0; i < slipItems.length; i++) {
+        for (let i = 0; i < slipItems?.length; i++) {
             const temp = document.getElementById("slipItem" + i)
             if (temp !== null)
                 temp.style.display = "block";
@@ -269,7 +269,7 @@ const SlipItems: React.FC = () => {
     function searchFilter(searchText: string | undefined) {
 
         if (searchText !== undefined) {
-            for (let i = 0; i < slipItems.length; i++) {
+            for (let i = 0; i < slipItems?.length; i++) {
                 if (!slipItems[i].location.toLowerCase().includes(searchText.toLowerCase())) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -316,7 +316,7 @@ const SlipItems: React.FC = () => {
         const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
         if (fromDate !== "" && fromDate !== undefined) {
-            for (let i = 0; i < originalSlips.length; i++) {
+            for (let i = 0; i < originalSlips?.length; i++) {
                 if (fromDate > originalSlips[i].transactionDate) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -326,7 +326,7 @@ const SlipItems: React.FC = () => {
         }
 
         if (toDate !== "" && toDate !== undefined) {
-            for (let i = 0; i < originalSlips.length; i++) {
+            for (let i = 0; i < originalSlips?.length; i++) {
                 if (toDate < originalSlips[i].transactionDate) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -351,7 +351,7 @@ const SlipItems: React.FC = () => {
     }
 
     function totalFilter() {
-        for (let i = 0; i < originalSlips.length; i++) {
+        for (let i = 0; i < originalSlips?.length; i++) {
 
             if (value[1] === 5000) {
                 if (value[0] > originalSlips[i].total) {
