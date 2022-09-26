@@ -159,7 +159,7 @@ const Home: React.FC = () => {
                 <IonCardTitle className='home-card-title'>This Week's Expenditure:</IonCardTitle>
               </IonCardHeader>
               <IonItem color="tertiary">Items Bought: {todayItems.weekItemCount}</IonItem>
-              <IonItem color="tertiary" lines='none'>Total Expenditure: R {todayItems.weekTotal}</IonItem>
+              <IonItem color="tertiary" lines='none'>Total Expenditure: R {todayItems.weekTotal?.toFixed(2)}</IonItem>
             </IonCard>
 
         </div>

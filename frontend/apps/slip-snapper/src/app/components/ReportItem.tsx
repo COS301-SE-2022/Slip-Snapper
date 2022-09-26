@@ -48,12 +48,11 @@ function view(data: any) {
       const blob = new Blob([arr], { type: 'application/pdf' });
       const docUrl = URL.createObjectURL(blob);
 
-      if (!isPlatform('android') && !isPlatform('ios')) {
+      if ((isPlatform('desktop') && !isPlatform("cordova")) || isPlatform('mobileweb')) {
         window.open(docUrl);
         loading.dismiss();
         loading.remove();
       } else {
-        //view for mobile, might need name
         const reader = new FileReader();
 
         reader.addEventListener(
