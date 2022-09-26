@@ -9,7 +9,6 @@ const ForgotPass: React.FC = () => {
   const [emailInput, setEmailInput] = useState<string>();
   const [errorAlert, setAlert] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const history = useHistory()
 
   return (
     <div>

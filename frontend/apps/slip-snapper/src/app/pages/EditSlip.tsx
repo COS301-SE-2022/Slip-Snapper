@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
@@ -59,14 +59,14 @@ const EditSlip: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput value={location} onIonChange={e => setLocation(e.detail.value!)} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput value={location} onIonChange={e => { getData(); setLocation(e.detail.value!)}} id={"Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonDatetime value={slipDate} onIonChange={e => setSlipDate(e.detail.value!) } displayFormat='DD/MM/YYYY' id={"date"}/>
+                                    <IonDatetime value={slipDate} onIonChange={e => { getData(); setSlipDate(e.detail.value!)}} displayFormat='DD/MM/YYYY' id={"date"}/>
                                     <IonIcon icon={calendarOutline} slot="end"/>
                                 </IonItem>
                             </IonCardTitle>

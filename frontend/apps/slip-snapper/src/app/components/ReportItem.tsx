@@ -7,7 +7,7 @@ import {
   IonText,
 } from '@ionic/react';
 import { isPlatform } from '@ionic/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@ionic-native/file-opener';
 import { getUserReport } from '../../api/apiCall';
 import '../theme/reportItem.css';

@@ -10,7 +10,6 @@ import {
     IonLabel,
     IonIcon
   } from "@ionic/react";
-  import React from "react";
   import {home, person, documents, pencil} from 'ionicons/icons';
 
   

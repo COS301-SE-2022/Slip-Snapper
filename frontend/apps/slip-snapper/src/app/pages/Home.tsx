@@ -5,28 +5,20 @@ import {
   IonTitle,
   IonToolbar,
   IonButtons,
-  IonRow,
   IonFooter,
-  IonCol,
   IonCard,
-  IonButton,
   IonCardHeader,
   IonCardTitle,
   IonItem,
-  useIonToast,
-  IonText,
   IonIcon,
 } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
-import { isPlatform } from '@ionic/core';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import { FileOpener } from '@ionic-native/file-opener';
 import TakePictureButton from '../components/TakePictureButton';
 import { NavButtons } from '../components/NavButtons';
 import ReportItem from '../components/ReportItem';
 import Graph from '../components/Graph';
 import { alertCircleOutline } from 'ionicons/icons';
-import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats, getUserReport, removeReport } from "../../api/apiCall"
+import { getGraphStats, getRecentReports, getThisWeeksReports, getTodayStats } from "../../api/apiCall"
 import '../theme/home.css';
 import { destroySession } from "../../api/Session"
 import {
@@ -58,7 +50,6 @@ const Home: React.FC = () => {
     weekTotal:0
   });
   // const [todayTotal, setTodayTotal] = useState(0);
-  const [present, dismiss] = useIonToast();
   const [reports, setR] = useState<any[]>([]);
 
   const [graphData, setGraphData] = useState<any[]>([])
