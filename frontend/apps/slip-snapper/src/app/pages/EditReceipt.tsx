@@ -1,29 +1,28 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonIcon, IonAlert, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
-import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IonDatetime } from '@ionic/react';
 import { calendarOutline } from 'ionicons/icons';
 import '../theme/addEntry.css';
 import { NavButtons } from '../components/NavButtons';
-import { updateSlipA} from '../../api/apiCall';
+import { updateSlipA } from '../../api/apiCall';
 import { useHistory } from "react-router-dom";
 
 const EditReceipt: React.FC = () => {
 
     const history = useHistory();
 
-     const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
-     for(let i=0; i<slipContents?.items.length;i++)
-     {
-         slipContents.items[i].itemPrice = Number(slipContents.items[i].itemPrice).toFixed(2)
-     }
+    const slipContents = JSON.parse(localStorage.getItem('editSlip')!);
+    for (let i = 0; i < slipContents?.items.length; i++) {
+        slipContents.items[i].itemPrice = Number(slipContents.items[i].itemPrice).toFixed(2)
+    }
     const [editReceiptItems, setEditReceiptItems] = useState(slipContents?.items);
     const originalItems = slipContents?.items
     const [location, setLocation] = useState(slipContents?.location);
     const [date, setDate] = useState(slipContents?.transactionDate);
-    
+
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
 
@@ -58,17 +57,17 @@ const EditReceipt: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput onIonChange={e => setLocation(e.detail.value!)} value={location} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput onIonChange={e => { getData(); setLocation(e.detail.value!) }} value={location} id={"editReceiptStore_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
                         <div color="primary">
-                        <IonCardTitle className="date elem">Date:
-                            <IonItem className='addEntry' color="tertiary">
-                                    <IonDatetime onIonChange={e => setDate(e.detail.value!)} value={date} displayFormat='DD/MM/YYYY' id={"date"}/>
-                                <IonIcon icon={calendarOutline} slot="end"/>
-                            </IonItem>
-                        </IonCardTitle>
+                            <IonCardTitle className="date elem">Date:
+                                <IonItem className='addEntry' color="tertiary">
+                                    <IonDatetime onIonChange={e => { getData(); setDate(e.detail.value!) }} value={date} displayFormat='DD/MM/YYYY' id={"editReceiptDate"} />
+                                    <IonIcon icon={calendarOutline} slot="end" />
+                                </IonItem>
+                            </IonCardTitle>
                         </div>
                     </IonCardHeader>
 
@@ -80,44 +79,44 @@ const EditReceipt: React.FC = () => {
                         return (
                             <IonGrid key={index} >
                                 <div className='wrapper small-chip'>
-                                    <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
-                                    <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined" slot="end"/>
+                                    <Chip label={"Item # " + (index + 1)} sx={{ bgcolor: '#27A592', color: 'white' }} />
+                                    <Chip icon={<DeleteIcon />} label="Delete" onClick={() => { removeItem(index) }} color="error" variant="outlined" slot="end" />
                                 </div>
                                 <div className='wrapper'>
-                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip label={"Item # "+ (index+1)} sx={{ bgcolor: '#27A592', color: 'white' }}/>
+                                    <IonCol className={index > 0 ? 'big-chip-child' : 'big-chip'}>
+                                        <Chip label={"Item # " + (index + 1)} sx={{ bgcolor: '#27A592', color: 'white' }} />
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Description</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Description</IonLabel>
                                         <IonLabel className='extra-labels'>Description</IonLabel>
-                                        <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput id={index + "/item"} value={item.data[0].item}></IonInput>
+                                        <IonItem data-testid={index + "/editReceiptItem"} color="tertiary" className='inputs'>
+                                            <IonInput id={index + "/editReceiptItem"} value={item.data[0].item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Quantity</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Quantity</IonLabel>
                                         <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
                                             <IonInput type='number'
-                                                id={index + "/quantity"} value={item.itemQuantity}  ></IonInput>
+                                                id={index + "/editReceiptQuantity"} value={item.itemQuantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                        <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.itemPrice} ></IonInput>
+                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/editReceiptPrice"} value={item.itemPrice} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
                                     <IonCol className='item-col elem'>
-                                    <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Type</IonLabel>
+                                        <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Type</IonLabel>
                                         <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' 
+                                            <IonSelect id={index + "/editReceiptType"} interface="popover" placeholder='Select Category'
                                                 value={item.data[0].itemType.charAt(0).toUpperCase() + item.data[0].itemType.slice(1)}>
                                                 <IonSelectOption>Electronics</IonSelectOption>
                                                 <IonSelectOption>Fashion</IonSelectOption>
@@ -131,8 +130,8 @@ const EditReceipt: React.FC = () => {
                                         </IonItem>
                                     </IonCol>
 
-                                    <IonCol className={index>0?'big-chip-child':'big-chip'}>
-                                        <Chip icon={<DeleteIcon/>}  label="Delete" onClick={() => removeItem(index)} color="error" variant="outlined"/>
+                                    <IonCol className={index > 0 ? 'big-chip-child' : 'big-chip'}>
+                                        <Chip icon={<DeleteIcon />} label="Delete" onClick={() => { removeItem(index) }} color="error" variant="outlined" />
                                     </IonCol>
                                     <IonAlert
                                         isOpen={showAlert}
@@ -147,7 +146,7 @@ const EditReceipt: React.FC = () => {
                     })}
 
                     <div className='wrapper'>
-                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary"/>
+                        <Chip label="New Item" icon={<AddCircleOutlineIcon />} onClick={addItem} color="secondary" />
                     </div>
 
                     <IonCardHeader className="wrapper">
@@ -155,7 +154,7 @@ const EditReceipt: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardHeader className="wrapper">
-                        <IonItem id={"total"} className='addEntry' color="tertiary" >
+                        <IonItem id={"editReceiptTotal"} className='addEntry' color="tertiary" >
                             {getTotalCosts()?.toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
@@ -174,10 +173,17 @@ const EditReceipt: React.FC = () => {
 
     function addItem() {
         getData()
-        setEditReceiptItems([...editReceiptItems, { data: { 0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
+        setEditReceiptItems([...editReceiptItems, { data: { 0: { id: editReceiptItems.length + 1, item: "", itemType: "" } }, itemPrice: 0, itemQuantity: 1 }])
     }
-    function removeItem(index: number) {
+
+    async function removeItem(index: number) {
+
+        // for (let i = 0; i < data.length; i++) {
+        //     console.log(data[i].data[0].item)
+        // }
+        // console.log("---------------------------")
         getData()
+
         const data = [...editReceiptItems];
 
         if (data.length === 1) {
@@ -188,13 +194,14 @@ const EditReceipt: React.FC = () => {
             data.splice(index, 1)
             setEditReceiptItems(data)
         }
+
     }
     function getData() {
         for (let i = 0; i < editReceiptItems.length; i++) {
-            const n = document.getElementById(i + "/item")?.getElementsByTagName("input")[0].value
-            const q = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
-            const p = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
-            const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
+            const n = document.getElementById(i + "/editReceiptItem")?.getElementsByTagName("input")[0].value
+            const q = document.getElementById(i + "/editReceiptQuantity")?.getElementsByTagName("input")[0].value
+            const p = document.getElementById(i + "/editReceiptPrice")?.getElementsByTagName("input")[0].value
+            const t = document.getElementById(i + "/editReceiptType")?.getElementsByTagName("input")[0].value
 
             if (n !== undefined) {
                 editReceiptItems[i].data[0].item = n
@@ -209,12 +216,12 @@ const EditReceipt: React.FC = () => {
     }
 
     async function validateData() {
-        if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
+        if (document.getElementById("editReceiptStore_Name")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
             return
         }
-        if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
+        if (document.getElementById("editReceiptDate")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Date to continue.")
             setShowAlert(true)
             return
@@ -223,7 +230,7 @@ const EditReceipt: React.FC = () => {
         for (let i = 0; i < editReceiptItems.length; i++) {
             if (editReceiptItems[i].data[0].item === "" ||
                 editReceiptItems[i].data[0].itemType === "" ||
-                !Number.isInteger(editReceiptItems[i].itemQuantity) || 
+                !Number.isInteger(editReceiptItems[i].itemQuantity) ||
                 Math.sign(editReceiptItems[i].itemQuantity) !== 1 ||
                 editReceiptItems[i].itemPrice === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
@@ -241,35 +248,34 @@ const EditReceipt: React.FC = () => {
         const updateItems = editReceiptItems;
 
         const removeItems: unknown[] = []
-        
-        for (const rem of originalItems){
+
+        for (const rem of originalItems) {
             let flag = false
-            for(const item of editReceiptItems){
-                if(item.id === rem.id){
+            for (const item of editReceiptItems) {
+                if (item.id === rem.id) {
                     flag = true
                 }
             }
-            if(!flag){
+            if (!flag) {
                 removeItems.push(rem.id)
             }
         }
 
         const insertItems: unknown[] = []
-        for (const item of editReceiptItems){
-            
-            if(item.id === undefined){
+        for (const item of editReceiptItems) {
+
+            if (item.id === undefined) {
                 insertItems.push(item)
             }
 
         }
 
-        const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi,"/")
-        const temp = document.getElementById("total")?.innerHTML
+        const storeName = document.getElementById("editReceiptStore_Name")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("editReceiptDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        const temp = document.getElementById("editReceiptTotal")?.innerHTML
         let total
-        if (temp !==undefined)
-        {
-             total = parseFloat(temp)
+        if (temp !== undefined) {
+            total = parseFloat(temp)
         }
         const data = {
             text: [date, storeName, "", "", total, slipContents.id]
@@ -281,11 +287,11 @@ const EditReceipt: React.FC = () => {
         loading.mode = "ios";
         document.body.appendChild(loading);
         loading.present();
-        await updateSlipA(data, insertItems, updateItems, removeItems).then((apiResponse) =>{
+        await updateSlipA(data, insertItems, updateItems, removeItems).then((apiResponse) => {
             loading.dismiss();
             loading.remove();
         })
-        setEditReceiptItems([{ data:{0: { id: editReceiptItems.length+1, item: "", itemType: "" }}, itemPrice: 0, itemQuantity: 1 }])
+        setEditReceiptItems([{ data: { 0: { id: editReceiptItems.length + 1, item: "", itemType: "" } }, itemPrice: 0, itemQuantity: 1 }])
         const button = document.getElementById("cancelButton")
         if (button) {
             button.click();
