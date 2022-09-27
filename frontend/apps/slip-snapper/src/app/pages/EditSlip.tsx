@@ -23,17 +23,31 @@ const EditSlip: React.FC = () => {
     const [alertMessage, setAlertMes] = useState("");
     const [showImage, setShowImage] = useState(false);
 
-    const handleCostsChange = (event: any) => {
-        const _tempCosts = [...items];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setItems(_tempCosts);
+    const [total, setTotal] = useState(0);
+
+
+    function handleCostsChange(lastItem: boolean) {
+        getData()
+        let total = 0;
+
+        if (lastItem) {
+            for (let i = 0; i < items.length - 1; i++) {
+                total += Number(items[i].price)
+            }
+        }
+        else {
+            for (let i = 0; i < items.length; i++) {
+                total += Number(items[i].price)
+            }
+        }
+        setTotal(total)
+        return total
+
     };
     const getTotalCosts = () => {
         return items.reduce((total: number, item: { price: any; }) => {
             return total + Number(item.price);
+
         }, 0);
     };
     
@@ -110,7 +124,7 @@ const EditSlip: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={() => { handleCostsChange(false) }} id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -204,6 +218,9 @@ const EditSlip: React.FC = () => {
         else {
             data.splice(index, 1)
             setItems(data)
+            if (index === items.length)
+                handleCostsChange(true)
+            else { handleCostsChange(true) }
         }
     }
     function getData() {

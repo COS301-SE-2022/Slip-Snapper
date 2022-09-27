@@ -14,14 +14,25 @@ const AddEntry: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
     const [present, dismiss] = useIonToast();
+    const [total, setTotal] = useState(0);
 
-    const handleCostsChange = (event: any) => {
-        const _tempCosts = [...addEntryItem];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setAddEntryItems(_tempCosts);
+    function handleCostsChange(lastItem: boolean) {
+        getData()
+        let total = 0;
+
+        if (lastItem) {
+            for (let i = 0; i < addEntryItem.length - 1; i++) {
+                total += Number(addEntryItem[i].price)
+            }
+        }
+        else {
+            for (let i = 0; i < addEntryItem.length; i++) {
+                total += Number(addEntryItem[i].price)
+            }
+        }
+        setTotal(total)
+        return total
+
     };
     const getTotalCosts = () => {
         return addEntryItem.reduce((total, item) => {
@@ -97,7 +108,7 @@ const AddEntry: React.FC = () => {
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/addEntryPrice"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={() => { handleCostsChange(false) }} id={index + "/addEntryPrice"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -173,6 +184,9 @@ const AddEntry: React.FC = () => {
         else {
             data.splice(index, 1)
             setAddEntryItems(data)
+            if (index === addEntryItem.length)
+                handleCostsChange(true)
+            else { handleCostsChange(true) }
         }
     }
 
