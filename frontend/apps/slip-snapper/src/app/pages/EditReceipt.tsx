@@ -22,24 +22,43 @@ const EditReceipt: React.FC = () => {
     const originalItems = slipContents?.items
     const [location, setLocation] = useState(slipContents?.location);
     const [date, setDate] = useState(slipContents?.transactionDate);
+    const [total, setTotal] = useState(0);
+
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
+    
 
-    const handleCostsChange = (event: any) => {
-        const _tempCosts = [...editReceiptItems];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].itemPrice = event.target.value
-        getData();
-        setEditReceiptItems(_tempCosts);
+     function handleCostsChange(lastItem:boolean){
+        getData()
+        let total = 0;
+
+        if(lastItem)
+        {
+            for (let i = 0; i < editReceiptItems.length-1; i++) {
+                total += Number(editReceiptItems[i].itemPrice)
+            }
+        }
+
+        else
+        {
+            for (let i = 0; i < editReceiptItems.length; i++) {
+                total += Number(editReceiptItems[i].itemPrice)
+            }
+
+        }
+        setTotal(total)
+        return total
+        
     };
+
     const getTotalCosts = () => {
-        return editReceiptItems?.reduce((total: number, item: { itemPrice: any; }) => {
-            return total + Number(item.itemPrice);
+        return editReceiptItems?.reduce((tempTotal: number, item: { itemPrice: any; }) => {
+            return tempTotal + Number(item.itemPrice);
 
         }, 0);
     };
+
     return (
         <IonPage>
             <IonHeader>
@@ -108,7 +127,7 @@ const EditReceipt: React.FC = () => {
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/editReceiptPrice"} value={item.itemPrice} ></IonInput>
+                                            <IonInput type='number' onIonChange={()=> {handleCostsChange(false)}} id={index + "/editReceiptPrice"} value={item.itemPrice} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -155,7 +174,7 @@ const EditReceipt: React.FC = () => {
 
                     <IonCardHeader className="wrapper">
                         <IonItem id={"editReceiptTotal"} className='addEntry' color="tertiary" >
-                            {getTotalCosts()?.toFixed(2)}
+                             {getTotalCosts()?.toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
                     <IonItem color="primary">
@@ -178,10 +197,6 @@ const EditReceipt: React.FC = () => {
 
     async function removeItem(index: number) {
 
-        // for (let i = 0; i < data.length; i++) {
-        //     console.log(data[i].data[0].item)
-        // }
-        // console.log("---------------------------")
         getData()
 
         const data = [...editReceiptItems];
@@ -193,10 +208,12 @@ const EditReceipt: React.FC = () => {
         else {
             data.splice(index, 1)
             setEditReceiptItems(data)
+            if(index===editReceiptItems.length)
+                handleCostsChange(true)
+            else { handleCostsChange(true) }
         }
-
     }
-    function getData() {
+    async function getData() {
         for (let i = 0; i < editReceiptItems.length; i++) {
             const n = document.getElementById(i + "/editReceiptItem")?.getElementsByTagName("input")[0].value
             const q = document.getElementById(i + "/editReceiptQuantity")?.getElementsByTagName("input")[0].value
@@ -273,6 +290,7 @@ const EditReceipt: React.FC = () => {
         const storeName = document.getElementById("editReceiptStore_Name")?.getElementsByTagName("input")[0].value
         const date = document.getElementById("editReceiptDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
         const temp = document.getElementById("editReceiptTotal")?.innerHTML
+
         let total
         if (temp !== undefined) {
             total = parseFloat(temp)
