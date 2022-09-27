@@ -154,17 +154,17 @@ const Profile: React.FC = () => {
               <div>
                   <IonItem className="center-items" color="tertiary">
                     <IonText>Username: </IonText>
-                    <IonText slot='end'>{userDetails?.username}</IonText>
+                  <IonText className='profile-user-details' slot='end'>{userDetails?.username}</IonText>
                   </IonItem>
 
                   <IonItem className="center-items" color="tertiary">
                     <IonText>Full Name: </IonText>
-                    <IonText slot='end'>{userDetails?.firstname + " " + userDetails?.lastname}</IonText>
+                  <IonText className='profile-user-details' slot='end'>{userDetails?.firstname + " " + userDetails?.lastname}</IonText>
                   </IonItem>
 
                   <IonItem className="center-items" color="tertiary">
                     <IonText>Email Address:</IonText>
-                    <IonText slot='end'>{userDetails?.email}</IonText>
+                  <IonText className='profile-user-details' slot='end'>{userDetails?.email}</IonText>
                   </IonItem>
               </div>
               

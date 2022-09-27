@@ -3,7 +3,7 @@
     vertical-align: middle;
 }
 
-.profile-card-title{
+.profile-card-title {
     font-size: x-large;
 }
 
@@ -22,15 +22,15 @@
     display: none;
 }
 
-.info-icon{
+.info-icon {
     cursor: pointer;
 }
 
-.info-icon:hover{
+.info-icon:hover {
     color: #5AD8C5;
 }
 
-.popover-text{
+.popover-text {
     margin: 10px;
     max-width: 200px;
 }
@@ -104,7 +104,6 @@
     flex: 1;
 }
 
-
 /* MEDIA SCALABILITY */
 @media screen and (min-width: 350px) {
     .wrapper {
@@ -144,7 +143,17 @@
 }
 
 @media screen and (max-width: 400px) {
-    .profile-card-title{
+    .profile-card-title {
         font-size: large;
     }
 }
+
+@media screen and (max-width: 390px) {
+    .profile-user-details {
+        white-space: nowrap;
+        width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+

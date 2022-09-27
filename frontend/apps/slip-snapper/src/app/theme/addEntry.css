@@ -72,7 +72,7 @@
     display: none;
 }
 
-@media screen and (min-width: 380px) {
+@media screen and (min-width: 345px) {
     .wrapper {
       grid-template-columns: repeat(auto-fit, minmax(14rem, 16rem));
     }
