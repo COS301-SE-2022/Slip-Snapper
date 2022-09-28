@@ -86,8 +86,6 @@ const ForgotPass: React.FC = () => {
         setErrorMessage("Please fill in all fields.")
         setAlert(true)
       }
-    
-    console.log("forgot");
   }
 
 };

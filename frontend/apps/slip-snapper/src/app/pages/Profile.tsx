@@ -80,6 +80,7 @@ const Profile: React.FC = () => {
         apiResponse => {
           if (typeof (apiResponse.data) !== "string") {
             destroySession(apiResponse);
+
             //Budget amounts
             val.weekly = apiResponse.data.weekly;
             val.monthly = apiResponse.data.monthly;
@@ -89,11 +90,11 @@ const Profile: React.FC = () => {
             expenditure.monthly = apiResponse.data.monthlyTotal;
 
             isExceeded(val.weekly, val.monthly);
-
             setWeeklyBudget(val.weekly)
             setMonthlyBudget(val.monthly)
             setProfile(apiResponse.data)
             setUserDetails(apiResponse.data.user?.user)
+            
             loading.dismiss();
             loading.remove();
           }else{

@@ -5,10 +5,10 @@ import { signupA } from "../../api/apiCall"
 import { Chip, Popover } from '@mui/material';
 import { checkmarkCircleOutline } from 'ionicons/icons';
 import { closeCircleOutline } from 'ionicons/icons';
-
-
+import { useHistory } from 'react-router-dom';
 
 const Register: React.FC = () => {
+  const history = useHistory();
   const [emailInput, setEmailInput] = useState<string>();
   const [userInput, setUserInput] = useState<string>();
   const [firstNameInput, setFirstNameInput] = useState<string>();
@@ -303,10 +303,8 @@ const Register: React.FC = () => {
                 localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
                 sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))
 
-                const button = document.getElementById("successRedirect")
-                if (button) {
-                  button.click();
-                }
+                history.push("/home")
+                window.location.reload();
               }else{
                 setErrorMessage("Unable to create user, please try again.")
                 setAlert(true)
