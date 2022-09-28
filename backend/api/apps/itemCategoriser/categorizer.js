@@ -65,18 +65,19 @@ class Layer{
         this.numNeurons = numberOfNeurons;
         this.neurons = [];
         for(let i = 0; i < this.numNeurons; i++){
-            this.allNeurons[i] = new Neuron( i );
+            this.neurons[i] = new Neuron( i );
         }
     }
 }
 
 class Categoriser{
     constructor(){
-        this.modelDescription = [512,16,8];
-        this.model = [];
         this.encoder = 0;
-        this.momentum = 0.1;
-        this.learningRate = 0.2;
+        this.learningRate = 0.001;
+        this.weightsItoH = tf.tensor2d([[1]]);
+        this.weightsHtoO = tf.tensor2d([[1]]);
+        this.biasesH = tf.tensor2d([[1]]);
+        this.biasesO = tf.tensor2d([[1]]);
     }
 
     async getData(){
@@ -101,240 +102,97 @@ class Categoriser{
     }
 
     async createModel(){
-        for(let i = 0; i < this.modelDescription.length; i++){
-            this.model[i] = new Layer(this.modelDescription[i]);
-        }
+        this.weightsItoH = tf.randomUniform([16,512], -2, 2);
+        this.weightsHtoO = tf.randomUniform([8,16], -2, 2);
+        this.biasesH = tf.randomUniform([16,1], -2, 2);
+        this.biasesO =  tf.randomUniform([8,1], -2, 2);
+    }
+
+    async forwardPropogate( input ){
+        const Z1 = this.weightsItoH.dot( input ).add( this.biasesH );
+        const A1 = Z1.relu();
+        const Z2 = this.weightsHtoO.dot( A1 ).add( this.biasesO );
+        const A2 = Z2.transpose().softmax().transpose();
+
+        return { Z1, A1, Z2, A2 }
+    }
+
+    async reluDeriv( input ){
+        const arr = await input.array();
         
-        for(let layer = 1; layer < this.model.length; layer++){
-            const currentLayer = this.model[layer];
-            const previousLayer = this.model[layer-1];
-
-            for(let neuron = 0; neuron < previousLayer.neurons.length; neuron++){
-                for(let neuronInLayer = 0; neuronInLayer < currentLayer.neurons.length; neuronInLayer++){
-                    const connection = new Connection(previousLayer.neurons[neuron], currentLayer.neurons[neuronInLayer])
-                    previousLayer.neurons[neuron].addOutConnection(connection);
-                    currentLayer.neurons[neuron].addInConnection(connection);
+        for(let i = 0; i < arr.length; i++){
+            for(let j = 0; j < arr[i].length; j++){
+                if(arr[i][j] < 0){
+                    arr[i][j] = 0;
                 }
             }
         }
+
+        return tf.tensor(arr);
     }
 
-    activateInput( input ){
-        this.model[0].neurons.forEach((neuron,i)=>{
-            neuron.setValue( input[i] )
-        })
+    async backwardPropogate( forwardProp, input ,output ){
+        const dZ2 = tf.sub(forwardProp.A2, output);
+        const dW2 = tf.mul(dZ2.dot(forwardProp.A1.transpose()),tf.scalar(1/ output.shape[0]));
+        const dB2 = tf.mul(dZ2.sum(1), tf.scalar(1/ output.shape[0]));
+
+        const reluD = await this.reluDeriv(forwardProp.Z1);
+        const dZ1 = this.weightsHtoO.transpose().dot(dZ2).mul(reluD);
+        const dW1 = tf.mul(dZ1.dot(input.transpose()), tf.scalar(1/ 16));
+        const dB1 = tf.mul(dZ1.sum(1), tf.scalar(1/ 16));
+
+        return { dW1, dB1, dW2, dB2 }
     }
 
-    relu( value ){
-        return Math.max(0, value);
-    }
-
-    softmax( num, den ){
-        return num/den;
-    }
-
-    forwardPropogate(){
-        for(let layer = 0; layer < this.model.length; layer++){
-            const currentLayer = this.model[layer]
-            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
-                const currentNeuron = currentLayer.neurons[neuron];
-                const bias = currentNeuron.bias;
-
-                const output = currentNeuron.inConnections.reduce((previous, current) => previous + current.weight * current.from.outValue, 0);
-
-                let activatedOutput = 0;
-                if(layer == this.model.length - 1){
-                    activatedOutput = this.relu( output + bias );
-                    currentNeuron.setValue( output );
-                    continue;
-                }
-
-                activatedOutput = this.relu( output + bias );
-                currentNeuron.setValue( activatedOutput );
-            }
-
-            if(layer == this.model.length - 1){
-                const total = currentLayer.neurons.reduce((previous, current) => previous + Math.pow(Math.E,(current.outValue + current.bias)), 0)
-                for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
-                    const currentNeur = currentLayer.neurons[neuron]
-                    const output = (currentNeur.outValue + currentNeur.bias)/ total;
-
-                    currentNeur.setValue( output );
-                }
-            }
+    async adjustWeightsAndBiases( backward ){
+        this.weightsItoH = this.weightsItoH.sub(tf.mul(backward.dW1,tf.scalar(this.learningRate)));
+        const biasChange = await tf.mul(backward.dB1,tf.scalar(this.learningRate)).array();
+        const originalBias = await this.biasesH.array();
+        for(let i = 0; i < biasChange.length; i++){
+            originalBias[i][0] -= biasChange[i];
         }
-    }
+        this.biasesH = tf.tensor2d(originalBias);
 
-    backwardPropogate( targets ){
-        for(let layer = this.model.length - 1; layer > -1; layer--){
-            const currentLayer = this.model[layer]
-            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
-                const currentNeuron = currentLayer.neurons[neuron]
-                const output = currentNeuron.outValue;
-                
-                let error = 0;
-                let delta = 0;
-                if(layer == this.model.length - 1){
-                    error = targets[neuron] - output;
-                    delta = (error * output * (1 - output))
-                    currentNeuron.setError( error );
-                    currentNeuron.setDelta( delta );
-                    continue;
-                }
-
-                for(let connection = 0; connection < currentNeuron.outConnections.length; connection++){
-                    const currentConnection = currentNeuron.outConnections[connection];
-                    error += currentConnection.to.delta * currentConnection.weight;
-                }
-                delta = (error * output * (1 - output))
-                currentNeuron.setError( error );
-                currentNeuron.setDelta( delta );
-            }
+        this.weightsHtoO = this.weightsHtoO.sub(tf.mul(backward.dW2,tf.scalar(this.learningRate)));
+        const biasChange2 = await tf.mul(backward.dB2,tf.scalar(this.learningRate)).array();
+        const originalBias2 = await this.biasesO.array();
+        for(let i = 0; i < biasChange2.length; i++){
+            originalBias2[i][0] -= biasChange2[i];
         }
-    }
-
-    adjustWeightsAndBiases(){
-        for(let layer = 1; layer < this.model.length; layer++){
-            const currentLayer = this.model[layer];
-
-            for(let neuron = 0; neuron < currentLayer.neurons.length; neuron++){
-                const currentNeuron = currentLayer.neurons[neuron];
-                const delta = currentNeuron.delta;
-
-                for(let connection = 0; connection < currentNeuron.inConnections.length; connection++){
-                    const currentConnection = currentNeuron.inConnections[connection];
-                    let change = currentConnection.change;
-
-                    change = (this.learningRate * delta * currentConnection.from.output) + (this.momentum * change);
-                    currentConnection.setChange(change);
-
-                    const newWeight = currentConnection.weight + change;
-                    currentConnection.setWeight( newWeight )
-                }
-
-                const newBias = currentNeuron.bias + (this.learningRate * delta)
-                currentNeuron.setBias( newBias );
-            }
-        }
+        this.biasesO = tf.tensor2d(originalBias2);
     }
 
     async train( inputs, outputs, epochs ){
-        for(let currentEpoch; currentEpoch < epochs; currentEpoch++){
-            for(let inputNumber = 0; inputNumber < inputs.length; inputNumber++){
-                this.activateInput( inputs[inputNumber] );
+        for(let currentEpoch = 0; currentEpoch < epochs; currentEpoch++){
+            const forwardProp = await this.forwardPropogate( inputs );
+            const backwardProp = await this.backwardPropogate( forwardProp, inputs, outputs );
+            await this.adjustWeightsAndBiases( backwardProp );
 
-                this.forwardPropogate();
+            if(currentEpoch%10 == 0){
+                let predictions = await tf.argMax(forwardProp.A2.transpose(),1).array();
+                let actual = await tf.argMax(outputs.transpose(),1).array();
+                let numCorrect = 0;
+                for(let i = 0; i < predictions.length; i++){
+                    if(predictions[i] == actual[i]){
+                        numCorrect++;
+                    }
+                }
 
-                this.backwardPropogate( outputs[inputNumber] );
-
-                this.adjustWeightsAndBiases();
+                let accuracy = numCorrect / predictions.length;
+                console.log("Accuracy: %d %", accuracy*100)
             }
         }
         
-        // let i, k; 
-        // let accuracies = [];
-        // let totalLoss = 0;
-        // let losses = 0;
-        // for(k = 0; k < epochs; k++){
-        //     accuracies = [];
-        //     totalLoss = 0;
-        //     for(i = 0; i < inputs.length; i++){
-        //         /*Forward Propagation*/
-        //         await this.inputLayer( inputs[i] );
-        //         await this.middleLayer( );
-        //         await this.ouputLayer( );
-        //         accuracies[i] = (await this.argmax()) == (await this.argmaxOut(outputs[i]));
-
-        //         /*Backward Propagation*/
-        //         losses = await this.loss( outputs[i] );
-        //         totalLoss = await this.outputLayerBack( losses );
-        //         await this.hiddenLayerBack(  );
-        //         await this.updateWandB(1, alpha );
-        //         await this.updateWandB(2, alpha );
-        //     }
-
-        //     let totalAccuracy = accuracies.filter( a => a==true).length;
-        //     let accuracy = totalAccuracy/accuracies.length;
-        //     console.log("Accuracy: %d, Total Loss: %d",accuracy, totalLoss)
-        // }
-
-        // this.saveWandB();
-    }
-
-    async argmax( ){
-        let highestP = 0;
-        for(let i =0; i <8; i++){
-            if(this.model[2].allNeurons[i].outValue > this.model[2].allNeurons[highestP].outValue){
-                highestP = i;
-            }
-        }
-
-        return highestP;
-    }
-
-    async argmaxOut( output ){
-        let highest = 0;
-        for(let i =0; i <8; i++){
-            if(output[i] > output[highest]){
-                highest = i;
-            }
-        }
-
-        return highest;
-    }
-
-    async loss( ){
-        // let lossV = [];
-        // for(let j = 0; j < output.length; j++){
-        //     lossV[j] = output[j] - this.model[2].allNeurons[j].outValue;
-        // }
-        // return lossV;
-        let highest = await this.argmax();
-        if(isNaN(this.model[2].allNeurons[highest].outValue)){
-            // console.log(this.model[2].allNeurons[highest])
-            // console.log(this.model[1].allNeurons)
-            return -1
-        }
-        return -1*(Math.log(this.model[2].allNeurons[highest].outValue))
-    }
-
-    async derivativeRelu( value ){
-        if(value >= 0){
-            return 1;
-        }
-        return 0;
-    }
-
-    async derivativeSoftmax( value ){
-        return value*(1-value);
+        this.saveWandB();
     }
 
     async saveWandB(){
-        let data = { layer2: {}, layer3: {}}
+        let data = { 1:{}, 2:{} }
 
-        let weights = [];
-        let biases = [];
-        for(let i = 0; i < 16; i++){
-            weights[i] = [];
-            for(let j = 0; j < this.model[1].allNeurons[i].connections.length; j++){
-                weights[i][j] = this.model[1].allNeurons[i].connections[j].weight;
-            }
-            biases[i] = this.model[1].allNeurons[i].bias;
-        }
-        data.layer2.weights = weights;
-        data.layer2.biases = biases;
-
-        weights = [];
-        biases = [];
-        for(let i = 0; i < 8; i++){
-            weights[i] = [];
-            for(let j = 0; j < this.model[2].allNeurons[i].connections.length; j++){
-                weights[i][j] = this.model[2].allNeurons[i].connections[j].weight;
-            }
-            biases[i] = this.model[2].allNeurons[i].bias;
-        }
-        data.layer3.weights = weights;
-        data.layer3.biases = biases;
+        data[1].weights = await this.weightsItoH.array();
+        data[1].biases = await this.biasesH.array();
+        data[2].weights = await this.weightsHtoO.array();
+        data[2].biases = await this.biasesO.array();
 
         let val = JSON.stringify(data, null, 2)
         fs.writeFile(__dirname+'/weights.json', val, (err) => {
@@ -343,13 +201,11 @@ class Categoriser{
         });
     }
 
-    
-
     async run(){
+        const encoder = await vector.load();
         const items = await this.getData();
         await this.createModel();
-        const encoder = await vector.load();
-        
+
         const inputs = [];
         const outputs = [];
         items.map((element) =>{ 
@@ -381,50 +237,41 @@ class Categoriser{
                     break;
             }
         });
-
+        
         const inputsEmbed = []
         for(let i = 0; i< inputs.length; i++){
             inputsEmbed[i] = (await(await encoder.embed(inputs[i])).array())[0];
         }
 
-        this.train( inputsEmbed, outputs, 10, 0.1 )
+        const outputTensor = tf.tensor2d(outputs).transpose();
+        const inputTensor = tf.tensor2d(inputsEmbed).transpose();
+        this.train( inputTensor, outputTensor, 1000 )
+    }
 
-        // console.log(this.model)
-        // console.log(model[2].allNeurons[0])
+    async testAccuracy(){
+        
     }
 
     async load(){
-        await this.createModel();
         this.encoder = await vector.load();
 
-        fs.readFile(__dirname+'/weights.json', (err, val) => {
+        fs.readFile(__dirname+'/weights5a.json', (err, val) => {
             let data = JSON.parse(val);
-
-            for(let i = 0; i < 16; i++){
-                for(let j = 0; j < this.model[1].allNeurons[i].connections.length; j++){
-                    this.model[1].allNeurons[i].connections[j].weight = data.layer2.weights[i][j];
-                }
-                this.model[1].allNeurons[i].bias = data.layer2.biases[i];
-            }
-
-            for(let i = 0; i < 8; i++){
-                for(let j = 0; j < this.model[2].allNeurons[i].connections.length; j++){
-                    this.model[2].allNeurons[i].connections[j].weight = data.layer3.weights[i][j];
-                }
-                this.model[2].allNeurons[i].bias = data.layer3.biases[i];
-            }
+            
+            this.weightsItoH = tf.tensor2d(data[1].weights);
+            this.biasesH = tf.tensor2d(data[1].biases);
+            this.weightsHtoO = tf.tensor2d(data[2].weights);
+            this.biasesO = tf.tensor2d(data[2].biases);
         });
-
     }
 
     async predict(item){
-        const data = (await(await this.encoder.embed(item)).array())[0];
-        await this.inputLayer(data);
-        await this.middleLayer();
-        await this.ouputLayer();
+        const data = await this.encoder.embed(item);
+        const result = await this.forwardPropogate(data.transpose());
 
-        let pred = await this.argmax();
-        switch (pred) {
+        let prediction = await tf.argMax(result.A2.transpose(),1).array();
+
+        switch (prediction[0]) {
             case 0:
                 return 'Food';
             case 1:
@@ -450,7 +297,8 @@ const categoriser = new Categoriser();
 
 async function test(){
     await categoriser.load();
-    let val = await categoriser.predict("food");
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    let val = await categoriser.predict("sprite");
     let vala = await categoriser.predict("umbrella");
     let valb = await categoriser.predict("phone");
     let valc = await categoriser.predict("bread");
