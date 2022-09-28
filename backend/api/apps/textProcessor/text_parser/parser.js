@@ -1,8 +1,10 @@
-// const { categorize } = require("../../itemCategoriser/categorizer");
-const { ItemCategoriser } = require('../../itemCategoriser/itemCategoriser')
+const { Categoriser } = require("../../itemCategoriser/categorizer");
+// const { ItemCategoriser } = require('../../itemCategoriser/itemCategoriser')
 
-const category = new ItemCategoriser();
-category.loadModel();
+// const category = new ItemCategoriser();
+// category.loadModel();
+const category = new Categoriser();
+category.load();
 
 /**
  * 

@@ -248,10 +248,6 @@ class Categoriser{
         this.train( inputTensor, outputTensor, 1000 )
     }
 
-    async testAccuracy(){
-        
-    }
-
     async load(){
         this.encoder = await vector.load();
 
@@ -305,6 +301,6 @@ async function test(){
     console.log(val, vala, valb, valc);
 }
 
-test();
+// test();
 
-// module.exports.Categoriser = Categoriser;
+module.exports.Categoriser = Categoriser;
