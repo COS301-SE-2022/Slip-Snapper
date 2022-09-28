@@ -13,3 +13,13 @@
 .profileGraph{
     margin-top: 10%;
 }
+
+.stats-card-title{
+    font-size: x-large;
+}
+
+@media screen and (max-width: 400px) {
+    .stats-card-title{
+        font-size: large;
+    }
+}

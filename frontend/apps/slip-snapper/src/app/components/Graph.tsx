@@ -72,7 +72,7 @@ function Graph({ graphData }: Props) {
     };
 
     return (
-        <Bar className="graph" options={graphSettings} data={graphStats} />
+        <Bar className="graph" options={graphSettings} data={graphStats} height={250}/>
     );
 }
 

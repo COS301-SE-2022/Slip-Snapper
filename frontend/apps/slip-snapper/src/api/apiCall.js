@@ -5,8 +5,8 @@ const headers = {
     'Authorization': 'Bearer ' + JSON.parse(sessionStorage.getItem('token'))
 }
 
-//const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
-const baseUrl = 'http://localhost:3000/api/'
+const baseUrl = 'https://slipsnapper.herokuapp.com/api/'
+//const baseUrl = 'http://localhost:3000/api/'
 
 /**
  * To process the text extracted by OCR

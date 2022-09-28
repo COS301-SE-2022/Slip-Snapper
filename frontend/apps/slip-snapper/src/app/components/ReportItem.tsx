@@ -2,13 +2,12 @@ import {
   IonButton,
   IonCard,
   IonCardHeader,
-  IonCardSubtitle,
   IonCardTitle,
-  IonCol,
   IonItem,
+  IonText,
 } from '@ionic/react';
 import { isPlatform } from '@ionic/core';
-import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 import { FileOpener } from '@ionic-native/file-opener';
 import { getUserReport } from '../../api/apiCall';
 import '../theme/reportItem.css';
@@ -18,19 +17,17 @@ type Props = {
 }
 function ReportItem({ reportData }: Props) {
     return (
-        <IonCol className="recent-item-col">
-            <IonCard color="primary">
+            <IonCard color="primary" className='report-cards'>
                 <IonCardHeader>
-                    <IonCardSubtitle>Report {reportData[0]} :</IonCardSubtitle>
-                    <IonCardTitle>{reportData[2]}</IonCardTitle>
+                    <IonCardTitle className='report-card-title'>Report {reportData[0]}:</IonCardTitle>
+                    <IonText>{reportData[2]}</IonText>
                 </IonCardHeader>
-                <IonItem color="tertiary">
+                <IonItem color="tertiary" lines='none'>
                     <IonButton onClick={() => view(reportData[1])} fill="solid" slot="end" color="secondary">
                         View
                     </IonButton>
                 </IonItem>
             </IonCard>
-        </IonCol>
     );
 }
 function view(data: any) {
@@ -38,16 +35,24 @@ function view(data: any) {
   if (user == null) {
     user = { username: 'demoUser' };
   }
+  const loading = document.createElement('ion-loading');
+  loading.spinner = "crescent";
+  loading.cssClass = "loading";
+  loading.mode = "ios";
+  document.body.appendChild(loading);
+  loading.present();
+
   getUserReport(user.username, data).then((apiResponse) => {
     if (apiResponse.data.report.data !== undefined) {
       const arr = new Uint8Array(apiResponse.data.report.data);
       const blob = new Blob([arr], { type: 'application/pdf' });
       const docUrl = URL.createObjectURL(blob);
 
-      if (!isPlatform('android') && !isPlatform('ios')) {
+      if ((isPlatform('desktop') && !isPlatform("cordova")) || isPlatform('mobileweb')) {
         window.open(docUrl);
+        loading.dismiss();
+        loading.remove();
       } else {
-        //view for mobile, might need name
         const reader = new FileReader();
 
         reader.addEventListener(
@@ -57,6 +62,8 @@ function view(data: any) {
               const result = reader.result as string;
               const pdfData = result.split(',')[1];
               downloadPDF(pdfData);
+              loading.dismiss();
+              loading.remove();
             }
           },
           false
@@ -64,6 +71,9 @@ function view(data: any) {
 
         reader.readAsDataURL(blob);
       }
+    }else{
+      loading.dismiss();
+      loading.remove();
     }
   });
 }

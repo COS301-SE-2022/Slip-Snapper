@@ -1,34 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ReportItem> should render component with props 1`] = `
-<ion-col>
-  <ion-card
-    color="primary"
+<ion-card
+  color="primary"
+  onClick={[Function]}
+>
+  <ion-card-header>
+    <ion-card-title>
+      Report 
+      18
+      :
+    </ion-card-title>
+    <ion-text>
+      19/9/2022 Weekly #18.pdf
+    </ion-text>
+  </ion-card-header>
+  <ion-item
+    color="tertiary"
+    lines="none"
     onClick={[Function]}
   >
-    <ion-card-header>
-      <ion-card-subtitle>
-        Report 
-        18
-         :
-      </ion-card-subtitle>
-      <ion-card-title>
-        19/9/2022 Weekly #18.pdf
-      </ion-card-title>
-    </ion-card-header>
-    <ion-item
-      color="tertiary"
+    <ion-button
+      color="secondary"
+      fill="solid"
       onClick={[Function]}
+      slot="end"
     >
-      <ion-button
-        color="secondary"
-        fill="solid"
-        onClick={[Function]}
-        slot="end"
-      >
-        View
-      </ion-button>
-    </ion-item>
-  </ion-card>
-</ion-col>
+      View
+    </ion-button>
+  </ion-item>
+</ion-card>
 `;

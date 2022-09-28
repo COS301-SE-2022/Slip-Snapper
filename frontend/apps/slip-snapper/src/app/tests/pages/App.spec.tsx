@@ -10,9 +10,10 @@ import Register from '../../pages/Register';
 //ReportTotal Imports
 import AddEntry from '../../pages/AddEntry';
 import ForgotPass from '../../pages/ForgotPass';
-import ProfileBarGraph from '../../components/ProfileBarGraph';
+import renderer from 'react-test-renderer';
 
 jest.mock('@ionic-native/file-opener/index', () => jest.fn());
+
 beforeEach(cleanup);
 test('renders without crashing', () => {
   const { baseElement } = render(<App />);
@@ -43,14 +44,10 @@ describe('Reports', () => {
     });
   });
 
-  it('Correctly renders the Reports page', () => {
-    const Component = render(<ViewReports />);
-
-    expect(Component.getByText('Profile'));
-    expect(Component.getByText('Home'));
-    expect(Component.getByText('Reports'));
-    expect(Component.getByText('Receipts'));
-    expect(Component.getByText('View Reports'));
+  const renderTree = (tree: JSX.Element) => renderer.create(tree);
+  it('should render component', () => {
+    expect(renderTree(<ViewReports 
+    />).toJSON()).toMatchSnapshot();
   });
 });
 
@@ -179,19 +176,28 @@ describe('Register', () => {
 
   test('Correctly renders user input', async () => {
     const Component = render(<Register />);
-    const usernameInput = await Component.findByTitle('username_Input');
-    const emailInput = await Component.findByTitle('email_Input');
-    const passwordInput = await Component.findByTitle('password_Input');
+    const usernameInput = await Component.findByTitle('Input Username');
+    const emailInput = await Component.findByTitle('Input Email');
+    const passwordInput = await Component.findByTitle('Input Password');
+    const confirmPasswordInput = await Component.findByTitle('Input Confirmation');
+    const firstNameInput = await Component.findByTitle('Input First Name');
+    const lastNameInput = await Component.findByTitle('Input Last Name');
 
     fire.ionChange(usernameInput, 'Jane_Doe777');
     fire.ionChange(emailInput, 'example@gmail.com');
-    fire.ionChange(passwordInput, 'password123');
+    fire.ionChange(passwordInput, '@Ndrey123');
+    fire.ionChange(confirmPasswordInput, '@Ndrey123');
+    fire.ionChange(firstNameInput, 'kenan');
+    fire.ionChange(lastNameInput, 'devraj');
 
     expect(Component.findByText('Jane_Doe777'));
     expect(Component.findByText('example@gmail.com'));
-    expect(Component.findByText('password123'));
+    expect(Component.findByText('@Ndrey123'));
+    expect(Component.findByText('kenan'));
+    expect(Component.findByText('devraj'));
+
   });
-});
+ });
 
 describe('Forgot Password', () => {
   it('Correctly renders the forgot password page', () => {

@@ -51,47 +51,47 @@ async function sortItemsIntoCategories(itemList){
     let totals =  [{price:0, itemNum:0}]
     for(const item of itemList){
         totals[0].price += item.price
-        totals[0].itemNum += 1
+        totals[0].itemNum += item.quantity
         item.price = parseFloat(item.price).toFixed(2)
         switch (item.type) {
             case "Food": 
                 types.totals.Food[3] += parseFloat(item.price)
-                types.totals.Food[2] += 1
+                types.totals.Food[2] += item.quantity
                 types.Food.push(item);
                 break
             case "Electronics": 
                 types.totals.Electronics[3] += parseFloat(item.price)
-                types.totals.Electronics[2] += 1
+                types.totals.Electronics[2] += item.quantity
                 types.Electronics.push(item);
                 break
             case "Fashion": 
                 types.totals.Fashion[3] += parseFloat(item.price)
-                types.totals.Fashion[2] += 1
+                types.totals.Fashion[2] += item.quantity
                 types.Fashion.push(item);
                 break
             case "Household": 
                 types.totals.Household[3] += parseFloat(item.price)
-                types.totals.Household[2] += 1
+                types.totals.Household[2] += item.quantity
                 types.Household.push(item);
                 break
             case "Healthcare":
                  types.totals.Healthcare[3] += parseFloat(item.price)
-                 types.totals.Healthcare[2] += 1
+                types.totals.Healthcare[2] += item.quantity
                  types.Healthcare.push(item);
                  break
              case "Hobby":
                  types.totals.Hobby[3] += parseFloat(item.price)
-                 types.totals.Hobby[2] += 1
+                types.totals.Hobby[2] += item.quantity
                  types.Hobby.push(item);
                  break
              case "Vehicle":
                  types.totals.Vehicle[3] += parseFloat(item.price)
-                 types.totals.Vehicle[2] += 1
+                types.totals.Vehicle[2] += item.quantity
                  types.Vehicle.push(item);
                  break
             default: 
                 types.totals.Other[3] += parseFloat(item.price)
-                types.totals.Other[2] += 1
+                types.totals.Other[2] += item.quantity
                 types.Other.push(item);
         }
     }
@@ -505,6 +505,7 @@ router.post('/spreadsheet', async (req, res) => {
     const periodStart = await determinePeriodStart(period, periodEnd);
 
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
+    console.log(result)
     const name = "Report.xlsx";
 
     const spreadSheet = await generateSpreadsheet(name,result.itemList);

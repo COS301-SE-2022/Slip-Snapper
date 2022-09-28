@@ -160,9 +160,9 @@ describe('Post /item', ()=>{
 
     test('should save the item to the database', async ()=>{
         const bodydata = [
-            { userId: 1, location:"location1", date:"date1", total: 0, data: [{ item: "name1", itemQuantities: 1, itemPrices: 1, itemType: "type1", slipId: -1 }]},
-            { userId: 2, location:"location2", date:"date2", total: 0, data: [{ item: "name2", itemQuantities: 2, itemPrices: 2, itemType: "type2", slipId: -1 }]},
-            { userId: 3, location:"location3", date:"date3", total: 0, data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]},
+            { userId: 1, location:"Location1", date:"date1", total: 0, data: [{ item: "name1", itemQuantities: 1, itemPrices: 1, itemType: "type1", slipId: -1 }]},
+            { userId: 2, location:"Location2", date:"date2", total: 0, data: [{ item: "name2", itemQuantities: 2, itemPrices: 2, itemType: "type2", slipId: -1 }]},
+            { userId: 3, location:"Location3", date:"date3", total: 0, data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]},
         ]
 
         for (const body of bodydata){
@@ -213,10 +213,9 @@ describe('Post /item', ()=>{
             const res = await request(app)
                 .post('/api/item')
                 .send(
-                    { userId: 1, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
+                    { userId: 1, location:"Location3", date:"date3",total: 0, data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
                 )
                 .set({ "Authorization": "Bearer " + token })
-
             expect(res.body.numItems).toEqual(1);
             expect(res.body.message).toEqual("Item/s has been added");
         }
@@ -237,7 +236,7 @@ describe('Post /item', ()=>{
         const res = await request(app)
             .post('/api/item')
             .send(
-                { userId: 1, location:"location3", date:"date3", data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
+                { userId: 1, location:"location3", date:"date3", total: 0, data: [{ item: "name3", itemQuantities: 3, itemPrices: 3, itemType: "type3", slipId: -1 }]}
             )
             .set({ "Authorization": "Bearer " + token })
 
@@ -258,9 +257,9 @@ describe('Patch /item', ()=>{
 
     test('should save the item to the database', async ()=>{
         const bodydata = [
-            { itemId: 1, itemname: "name1", itemprice: 1, itemquantity: 1, itemtype: "type1" },
-            { itemId: 1, itemname: "name2", itemprice: 2, itemquantity: 2, itemtype: "type2" },
-            { itemId: 1, itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" },
+            { itemId: 1, itemname: "name1", itemprice: "1.00", itemquantity: 1, itemtype: "type1" },
+            { itemId: 1, itemname: "name2", itemprice: "2.00", itemquantity: 2, itemtype: "type2" },
+            { itemId: 1, itemname: "name3", itemprice: "3.00", itemquantity: 3, itemtype: "type3" },
         ]
 
         //let data = { itemname: "name", itemprice: 1, itemquantity: 1, itemtype: "type" }
@@ -274,7 +273,7 @@ describe('Patch /item', ()=>{
                     itemName: "name",
                     type: "type",
                     quantity: 1,
-                    price: 111111,
+                    price: "111111",
                 }
             });
 
@@ -286,6 +285,7 @@ describe('Patch /item', ()=>{
             });
 
             const res = await request(app)
+
                 .patch('/api/item')
                 .send(
                     body
@@ -304,7 +304,7 @@ describe('Patch /item', ()=>{
                 itemName: "name",
                 type: "type",
                 quantity: 1,
-                price: 111111,
+                price: "111111",
             }
         for (let i = 0; i < 10; i++){
             updateItem.mockReset();
@@ -315,7 +315,7 @@ describe('Patch /item', ()=>{
                     itemName: "name",
                     type: "type",
                     quantity: 1,
-                    price: 111111,
+                    price: "111111",
                 }
             });
 
@@ -329,7 +329,7 @@ describe('Patch /item', ()=>{
             const res = await request(app)
                 .patch('/api/item')
                 .send(
-                    { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
+                    { itemId: 1,  itemname: "name3", itemprice: "3.00", itemquantity: 3, itemtype: "type3" }
                 )
                 .set({ "Authorization": "Bearer " + token })
 
@@ -359,7 +359,7 @@ describe('Patch /item', ()=>{
         const res = await request(app)
             .patch('/api/item')
             .send(
-                { itemId: 1, data: { itemname: "name3", itemprice: 3, itemquantity: 3, itemtype: "type3" }}
+                { itemId: 1, itemname: "name3", itemprice: "3.00", itemquantity: 3, itemtype: "type3" }
             )
             .set({ "Authorization": "Bearer " + token })
 
@@ -395,7 +395,7 @@ describe('Delete /item', ()=>{
                     itemName: "name",
                     type: "type",
                     quantity: 1,
-                    price: 111111,
+                    price: "111111",
                 }
             });
 
@@ -424,7 +424,7 @@ describe('Delete /item', ()=>{
             itemName: "name",
             type: "type",
             quantity: 1,
-            price: 111111,
+            price: "111111",
         }
         
         for (let i = 0; i < 10; i++){
@@ -436,7 +436,7 @@ describe('Delete /item', ()=>{
                     itemName: "name",
                     type: "type",
                     quantity: 1,
-                    price: 111111,
+                    price: "111111",
                 }
             });
 
@@ -454,7 +454,6 @@ describe('Delete /item', ()=>{
                 )
                 .set({ "Authorization": "Bearer " + token })
 
-            expect(res.body.item).toEqual(data);
             expect(res.body.message).toEqual("Item has been deleted");
         }
     })
@@ -590,9 +589,9 @@ describe('Post /item/slip', ()=>{
 
     test('should update all the items in the database', async ()=>{
         const bodyData = [
-            {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}},
-            {userId:2, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}},
-            {userId:3, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+        {userId:1, updateSlip:{text:['2022/09/25','Store']}, insertItems:{}, updateItems:{}, removeItems:{}},
+            {userId:2, updateSlip:{text:['2022/09/25','Store']}, insertItems:{}, updateItems:{}, removeItems:{}},
+            {userId:3, updateSlip:{text:['2022/09/25','Store']}, insertItems:{}, updateItems:{}, removeItems:{}}
         ]
 
         for (const body of bodyData){
@@ -643,7 +642,7 @@ describe('Post /item/slip', ()=>{
             const res = await request(app)
                 .patch('/api/item/slip')
                 .send(
-                    {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+                    {userId:1, updateSlip:{text:['2022/09/25','Store']}, insertItems:{}, updateItems:{}, removeItems:{}}
                 )
                 .set({ "Authorization": "Bearer " + token })
 
@@ -667,7 +666,7 @@ describe('Post /item/slip', ()=>{
         const res = await request(app)
             .patch('/api/item/slip')
             .send(
-                {userId:1, updateSlip:{text:[]}, insertItems:{}, updateItems:{}, removeItems:{}}
+                {userId:1, updateSlip:{text:['2022/09/25','Store']}, insertItems:{}, updateItems:{}, removeItems:{}}
             )
             .set({ "Authorization": "Bearer " + token })
 

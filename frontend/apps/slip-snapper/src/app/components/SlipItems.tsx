@@ -1,4 +1,4 @@
-import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonLabel, IonSearchbar, IonToggle, IonDatetime, IonIcon, useIonToast, IonButtons, IonContent, IonHeader, IonModal, IonRadio, IonRadioGroup, IonToolbar, IonFab, IonFabButton, IonCardSubtitle } from '@ionic/react';
+import { IonTitle, IonButton, IonCard, IonItem, IonAlert, IonCardHeader, IonLabel, IonSearchbar, IonToggle, IonDatetime, IonIcon, IonButtons, IonContent, IonHeader, IonModal, IonToolbar, IonFab, IonFabButton } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import { getAllSlips, deleteSlip } from '../../api/apiCall';
 import '../theme/slip-items.css';
@@ -17,6 +17,13 @@ const SlipItems: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
 
     useEffect(() => {
+        const loading = document.createElement('ion-loading');
+        loading.spinner = "crescent";
+        loading.cssClass = "loading";
+        loading.mode = "ios";
+        document.body.appendChild(loading);
+        loading.present();
+
         getAllSlips()
             .then(
                 apiResponse => {
@@ -26,6 +33,11 @@ const SlipItems: React.FC = () => {
                         setOriginalSlips(apiResponse.data.slips)
                         setSlipItems(apiResponse.data.slips)
                         checkEmptySlips(apiResponse.data.slips)
+                        loading.dismiss();
+                        loading.remove();
+                    }else{
+                        loading.dismiss();
+                        loading.remove();
                     }
                 })
     }, []);
@@ -128,7 +140,20 @@ const SlipItems: React.FC = () => {
                                         text: 'Delete',
                                         cssClass: 'toasts',
                                         handler: async () => {
-                                            await deleteSlip(deleteAlert.id)
+                                            const loading = document.createElement('ion-loading');
+                                            loading.spinner = "crescent";
+                                            loading.cssClass = "loading";
+                                            loading.mode = "ios";
+                                            document.body.appendChild(loading);
+                                            loading.present();
+
+                                            await deleteSlip(deleteAlert.id).then(apiResonse =>{
+                                                loading.dismiss();
+                                                loading.remove();
+                                            }).catch(err => {
+                                                loading.dismiss();
+                                                loading.remove();
+                                            })
                                             getAllSlips()
                                                 .then(
                                                     apiResponse => {
@@ -165,7 +190,7 @@ const SlipItems: React.FC = () => {
                         <IonButtons slot="end">
                             <IonButton onClick={() => {
                                 returnToDefault()
-                            }}>restore to default</IonButton>
+                            }}>set to default</IonButton>
                             <IonButton onClick={() => {
                                 setIsOpenSearch(false); filter();
                             }}>Apply</IonButton>
@@ -220,7 +245,7 @@ const SlipItems: React.FC = () => {
 
     function filter() {
 
-        for (let i = 0; i < slipItems.length; i++) {
+        for (let i = 0; i < slipItems?.length; i++) {
             const temp = document.getElementById("slipItem" + i)
             if (temp !== null)
                 temp.style.display = "block";
@@ -244,7 +269,7 @@ const SlipItems: React.FC = () => {
     function searchFilter(searchText: string | undefined) {
 
         if (searchText !== undefined) {
-            for (let i = 0; i < slipItems.length; i++) {
+            for (let i = 0; i < slipItems?.length; i++) {
                 if (!slipItems[i].location.toLowerCase().includes(searchText.toLowerCase())) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -291,7 +316,7 @@ const SlipItems: React.FC = () => {
         const toDate = filterDateTo.split('T')[0].replace(/-/gi, "/")
 
         if (fromDate !== "" && fromDate !== undefined) {
-            for (let i = 0; i < originalSlips.length; i++) {
+            for (let i = 0; i < originalSlips?.length; i++) {
                 if (fromDate > originalSlips[i].transactionDate) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -301,7 +326,7 @@ const SlipItems: React.FC = () => {
         }
 
         if (toDate !== "" && toDate !== undefined) {
-            for (let i = 0; i < originalSlips.length; i++) {
+            for (let i = 0; i < originalSlips?.length; i++) {
                 if (toDate < originalSlips[i].transactionDate) {
                     const temp = document.getElementById("slipItem" + i)
                     if (temp !== null)
@@ -326,7 +351,7 @@ const SlipItems: React.FC = () => {
     }
 
     function totalFilter() {
-        for (let i = 0; i < originalSlips.length; i++) {
+        for (let i = 0; i < originalSlips?.length; i++) {
 
             if (value[1] === 5000) {
                 if (value[0] > originalSlips[i].total) {

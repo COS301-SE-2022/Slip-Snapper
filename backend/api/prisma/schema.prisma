@@ -14,7 +14,7 @@ model User {
   id            Int       @id @default(autoincrement())
   username      String    @unique
   firstname     String
-  email         String    @default("")
+  email         String    @unique
   lastname      String
   weeklyBudget  Float     @default(0)
   monthlyBudget Float     @default(0)

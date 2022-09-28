@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonIcon, IonAlert, IonModal, IonFab, IonFabButton, IonSelect, IonSelectOption } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import AddCircleOutlineIcon  from '@mui/icons-material/AddCircleOutline';
@@ -23,17 +23,31 @@ const EditSlip: React.FC = () => {
     const [alertMessage, setAlertMes] = useState("");
     const [showImage, setShowImage] = useState(false);
 
-    const handleCostsChange = (event: any) => {
-        const _tempCosts = [...items];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setItems(_tempCosts);
+    const [total, setTotal] = useState(0);
+
+
+    function handleCostsChange(lastItem: boolean) {
+        getData()
+        let total = 0;
+
+        if (lastItem) {
+            for (let i = 0; i < items.length - 1; i++) {
+                total += Number(items[i].price)
+            }
+        }
+        else {
+            for (let i = 0; i < items.length; i++) {
+                total += Number(items[i].price)
+            }
+        }
+        setTotal(total)
+        return total
+
     };
     const getTotalCosts = () => {
         return items.reduce((total: number, item: { price: any; }) => {
             return total + Number(item.price);
+
         }, 0);
     };
     
@@ -59,14 +73,14 @@ const EditSlip: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput value={location} onIonChange={e => setLocation(e.detail.value!)} id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput value={location} onIonChange={e => { getData(); setLocation(e.detail.value!)}} id={"Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
                         <div color="primary">
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonDatetime value={slipDate} onIonChange={e => setSlipDate(e.detail.value!) } displayFormat='DD/MM/YYYY' id={"date"}/>
+                                    <IonDatetime value={slipDate} onIonChange={e => { getData(); setSlipDate(e.detail.value!)}} displayFormat='DD/MM/YYYY' id={"date"}/>
                                     <IonIcon icon={calendarOutline} slot="end"/>
                                 </IonItem>
                             </IonCardTitle>
@@ -110,7 +124,7 @@ const EditSlip: React.FC = () => {
                                         <IonLabel className='labels' style={index>0?{display:"none"}:{}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={() => { handleCostsChange(false) }} id={index + "/price"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -204,6 +218,9 @@ const EditSlip: React.FC = () => {
         else {
             data.splice(index, 1)
             setItems(data)
+            if (index === items.length)
+                handleCostsChange(true)
+            else { handleCostsChange(true) }
         }
     }
     function getData() {
@@ -226,7 +243,7 @@ const EditSlip: React.FC = () => {
 
     }
 
-    function validateData() {
+    async function validateData() {
         if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Store Name to continue.")
             setShowAlert(true)
@@ -266,9 +283,22 @@ const EditSlip: React.FC = () => {
         }
         const data = {
             text: [date, storeName, "", "", total]
-        };
+        };  
 
-        addItemsA(data, items)
+        const loading = document.createElement('ion-loading');
+        loading.spinner = "crescent";
+        loading.cssClass = "loading";
+        loading.mode = "ios";
+        document.body.appendChild(loading);
+        loading.present();
+        
+        await addItemsA(data, items).then(apiResponse => {
+            loading.dismiss();
+            loading.remove();
+        }).catch(err =>{
+            loading.dismiss();
+            loading.remove();
+        })
         const button = document.getElementById("successRedirect")
         if (button) {
             button.click();

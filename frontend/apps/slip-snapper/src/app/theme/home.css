@@ -1,12 +1,24 @@
 .takePicture{
     left:50%;
 }
+
 .addEntry{
     left: 53%;
 }
+
 .successRedirect {
     display: none;
 }
+
+.reports-wrapper{
+    padding: 5px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: center;
+}
+
 .graph-card{
     min-width: 30%;
     padding: 2%;
@@ -25,4 +37,60 @@
 
 .footer-home{
     padding-top: 60px;
+}
+
+.home-card-title{
+    font-size: x-large;
+}
+
+.home-info-text{
+    padding: 2px;
+}
+
+.home-error-message{
+    text-align: center;
+}
+
+.error-wrapper {
+    margin: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.expense-wrapper {
+    min-width: 30%;
+    padding: 5px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    justify-content: center;
+}
+
+.expense-cards{
+    min-width: 48%;
+}
+
+@media screen and (max-width: 420px) {
+    .home-card-title{
+        font-size: large;
+    }
+
+    .graph-card{
+        width: 90%;
+    }
+
+    .home-error-message{
+        font-size: large;
+    }
+
+    .expense-cards{
+        width: 90%;
+    }
+
+    .reports-wrapper{
+        flex-wrap: wrap;
+    }
 }

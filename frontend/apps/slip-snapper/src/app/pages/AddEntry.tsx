@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonRow, IonIcon, IonAlert, useIonToast, IonSelectOption, IonSelect } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonItem, IonButton, IonCard, IonFooter, IonGrid, IonCardHeader, IonCardTitle, IonCol, IonInput, IonLabel, IonIcon, IonAlert, useIonToast, IonSelectOption, IonSelect } from '@ionic/react';
 import React, { useState } from 'react';
 import { Chip } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -10,21 +10,32 @@ import { NavButtons } from '../components/NavButtons';
 import { addItemsA } from '../../api/apiCall';
 
 const AddEntry: React.FC = () => {
-    const [items, setItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
+    const [addEntryItem, setAddEntryItems] = useState([{ item: "", quantity: 1, price: "0.00", type: "" }]);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMes] = useState("");
     const [present, dismiss] = useIonToast();
+    const [total, setTotal] = useState(0);
 
-    const handleCostsChange = (event: any) => {
-        const _tempCosts = [...items];
-        let temp = event.target.id
-        temp = temp.substring(0, 1)
-        _tempCosts[temp].price = event.target.value
-        getData();
-        setItems(_tempCosts);
+    function handleCostsChange(lastItem: boolean) {
+        getData()
+        let total = 0;
+
+        if (lastItem) {
+            for (let i = 0; i < addEntryItem.length - 1; i++) {
+                total += Number(addEntryItem[i].price)
+            }
+        }
+        else {
+            for (let i = 0; i < addEntryItem.length; i++) {
+                total += Number(addEntryItem[i].price)
+            }
+        }
+        setTotal(total)
+        return total
+
     };
     const getTotalCosts = () => {
-        return items.reduce((total, item) => {
+        return addEntryItem.reduce((total, item) => {
             return total + Number(item.price);
 
         }, 0);
@@ -47,7 +58,7 @@ const AddEntry: React.FC = () => {
                         <div color="primary">
                             <IonCardTitle className="store elem">Location:
                                 <IonItem className='addEntry' color="tertiary">
-                                    <IonInput id={"Store_Name"} contentEditable="true"></IonInput>
+                                    <IonInput id={"addEntry_Store_Name"} contentEditable="true"></IonInput>
                                 </IonItem>
                             </IonCardTitle>
                         </div>
@@ -55,7 +66,7 @@ const AddEntry: React.FC = () => {
                             <IonCardTitle className="date elem">Date:
                                 <IonItem className='addEntry' color="tertiary">
                                     <IonIcon icon={calendarOutline} slot="end" />
-                                    <IonDatetime displayFormat='YYYY/MM/DD' id={"date"} />
+                                    <IonDatetime displayFormat='YYYY/MM/DD' id={"addEntryDate"} />
                                 </IonItem>
                             </IonCardTitle>
                         </div>
@@ -65,7 +76,7 @@ const AddEntry: React.FC = () => {
                         <IonCardTitle>Edit Details</IonCardTitle>
                     </IonCardHeader>
 
-                    {items.map((item: any, index: number) => {
+                    {addEntryItem.map((item: any, index: number) => {
                         return (
                             <IonGrid key={index}>
                                 <div className='wrapper small-chip'>
@@ -80,8 +91,8 @@ const AddEntry: React.FC = () => {
                                     <IonCol className='item-col elem'>
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Description</IonLabel>
                                         <IonLabel className='extra-labels'>Description</IonLabel>
-                                        <IonItem data-testid={index + "/item"} color="tertiary" className='inputs'>
-                                            <IonInput  id={index + "/item"} value={item.item}></IonInput>
+                                        <IonItem data-testid={index + "/addEntryItem"} color="tertiary" className='inputs'>
+                                            <IonInput  id={index + "/addEntryItem"} value={item.item}></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -89,7 +100,7 @@ const AddEntry: React.FC = () => {
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Quantity</IonLabel>
                                         <IonLabel className='extra-labels'>Quantity</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' id={index + "/quantity"} value={item.quantity}  ></IonInput>
+                                            <IonInput type='number' id={index + "/addEntryQuantity"} value={item.quantity}  ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -97,7 +108,7 @@ const AddEntry: React.FC = () => {
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Price</IonLabel>
                                         <IonLabel className='extra-labels'>Price</IonLabel>
                                         <IonItem color="tertiary" className='inputs'>
-                                            <IonInput type='number' onIonChange={handleCostsChange} id={index + "/price"} value={item.price} ></IonInput>
+                                            <IonInput type='number' onIonChange={() => { handleCostsChange(false) }} id={index + "/addEntryPrice"} value={item.price} ></IonInput>
                                         </IonItem>
                                     </IonCol>
 
@@ -105,7 +116,7 @@ const AddEntry: React.FC = () => {
                                         <IonLabel className='labels' style={index > 0 ? { display: "none" } : {}}>Type</IonLabel>
                                         <IonLabel className='extra-labels'>Type</IonLabel>
                                         <IonItem color="tertiary" className="select-options">
-                                            <IonSelect id={index + "/type"} interface="popover" placeholder='Select Category' value={item.type}>
+                                            <IonSelect id={index + "/addEntryType"} interface="popover" placeholder='Select Category' value={item.type}>
                                                 <IonSelectOption>Electronics</IonSelectOption>
                                                 <IonSelectOption>Fashion</IonSelectOption>
                                                 <IonSelectOption>Food</IonSelectOption>
@@ -141,7 +152,7 @@ const AddEntry: React.FC = () => {
                     </IonCardHeader>
 
                     <IonCardHeader className="wrapper">
-                        <IonItem id={"total"} className='addEntry' color="tertiary">
+                        <IonItem id={"addEntryTotal"} className='addEntry' color="tertiary">
                             {getTotalCosts().toFixed(2)}
                         </IonItem>
                     </IonCardHeader>
@@ -161,64 +172,67 @@ const AddEntry: React.FC = () => {
 
     function addItem() {
         getData()
-        setItems([...items, { item: "", quantity: 1, price: "0.00", type: "" }])
+        setAddEntryItems([...addEntryItem, { item: "", quantity: 1, price: "0.00", type: "" }])
     }
     function removeItem(index: number) {
         getData()
-        const data = [...items];
+        const data = [...addEntryItem];
         if (data.length === 1) {
             setAlertMes("A receipt needs to have at least one item.")
             setShowAlert(true);
         }
         else {
             data.splice(index, 1)
-            setItems(data)
+            setAddEntryItems(data)
+            if (index === addEntryItem.length)
+                handleCostsChange(true)
+            else { handleCostsChange(true) }
         }
     }
 
     function getData() {
-        for (let i = 0; i < items.length; i++) {
-            const n = document.getElementById(i + "/item")?.getElementsByTagName("input")[0].value
-            const q = document.getElementById(i + "/quantity")?.getElementsByTagName("input")[0].value
-            const p = document.getElementById(i + "/price")?.getElementsByTagName("input")[0].value
-            const t = document.getElementById(i + "/type")?.getElementsByTagName("input")[0].value
+        for (let i = 0; i < addEntryItem.length; i++) {
+            const n = document.getElementById(i + "/addEntryItem")?.getElementsByTagName("input")[0].value
+            const q = document.getElementById(i + "/addEntryQuantity")?.getElementsByTagName("input")[0].value
+            const p = document.getElementById(i + "/addEntryPrice")?.getElementsByTagName("input")[0].value
+            const t = document.getElementById(i + "/addEntryType")?.getElementsByTagName("input")[0].value
 
             if (n !== undefined) {
-                items[i].item = n
+                addEntryItem[i].item = n
             } if (q !== undefined) {
-                items[i].quantity = Number(q)
+                addEntryItem[i].quantity = Number(q)
             } if (p !== undefined) {
-                items[i].price = p
+                addEntryItem[i].price = p
             } if (t !== undefined) {
-                items[i].type = t
+                addEntryItem[i].type = t
             }
         }
     }
 
     function validateData() {
-        if (document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value === "") {
+        if (document.getElementById("addEntry_Store_Name")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Store Location to continue.")
             setShowAlert(true)
             return
         }
-        if (document.getElementById("date")?.getElementsByTagName("input")[0].value === "") {
+        if (document.getElementById("addEntryDate")?.getElementsByTagName("input")[0].value === "") {
             setAlertMes("Please enter a Date to continue.")
             setShowAlert(true)
             return
         }
 
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].item === "" ||
-                items[i].type === "" ||
-                !Number.isInteger(items[i].quantity) ||
-                Math.sign(items[i].quantity) !== 1 ||
-                items[i].price === "") {
+        for (let i = 0; i < addEntryItem.length; i++) {
+            if (addEntryItem[i].item === "" ||
+                addEntryItem[i].type === "" ||
+                !Number.isInteger(addEntryItem[i].quantity) ||
+                Math.sign(addEntryItem[i].quantity) !== 1 ||
+                addEntryItem[i].price === "") {
                 setAlertMes("Please complete all fields for item #" + (i + 1) + " to continue.")
                 setShowAlert(true)
                 return
             }
 
-            if (Number(items[i].price) < 0 || items[i].price.includes('e'))
+            if (Number(addEntryItem[i].price) < 0 || addEntryItem[i].price.includes('e'))
             {
                 setAlertMes("Please enter a valid price at item #" + (i + 1) + ".")
                 setShowAlert(true)
@@ -226,9 +240,9 @@ const AddEntry: React.FC = () => {
             }
         }
 
-        const storeName = document.getElementById("Store_Name")?.getElementsByTagName("input")[0].value
-        const date = document.getElementById("date")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
-        const tempTotal = document.getElementById("total")?.innerHTML
+        const storeName = document.getElementById("addEntry_Store_Name")?.getElementsByTagName("input")[0].value
+        const date = document.getElementById("addEntryDate")?.getElementsByTagName("input")[0].value.split('T')[0].replace(/-/gi, "/")
+        const tempTotal = document.getElementById("addEntryTotal")?.innerHTML
         let total = 0.00;
         if (tempTotal !== undefined) {
             total = parseFloat(tempTotal)
@@ -236,11 +250,11 @@ const AddEntry: React.FC = () => {
         const data = {
             text: [date, storeName, "", "", total]
         };
-        for(let a = 0 ; a<items.length;a++)
+        for (let a = 0; a < addEntryItem.length;a++)
         {
-            items[a].price = Number(items[a].price).toFixed(2)
+            addEntryItem[a].price = Number(addEntryItem[a].price).toFixed(2)
         }
-        addItemsA(data, items)
+        addItemsA(data, addEntryItem)
         clearData()
         const button = document.getElementById("cancelButton")
         if (button) {
@@ -250,9 +264,9 @@ const AddEntry: React.FC = () => {
     }
 
     function clearData() {
-        setItems([{ item: "", quantity: 1, price: "0.00", type: "" }]);
-        document.getElementById("Store_Name")!.getElementsByTagName("input")[0].value = "";
-        document.getElementById("date")!.getElementsByTagName("input")[0].value = "";
+        setAddEntryItems([{ item: "", quantity: 1, price: "0.00", type: "" }]);
+        document.getElementById("addEntry_Store_Name")!.getElementsByTagName("input")[0].value = "";
+        document.getElementById("addEntryDate")!.getElementsByTagName("input")[0].value = "";
     }
 }
 
