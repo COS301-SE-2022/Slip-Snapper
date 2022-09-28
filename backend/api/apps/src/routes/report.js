@@ -19,14 +19,10 @@ async function determinePeriodStart( period ){
             var day = date.getDay(),
                 diff = date.getDate() - day + (day == 0 ? -6 : 1);
             let monday = new Date(date.setDate(diff));
-            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-               
-            case "Monthly":
-                date.setDate(1)
-                return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-        // case "Yearly":
-        //     d.setFullYear(date.getFullYear() - 1);
-        //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")   
+        case "Monthly":
+            date.setDate(1)
+            return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     }
 }
  
@@ -118,12 +114,13 @@ async function generatePDF(name, object, today, period){
     let pdf = new PDFDocument;
     pdf.pipe(fs.createWriteStream(name));
     const xcoord = pdf.x;
-    await pdf.image(__dirname + '/assets/maskable_icon.png', 240, 50, {fit:[150,150], align:'center'});
+    await pdf.image(__dirname + '/assets/maskable_icon.png', 240, 60, {fit:[150,150], align:'center'});
     const pdfTitle = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
-    pdf.fontSize(20).text(pdfTitle,xcoord,210,{align:'center'}); 
+    pdf.fontSize(20).text(pdfTitle,xcoord,50,{align:'center'}); 
     pdf.y= 240;
 
     const types = object.types
+
     const table = { 
         title: `Report Statistics`,
         headers: [
@@ -133,10 +130,14 @@ async function generatePDF(name, object, today, period){
         datas: object.totals,
     }
     await pdf.table(table);
-
+    
+    pdf.y= 310;
     let pdfTotal = 0
     for (const key in types){
         if(types.hasOwnProperty(key) && types[key].length > 0){
+            if(pdf.y > 650){
+                await pdf.addPage()
+            }
             const subTable = { 
                 title: `${key} Items`,
                 headers: [
