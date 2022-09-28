@@ -71,6 +71,7 @@ const ViewReports: React.FC = () => {
         setReports(apiResponse.data.reports);
         checkEmptyReports(apiResponse.data.reports)
         orderReports(reports)
+        
         loading.dismiss();
         loading.remove();
       }else{
