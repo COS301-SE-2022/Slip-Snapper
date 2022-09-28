@@ -109,7 +109,6 @@ const Login: React.FC = () => {
               setAlert(true)
             }
             else {
-              //Change user local storage item
               localStorage.removeItem('user')
               localStorage.setItem('user', JSON.stringify(apiResponse.data.userData))
               sessionStorage.setItem('token', JSON.stringify(apiResponse.data.token))

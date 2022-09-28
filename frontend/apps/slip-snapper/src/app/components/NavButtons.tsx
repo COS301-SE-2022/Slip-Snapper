@@ -8,12 +8,13 @@ import { useHistory } from "react-router-dom";
 export const NavButtons = () => {
 
   const history =useHistory();
-  //Media Query State
+
+  /*Media Query State*/
   const [mQuery, setMQuery] = React.useState<any>({
     matches: window.innerWidth > 768 ? true : false,
   });
 
-  //Update state based on screen size
+  /*Update state based on screen size*/
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     mediaQuery.onchange = (e) => {

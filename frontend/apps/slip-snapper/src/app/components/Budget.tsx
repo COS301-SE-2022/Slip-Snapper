@@ -14,16 +14,14 @@ import Filter7Icon from '@mui/icons-material/Filter7Outlined';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { getProfileData, setGeneralBudget } from "../../api/apiCall"
 
-
 export let globalCategoryBudgets: any
 let globalCategorySpent: any, globalRenderedBudgets: any, globalSetRenderedBudgets: any
-
 
 function Budget() {
 
     const [present, dismiss] = useIonToast();
 
-    //Alerts
+    /*Alerts*/
     const [food, setFood] = useState(false);
     const [fashion, setFashion] = useState(false);
     const [elec, setElec] = useState(false);
@@ -32,8 +30,6 @@ function Budget() {
     const [healthcare, setHealthCare] = useState(false);
     const [hobby, setHobby] = useState(false);
     const [vehicle, setVehicle] = useState(false);
-
-
     const [weeklyCategorySpent, setWeeklyCategorySpent] = useState({
         Food: 0,
         Fashion: 0,
@@ -45,7 +41,6 @@ function Budget() {
         Vehicle: 0
 
     });
-
     const [monthlyCategorySpent, setMonthlyCategorySpent] = useState({
         Food: 0,
         Fashion: 0,
@@ -58,7 +53,7 @@ function Budget() {
 
     });
 
-    //User Expenditure
+    /*User Expenditure*/
     const [categoryBudgets, setCategoryBudgets] = useState({
         FoodBudget:
         {
@@ -124,8 +119,6 @@ function Budget() {
     })
 
     globalCategoryBudgets = categoryBudgets;
-    // globalCategorySpent = weeklyCategorySpent;
-    // globalRenderedBudgets = renderedBudgets
     globalSetRenderedBudgets = setRenderedBudgets
 
     useEffect(() => {

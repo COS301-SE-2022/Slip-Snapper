@@ -12,7 +12,7 @@ import {
   IonList,
   IonToggle
 } from "@ionic/react";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getProfileData, setGeneralBudget } from '../../api/apiCall';
 import { updateBudgets, globalCategoryBudgets } from './Budget';
 
@@ -53,8 +53,8 @@ export const EditBudgets = () => {
   const [healthcareInterval, setHealthcareInterval] = useState(false);
 
 
-  //true for weekly
-  //false for monthly
+  /*true for weekly
+    false for monthly*/
   const budgetIntervals = [
     { name: 'Food', weekly: foodInterval, id: "foodInterval" },
     { name: 'Fashion', weekly: fashionInterval, id: "fashionInterval" },
