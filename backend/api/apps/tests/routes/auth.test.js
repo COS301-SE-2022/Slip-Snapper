@@ -4,7 +4,6 @@ const { makeApp } = require('../../src/index.js');
 const getUser = jest.fn();
 const addUser = jest.fn();
 const deleteUser = jest.fn();
-const updateUser = jest.fn();
 const verifyToken = jest.fn()
 const generateToken = jest.fn()
 const createFolder = jest.fn()
@@ -13,7 +12,6 @@ const app = makeApp({
   getUser,
   addUser,
   deleteUser,
-  updateUser
 },{},{
     verifyToken,
     generateToken,
@@ -282,137 +280,6 @@ describe('Post /user/login', ()=>{
         expect(res.statusCode).toEqual(200);
     })
 
-})
-
-/**
- * Test for the update user query
- */
-
-describe('Patch /user', ()=>{
-    const token = ""
-
-    beforeEach(()=>{
-        updateUser.mockReset();
-        verifyToken.mockReset();
-    })
-
-    test('should update the username and password in the database', async ()=>{
-        const bodydata = [
-            { userId: 1, data: "password1"},
-            { userId: 2, data: "password2"},
-            { userId: 3, data: "password3"}
-        ]
-
-        for (const body of bodydata){
-            updateUser.mockReset();
-            updateUser.mockResolvedValue({
-                message:"User updated succesfully",
-                user: {
-                    id: 1,
-                    email: 'johndoe@gmail.com',
-                    username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
-                    password: '20042',
-                    isBusiness: false
-                  }
-            });
-
-            verifyToken.mockReset();
-            verifyToken.mockResolvedValue({
-                user: {
-                    id: body.userId
-                }
-            });
-
-            const res = await request(app)
-                .patch('/api/user')
-                .send(
-                    body
-                )
-                .set({ "Authorization": "Bearer " + token })
-
-            expect(updateUser.mock.calls.length).toBe(1);
-            expect(updateUser.mock.calls[0][0]).toBe(body.userId);
-            //expect(updateUser.mock.calls[0][1]).toBe(body.data);
-        }
-        
-    })
-
-    test('should return a json object containing the user id ', async ()=>{
-        let body = {
-            id: 1,
-            email: 'johndoe@gmail.com',
-            username: 'johnny',
-            firstname: 'John',
-            lastname: 'Doe',
-            password: '20042',
-            isBusiness: false
-          }
-
-        for (let i = 0; i < 10; i++){
-            updateUser.mockReset();
-            updateUser.mockResolvedValue({
-                message:"User updated succesfully",
-                user: {
-                    id: 1,
-                    email: 'johndoe@gmail.com',
-                    username: 'johnny',
-                    firstname: 'John',
-                    lastname: 'Doe',
-                    password: '20042',
-                    isBusiness: false
-                  }
-            });
-
-            verifyToken.mockReset();
-            verifyToken.mockResolvedValue({
-                user: {
-                    id: 1
-                }
-            });
-
-            const res = await request(app)
-                .patch('/api/user')
-                .send(
-                    { username: "username1", password: "password1"}
-                )
-                .set({ "Authorization": "Bearer " + token })
-
-            //expect(res.body.userData).toEqual(body);
-            expect(res.body.message).toEqual("User updated succesfully");
-        }
-    })
-
-    test('should return a status code of 200', async ()=>{
-        updateUser.mockResolvedValue({
-            message:"User updated succesfully",
-            user: {
-                id: 1,
-                email: 'johndoe@gmail.com',
-                username: 'johnny',
-                firstname: 'John',
-                lastname: 'Doe',
-                password: '20042',
-                isBusiness: false
-              }
-        });
-
-        verifyToken.mockResolvedValue({
-            user: {
-                id: 1
-            }
-        });
-        
-        const res = await request(app)
-            .patch('/api/user')
-            .send(
-                { username: "username1", password: "password1"}
-            )
-            .set({ "Authorization": "Bearer " + token })
-
-        expect(res.statusCode).toEqual(200);
-    })
 })
 
 /**

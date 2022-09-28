@@ -9,24 +9,20 @@ const router = require("express").Router();
  * @param {*} period the user specified period
  * @returns the starting date of the period
  */
- async function determinePeriodStart(period, periodEnd){
-    var date = new Date();
+async function determinePeriodStart( period ){
+    let date = new Date();
     switch (period) {
         case "Daily":
-            return periodEnd;
+            return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/");
         case "Weekly":
             date.setDate(date.getDate())
             var day = date.getDay(),
                 diff = date.getDate() - day + (day == 0 ? -6 : 1);
             let monday = new Date(date.setDate(diff));
-            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-               
-            case "Monthly":
-                date.setDate(1)
-                return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-        // case "Yearly":
-        //     d.setFullYear(date.getFullYear() - 1);
-        //     return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()
+            return monday.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")   
+        case "Monthly":
+            date.setDate(1)
+            return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
     }
 }
  
@@ -101,6 +97,7 @@ async function sortItemsIntoCategories(itemList){
             types.totals[key][3] = parseFloat(types.totals[key][3]).toFixed(2)
         }
     }
+    totals[0].price = parseFloat(totals[0].price);
     return { 
         types,
         totals
@@ -118,12 +115,13 @@ async function generatePDF(name, object, today, period){
     let pdf = new PDFDocument;
     pdf.pipe(fs.createWriteStream(name));
     const xcoord = pdf.x;
-    await pdf.image(__dirname + '/assets/maskable_icon.png', 240, 50, {fit:[150,150], align:'center'});
+    await pdf.image(__dirname + '/assets/maskable_icon.png', 240, 60, {fit:[150,150], align:'center'});
     const pdfTitle = period + " Report for " + today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
-    pdf.fontSize(20).text(pdfTitle,xcoord,210,{align:'center'}); 
+    pdf.fontSize(20).text(pdfTitle,xcoord,50,{align:'center'}); 
     pdf.y= 240;
 
     const types = object.types
+
     const table = { 
         title: `Report Statistics`,
         headers: [
@@ -133,10 +131,14 @@ async function generatePDF(name, object, today, period){
         datas: object.totals,
     }
     await pdf.table(table);
-
+    
+    pdf.y= 310;
     let pdfTotal = 0
     for (const key in types){
         if(types.hasOwnProperty(key) && types[key].length > 0){
+            if(pdf.y > 650){
+                await pdf.addPage()
+            }
             const subTable = { 
                 title: `${key} Items`,
                 headers: [
@@ -275,7 +277,7 @@ router.post('/pdf', async (req,res)=>{
 
     const today = new Date();
     const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-    const periodStart = await determinePeriodStart(period, periodEnd);
+    const periodStart = await determinePeriodStart( period );
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
     const types = await sortItemsIntoCategories(result.itemList)
@@ -501,11 +503,10 @@ router.post('/spreadsheet', async (req, res) => {
     }
 
     const today = new Date();
-    const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
-    const periodStart = await determinePeriodStart(period, periodEnd);
+    const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/");
+    const periodStart = await determinePeriodStart( period );
 
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
-    console.log(result)
     const name = "Report.xlsx";
 
     const spreadSheet = await generateSpreadsheet(name,result.itemList);
