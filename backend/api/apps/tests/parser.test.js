@@ -1,6 +1,6 @@
 const parse = require("../textProcessor/text_parser/parser").parse
 
-jest.mock('../itemCategoriser/itemCategoriser');
+jest.mock('../itemCategoriser/categorizer');
 
 /**
  * Test for parsing scanned text

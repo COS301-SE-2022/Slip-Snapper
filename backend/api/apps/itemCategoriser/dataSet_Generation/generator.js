@@ -1,7 +1,6 @@
 const fs = require('fs')
 const csvParser = require('csv-parse');
 const csvWriter = require('csv-stringify');
-const { resolve } = require('path');
 
 // Original Data Sets
 // https://www.kaggle.com/datasets/lakritidis/product-classification-and-categorization?resource=download
@@ -23,11 +22,7 @@ async function findUniquesGroceries(){
             count.total++;
 
             const newElement = {
-                Date: element.Date,
                 Item: element.itemDescription,
-                Location: 'unknown',
-                Quantity: 1,
-                Price: 0.0,
                 Category: "Food"
             }
             allResults.push(newElement);
@@ -67,11 +62,7 @@ async function findUniquesPrice(){
             count.total++;
 
             const newElement = {
-                Date: 'unknown',
                 Item: element.Cluster,
-                Location: 'PriceRunner',
-                Quantity: 1,
-                Price: 0.0,
                 Category: element.Category
             }
             allResults.push(newElement);
@@ -115,11 +106,7 @@ async function findUniquesShop(){
             count.total++;
 
             const newElement = {
-                Date: 'unknown',
                 Item: element.ProductTitle,
-                Location: 'ShopMania',
-                Quantity: 1,
-                Price: 0.0,
                 Category: element.Category
             }
             allResults.push(newElement);
@@ -163,11 +150,7 @@ async function findUniquesSkrout(){
             count.total++;
 
             const newElement = {
-                Date: 'unknown',
                 Item: element.Cluster,
-                Location: 'Skroutz',
-                Quantity: 1,
-                Price: 0.0,
                 Category: element.Category
             }
             allResults.push(newElement);
@@ -295,7 +278,7 @@ async function updateCategories(){
             }
 
             if( healthCare.includes(allResults[i].Category) ){
-                allResults[i].Category = 'HealthCare'
+                allResults[i].Category = 'Healthcare'
                 continue;
             }
 
@@ -320,14 +303,40 @@ async function createDataSet(){
         
         const fileName = 'fullDataSet.csv';
         const file = fs.createWriteStream( fileName );
-        const columns = ['Date', 'Item', 'Location', 'Quantity', 'Price', 'Category'];
+        const columns = ['Item', 'Category'];
         const stringy = csvWriter.stringify( { header: true, columns: columns } );
-    
+        
+        let num = 0;
         for(const item of allResults){
-            stringy.write(item)
+            const ran = Math.random();
+
+            if( (item.Category == 'Other' || item.Category == 'Vehicle' || item.Category == 'Food') && ran < 0.5){
+                stringy.write(item);
+                num++;
+            }
+
+            if(( item.Category == 'Electronics' || item.Category == 'Healthcare' ) && ran < 0.025){
+                stringy.write(item);
+                num++;
+            }
+
+            if(( item.Category == 'Hobby') && ran < 0.02){
+                stringy.write(item);
+                num++;
+            }
+
+            if(( item.Category == 'Household') && ran < 0.01){
+                stringy.write(item);
+                num++;
+            }
+
+            if((item.Category == 'Fashion' ) && ran < 0.008){
+                stringy.write(item);
+                num++;
+            }
         }
         stringy.pipe(file)
-        console.log("Finished Creating Data Set");
+        console.log("Finished Creating Data Set. Items: ", num);
 
         resolve();
     })
