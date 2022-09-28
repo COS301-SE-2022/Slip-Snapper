@@ -55,22 +55,27 @@
 
 # SRS Documents
 ## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
-Architectural Structures are within the SRS Demo 2
 ## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
 ## [SRS Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214324/COS301_SRS_Anoobis_Demo3.pdf)
-## [SRS Demo 4]()
+## [SRS Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667743/COS301_SRS_Anoobis_Demo4.pdf)
+
+# Deployment Model
+## [Deployment Model](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667782/DeploymentDiagamAnoobis_Demo4.pdf)
 
 # User Manual
 ## [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
 ## [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
-## [User Manual Demo 4]()
+## [User Manual Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667752/Demo4_Anoobis_userManual.pdf)
 
 # Technical Installation Manual
 ## [Technical Installation Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214305/Demo3_Anoobis_Technical_Installation_Manual.pdf)
-## [Technical Installation Manual Demo 4]()
+## [Technical Installation Manual Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667768/Demo4_Anoobis_COS301_Technical_Installation_Manual.pdf)
 
 # Coding Standards
 ## [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
+
+# Testing Policy
+## [Testing Policy](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667756/Demo4_Anoobis_COS301_Testing_Policy.pdf)
 
 # Project Board
 ## [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
