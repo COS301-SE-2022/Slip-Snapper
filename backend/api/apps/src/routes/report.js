@@ -97,6 +97,7 @@ async function sortItemsIntoCategories(itemList){
             types.totals[key][3] = parseFloat(types.totals[key][3]).toFixed(2)
         }
     }
+    totals[0].price = parseFloat(totals[0].price);
     return { 
         types,
         totals
@@ -120,6 +121,7 @@ async function generatePDF(name, object, today, period){
     pdf.y= 240;
 
     const types = object.types
+    console.log(object.totals)
 
     const table = { 
         title: `Report Statistics`,
