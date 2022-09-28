@@ -9,11 +9,11 @@ const router = require("express").Router();
  * @param {*} period the user specified period
  * @returns the starting date of the period
  */
- async function determinePeriodStart(period, periodEnd){
-    var date = new Date();
+async function determinePeriodStart( period ){
+    let date = new Date();
     switch (period) {
         case "Daily":
-            return periodEnd;
+            return date.toISOString().substring(0, 10).replace("-", "/").replace("-", "/");
         case "Weekly":
             date.setDate(date.getDate())
             var day = date.getDay(),
@@ -275,7 +275,7 @@ router.post('/pdf', async (req,res)=>{
 
     const today = new Date();
     const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/")
-    const periodStart = await determinePeriodStart(period, periodEnd);
+    const periodStart = await determinePeriodStart( period );
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
 
     const types = await sortItemsIntoCategories(result.itemList)
@@ -501,11 +501,10 @@ router.post('/spreadsheet', async (req, res) => {
     }
 
     const today = new Date();
-    const periodEnd = today.getFullYear()+"/"+(today.getMonth()+1)+"/"+today.getDate()
-    const periodStart = await determinePeriodStart(period, periodEnd);
+    const periodEnd = today.toISOString().substring(0, 10).replace("-", "/").replace("-", "/");
+    const periodStart = await determinePeriodStart( period );
 
     const result = await req.app.get('db').getItemsReport(Number(tokenVerified.user.id), periodStart, periodEnd);
-    console.log(result)
     const name = "Report.xlsx";
 
     const spreadSheet = await generateSpreadsheet(name,result.itemList);
