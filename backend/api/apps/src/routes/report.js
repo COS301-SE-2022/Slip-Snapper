@@ -121,7 +121,6 @@ async function generatePDF(name, object, today, period){
     pdf.y= 240;
 
     const types = object.types
-    console.log(object.totals)
 
     const table = { 
         title: `Report Statistics`,
