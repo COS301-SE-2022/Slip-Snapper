@@ -3,73 +3,6 @@ const csv = require('csv');
 const tf = require('@tensorflow/tfjs-node');
 const vector = require('@tensorflow-models/universal-sentence-encoder');
 
-function randn_bm() {
-    return Math.floor( Math.random() * 6) - 3;
-}
-
-class Neuron {
-    constructor( i ){
-        this.inConnections = [];
-        this.outConnections = [];
-        this.bias = 0;
-        this.outValue = 0;
-        this.delta = 0;
-        this.error = 0;
-        this.index = i;
-    }
-
-    addInConnection(connection){
-        this.inConnections.push(connection);
-    }
-
-    addOutConnection(connection){
-        this.outConnections.push(connection);
-    }
-
-    setValue(val){
-        this.outValue = val;
-    }
-
-    setBias(val){
-        this.bias = val;
-    }
-
-    setError(val){
-        this.error = val;
-    }
-
-    setDelta(val){
-        this.delta = val;
-    }
-}
-
-class Connection{
-    constructor(neuronA, neuronB){
-        this.from = neuronA;
-        this.to = neuronB;
-        this.weight = randn_bm();
-        this.change = 0;
-    }
-
-    setWeight(val) {
-        this.weight = val;
-    }
-    
-    setChange(val) {
-        this.change = val;
-    }
-}
-
-class Layer{
-    constructor(numberOfNeurons){
-        this.numNeurons = numberOfNeurons;
-        this.neurons = [];
-        for(let i = 0; i < this.numNeurons; i++){
-            this.neurons[i] = new Neuron( i );
-        }
-    }
-}
-
 class Categoriser{
     constructor(){
         this.encoder = 0;
@@ -98,7 +31,13 @@ class Categoriser{
         }
         ////////////////////////////////////
     
-        return ret;
+        let testset = [];
+        let j = 0;
+        for(let i = 10000; i < items.length; i++){
+            testset[j++] = items[i];
+        }
+
+        return { items: ret, testset: testset}
     }
 
     async createModel(){
@@ -203,12 +142,16 @@ class Categoriser{
 
     async run(){
         const encoder = await vector.load();
-        const items = await this.getData();
+        const ret = await this.getData();
         await this.createModel();
+
+        console.log(ret.items.length)
+        console.log(ret.testset.length)
+
 
         const inputs = [];
         const outputs = [];
-        items.map((element) =>{ 
+        ret.items.map((element) =>{ 
             inputs.push(element.Item.toLowerCase()); 
             switch (element.Category.toLowerCase()) {
                 case 'food':
@@ -248,10 +191,69 @@ class Categoriser{
         this.train( inputTensor, outputTensor, 1000 )
     }
 
+    async testModel(){
+        await this.load();
+        const ret = await this.getData();
+
+        const inputs = [];
+        const outputs = [];
+        ret.testset.map((element) =>{ 
+            inputs.push(element.Item.toLowerCase()); 
+            switch (element.Category.toLowerCase()) {
+                case 'food':
+                    outputs.push([1,0,0,0,0,0,0,0])
+                    break;
+                case 'electronics':
+                    outputs.push([0,1,0,0,0,0,0,0])
+                    break;
+                case 'fashion':
+                    outputs.push([0,0,1,0,0,0,0,0])
+                    break;
+                case 'household':
+                    outputs.push([0,0,0,1,0,0,0,0])
+                    break;
+                case 'hobby':
+                    outputs.push([0,0,0,0,1,0,0,0])
+                    break;
+                case 'vehicle':
+                    outputs.push([0,0,0,0,0,1,0,0])
+                    break;
+                case 'healthcare':
+                    outputs.push([0,0,0,0,0,0,1,0])
+                    break;    
+                default:
+                    outputs.push([0,0,0,0,0,0,0,1])
+                    break;
+            }
+        });
+
+        const inputsEmbed = []
+        for(let i = 0; i< inputs.length; i++){
+            inputsEmbed[i] = (await(await this.encoder.embed(inputs[i])).array())[0];
+        }
+
+        const outputTensor = tf.tensor2d(outputs);
+        const inputTensor = tf.tensor2d(inputsEmbed).transpose();
+
+        const result = await this.forwardPropogate(inputTensor);
+
+        let predictions = await tf.argMax(result.A2.transpose(),1).array();
+        let actual = await tf.argMax(outputTensor,1).array();
+        let numCorrect = 0;
+        for(let i = 0; i < predictions.length; i++){
+            if(predictions[i] == actual[i]){
+                numCorrect++;
+            }
+        }
+
+        let accuracy = numCorrect / predictions.length;
+        console.log("Accuracy: %d %", accuracy*100)
+    }
+
     async load(){
         this.encoder = await vector.load();
 
-        fs.readFile(__dirname+'/weights5a.json', (err, val) => {
+        fs.readFile(__dirname+'/weights.json', (err, val) => {
             let data = JSON.parse(val);
             
             this.weightsItoH = tf.tensor2d(data[1].weights);
@@ -290,6 +292,7 @@ class Categoriser{
 
 const categoriser = new Categoriser();
 // categoriser.run();
+// categoriser.testModel();
 
 async function test(){
     await categoriser.load();
