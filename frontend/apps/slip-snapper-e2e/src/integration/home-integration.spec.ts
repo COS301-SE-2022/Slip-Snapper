@@ -1,11 +1,12 @@
 describe('Home page integration', () => {
   beforeEach(() => {
     cy.clearCookies();
+    cy.clearLocalStorage();
     cy.visit('http://localhost:4200');
     cy.get('input[ title="usernameInput"]').clear();
-    cy.get('input[ title="usernameInput"]').type('Regan');
+    cy.get('input[ title="usernameInput"]').type('IntUser');
     cy.get('input[title="passwordInput"]').clear();
-    cy.get('input[title="passwordInput"]').type('Password123');
+    cy.get('input[title="passwordInput"]').type('P@ssword1');
     cy.get('ion-button[type="submit"]').click();
   });
 
@@ -27,11 +28,12 @@ describe('Home page integration', () => {
 describe('Edit Page integration from Home', () => {
   beforeEach(() => {
     cy.clearCookies();
+    cy.clearLocalStorage();
     cy.visit('http://localhost:4200');
     cy.get('input[ title="usernameInput"]').clear();
-    cy.get('input[ title="usernameInput"]').type('Regan');
+    cy.get('input[ title="usernameInput"]').type('IntUser');
     cy.get('input[title="passwordInput"]').clear();
-    cy.get('input[title="passwordInput"]').type('Password123');
+    cy.get('input[title="passwordInput"]').type('P@ssword1');
     cy.get('ion-button[type="submit"]').click();
   });
 
