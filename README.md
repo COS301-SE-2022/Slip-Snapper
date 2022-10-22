@@ -50,7 +50,7 @@
 
 ### [User Manual, Installation Instructions, Tutorial](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-### [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki/Contributors)
 
 ### [Demo Recording Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
