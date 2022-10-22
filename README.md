@@ -47,90 +47,23 @@
 > The Slip Snapper is a cross-platform application that assists in managing an individual's expenses.
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and create comprehensive expense reports.
 
-# Demo Recordings
-## [Demo 1 Recording](https://drive.google.com/file/d/1F5nRM36T2q_Rkogoo7CNIZbtYbMClWut/view?usp=sharing)
-## [Demo 2 Recording](https://drive.google.com/file/d/1wLIFnKHJh7Q3rNDHcftW2L89lJFEFFai/view?usp=sharing)
-## [Demo 3 Recording](https://drive.google.com/file/d/1s150qzzVPPMcAO7Il2uKDYj3bjWAEDhM/view?usp=sharing)
-## [Demo 4 Recording](https://drive.google.com/file/d/1Z9DchY7JgmmcG3UBL4bMpmDoxcmQuoWA/view?usp=sharing)
+# [Demo Recordings](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# SRS Documents
-## [SRS Demo 1](https://github.com/COS301-SE-2022/Slip-Snapper/files/8682609/COS301_SRS_Anoobis.pdf)
-## [SRS Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874339/COS301_SRS_DEMO2.pdf)
-## [SRS Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214324/COS301_SRS_Anoobis_Demo3.pdf)
-## [SRS Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667743/COS301_SRS_Anoobis_Demo4.pdf)
+# [SRS Documents](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# Deployment Model
-## [Deployment Model](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667782/DeploymentDiagamAnoobis_Demo4.pdf)
+# [Deployment Model](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# User Manual
-## [User Manual Demo 2](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874370/COS301_userManual_DEMO2.pdf)
-## [User Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214320/Demo3_Anoobis_userManual.pdf)
-## [User Manual Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667752/Demo4_Anoobis_userManual.pdf)
+# [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# Technical Installation Manual
-## [Technical Installation Manual Demo 3](https://github.com/COS301-SE-2022/Slip-Snapper/files/9214305/Demo3_Anoobis_Technical_Installation_Manual.pdf)
-## [Technical Installation Manual Demo 4](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667768/Demo4_Anoobis_COS301_Technical_Installation_Manual.pdf)
+# [Technical Installation Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# Coding Standards
-## [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/files/8874348/COS301_Coding_Standards_DEMO2.pdf)
+# [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# Testing Policy
-## [Testing Policy](https://github.com/COS301-SE-2022/Slip-Snapper/files/9667756/Demo4_Anoobis_COS301_Testing_Policy.pdf)
+# [Testing Policy](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-# Project Board
-## [GitHub Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
+# [Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
-# Contributors
-
-## [Gabriel Grobler](https://github.com/Grobbies26) (Team Lead)
-
-<a href="https://linkedin.com/in/gabriel-grobler-865601238/" target="blank">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-
-> “The computer was born to solve problems that did not exist before.” - Bill Gates
-
-> I am currently a student at the University of Pretoria studying to get a BSc Computer Science. Problem solving is a passion of mine and by coding I naturally get to practice this skill of mine. I enjoy exploring the fields of Digital Forensics and Artificial Intelligence and these two fields are the reason I chose to study Computer Science. When I feel as though I cannot do something I spend the time necessary to add it to my skill set.
-
-
-## [Christian Devraj](https://github.com/KenanDevraj)
-
-<a href="https://linkedin.com/in/christian-devraj-240599229/" target="blank">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-
-> "A bug is never just a mistake. It represents something bigger. An error of thinking that makes you who you are." - Mr Robot
-
-> Software development has always been a passion of mine and in my first 2 years of BSc Computer Science, I have gained a lot of experience in front-end design and app development. I am currently in my final year, and I look forward to adding value to my Capstone Team through a dedicated and consistent work ethic. I always opt to learn new skills and programming languages, therefore in this project I have decided to challenge myself and work on implementing the hosting system for this project. I look forward to tackling the many obstacles this year and presenting a fully functional Capstone project.
-
-
-## [Tshego Manthata](https://github.com/SeePeeYou)
-
-<a href="https://linkedin.com/in/tshegofatso-m-83a640120/" target="blank">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-
-> “Programs must be written for people to read, and only incidentally for machines to execute.” - Abelson and Sussman
-
-> I am a final year Computer Science student at the University of Pretoria with experience and practice in Java and C++ as well as other programming languages. I enjoy coding because it challenges me and invigorates my curiosity for problem solving. My passion for programming motivates my resilience for it. Over the years, I have accumulated various skills that would make me an asset to any team I join including JavaScript, HTML, Python and 8 years worth of SQL.
-
-
-## [Andrey Omeltchenko](https://github.com/druha4087)
-
-<a href="https://linkedin.com/in/andrey-omeltchenko-65401b228/" target="blank">
-<img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-
-> “We who cut mere stones must always be envisioning cathedrals.” - Medieval worker’s creed.
-
-> I am a final year BSc Computer Science student at the University of Pretoria with a passion for application development and specifically the frontend domain. On my journey to becoming a professional software engineer, continuous improvement and growth along with gathering of knowledge are vitally important aspects to me. My current skills include intermediate experience with programming languages such as Java, Python and C++, as well as web development languages including HTML, CSS and JavaScript.
-
-
-## [Regan Zhao](https://github.com/JurassicRegz)
-
-<a href="https://linkedin.com/in/regan-zhao-743533238/" target="blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a>
-
-> “Nothing great in the world has ever been accomplished without passion.” – Georg Hegel.  
-
-> I am Regan Zhao, a BSc Computer Science Student at the University of Pretoria. Software development is my passion and I thrive in environments that mentally challenge me. I am goal-driven, curious and open-minded in every aspect of my life. I have experience in Android app development and Web development. In areas where I fall short of knowledge I strive to educate myself on these matters to the best of my abilities. Even though my future is uncertain, I'll continue to keep my head up and my passion ignited.
-
-
+# [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 # Affiliation
 > This project was developed for the COS 301 Capstone Project 2022 in association with the University of Pretoria and Epi-Use.
