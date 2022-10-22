@@ -42,23 +42,29 @@
 > The Slip Snapper is a cross-platform application that assists in managing an individual's paper based expenses.
 > It will accomplish this by allowing a user to scan their receipts using optical character recognition (OCR) with a mobile device and generate comprehensive expense reports.
 
-### [Demo Recordings](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [SRS Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-### [SRS Documents](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [Coding Standards Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-### [Deployment Model](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
-
-### [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
-
-### [Technical Installation Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
-
-### [Coding Standards](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
-
-### [Testing Policy](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [Testing Policy Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 ### [Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
+### [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+
 ### [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+
+### [Demo Recording Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+
+### [Slide show summary]()
+
+### [Video Advert]()
+
+### [Deployment]()
+
+### [Tutorial]()
+
+### [Installation Instructions](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 ### [All Documentation Required Before Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
