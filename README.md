@@ -44,13 +44,11 @@
 
 ### [SRS Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
-### [Coding Standards Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
-
-### [Testing Policy Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [Coding Standards, Testing Policy - Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 ### [Project Board](https://github.com/COS301-SE-2022/Slip-Snapper/projects/1)
 
-### [User Manual](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [User Manual, Installation Instructions, Tutorial](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 ### [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
@@ -61,10 +59,6 @@
 ### [Video Advert]()
 
 ### [Deployment]()
-
-### [Tutorial]()
-
-### [Installation Instructions](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
 ### [All Documentation Required Before Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
 
