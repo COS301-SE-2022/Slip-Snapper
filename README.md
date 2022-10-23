@@ -15,9 +15,9 @@
 
 ### [Contributors](https://github.com/COS301-SE-2022/Slip-Snapper/wiki/Contributors)
 
-### [Demo Recording Project Day](https://github.com/COS301-SE-2022/Slip-Snapper/wiki)
+### [Demo Recording Project Day](https://drive.google.com/file/d/1rtCvsFDAxtTyw3DdluUy5JLDOHhq2gUw/view?usp=sharing)
 
-### [Slide show summary]()
+### [Slide show summary](https://github.com/COS301-SE-2022/Slip-Snapper/files/9847339/Anoobis-SlideshowSummary.pptx)
 
 ### [Slip-Snapper - Hosted](https://www.slip-snapper.tech/login)
 
