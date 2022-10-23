@@ -196,7 +196,7 @@ const EditSlip: React.FC = () => {
             <IonButton className="successRedirect" id="successRedirect" routerLink={"/home"}></IonButton>
             <IonFooter>
                     <IonFab id="mobi-fab" horizontal='start' vertical='top' edge>
-                            <IonFabButton color='secondary' onClick={() => { setShowImage(true) }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
+                    <IonFabButton color='secondary' onClick={() => { setShowImage(true); getData(); }}><IonIcon icon={imageOutline}></IonIcon></IonFabButton>
                     </IonFab>
                 <IonToolbar color="primary">
                 </IonToolbar>
